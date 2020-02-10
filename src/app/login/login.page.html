@@ -25,7 +25,7 @@
                 <mat-form-field class="login-full-width" appearance="outline">
                     <mat-label>Username</mat-label>
                     <input matInput placeholder="Email Id"  [formControl]="emailFormControl"
-                    (keyup)="onChangeEmailValidation($event)" [errorStateMatcher]="matcher">
+                       [errorStateMatcher]="matcher">
                     <mat-icon matSuffix>local_post_office
                     </mat-icon>
                     <mat-error *ngIf="(emailFormControl.hasError('invalidemail') && !emailFormControl.hasError('required'))">
@@ -35,19 +35,7 @@
                       Email is <strong>required</strong>
                     </mat-error>
                   </mat-form-field>
-                <!-- <mat-form-field class="login-full-width" appearance="outline">
-                    <mat-label>Username</mat-label>
-                    <input matInput placeholder="Email Id"  [formControl]="emailFormControl"
-                    [errorStateMatcher]="matcher">
-                    <mat-icon matSuffix>local_post_office
-                    </mat-icon>
-                    <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
-                      Please enter a valid email address
-                    </mat-error>
-                    <mat-error *ngIf="emailFormControl.hasError('required')">
-                      Email is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field> -->
+            
                   <mat-form-field class="login-full-width" appearance="outline">
                     <mat-label>Password</mat-label>
                     <input matInput [type]="pswdhide ? 'password' : 'text'" [formControl]="pswdFormControl" [errorStateMatcher]="matcher"> 
@@ -72,5 +60,6 @@
                  
             </mat-card-content>
         </mat-card>
+   
       </form>
 </ion-content>

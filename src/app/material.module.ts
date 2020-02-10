@@ -12,10 +12,14 @@ import {
   MatPaginatorModule,
   MatSortModule,
   MatCardModule,
-  MatGridListModule
+  MatGridListModule,
+  MatExpansionModule,
+  MatCheckboxModule,
+  MatDatepickerModule,
+  MatNativeDateModule
+
 //  ErrorStateMatcher
 } from "@angular/material"
-
 
 @NgModule({
   declarations: [],
@@ -34,7 +38,13 @@ import {
     MatPaginatorModule,
     MatSortModule,
     MatCardModule,
-    MatGridListModule
+    MatGridListModule,
+    MatExpansionModule,
+    MatCheckboxModule,
+    MatDatepickerModule,
+    MatNativeDateModule,
+  
+
    // ErrorStateMatcher
   ]
 })

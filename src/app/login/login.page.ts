@@ -1,11 +1,12 @@
-import { Component } from '@angular/core';
-import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
+import { Component ,OnInit} from '@angular/core';
+import {FormControl,FormBuilder, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
 import { ToastController,  Events,MenuController} from '@ionic/angular';
 
 import {ErrorStateMatcher} from '@angular/material/core';
 import { trimmedCharsValidator } from '../../validators/minLength.validator';
 import { EmailIdValidator } from '../../validators/emailId.validator';
 import { Router } from '@angular/router';
+
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -20,7 +21,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   templateUrl: 'login.page.html',
   styleUrls: ['login.page.scss'],
 })
-export class LoginPage {
+export class LoginPage  implements OnInit {
   emailFormControl = new FormControl('', [
     Validators.required,
     // Validators.email,
@@ -35,17 +36,28 @@ export class LoginPage {
   //   password: ['', Validators.compose([Validators.required, trimmedCharsValidator.checkTrimmedSixChars])],
   // });
   matcher = new MyErrorStateMatcher();
- 
+  isLinear = false;
+  firstFormGroup: FormGroup;
+  secondFormGroup: FormGroup;
   pswdhide = true;
 
 
   constructor(
     private toastCtrl: ToastController,
     public menu: MenuController,
-    private router: Router) {
+    private router: Router,
+    private _formBuilder: FormBuilder) {
 
    // this.statusBar.backgroundColorByHexString("#000000");
 
+  }
+  ngOnInit() {
+    this.firstFormGroup = this._formBuilder.group({
+      firstCtrl: ['', Validators.required]
+    });
+    this.secondFormGroup = this._formBuilder.group({
+      secondCtrl: ['', Validators.required]
+    });
   }
   ionViewDidEnter() {
     // the root left menu should be disabled on this page
@@ -66,19 +78,4 @@ export class LoginPage {
    }
   }
 
-
-  // onChangeEmailValidation(newValue) {
-  //   console.log(this.emailFormControl.value)
-  //   const validEmailRegEx = /^(([^<>()\[\]\\.,;:\s@"]+(\.[^<>()\[\]\\.,;:\s@"]+)*)|(".+"))@((\[[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}\.[0-9]{1,3}])|(([a-zA-Z\-0-9]+\.)+[a-zA-Z]{2,}))$/;
-  //   if (validEmailRegEx.test(this.emailFormControl.value)) {
-  //       this.validEmail = true;
-  //   }else {
-  //     this.validEmail = false;
-  //   }
-  //   if(this.emailFormControl.value==""){
-  //     this.validEmail = true;
-  //   }
-  //   this.emailIDValidate=this.validEmail;
-  //   console.log(this.emailIDValidate)
-  // }
 }
