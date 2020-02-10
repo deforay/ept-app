@@ -18,6 +18,10 @@ const routes: Routes = [
   {
     path: 'dts-hiv-serology',
     loadChildren: () => import('./dts-hiv-serology/dts-hiv-serology.module').then( m => m.DTSHIVSerologyPageModule)
+  },
+  {
+    path: 'dts-hiv-viralload',
+    loadChildren: () => import('./dts-hiv-viralload/dts-hiv-viralload.module').then( m => m.DtsHivViralloadPageModule)
   }
 ];
 

@@ -20,6 +20,16 @@ export class AppComponent {
       title: 'List',
       url: '/list',
       icon: 'list'
+    },
+    {
+      title: 'DTS_HIV_Viral_load',
+      url: '/dts-hiv-viralload',
+      icon: 'list'
+    },
+    {
+      title: 'DTS_HIV_Serology',
+      url: '/dts-hiv-serology',
+      icon: 'list'
     }
   ];
 
