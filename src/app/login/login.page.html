@@ -1,0 +1,76 @@
+<ion-content>
+    <ion-grid padding>
+        <ion-row class="row-top">
+          <ion-col>
+              <img src="assets/img/ept-logo.png">
+          </ion-col>        
+        </ion-row>
+    <p class="text-center">EPT Test And Training Instance</p>
+      </ion-grid>
+    <form class="login-form">
+        <!-- <mat-form-field class="login-full-width"  appearance="outline">
+          <input matInput placeholder="Email" [formControl]="emailFormControl"
+                 [errorStateMatcher]="matcher">
+          <mat-hint>Errors appear instantly!</mat-hint>
+          <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+            Please enter a valid email address
+          </mat-error>
+          <mat-error *ngIf="emailFormControl.hasError('required')">
+            Email is <strong>required</strong>
+          </mat-error>
+        </mat-form-field> -->
+        <mat-card>
+            <mat-card-title>	</mat-card-title>
+            <mat-card-content>	
+                <mat-form-field class="login-full-width" appearance="outline">
+                    <mat-label>Username</mat-label>
+                    <input matInput placeholder="Email Id"  [formControl]="emailFormControl"
+                    (keyup)="onChangeEmailValidation($event)" [errorStateMatcher]="matcher">
+                    <mat-icon matSuffix>local_post_office
+                    </mat-icon>
+                    <mat-error *ngIf="(emailFormControl.hasError('invalidemail') && !emailFormControl.hasError('required'))">
+                      Please enter a valid email address
+                    </mat-error>                    
+                    <mat-error *ngIf="emailFormControl.hasError('required')">
+                      Email is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field>
+                <!-- <mat-form-field class="login-full-width" appearance="outline">
+                    <mat-label>Username</mat-label>
+                    <input matInput placeholder="Email Id"  [formControl]="emailFormControl"
+                    [errorStateMatcher]="matcher">
+                    <mat-icon matSuffix>local_post_office
+                    </mat-icon>
+                    <mat-error *ngIf="emailFormControl.hasError('email') && !emailFormControl.hasError('required')">
+                      Please enter a valid email address
+                    </mat-error>
+                    <mat-error *ngIf="emailFormControl.hasError('required')">
+                      Email is <strong>required</strong>
+                    </mat-error>
+                  </mat-form-field> -->
+                  <mat-form-field class="login-full-width" appearance="outline">
+                    <mat-label>Password</mat-label>
+                    <input matInput [type]="pswdhide ? 'password' : 'text'" [formControl]="pswdFormControl" [errorStateMatcher]="matcher"> 
+                    <button mat-icon-button matSuffix (click)="pswdhide = !pswdhide" [attr.aria-label]="'hide password'" [attr.aria-pressed]="hide">
+                    <mat-icon>{{pswdhide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                    </button>
+                    <mat-error *ngIf="!pswdFormControl.hasError('required') && pswdFormControl.hasError('trimmedThreeChars')">
+                        Password must be atleast <strong>3 Characters</strong>
+                      </mat-error>
+                    <mat-error *ngIf="pswdFormControl.hasError('required')">
+                        Password is <strong>required</strong>
+                      </mat-error>
+                  </mat-form-field>
+                  <mat-grid-list class="login-btn-grid" cols="2" rowHeight="2:1">
+                      <mat-grid-tile>
+                           <button mat-raised-button color="primary" (click)="login()">Login</button>
+                      </mat-grid-tile>
+                      <mat-grid-tile>
+                          <a class="float-right" mat-flat-button  routerLink=".">Forgot Password ?</a>
+                      </mat-grid-tile>
+                  </mat-grid-list>
+                 
+            </mat-card-content>
+        </mat-card>
+      </form>
+</ion-content>
