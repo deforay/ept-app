@@ -11,6 +11,10 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
+interface selectArray {
+  id: any;
+  name: string;
+}
 @Component({
   selector: 'app-dts-hiv-serology',
   templateUrl: './dts-hiv-serology.page.html',
@@ -22,7 +26,19 @@ export class DTSHIVSerologyPage implements OnInit {
   constructor() {
     
   }
+  algorithmused: any;
+  algUsed: selectArray[] = [
+    {id: 1, name: 'Serial'},
+    {id: 2, name: 'Parallel'}
+  ];
 
+  selectedValue: string;
+  selectedCar: string;
+
+  foods: selectArray[] = [
+    {id: 1, name: 'Serial'},
+    {id: 2, name: 'Parallel'}
+  ];
   ngOnInit() {
   }
   step = 0;

@@ -1,0 +1,11 @@
+/* CSS Changes in DTS - HIV Serology Page */
+
+ion-grid ion-row ion-col{
+padding:0 ;
+    p{
+        margin:5px;
+    }
+} 
+ion-grid ion-row ion-col:nth-child(3n){
+    text-align: right;
+} 
