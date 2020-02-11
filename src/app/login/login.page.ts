@@ -1,12 +1,39 @@
-import { Component ,OnInit} from '@angular/core';
-import {FormControl,FormBuilder, FormGroup, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-import { ToastController,  Events,MenuController} from '@ionic/angular';
-
-import {ErrorStateMatcher} from '@angular/material/core';
-import { trimmedCharsValidator } from '../../validators/minLength.validator';
-import { EmailIdValidator } from '../../validators/emailId.validator';
-import { Router } from '@angular/router';
-
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  FormControl,
+  FormBuilder,
+  FormGroup,
+  FormGroupDirective,
+  NgForm,
+  Validators
+} from '@angular/forms';
+import {
+  ToastController,
+  Events,
+  MenuController
+} from '@ionic/angular';
+import {
+  ErrorStateMatcher
+} from '@angular/material/core';
+import {
+  trimmedCharsValidator
+} from '../../validators/minLength.validator';
+import {
+  EmailIdValidator
+} from '../../validators/emailId.validator';
+import {
+  Router
+} from '@angular/router';
+import {
+  CrudServiceService,
+  ToastService
+} from '../../app/service/providers';
+import {
+  Storage
+} from '@ionic/storage';
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -15,20 +42,20 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
- 
+
 @Component({
   selector: 'app-login',
   templateUrl: 'login.page.html',
   styleUrls: ['login.page.scss'],
 })
-export class LoginPage  implements OnInit {
+export class LoginPage implements OnInit {
   emailFormControl = new FormControl('', [
     Validators.required,
     // Validators.email,
     EmailIdValidator.patternValidation
   ]);
   pswdFormControl = new FormControl('', [
-    Validators.required,   
+    Validators.required,
     trimmedCharsValidator.checkTrimmedThreeChars
   ]);
   // this.loginForm = this.formBuilder.group({
@@ -46,9 +73,12 @@ export class LoginPage  implements OnInit {
     private toastCtrl: ToastController,
     public menu: MenuController,
     private router: Router,
-    private _formBuilder: FormBuilder) {
+    private _formBuilder: FormBuilder,
+    public CrudServiceService: CrudServiceService,
+    private storage: Storage,
+    public ToastService: ToastService) {
 
-   // this.statusBar.backgroundColorByHexString("#000000");
+    // this.statusBar.backgroundColorByHexString("#000000");
 
   }
   ngOnInit() {
@@ -69,13 +99,31 @@ export class LoginPage  implements OnInit {
     this.menu.enable(true);
   }
 
-  login(){
-   
-   if(this.emailFormControl.invalid || this.pswdFormControl.invalid){
+  login() {
 
-   }else{
-    this.router.navigate(['/dts-hiv-serology']);
-   }
+    if (this.emailFormControl.invalid || this.pswdFormControl.invalid) {
+      return false;
+    } else {
+
+      let loginJSON = {
+        "userId": this.emailFormControl.value,
+        "key": this.pswdFormControl.value
+      }
+      this.CrudServiceService.postData('login', loginJSON)
+        .then((result) => {
+
+          if (result["status"] == 'success') {
+
+            this.storage.set('participant_details', result['data']);
+          }
+          if (result["status"] == 'fail') {
+
+            this.ToastService.presentToastWithOptions(result["message"]);
+          }
+
+        }, (err) => {});
+      //  this.router.navigate(['/dts-hiv-serology']);
+    }
   }
 
 }
