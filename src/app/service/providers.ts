@@ -7,14 +7,15 @@ import {
 import {
     ToastService
 } from '../service/toast.service';
-// import {
-//     LoaderService
-// } from '../service/loader.service';
+import {
+    LoaderService
+} from '../service/loader.service';
+
 export {
 
     constantService,
     CrudServiceService,
-    ToastService
- //   LoaderService
+    ToastService,
+    LoaderService
 
 }

@@ -11,8 +11,6 @@ import {
   Validators
 } from '@angular/forms';
 import {
-  ToastController,
-  Events,
   MenuController
 } from '@ionic/angular';
 import {
@@ -29,7 +27,8 @@ import {
 } from '@angular/router';
 import {
   CrudServiceService,
-  ToastService
+  ToastService,
+  LoaderService
 } from '../../app/service/providers';
 import {
   Storage
@@ -70,13 +69,13 @@ export class LoginPage implements OnInit {
 
 
   constructor(
-    private toastCtrl: ToastController,
     public menu: MenuController,
     private router: Router,
     private _formBuilder: FormBuilder,
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
-    public ToastService: ToastService) {
+    public ToastService: ToastService,
+    public LoaderService: LoaderService) {
 
     // this.statusBar.backgroundColorByHexString("#000000");
 
@@ -109,21 +108,27 @@ export class LoginPage implements OnInit {
         "userId": this.emailFormControl.value,
         "key": this.pswdFormControl.value
       }
+      this.LoaderService.presentLoading();
       this.CrudServiceService.postData('login', loginJSON)
         .then((result) => {
+            this.LoaderService.disMissLoading();
+            if (result["status"] == 'success') {
 
-          if (result["status"] == 'success') {
+              this.storage.set('participantLogin', result['data']);
+              this.storage.get('participantLogin').then((partiLoginResult) => {
+                  if (partiLoginResult) {
+                    this.router.navigate(['/all-pt-schemes']);
+                  }
+                })
+              }
+              if (result["status"] == 'fail') {
 
-            this.storage.set('participant_details', result['data']);
-          }
-          if (result["status"] == 'fail') {
-
-            this.ToastService.presentToastWithOptions(result["message"]);
-          }
-
-        }, (err) => {});
-      //  this.router.navigate(['/dts-hiv-serology']);
+                this.ToastService.presentToastWithOptions(result["message"]);
+              }
+            }, (err) => {
+              this.LoaderService.disMissLoading();
+            });
+        }
     }
-  }
 
-}
+  }

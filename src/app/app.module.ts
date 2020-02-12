@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 //providers
-import{ CrudServiceService,constantService,ToastService } from '../app/service/providers';
+import { CrudServiceService,constantService,ToastService,LoaderService } from '../app/service/providers';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 @NgModule({
@@ -35,6 +35,7 @@ import { IonicStorageModule } from '@ionic/storage';
     CrudServiceService,
     constantService,
     ToastService,
+    LoaderService,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
