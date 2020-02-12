@@ -50,7 +50,6 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 export class LoginPage implements OnInit {
   emailFormControl = new FormControl('', [
     Validators.required,
-    // Validators.email,
     EmailIdValidator.patternValidation
   ]);
   pswdFormControl = new FormControl('', [
@@ -101,7 +100,7 @@ export class LoginPage implements OnInit {
   login() {
 
     if (this.emailFormControl.invalid || this.pswdFormControl.invalid) {
-      return false;
+      //return false;
     } else {
 
       let loginJSON = {

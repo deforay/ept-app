@@ -1,8 +1,9 @@
 import { Component, OnInit } from '@angular/core';
 import {FormControl, FormGroupDirective, NgForm, Validators} from '@angular/forms';
-
 import { Router } from '@angular/router';
 import {ErrorStateMatcher} from '@angular/material/core';
+
+
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -11,10 +12,19 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
+/** Error when invalid control is dirty, touched, or submitted. */
+
+
+interface selectArray {
+  id: any;
+  name: string;
+}
+
 @Component({
   selector: 'app-dts-hiv-serology',
   templateUrl: './dts-hiv-serology.page.html',
   styleUrls: ['./dts-hiv-serology.page.scss'],
+ 
 })
 export class DTSHIVSerologyPage implements OnInit {
   panelOpenState = false;
@@ -22,7 +32,12 @@ export class DTSHIVSerologyPage implements OnInit {
   constructor() {
     
   }
-
+  algorithmused: any;
+  algUsed: selectArray[] = [
+    {id: 1, name: 'Serial'},
+    {id: 2, name: 'Parallel'}
+  ];
+ 
   ngOnInit() {
   }
   step = 0;

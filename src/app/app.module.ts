@@ -14,12 +14,10 @@ import { MaterialModule } from './material.module';
 import { CrudServiceService,constantService,ToastService,LoaderService } from '../app/service/providers';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
-  // schemas:[
-  //   CUSTOM_ELEMENTS_SCHEMA
-  // ],
   imports: [
     BrowserModule,
     IonicModule.forRoot(),

@@ -16,7 +16,8 @@ import {
   MatExpansionModule,
   MatCheckboxModule,
   MatDatepickerModule,
-  MatNativeDateModule
+  MatNativeDateModule,
+  MatTabsModule
 
 //  ErrorStateMatcher
 } from "@angular/material";
@@ -44,7 +45,8 @@ import {MatDividerModule} from '@angular/material/divider';
     MatCheckboxModule,
     MatDatepickerModule,
     MatNativeDateModule,
-    MatDividerModule
+    MatDividerModule,
+    MatTabsModule
 
    // ErrorStateMatcher
   ]

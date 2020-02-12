@@ -11,6 +11,7 @@
 
 /* Core CSS required for Ionic components to work properly */
 @import "~@ionic/angular/css/core.css";
+@import '~material-design-icons/iconfont/material-icons.css'; // Import Materialize css locally
 
 /* Basic CSS for apps built with Ionic */
 @import "~@ionic/angular/css/normalize.css";
@@ -26,7 +27,8 @@
 @import "~@ionic/angular/css/flex-utils.css";
 //@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 
-// Global Changes in Material CSS
+
+/* Global CSS Changes Starts */
 .text-center{
     text-align: center;
 }
@@ -36,11 +38,59 @@
 .text-right{
     text-align: right;
 }
+.text-title-color{
+    color: #28378d;
+}
+.text-bold{
+    font-weight: 700;
+}
+.no-padding{
+    padding:0 !important;
+}
+.padding-top-10{
+    padding-top: 10px;
+}
+.padding-top-20{
+    padding-top: 20px;
+}
+.padding-bottom-10{
+    padding-bottom: 10px;
+}
+.padding-bottom-20{
+    padding-bottom: 10px;
+}
 .float-left{
     float: left;
 }
 .float-right{
     float: right;
+}
+/* Global CSS Changes Ends */
+
+
+
+
+
+/* Materialize Global CSS Changes Starts*/
+
+.mat-select-panel{
+    margin-top: 40px;
+}
+.mat-focused .mat-form-field-required-marker{
+    color: #F44336;
+}
+.mat-form-field-appearance-outline.grid-col-form.mat-form-field-hide-placeholder .mat-form-field-outline-thick {
+    color: #9C27B0 ;
+}
+.mat-form-field.grid-col-form {
+   width:calc(100% - 10px) !important;
+}
+.mat-form-field .mat-form-field-wrapper{
+    padding-bottom: 0px;
+}
+.mat-form-field.mat-form-field-invalid .mat-form-field-wrapper{
+    padding-bottom:20px;
+
 }
 .mat-form-field-appearance-outline .mat-form-field-flex
 {
@@ -58,10 +108,47 @@
     }
 }
 .mat-accordion .mat-expansion-panel {
-    width: calc(100% - 40px) !important;
+    width: calc(100% - 20px) !important;
     margin: auto !important;
-   // margin-top: 20px !important;
 }
-.mat-expansion-panel-body {
-    padding: 0 10px 16px !important;
+.mat-action-row{
+    padding: 0px !important;
+    background: aliceblue;
+    // background: linear-gradient(90deg, rgba(38,48,142,1) 19%, rgba(44,159,162,1) 50%, rgba(0,212,255,1) 100%);
 }
+.mat-accordion .mat-expansion-panel{
+    margin-bottom: 10px !important;
+}
+.mat-accordion .mat-expansion-panel:first-child{
+    margin-top:15px !important;
+}
+.mat-accordion .mat-expansion-panel-spacing{
+    margin-bottom: 10px !important;
+}
+.mat-expansion-panel .mat-expansion-panel-content .mat-expansion-panel-body{
+    padding: 0 12px 5px !important;
+}
+// mat-expansion-panel-header.mat-expanded.mat-expansion-panel-header{
+//     height: 40px !important;
+//     background: rgb(31,232,225) !important;
+//     background: linear-gradient(0deg, rgba(31,232,225,1) 0%, rgba(45,58,253,1) 100%) !important;
+// }
+.mat-expansion-panel mat-expansion-panel-header{
+    height: 37px !important;   
+
+}
+.mat-expansion-panel:nth-child(2n) mat-expansion-panel-header.mat-expanded.mat-expansion-panel-header{
+    height: 37px !important;   
+    background-color: #e1bee7 !important;
+}
+.mat-expansion-panel:nth-child(2n+1) mat-expansion-panel-header.mat-expanded.mat-expansion-panel-header{
+    height: 37px !important;   
+    background-color: #b4c0ff!important;
+}
+
+// .mat-expansion-panel.mat-expanded .mat-expansion-panel-header {
+//     height: 45px !important;
+// }
+
+
+/* Materialize Global CSS Changes Ends*/
