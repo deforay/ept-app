@@ -23,32 +23,24 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
-
+interface selectArray {
+  id: any;
+  name: string;
+}
 @Component({
   selector: 'app-dts-hiv-viralload',
   templateUrl: './dts-hiv-viralload.page.html',
   styleUrls: ['./dts-hiv-viralload.page.scss'],
 })
 export class DtsHivViralloadPage implements OnInit {
-
+  algorithmused: any;
+  algUsed: selectArray[] = [
+    {id: 1, name: 'Serial'},
+    {id: 2, name: 'Parallel'}
+  ];
   panelOpenState = false;
   partDetailsArray = [];
-  tiles: Tile[] = [{
-      text: 'One',
-      cols: 1,
-      rows: 1,
-      color: 'lightblue'
-    },
-    {
-      text: 'Two',
-      cols: 1,
-      rows: 1,
-      color: 'lightgreen'
-    },
-    // {text: 'Three', cols: 1, rows: 1, color: 'lightpink'},
-    // {text: 'Four', cols: 1, rows: 1, color: '#DDBDF1'},
-  ];
-
+  
   constructor() {
     this.partDetailsArray = [{
         "key": "Participant Name",
@@ -71,7 +63,6 @@ export class DtsHivViralloadPage implements OnInit {
         "value": "9841119818"
       }
     ];
- 
   }
 
 
@@ -91,12 +82,4 @@ export class DtsHivViralloadPage implements OnInit {
     this.step--;
   }
 
-}
-
-
-export interface Tile {
-  color: string;
-  cols: number;
-  rows: number;
-  text: string;
 }

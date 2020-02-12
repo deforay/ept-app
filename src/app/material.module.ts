@@ -17,11 +17,13 @@ import {
   MatCheckboxModule,
   MatDatepickerModule,
   MatNativeDateModule,
-  MatTabsModule
+  MatDividerModule,
+  MatTabsModule,
+  MatMenuModule,
+  MatListModule
 
 //  ErrorStateMatcher
 } from "@angular/material";
-import {MatDividerModule} from '@angular/material/divider';
 
 @NgModule({
   declarations: [],
@@ -46,7 +48,9 @@ import {MatDividerModule} from '@angular/material/divider';
     MatDatepickerModule,
     MatNativeDateModule,
     MatDividerModule,
-    MatTabsModule
+    MatTabsModule,
+    MatMenuModule,
+    MatListModule
 
    // ErrorStateMatcher
   ]
