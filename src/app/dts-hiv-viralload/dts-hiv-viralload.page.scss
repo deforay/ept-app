@@ -5,3 +5,19 @@
     position: relative;
     top: 20px;
 }
+ion-grid ion-row ion-col{
+    padding:0 ;
+        p{
+            margin:5px;
+        }
+    } 
+    ion-grid ion-row ion-col:nth-child(3n){
+        text-align: right;
+    } 
+    .card-div{
+        width: calc(100% - 20px) !important;
+        margin: auto !important;
+    }
+    .card-div mat-card{
+        padding:0;
+    }

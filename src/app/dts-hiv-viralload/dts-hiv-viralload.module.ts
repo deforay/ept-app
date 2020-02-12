@@ -8,6 +8,7 @@ import { DtsHivViralloadPageRoutingModule } from './dts-hiv-viralload-routing.mo
 
 import { DtsHivViralloadPage } from './dts-hiv-viralload.page';
 import { MaterialModule } from '../material.module';
+import { MomentModule } from '../moment.module';
 
 @NgModule({
   imports: [
@@ -15,6 +16,7 @@ import { MaterialModule } from '../material.module';
     FormsModule,
     IonicModule,
     MaterialModule,
+    MomentModule,
     DtsHivViralloadPageRoutingModule
   ],
   declarations: [DtsHivViralloadPage]

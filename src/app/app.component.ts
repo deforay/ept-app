@@ -22,12 +22,12 @@ export class AppComponent {
       icon: 'list'
     },
     {
-      title: 'DTS_HIV_Viral_load',
+      title: 'DTS HIV Viral load',
       url: '/dts-hiv-viralload',
       icon: 'list'
     },
     {
-      title: 'DTS_HIV_Serology',
+      title: 'DTS HIV Serology',
       url: '/dts-hiv-serology',
       icon: 'list'
     },
