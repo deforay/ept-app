@@ -1,23 +1,30 @@
 .CardHeader{
     padding: 3px;
-    background-color:blue;
-    padding-left: 3%;;
+    background-color:#b4c0ff;
+    padding-left: 3%;
 }
-.customerName{
+.schemeName{
     font-weight: 500;
     text-transform: capitalize;
     font-size: 15px;
+    color: #28378d;
+    margin: 5px;
 }
 .cardContent{
     padding-bottom: 5px;
 }
-.customerSearchBar.searchbar-md .searchbar-input{
-    padding: 6px 40px!important;
-    font-size: 1.4rem!important;
+.eptCardRow{
+    padding: 5px;
 }
-.customerSearchBar.searchbar-md{
-   padding: 10px;
+.text-normal{
+    color:black;
 }
-.text-bold.noOfCustomer{
-    font-weight: 500!important;
-}
+ion-grid ion-row ion-col{
+    padding:0 ;
+        p{
+            margin:5px;
+        }
+    } 
+    ion-grid ion-row ion-col:nth-child(3n){
+        text-align: right;
+    } 

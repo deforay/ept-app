@@ -24,8 +24,14 @@ export class LoaderService {
   }
   
   async disMissLoading() {
-
-    this.loadingController.dismiss();
+    const loading = await this.loadingController.create({
+      spinner: 'dots',
+      message: 'Please wait',
+    });
+ //   await loading.present();
+    const { role, data } = await loading.onDidDismiss();
+    //this.loadingController.dismiss();
+    await loading.onDidDismiss();
 
   }
 

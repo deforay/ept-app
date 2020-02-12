@@ -5,36 +5,126 @@
 </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let item of shippingsArray" class="rmCard" (click)="viewSchemeCustDetails(item)">
+  <ion-card *ngFor="let item of shippingsArray" class="eptCard" (click)="viewSchemeCustDetails(item)">
     <ion-card-header class="CardHeader">
-      <p text-wrap class="customerName"> {{item.schemeName}}</p>
+      <p text-wrap class="schemeName"> {{item.schemeName}}</p>
     </ion-card-header>
     <ion-card-content class="cardContent">
-      <ion-grid class="no-padding">
+      <ion-grid>
+
+
         <ion-row>
-          <ion-col col-5 class="no-padding">
+          <ion-col size="5">
             <p text-wrap>
-              <span class="text-bold">Mobile No :</span>
+              <span class="text-title-color">Shipment Date </span>
             </p>
           </ion-col>
-          <ion-col col-7 class="no-padding">
+          <ion-col size="1">
+              <p text-wrap>
+                  <span class="text-title-color">:</span>
+              </p>
+          </ion-col>
+          <ion-col>
             <p text-wrap>
-              <span class="text-normal">{{item.shipmentDate}}</span>
+              <span>{{item.shipmentDate | date :'d MMM y'}}</span>
             </p>
           </ion-col>
         </ion-row>
-        <ion-row>
-          <ion-col col-5 class="no-padding">
+
+
+  <ion-row>
+          <ion-col size="5">
             <p text-wrap>
-              <span class="text-bold">Added On :</span>
+              <span class="text-title-color">Shipment Code </span>
             </p>
           </ion-col>
-          <ion-col col-7 class="no-padding">
+          <ion-col size="1">
+              <p text-wrap>
+                  <span class="text-title-color">:</span>
+              </p>
+          </ion-col>
+          <ion-col>
             <p text-wrap>
-              <span class="text-normal">{{item.schemeType}}</span>
+              <span>{{item.shipmentCode}}</span>
             </p>
           </ion-col>
         </ion-row>
+
+
+        <ion-row>
+            <ion-col size="5">
+              <p text-wrap>
+                <span class="text-title-color">Participant ID </span>
+              </p>
+            </ion-col>
+            <ion-col size="1">
+                <p text-wrap>
+                    <span class="text-title-color">:</span>
+                </p>
+            </ion-col>
+            <ion-col>
+              <p text-wrap>
+                <span>{{item.participantId}}</span>
+              </p>
+            </ion-col>
+          </ion-row>
+
+
+
+          <ion-row>
+              <ion-col size="5">
+                <p text-wrap>
+                  <span class="text-title-color">Participant Name </span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                  <p text-wrap>
+                      <span class="text-title-color">:</span>
+                  </p>
+              </ion-col>
+              <ion-col>
+                <p text-wrap>
+                  <span>{{item.participantName}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
+
+
+            <ion-row>
+                <ion-col size="5">
+                  <p text-wrap>
+                    <span class="text-title-color">Result Due Date </span>
+                  </p>
+                </ion-col>
+                <ion-col size="1">
+                    <p text-wrap>
+                        <span class="text-title-color">:</span>
+                    </p>
+                </ion-col>
+                <ion-col>
+                  <p text-wrap>
+                    <span>{{item.resultDueDate  | date :'d MMM y'}}</span>
+                  </p>
+                </ion-col>
+              </ion-row>
+
+              <ion-row>
+                  <ion-col size="5">
+                    <p text-wrap>
+                      <span class="text-title-color">Response Date </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size="1">
+                      <p text-wrap>
+                          <span class="text-title-color">:</span>
+                      </p>
+                  </ion-col>
+                  <ion-col>
+                    <p text-wrap>
+                      <span>{{item.responseDate  | date :'d MMM y'}}</span>
+                    </p>
+                  </ion-col>
+                </ion-row>
       </ion-grid>
 
     </ion-card-content>

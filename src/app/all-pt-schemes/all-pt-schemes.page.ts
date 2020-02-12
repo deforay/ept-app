@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 import {
   Router
 } from '@angular/router';
@@ -19,37 +22,36 @@ import {
 export class AllPTSchemesPage implements OnInit {
 
   //variable declaration
-  authToken:any;
-  shippingsArray=[];
-  constructor( public CrudServiceService: CrudServiceService,
+  authToken: any;
+  shippingsArray = [];
+  constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
-    public LoaderService:LoaderService,
+    public LoaderService: LoaderService,
     private router: Router) {
 
     this.getAllShippings();
 
-   }
-
-  ngOnInit() {
   }
 
-  getAllShippings(){
-    this.LoaderService.presentLoading();
+  ngOnInit() {}
+
+  getAllShippings() {
+
     this.storage.get('participantLogin').then((partiLoginResult) => {
-      if(partiLoginResult.authToken){
-    this.CrudServiceService.getData('shipments/get/?authToken='+partiLoginResult.authToken)
-      .then(result => {
-        this.LoaderService.disMissLoading();
-        if (result["status"] == 'success') {
-         this.shippingsArray = result['data'];
-         console.log(this.shippingsArray);
-        }
-      }, (err) => {
-        this.LoaderService.disMissLoading();
-      });
-      this.LoaderService.disMissLoading();
-    }
+      if (partiLoginResult.authToken) {
+     //   this.LoaderService.presentLoading();
+        this.CrudServiceService.getData('shipments/get/?authToken=' + partiLoginResult.authToken)
+          .then(result => {
+         //   this.LoaderService.disMissLoading();
+            if (result["status"] == 'success') {
+              this.shippingsArray = result['data'];
+              console.log(this.shippingsArray);
+            }
+          }, (err) => {
+        //    this.LoaderService.disMissLoading();
+          });
+      }
     });
   }
 
