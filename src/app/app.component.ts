@@ -30,6 +30,11 @@ export class AppComponent {
       title: 'DTS HIV Serology',
       url: '/dts-hiv-serology',
       icon: 'list'
+    },
+    {
+    title: 'All PT Schemes',
+    url: '/all-pt-schemes',
+    icon: 'list'
     }
   ];
 

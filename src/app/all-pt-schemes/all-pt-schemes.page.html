@@ -1,0 +1,43 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-title>all-PT-schemes</ion-title>
+  </ion-toolbar>
+</ion-header>
+
+<ion-content>
+  <ion-card *ngFor="let item of shippingsArray" class="rmCard" (click)="viewSchemeCustDetails(item)">
+    <ion-card-header class="CardHeader">
+      <p text-wrap class="customerName"> {{item.schemeName}}</p>
+    </ion-card-header>
+    <ion-card-content class="cardContent">
+      <ion-grid class="no-padding">
+        <ion-row>
+          <ion-col col-5 class="no-padding">
+            <p text-wrap>
+              <span class="text-bold">Mobile No :</span>
+            </p>
+          </ion-col>
+          <ion-col col-7 class="no-padding">
+            <p text-wrap>
+              <span class="text-normal">{{item.shipmentDate}}</span>
+            </p>
+          </ion-col>
+        </ion-row>
+        <ion-row>
+          <ion-col col-5 class="no-padding">
+            <p text-wrap>
+              <span class="text-bold">Added On :</span>
+            </p>
+          </ion-col>
+          <ion-col col-7 class="no-padding">
+            <p text-wrap>
+              <span class="text-normal">{{item.schemeType}}</span>
+            </p>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>

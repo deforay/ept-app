@@ -22,6 +22,10 @@ const routes: Routes = [
   {
     path: 'dts-hiv-viralload',
     loadChildren: () => import('./dts-hiv-viralload/dts-hiv-viralload.module').then( m => m.DtsHivViralloadPageModule)
+  },
+  {
+    path: 'all-pt-schemes',
+    loadChildren: () => import('./all-pt-schemes/all-pt-schemes.module').then( m => m.AllPTSchemesPageModule)
   }
 ];
 
