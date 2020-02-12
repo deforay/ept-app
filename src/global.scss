@@ -72,11 +72,25 @@
 
 
 /* Materialize Global CSS Changes Starts*/
+
+.mat-select-panel{
+    margin-top: 40px;
+}
+.mat-focused .mat-form-field-required-marker{
+    color: #F44336;
+}
+.mat-form-field-appearance-outline.grid-col-form.mat-form-field-hide-placeholder .mat-form-field-outline-thick {
+    color: #9C27B0 ;
+}
 .mat-form-field.grid-col-form {
    width:calc(100% - 10px) !important;
 }
-.mat-form-field.grid-col-form .mat-form-field-wrapper{
+.mat-form-field .mat-form-field-wrapper{
     padding-bottom: 0px;
+}
+.mat-form-field.mat-form-field-invalid .mat-form-field-wrapper{
+    padding-bottom:20px;
+
 }
 .mat-form-field-appearance-outline .mat-form-field-flex
 {
