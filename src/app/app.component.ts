@@ -1,8 +1,23 @@
-import { Component } from '@angular/core';
+import {
+  Component
+} from '@angular/core';
 
-import { Platform } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import {
+  Platform
+} from '@ionic/angular';
+import {
+  SplashScreen
+} from '@ionic-native/splash-screen/ngx';
+import {
+  StatusBar
+} from '@ionic-native/status-bar/ngx';
+import {
+  AppVersion
+} from '@ionic-native/app-version/ngx';
+import {
+  Storage
+} from '@ionic/storage';
+
 
 @Component({
   selector: 'app-root',
@@ -10,20 +25,11 @@ import { StatusBar } from '@ionic-native/status-bar/ngx';
   styleUrls: ['app.component.scss']
 })
 export class AppComponent {
-  public appPages = [
-    {
-      title: 'Login',
-      url: '/login',
-      icon: 'login'
-    },
-    {
-      title: 'List',
-      url: '/list',
-      icon: 'list'
-    },
-    {
-      title: 'DTS HIV Viral load',
-      url: '/dts-hiv-viralload',
+
+  appVersionNumber:any;
+  public appPages = [{
+      title: 'All Shipments',
+      url: '/all-pt-schemes',
       icon: 'list'
     },
     {
@@ -32,16 +38,24 @@ export class AppComponent {
       icon: 'list'
     },
     {
-    title: 'All PT Schemes',
-    url: '/all-pt-schemes',
-    icon: 'list'
-    }
+      title: 'DTS HIV Viral load',
+      url: '/dts-hiv-viralload',
+      icon: 'list'
+    },
+    // {
+    //   title: 'Log Out',
+    //   url: '/login',
+    //   icon: 'login'
+    // },
+
   ];
 
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
-    private statusBar: StatusBar
+    private statusBar: StatusBar,
+    private appVersion: AppVersion,
+    private storage: Storage,
   ) {
     this.initializeApp();
   }
@@ -50,6 +64,22 @@ export class AppComponent {
     this.platform.ready().then(() => {
       this.statusBar.styleDefault();
       this.splashScreen.hide();
+      this.appVersion.getVersionNumber().then(value => {
+        this.appVersionNumber = value;
+        this.storage.set('appVersionNumber', this.appVersionNumber); 
+      }).catch(err => {
+     //   console.log(err);
+      });
     });
+
+
+    //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
+    if(!this.appVersionNumber) {
+      this.appVersionNumber ="0.0.1";
+      this.storage.set('appVersionNumber', this.appVersionNumber); 
+    }
+    //end..... 
+
+
   }
 }

@@ -14,7 +14,7 @@ import { MaterialModule } from './material.module';
 import { CrudServiceService,constantService,ToastService,LoaderService } from '../app/service/providers';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
-
+import { AppVersion } from '@ionic-native/app-version/ngx';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -34,6 +34,7 @@ import { IonicStorageModule } from '@ionic/storage';
     constantService,
     ToastService,
     LoaderService,
+    AppVersion,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

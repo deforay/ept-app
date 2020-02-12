@@ -3,8 +3,8 @@
     <ion-buttons slot="start">
       <ion-menu-button></ion-menu-button>
     </ion-buttons>
-    <ion-title>
-      Dried Tube Specimen - HIV Serology
+    <ion-title class="eptHeaderTitle">
+      DTS - HIV Serology
     </ion-title>
   </ion-toolbar>
 </ion-header>
@@ -19,6 +19,27 @@
       </mat-expansion-panel-header>
 
       <ion-grid>
+
+          <ion-row *ngFor="let item of partiKeysArray">
+              <ion-col size="5">
+                <p text-wrap>
+                  <span class="text-title-color">{{item}} </span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                <p text-wrap>
+                  <span class="text-title-color">:</span>
+                </p>
+              </ion-col>
+              <ion-col>
+                <p text-wrap>
+                  <span>MUKAMAZIMPAKA Athanasiemm</span>
+                </p>
+              </ion-col>
+            </ion-row>
+
+
+
         <ion-row>
           <ion-col size="5">
             <p text-wrap>
@@ -36,74 +57,7 @@
             </p>
           </ion-col>
         </ion-row>
-        <ion-row>
-          <ion-col size="5">
-            <p text-wrap>
-              <span class="text-title-color">Participant Code :</span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-            <p text-wrap>
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col>
-            <p text-wrap>
-              <span>1386</span>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="5">
-            <p text-wrap>
-              <span class="text-title-color">Affiliation :</span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-            <p text-wrap>
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col>
-            <p text-wrap>
-              <span> Athanasie</span>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="5">
-            <p text-wrap>
-              <span class="text-title-color">Phone No :</span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-            <p text-wrap>
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col>
-            <p text-wrap>
-              <span>4444444444</span>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="5">
-            <p text-wrap>
-              <span class="text-title-color">Mobile No :</span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-            <p text-wrap>
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col>
-            <p text-wrap>
-              <span>445555555</span>
-            </p>
-          </ion-col>
-        </ion-row>
+
       </ion-grid>
       <mat-action-row>
         <button mat-button color="primary" (click)="nextStep()">Next</button>

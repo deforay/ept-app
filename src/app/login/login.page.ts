@@ -48,6 +48,8 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ['login.page.scss'],
 })
 export class LoginPage implements OnInit {
+
+  appVersionNumber:any;
   emailFormControl = new FormControl('', [
     Validators.required,
     EmailIdValidator.patternValidation
@@ -77,7 +79,11 @@ export class LoginPage implements OnInit {
     public LoaderService: LoaderService) {
 
     // this.statusBar.backgroundColorByHexString("#000000");
-
+    this.storage.get('appVersionNumber').then((appVersionNumber) => {
+      if (appVersionNumber) {
+       this.appVersionNumber=appVersionNumber;
+      }
+    })
   }
   ngOnInit() {
     this.firstFormGroup = this._formBuilder.group({
@@ -98,19 +104,19 @@ export class LoginPage implements OnInit {
   }
 
   login() {
-
     if (this.emailFormControl.invalid || this.pswdFormControl.invalid) {
       //return false;
     } else {
 
       let loginJSON = {
         "userId": this.emailFormControl.value,
-        "key": this.pswdFormControl.value
+        "key": this.pswdFormControl.value,
+        "appVersion":this.appVersionNumber
       }
-      this.LoaderService.presentLoading();
+  //    this.LoaderService.presentLoading();
       this.CrudServiceService.postData('login', loginJSON)
         .then((result) => {
-            this.LoaderService.disMissLoading();
+         //   this.LoaderService.disMissLoading();
             if (result["status"] == 'success') {
 
               this.storage.set('participantLogin', result['data']);

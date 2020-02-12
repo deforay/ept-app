@@ -24,6 +24,7 @@ export class AllPTSchemesPage implements OnInit {
   //variable declaration
   authToken: any;
   shippingsArray = [];
+  shipmentFormArray=[];
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -51,10 +52,29 @@ export class AllPTSchemesPage implements OnInit {
           }, (err) => {
         //    this.LoaderService.disMissLoading();
           });
+
+          this.CrudServiceService.getData('shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken)
+          .then(result => {
+         //   this.LoaderService.disMissLoading();
+             if (result["status"] == 'success') {
+              this.shipmentFormArray = result['data'];
+              console.log(this.shipmentFormArray);
+              this.storage.set("shipmentFormArray",this.shipmentFormArray);
+          }
+          }, (err) => {
+        //    this.LoaderService.disMissLoading();
+          });
       }
     });
   }
 
-
-
+  goToTestScheme(item){
+    if(item.schemeType=='dts'){
+      this.router.navigate(['/dts-hiv-serology']);
+    }
+    if(item.schemeType=='vl'){
+      this.router.navigate(['/dts-hiv-viralload']);
+    }
+  }
+  
 }

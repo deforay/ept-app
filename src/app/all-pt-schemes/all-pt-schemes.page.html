@@ -1,11 +1,16 @@
 <ion-header>
-  <ion-toolbar>
-    <ion-title>all-PT-schemes</ion-title>
-  </ion-toolbar>
-</ion-header>
+    <ion-toolbar>
+      <ion-buttons slot="start">
+        <ion-menu-button></ion-menu-button>
+      </ion-buttons>
+      <ion-title class="eptHeaderTitle">
+       All Shipments
+      </ion-title>
+    </ion-toolbar>
+  </ion-header>
 
 <ion-content>
-  <ion-card *ngFor="let item of shippingsArray" class="eptCard" (click)="viewSchemeCustDetails(item)">
+  <ion-card *ngFor="let item of shippingsArray" class="eptCard">
     <ion-card-header class="CardHeader">
       <p text-wrap class="schemeName"> {{item.schemeName}}</p>
     </ion-card-header>
@@ -25,7 +30,7 @@
               </p>
           </ion-col>
           <ion-col>
-            <p text-wrap>
+            <p text-wrap class="shipmentValues">
               <span>{{item.shipmentDate | date :'d MMM y'}}</span>
             </p>
           </ion-col>
@@ -44,7 +49,7 @@
               </p>
           </ion-col>
           <ion-col>
-            <p text-wrap>
+            <p text-wrap class="shipmentValues">
               <span>{{item.shipmentCode}}</span>
             </p>
           </ion-col>
@@ -63,7 +68,7 @@
                 </p>
             </ion-col>
             <ion-col>
-              <p text-wrap>
+              <p text-wrap class="shipmentValues">
                 <span>{{item.participantId}}</span>
               </p>
             </ion-col>
@@ -83,7 +88,7 @@
                   </p>
               </ion-col>
               <ion-col>
-                <p text-wrap>
+                <p text-wrap class="shipmentValues">
                   <span>{{item.participantName}}</span>
                 </p>
               </ion-col>
@@ -102,7 +107,7 @@
                     </p>
                 </ion-col>
                 <ion-col>
-                  <p text-wrap>
+                  <p text-wrap class="shipmentValues">
                     <span>{{item.resultDueDate  | date :'d MMM y'}}</span>
                   </p>
                 </ion-col>
@@ -120,13 +125,17 @@
                       </p>
                   </ion-col>
                   <ion-col>
-                    <p text-wrap>
+                    <p text-wrap class="shipmentValues">
                       <span>{{item.responseDate  | date :'d MMM y'}}</span>
                     </p>
                   </ion-col>
                 </ion-row>
       </ion-grid>
+      <ion-button color="tertiary" expand="block" (click)="goToTestScheme(item)">Enter Response</ion-button>
+<!-- 
+      <ion-button color="tertiary" expand="block">Edit Response</ion-button>
 
+      <ion-button color="tertiary" expand="block">View Response</ion-button> -->
     </ion-card-content>
   </ion-card>
 
