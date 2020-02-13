@@ -35,12 +35,13 @@ interface selectArray {
 export class DtsHivViralloadPage implements OnInit {
   algorithmused: any;
   algUsed: selectArray[] = [
-    {id: 1, name: 'Serial'},
-    {id: 2, name: 'Parallel'}
+    {id: "1", name: 'Serial'},
+    {id: "2", name: 'Parallel'}
   ];
   panelOpenState = false;
   partDetailsArray = [];
-  
+  vlCalc:any;
+  vlLog;
   constructor() {
     this.partDetailsArray = [{
         "key": "Participant Name",
@@ -81,5 +82,12 @@ export class DtsHivViralloadPage implements OnInit {
   prevStep() {
     this.step--;
   }
+  calcLog(){
+    if(this.vlCalc==''){
+      this.vlLog='';
+    }else{
+    this.vlLog = (Math.log10(this.vlCalc)).toFixed(1);
 
+    }
+  }
 }

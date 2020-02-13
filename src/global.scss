@@ -71,6 +71,9 @@
 .eptHeaderTitle{
     font-size:17px;
 }
+.div-section{
+margin:10px;
+}
 /* Global CSS Changes Ends */
 
 
@@ -91,7 +94,8 @@
     color: #9C27B0 ;
 }
 .mat-form-field.grid-col-form {
-   width:calc(100% - 10px) !important;
+//    width:calc(100% - 10px) !important;
+   width:100% !important;
 }
 .mat-form-field .mat-form-field-wrapper{
     padding-bottom: 0px;
@@ -99,6 +103,9 @@
 .mat-form-field.mat-form-field-invalid .mat-form-field-wrapper{
     padding-bottom:20px;
 
+}
+.mat-form-field-appearance-outline .mat-form-field-wrapper {
+    margin: .07em 0 !important;
 }
 .mat-form-field-appearance-outline .mat-form-field-flex
 {
