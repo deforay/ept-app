@@ -46,11 +46,13 @@ interface selectArray {
 
 })
 export class DTSHIVSerologyPage implements OnInit {
+
   panelOpenState = false;
   DTSFormArray = [];
   participantsFieldsArray = [];
-  partiKeysArray = [];
-  partiKeyValueArray=[];
+  partiKeysValuesArray=[];
+  shipmentDetailsArray=[];
+  shipmentDetailsKeysValuesArray=[];
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -91,27 +93,23 @@ export class DTSHIVSerologyPage implements OnInit {
         this.DTSFormArray = shipmentFormArray.filter(i => i.schemeType == "dts");
       }
       if (this.DTSFormArray) {
-     
-        this.participantsFieldsArray = this.DTSFormArray[0].dtsData.Heading1;
+     debugger;
+        this.participantsFieldsArray=(this.DTSFormArray[0].dtsData.Heading1);
+        for (let [key, value] of Object.entries(this.participantsFieldsArray)) {
+          this.partiKeysValuesArray.push({keys:key,values:value}) 
+        }
 
-        this.partiKeysArray = Object.keys(this.participantsFieldsArray);
-        //  this.partiKeysArray=Object.values(this.participantsFieldsArray);
-        //  console.log(this.partiKeysArray);
-        //  const obj = { foo: 'bar', baz: 42 };
-        //  console.log(Object.values(obj)); // ['bar', 42]
+        console.log(this.partiKeysValuesArray);
+
+        this.shipmentDetailsArray=(this.DTSFormArray[0].dtsData.Heading2);
+        for (let [key, value] of Object.entries(this.shipmentDetailsArray)) {
+          this.shipmentDetailsKeysValuesArray.push({keys:key,values:value}) 
+        }
+        
+        console.log(this.shipmentDetailsKeysValuesArray);
 
 
-        // instantiation
-        const myMap = new Map([
-          ["A", 1],
-          ["B", 2]
-        ]);
-
-        // what's built into Map for you
-        myMap.forEach((val, key) => this.partiKeyValueArray.push({keys:key,values:val})  //console.log(key, val)
-        ); // "A 1", "B 2"
       }
-
     })
 
   }
