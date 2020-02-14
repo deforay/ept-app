@@ -22,6 +22,7 @@ import {
 import {
   Storage
 } from '@ionic/storage';
+import { ActivatedRoute } from '@angular/router';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 
@@ -48,17 +49,17 @@ interface selectArray {
 export class DTSHIVSerologyPage implements OnInit {
 
   panelOpenState = false;
-  DTSFormArray = [];
-  participantsFieldsArray = [];
-  partiKeysValuesArray=[];
-  shipmentDetailsArray=[];
-  shipmentDetailsKeysValuesArray=[];
+  selectedTestFormStringify:any;
+  selectedTestFormArray=[];
+  partiDetailsArray=[];
+  shipmentsDetailsArray=[];
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
-    private router: Router) {
-    this.getDynFieldsSerology();
+    private router: Router,
+    private activatedRoute: ActivatedRoute) {
+//    this.getDynFieldsSerology();
   }
   algorithmused: any;
   algUsed: selectArray[] = [{
@@ -71,7 +72,26 @@ export class DTSHIVSerologyPage implements OnInit {
     }
   ];
 
-  ngOnInit() {}
+  ngOnInit() {
+    if(this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray')){
+      debugger;
+      this.selectedTestFormStringify = this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray');
+      this.selectedTestFormArray=JSON.parse(this.selectedTestFormStringify);
+      console.log(this.selectedTestFormArray);
+      if(this.selectedTestFormArray[0].dtsData.Heading1.status==true){
+
+        this.partiDetailsArray=this.selectedTestFormArray[0].dtsData.Heading1.data;
+
+      }
+      if(this.selectedTestFormArray[0].dtsData.Heading2.status==true){
+
+        this.shipmentsDetailsArray=this.selectedTestFormArray[0].dtsData.Heading2.data;
+
+      }
+
+    }
+  }
+
   step = 0;
 
   setStep(index: number) {
@@ -86,31 +106,8 @@ export class DTSHIVSerologyPage implements OnInit {
     this.step--;
   }
 
-  getDynFieldsSerology() {
-    this.storage.get('shipmentFormArray').then((shipmentFormArray) => {
-
-      if (shipmentFormArray) {
-        this.DTSFormArray = shipmentFormArray.filter(i => i.schemeType == "dts");
-      }
-      if (this.DTSFormArray) {
-     debugger;
-        this.participantsFieldsArray=(this.DTSFormArray[0].dtsData.Heading1);
-        for (let [key, value] of Object.entries(this.participantsFieldsArray)) {
-          this.partiKeysValuesArray.push({keys:key,values:value}) 
-        }
-
-        console.log(this.partiKeysValuesArray);
-
-        this.shipmentDetailsArray=(this.DTSFormArray[0].dtsData.Heading2);
-        for (let [key, value] of Object.entries(this.shipmentDetailsArray)) {
-          this.shipmentDetailsKeysValuesArray.push({keys:key,values:value}) 
-        }
-        
-        console.log(this.shipmentDetailsKeysValuesArray);
-
-
-      }
-    })
-
-  }
+//   getDynFieldsSerology() {
+// debugger;
+// console.log(this.selectedTestFormArray);
+//   }
 }

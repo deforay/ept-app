@@ -20,10 +20,10 @@
 
       <ion-grid>
 
-          <ion-row *ngFor="let item of partiKeysValuesArray">
+          <ion-row>
               <ion-col size="6">
                 <p text-wrap>
-                  <span class="text-title-color">{{item.keys}} </span>
+                  <span class="text-title-color">Participant Name</span>
                 </p>
               </ion-col>
               <ion-col size="1">
@@ -33,11 +33,86 @@
               </ion-col>
               <ion-col>
                 <p text-wrap class="partiValues">
-                  <span>{{item.values}}</span>
+                  <span>{{partiDetailsArray.participantName}}</span>
                 </p>
               </ion-col>
             </ion-row>
 
+
+            <ion-row >
+              <ion-col size="6">
+                <p text-wrap>
+                  <span class="text-title-color">Participant Code </span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                <p text-wrap>
+                  <span class="text-title-color">:</span>
+                </p>
+              </ion-col>
+              <ion-col>
+                <p text-wrap class="partiValues">
+                  <span>{{partiDetailsArray.participantCode}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
+
+
+            <ion-row >
+              <ion-col size="6">
+                <p text-wrap>
+                  <span class="text-title-color">Affiliation </span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                <p text-wrap>
+                  <span class="text-title-color">:</span>
+                </p>
+              </ion-col>
+              <ion-col>
+                <p text-wrap class="partiValues">
+                  <span>{{partiDetailsArray.affiliation}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
+
+
+            <ion-row>
+              <ion-col size="6">
+                <p text-wrap>
+                  <span class="text-title-color">Tel Phone No</span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                <p text-wrap>
+                  <span class="text-title-color">:</span>
+                </p>
+              </ion-col>
+              <ion-col>
+                <p text-wrap class="partiValues">
+                  <span>{{partiDetailsArray.phone}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
+
+
+            <ion-row >
+              <ion-col size="6">
+                <p text-wrap>
+                  <span class="text-title-color">Mobile No</span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                <p text-wrap>
+                  <span class="text-title-color">:</span>
+                </p>
+              </ion-col>
+              <ion-col>
+                <p text-wrap class="partiValues">
+                  <span>{{partiDetailsArray.mobile}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
 
       </ion-grid>
       <mat-action-row>
@@ -68,7 +143,7 @@
           </ion-col>
           <ion-col>
             <p text-wrap>
-              <span>29-Feb-2020 </span>
+              <span>{{shipmentsDetailsArray.shipmentDate}} </span>
             </p>
           </ion-col>
         </ion-row>
@@ -85,7 +160,7 @@
           </ion-col>
           <ion-col>
             <p text-wrap>
-              <span>05-Mar-2020
+              <span>{{shipmentsDetailsArray.resultDueDate}}
               </span>
             </p>
           </ion-col>
