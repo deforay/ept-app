@@ -6,7 +6,8 @@
     top: 20px;
 }
 ion-grid ion-row ion-col{
-    padding:0 ;
+    padding:2px !important;
+    width:calc(100% - 10px);
         p{
             margin:5px;
         }
@@ -21,3 +22,19 @@ ion-grid ion-row ion-col{
     .card-div mat-card{
         padding:0;
     }
+   .div-section ul{
+       padding-left:30px;
+    li {
+        font-size:13px;
+    }
+   } 
+   p.log-para{
+    margin: 0;
+    margin-top: 10px;
+    color: red;
+    padding-left: 10px;
+   }
+   p.label-para{
+       margin: 0;
+       font-size: 13px;
+   }
