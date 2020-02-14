@@ -68,11 +68,15 @@
 .eptCard:hover{
     box-shadow: 3px 3px 3px 3px #c6d1e3;
 }
-.eptHeaderTitle{
-    font-size:17px;
-}
+// .eptHeaderTitle{
+//     font-size:17px;
+// }
 .div-section{
 margin:10px;
+}
+ion-header ion-toolbar ion-title{
+    font-size:15px;
+    padding: 0px;
 }
 /* Global CSS Changes Ends */
 

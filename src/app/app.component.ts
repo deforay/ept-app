@@ -42,11 +42,11 @@ export class AppComponent {
       url: '/dts-hiv-viralload',
       icon: 'list'
     },
-    // {
-    //   title: 'Log Out',
-    //   url: '/login',
-    //   icon: 'login'
-    // },
+    {
+      title: 'Log Out',
+      url: '/login',
+      icon: 'list'
+    },
 
   ];
 
