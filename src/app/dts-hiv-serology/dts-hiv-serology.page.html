@@ -213,8 +213,8 @@
               <mat-label>Algorithm Used </mat-label>
               <mat-select [(ngModel)]="algorithmused" name="alg" required>
                 <mat-option>--Select--</mat-option>
-                <mat-option *ngFor="let alg of algUsed" [value]="alg.id">
-                  {{alg.name}}
+                <mat-option *ngFor="let alg of algorithmUsedSelectArray" [value]="alg.value">
+                  {{alg.show}}
                 </mat-option>
               </mat-select>
 
@@ -226,8 +226,8 @@
               <mat-label>Mode of Receipt</mat-label>
               <mat-select [(ngModel)]="receiptmode" name="rmode" required>
                 <mat-option>--Select--</mat-option>
-                <mat-option *ngFor="let alg of algUsed" [value]="alg.id">
-                  {{alg.name}}
+                <mat-option *ngFor="let modeRec of modeOfReceiptArray" [value]="modeRec.value">
+                  {{modeRec.show}}
                 </mat-option>
               </mat-select>
 
@@ -235,6 +235,40 @@
             </mat-form-field>
           </ion-col>
         </ion-row>
+
+        <ion-row *ngIf="isQCDoneShow">
+          <ion-col size="12">
+              <mat-label>QC Done</mat-label> 
+             <mat-radio-group
+              aria-labelledby="example-radio-group-label"
+              class="login-full-width grid-col-form"
+              [(ngModel)]="qcDone">
+              <mat-radio-button class="example-radio-button" *ngFor="let qcData of qcRadioArray" [value]="qcData.value">
+                {{qcData.show}}
+              </mat-radio-button>
+            </mat-radio-group> 
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row *ngIf="isQCDoneShow && qcDone=='yes'">
+          <ion-col size="6">
+            <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+              <mat-label>QC Date</mat-label>
+              <input matInput [matDatepicker]="qcDate" placeholder="Choose a date" required disabled>
+              <mat-datepicker-toggle matSuffix [for]="qcDate"></mat-datepicker-toggle>
+              <mat-datepicker #qcDate disabled="false"></mat-datepicker>
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="6">
+            <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>QC Done By </mat-label>
+                <input matInput [(ngModel)]="qcDoneBy" placeholder="" >
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+
       </ion-grid>
 
       <mat-action-row>
@@ -251,15 +285,15 @@
 
       </mat-expansion-panel-header>
       <mat-tab-group mat-stretch-tabs>
-        <mat-tab label="Test-1">
+        <mat-tab *ngFor="let item of testKitNameArray" label={{item}}>
           <ion-row>
             <ion-col size="12">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Kit Name </mat-label>
                 <mat-select [(ngModel)]="kitname" name="kit">
                   <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let alg of algUsed" [value]="alg.id">
-                    {{alg.name}}
+                  <mat-option *ngFor="let kitNameItem of testKitDetailsArray.kitName[item].data" [value]="kitNameItem.value">
+                    {{kitNameItem.show}}
                   </mat-option>
                 </mat-select>
                 <!-- <mat-error *ngIf="!kitname">Please choose the Kit</mat-error> -->
@@ -284,42 +318,7 @@
             </ion-col>
           </ion-row>
         </mat-tab>
-        <mat-tab label="Test-2">
-          <ion-row>
-            <ion-col size="12">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Kit Name </mat-label>
-                <mat-select [(ngModel)]="kitname" name="kit">
-                  <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let alg of algUsed" [value]="alg.id" required>
-                    {{alg.name}}
-                  </mat-option>
-                </mat-select>
-                <!-- <mat-error *ngIf="!kitname">Please choose the Kit</mat-error> -->
-              </mat-form-field>
-            </ion-col>
-
-          </ion-row>
-          <ion-row>
-            <ion-col size="6">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Lot Number </mat-label>
-                <input matInput [(ngModel)]="LotNo" placeholder="Enter Lot Number" >
-                
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="6">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Exp Date</mat-label>
-                <input matInput [matDatepicker]="expDate1" placeholder="Choose a date" (click)="expDate1.open()"
-                  required disabled>
-                <mat-datepicker-toggle matSuffix [for]="expDate1"></mat-datepicker-toggle>
-                <mat-datepicker #expDate1 disabled="false"></mat-datepicker>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-        </mat-tab>
-
+   
       </mat-tab-group>
 
 
@@ -366,6 +365,8 @@
             </ion-col>
           </ion-row>
         </mat-tab>
+
+
         <mat-tab label="Result-2">
 
           <ion-row>
@@ -397,6 +398,8 @@
             </ion-col>
           </ion-row>
         </mat-tab>
+
+        
         <mat-tab label="Final Result">
 
           <ion-row>
@@ -450,9 +453,9 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Supervisor Review </mat-label>
                 <mat-select [(ngModel)]="supReview" name="supReview">
-                  <mat-option>--Select--</mat-option>
-                  <mat-option value="yes">YES</mat-option>
-                  <mat-option value="no">NO</mat-option>
+                  <mat-option *ngFor="let item of supervisorReviewArray" [value]="item.value">
+                    {{item.show}}
+                  </mat-option>
                 </mat-select>
               </mat-form-field>
             </ion-col>
@@ -464,6 +467,18 @@
         </ion-col>
        
       </ion-row>
+
+
+      <ion-row *ngIf="supReview=='yes'">
+        <ion-col size="12">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+              <mat-label>Supervisor Name</mat-label>
+              <input matInput [(ngModel)]="supervisorName" placeholder="" >
+          </mat-form-field>
+        </ion-col> 
+    </ion-row>
+
+
     </ion-grid>
 
     <mat-action-row>

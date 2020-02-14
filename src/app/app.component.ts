@@ -67,6 +67,8 @@ export class AppComponent {
       this.appVersion.getVersionNumber().then(value => {
         this.appVersionNumber = value;
         this.storage.set('appVersionNumber', this.appVersionNumber); 
+
+        
       }).catch(err => {
      //   console.log(err);
       });

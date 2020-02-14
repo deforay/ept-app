@@ -130,6 +130,9 @@ export class LoginPage implements OnInit {
 
                 this.ToastService.presentToastWithOptions(result["message"]);
               }
+
+
+              
             }, (err) => {
               this.LoaderService.disMissLoading();
             });

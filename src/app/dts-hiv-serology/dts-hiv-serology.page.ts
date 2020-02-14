@@ -22,7 +22,9 @@ import {
 import {
   Storage
 } from '@ionic/storage';
-import { ActivatedRoute } from '@angular/router';
+import {
+  ActivatedRoute
+} from '@angular/router';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 
@@ -49,17 +51,29 @@ interface selectArray {
 export class DTSHIVSerologyPage implements OnInit {
 
   panelOpenState = false;
-  selectedTestFormStringify:any;
-  selectedTestFormArray=[];
-  partiDetailsArray=[];
-  shipmentsDetailsArray=[];
+  selectedTestFormStringify: any;
+  selectedTestFormArray = [];
+  partiDetailsArray = [];
+  shipmentsDetailsArray: any;
+  algorithmUsedSelectArray = [];
+  modeOfReceiptArray = [];
+  qcRadioArray = [];
+  isQCDoneShow: boolean;
+  testKitDetailsArray:any;
+  sampleDetailsArray:any;
+  otherInfoArray:any;
+  supervisorReviewArray=[];
+  samplesArray=[];
+  testKitNameArray=[];
+
+
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
     private router: Router,
     private activatedRoute: ActivatedRoute) {
-//    this.getDynFieldsSerology();
+    //    this.getDynFieldsSerology();
   }
   algorithmused: any;
   algUsed: selectArray[] = [{
@@ -73,22 +87,48 @@ export class DTSHIVSerologyPage implements OnInit {
   ];
 
   ngOnInit() {
-    if(this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray')){
-      debugger;
+    if (this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray')) {
+     
       this.selectedTestFormStringify = this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray');
-      this.selectedTestFormArray=JSON.parse(this.selectedTestFormStringify);
+      this.selectedTestFormArray = JSON.parse(this.selectedTestFormStringify);
       console.log(this.selectedTestFormArray);
-      if(this.selectedTestFormArray[0].dtsData.Heading1.status==true){
+      if (this.selectedTestFormArray[0].dtsData.Heading1.status == true) {
 
-        this.partiDetailsArray=this.selectedTestFormArray[0].dtsData.Heading1.data;
-
-      }
-      if(this.selectedTestFormArray[0].dtsData.Heading2.status==true){
-
-        this.shipmentsDetailsArray=this.selectedTestFormArray[0].dtsData.Heading2.data;
+        this.partiDetailsArray = this.selectedTestFormArray[0].dtsData.Heading1.data;
 
       }
+      if (this.selectedTestFormArray[0].dtsData.Heading2.status == true) {
 
+        this.shipmentsDetailsArray = this.selectedTestFormArray[0].dtsData.Heading2.data;
+        this.algorithmUsedSelectArray = this.shipmentsDetailsArray.algorithmUsedSelect;
+        this.modeOfReceiptArray = this.shipmentsDetailsArray.modeOfReceiptSelect;
+        this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
+        if (this.isQCDoneShow == true) {
+          this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
+        }
+
+      }
+debugger;
+      if (this.selectedTestFormArray[0].dtsData.Heading3.status == true) {
+
+        this.testKitDetailsArray = this.selectedTestFormArray[0].dtsData.Heading3.data;
+
+        this.testKitNameArray=this.testKitDetailsArray.kitText;
+
+      }
+
+      if (this.selectedTestFormArray[0].dtsData.Heading4.status == true) {
+
+        this.sampleDetailsArray = this.selectedTestFormArray[0].dtsData.Heading4.data;
+        this.samplesArray=this.sampleDetailsArray.samples;
+        
+      }
+
+      if (this.selectedTestFormArray[0].dtsData.Heading5.status == true) {
+
+        this.otherInfoArray = this.selectedTestFormArray[0].dtsData.Heading5.data;
+        this.supervisorReviewArray=this.otherInfoArray.supervisorReview;
+      }
     }
   }
 
@@ -106,8 +146,8 @@ export class DTSHIVSerologyPage implements OnInit {
     this.step--;
   }
 
-//   getDynFieldsSerology() {
-// debugger;
-// console.log(this.selectedTestFormArray);
-//   }
+  //   getDynFieldsSerology() {
+  // debugger;
+  // console.log(this.selectedTestFormArray);
+  //   }
 }

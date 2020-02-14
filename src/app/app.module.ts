@@ -15,6 +15,7 @@ import { CrudServiceService,constantService,ToastService,LoaderService } from '.
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { AppVersion } from '@ionic-native/app-version/ngx';
+import { Market } from '@ionic-native/market/ngx';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -35,6 +36,7 @@ import { AppVersion } from '@ionic-native/app-version/ngx';
     ToastService,
     LoaderService,
     AppVersion,
+    Market,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
