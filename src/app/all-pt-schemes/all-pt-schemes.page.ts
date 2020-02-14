@@ -5,11 +5,7 @@ import {
 import {
   Router
 } from '@angular/router';
-import {
-  CrudServiceService,
-  ToastService,
-  LoaderService
-} from '../../app/service/providers';
+import {  CrudServiceService,ToastService,LoaderService } from '../../app/service/providers';
 import {
   Storage
 } from '@ionic/storage';
@@ -99,7 +95,9 @@ export class AllPTSchemesPage implements OnInit {
           }
           if(this.TestFormArray[0].schemeType == 'vl'){
             if(this.TestFormArray[0].vlData.access.status=='success'){
-            this.router.navigate(['/dts-hiv-viralload',{"selectedTestFormArray":JSON.stringify(this.TestFormArray)}]);
+              this.router.navigate(['/dts-hiv-viralload']);
+              
+            // this.router.navigate(['/dts-hiv-viralload',{"selectedTestFormArray":JSON.stringify(this.TestFormArray)}]);
             }
           }
         }

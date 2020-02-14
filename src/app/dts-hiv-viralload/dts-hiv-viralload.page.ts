@@ -8,13 +8,10 @@ import {
   NgForm,
   Validators
 } from '@angular/forms';
-
-import {
-  Router
-} from '@angular/router';
-import {
-  ErrorStateMatcher
-} from '@angular/material/core';
+import {  Storage } from '@ionic/storage';
+import {  Router,ActivatedRoute } from '@angular/router';
+import {  CrudServiceService,ToastService,LoaderService } from '../../app/service/providers';
+import {  ErrorStateMatcher } from '@angular/material/core';
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -39,36 +36,88 @@ export class DtsHivViralloadPage implements OnInit {
     {id: "2", name: 'Parallel'}
   ];
   panelOpenState = false;
+
   partDetailsArray = [];
+  shipmentsDetailsArray=[];
+  ptPanelTestArray=[];
+  otherInfoArray=[];
+  viewAccessMessage:string='';
+  // selectedTestFormStringify:any;
+  // selectedTestFormArray=[];
   vlCalc:any;
   vlLog;
-  constructor() {
-    this.partDetailsArray = [{
-        "key": "Participant Name",
-        "value": "Indhu"
-      },
-      {
-        "key": "Participant Code",
-        "value": "4125"
-      },
-      {
-        "key": "Affiliation",
-        "value": "Laboratory"
-      },
-      {
-        "key": "Tel Phone No",
-        "value": "044-345444645"
-      },
-      {
-        "key": "Mobile No",
-        "value": "9841119818"
-      }
-    ];
+  testReceiptDate;
+  sampleRhdDate;
+  constructor(private activatedRoute: ActivatedRoute,private storage: Storage, public ToastService: ToastService,
+    public LoaderService: LoaderService,public CrudServiceService: CrudServiceService) {
+    // this.partDetailsArray = [{
+    //     "key": "Participant Name",
+    //     "value": "Indhu"
+    //   },
+    //   {
+    //     "key": "Participant Code",
+    //     "value": "4125"
+    //   },
+    //   {
+    //     "key": "Affiliation",
+    //     "value": "Laboratory"
+    //   },
+    //   {
+    //     "key": "Tel Phone No",
+    //     "value": "044-345444645"
+    //   },
+    //   {
+    //     "key": "Mobile No",
+    //     "value": "9841119818"
+    //   }
+    // ];
   }
 
 
 
-  ngOnInit() {}
+  ngOnInit() {
+    // if(this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray')){
+      
+    //   this.selectedTestFormStringify = this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray');
+    //   this.selectedTestFormArray=JSON.parse(this.selectedTestFormStringify);
+    //   console.log(this.selectedTestFormArray);
+    //   if(this.selectedTestFormArray[0].vlData.Heading1.status==true){
+
+    //     this.partDetailsArray=this.selectedTestFormArray[0].vlData.Heading1.data;
+    //     console.log(this.partDetailsArray)
+
+    //   }else{
+    //     this.partDetailsArray=[];
+    //   }
+    //   if(this.selectedTestFormArray[0].vlData.Heading2.status==true){
+
+    //     this.shipmentsDetailsArray=this.selectedTestFormArray[0].vlData.Heading2.data;
+
+    //   }else{
+    //     this.shipmentsDetailsArray
+    //   }
+    // }
+ this.storage.get('selectedTestFormArray').then((vlDataObj)=>{
+      console.log(vlDataObj[0]);
+      if(vlDataObj[0].vlData.access.status=='success'){
+        this.partDetailsArray = vlDataObj[0].vlData.Heading1.data;
+        this.shipmentsDetailsArray = vlDataObj[0].vlData.Heading2.data;
+        this.ptPanelTestArray = vlDataObj[0].vlData.Heading3.data;
+        if(this.shipmentsDetailsArray['receiptDate']){
+          this.testReceiptDate = new Date(this.shipmentsDetailsArray['receiptDate']);
+        }
+        if(this.shipmentsDetailsArray['sampleRehydrationDate']){
+          this.sampleRhdDate = new Date(this.shipmentsDetailsArray['sampleRehydrationDate']);
+        }
+        this.otherInfoArray = vlDataObj[0].vlData.Heading4.data;
+      }else{
+        this.viewAccessMessage = vlDataObj[0].vlData.access.message;
+      }
+    })
+//     else if (this.storage.get('selectedTestFormArray') ){
+// console.log(this.storage.get('selectedTestFormArray'))
+//     }
+  }  
   step = 0;
 
   setStep(index: number) {

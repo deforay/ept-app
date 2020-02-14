@@ -11,6 +11,7 @@
 
 
 <ion-content>
+  <p *ngIf="viewAccessMessage">{{viewAccessMessage}}</p>
   <mat-accordion class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
       <mat-expansion-panel-header>
@@ -20,88 +21,88 @@
       </mat-expansion-panel-header>
 
       <ion-grid>
-        <ion-row>
-          <ion-col size="5">
+        <ion-row *ngIf="partDetailsArray.participantName">
+          <ion-col size="5" class="grid-readonly-col">
             <p text-wrap>
               <span class="text-title-color">Participant Name </span>
             </p>
           </ion-col>
-          <ion-col size="1">
+          <ion-col size="1"class="grid-readonly-col">
             <p text-wrap>
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
-          <ion-col>
+          <ion-col class="grid-readonly-col">
             <p text-wrap>
-              <span>MUKAMAZIMPAKA Athanasie</span>
+              <span>{{partDetailsArray.participantName}}</span>
             </p>
           </ion-col>
         </ion-row>
-        <ion-row>
-          <ion-col size="5">
+        <ion-row *ngIf="partDetailsArray.participantCode">
+          <ion-col size="5"class="grid-readonly-col">
             <p text-wrap>
-              <span class="text-title-color">Participant Code :</span>
+              <span class="text-title-color">Participant Code </span>
             </p>
           </ion-col>
-          <ion-col size="1">
+          <ion-col size="1" class="grid-readonly-col">
             <p text-wrap>
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
-          <ion-col>
+          <ion-col class="grid-readonly-col">
             <p text-wrap>
-              <span>1386</span>
+              <span>{{partDetailsArray.participantCode}}</span>
             </p>
           </ion-col>
         </ion-row>
-        <ion-row>
-          <ion-col size="5">
+        <ion-row *ngIf="partDetailsArray.affiliation">
+          <ion-col size="5" class="grid-readonly-col">
             <p text-wrap>
-              <span class="text-title-color">Affiliation :</span>
+              <span class="text-title-color">Affiliation </span>
             </p>
           </ion-col>
-          <ion-col size="1">
+          <ion-col size="1" class="grid-readonly-col">
             <p text-wrap>
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
-          <ion-col>
+          <ion-col class="grid-readonly-col">
             <p text-wrap>
-              <span> Athanasie</span>
+              <span> {{partDetailsArray.affiliation}}</span>
             </p>
           </ion-col>
         </ion-row>
-        <ion-row>
-          <ion-col size="5">
+        <ion-row *ngIf="partDetailsArray.phone">
+          <ion-col size="5" class="grid-readonly-col">
             <p text-wrap>
-              <span class="text-title-color">Phone No :</span>
+              <span class="text-title-color">Phone No </span>
             </p>
           </ion-col>
-          <ion-col size="1">
+          <ion-col size="1" class="grid-readonly-col">
             <p text-wrap>
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
-          <ion-col>
+          <ion-col class="grid-readonly-col">
             <p text-wrap>
-              <span>4444444444</span>
+              <span>{{partDetailsArray.phone}}</span>
             </p>
           </ion-col>
         </ion-row>
-        <ion-row>
-          <ion-col size="5">
+        <ion-row *ngIf="partDetailsArray.mobile">
+          <ion-col size="5" class="grid-readonly-col">
             <p text-wrap>
-              <span class="text-title-color">Mobile No :</span>
+              <span class="text-title-color">Mobile No</span>
             </p>
           </ion-col>
-          <ion-col size="1">
+          <ion-col size="1" class="grid-readonly-col">
             <p text-wrap>
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
-          <ion-col>
+          <ion-col class="grid-readonly-col">
             <p text-wrap>
-              <span>445555555</span>
+              <span>{{partDetailsArray.mobile}}</span>
             </p>
           </ion-col>
         </ion-row>
@@ -120,67 +121,62 @@
       </mat-expansion-panel-header>
 
       <ion-grid>
-        <ion-row>
-          <ion-col size="5">
+        <ion-row *ngIf="shipmentsDetailsArray.shipmentDate">
+          <ion-col size="5" class="grid-readonly-col">
             <p text-wrap>
               <span class="text-title-color">Shipment Date </span>
             </p>
           </ion-col>
-          <ion-col size="1">
+          <ion-col size="1" class="grid-readonly-col">
             <p text-wrap>
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
-          <ion-col>
+          <ion-col class="grid-readonly-col">
             <p text-wrap>
-              <span>29-Feb-2020 </span>
+              <span>{{shipmentsDetailsArray.shipmentDate}}</span>
             </p>
           </ion-col>
         </ion-row>
-        <ion-row>
-          <ion-col size="5">
+        <ion-row *ngIf="shipmentsDetailsArray.resultDueDate">
+          <ion-col size="5" class="grid-readonly-col">
             <p text-wrap>
               <span class="text-title-color">Result Due Date </span>
             </p>
           </ion-col>
-          <ion-col size="1">
+          <ion-col size="1" class="grid-readonly-col">
             <p text-wrap>
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
-          <ion-col>
+          <ion-col class="grid-readonly-col">
             <p text-wrap>
-              <span>05-Mar-2020
+              <span>{{shipmentsDetailsArray.resultDueDate}}
               </span>
             </p>
           </ion-col>
         </ion-row>
-
-
       </ion-grid>
       <ion-grid>
-
         <ion-row>
-          <ion-col size="6" size-xs>
+          <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Test Receipt Date</mat-label>
-              <input matInput [matDatepicker]="testReceiptPicker" placeholder="Choose a date" required disabled>
+              <input matInput  [matDatepicker]="testReceiptPicker" [(ngModel)]="testReceiptDate" placeholder="Choose a date" required disabled>
               <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
               <mat-datepicker #testReceiptPicker disabled="false"></mat-datepicker>
             </mat-form-field>
           </ion-col>
-          <ion-col size="6" size-xs>
+          <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Sample Rehydration Date</mat-label>
-              <input matInput [matDatepicker]="sampleRhdPicker" placeholder="Choose a date" required disabled>
+              <input matInput [matDatepicker]="sampleRhdPicker"[(ngModel)]="sampleRhdDate" placeholder="Choose a date" required disabled>
               <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
               <mat-datepicker #sampleRhdPicker disabled="false"></mat-datepicker>
             </mat-form-field>
           </ion-col>
-          <!-- </ion-row>
-        
-        <ion-row> -->
-          <ion-col size="6" size-xs>
+          
+          <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Testing Date</mat-label>
               <input matInput [matDatepicker]="testDatePicker" placeholder="Choose a date" required disabled>
@@ -188,7 +184,7 @@
               <mat-datepicker #testDatePicker disabled="false"></mat-datepicker>
             </mat-form-field>
           </ion-col>
-          <ion-col size="6" size-xs>
+          <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Viral Load Assay </mat-label>
               <mat-select [(ngModel)]="vlassay" name="vlassay" required>
@@ -202,7 +198,7 @@
             </mat-form-field>
 
           </ion-col>
-          <ion-col size="6" size-xs *ngIf="vlassay=='1'">
+          <ion-col size="6" size-xs *ngIf="vlassay=='1'" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Please specify Other Assay Name </mat-label>
               <input matInput [(ngModel)]="othervlassay" placeholder="Enter Other Assay Name" required>
@@ -213,7 +209,7 @@
         </ion-row>
 
         <ion-row>
-          <ion-col size="12">
+          <ion-col size="12" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Specimen Volume used for testing</mat-label>
               <input matInput [(ngModel)]="specVolTest" placeholder="Enter Specimen Volume">
@@ -222,7 +218,7 @@
         </ion-row>
 
         <ion-row>
-          <ion-col size="6">
+          <ion-col size="6" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Assay Expiration Date</mat-label>
               <input matInput [matDatepicker]="assayExpDate" placeholder="Choose a date" required disabled>
@@ -231,7 +227,7 @@
             </mat-form-field>
           </ion-col>
 
-          <ion-col size="6">
+          <ion-col size="6" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Assay Lot Number</mat-label>
               <input matInput [(ngModel)]="assayLotNo" placeholder="Enter Assay Lot Number">
@@ -240,7 +236,7 @@
         </ion-row>
 
         <ion-row>
-          <ion-col size="6">
+          <ion-col size="6" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Response Date</mat-label>
               <input matInput [matDatepicker]="respDate" placeholder="Choose a date" required disabled>
@@ -248,7 +244,7 @@
               <mat-datepicker #respDate disabled="false"></mat-datepicker>
             </mat-form-field>
           </ion-col>
-          <ion-col size="6">
+          <ion-col size="6" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Mode of Receipt</mat-label>
               <mat-select [(ngModel)]="receiptmode" name="receiptmode" required>
@@ -280,7 +276,7 @@
 
       </mat-expansion-panel-header>
       <ion-row>
-        <ion-col>
+        <ion-col class="grid-input-col">
           <section class="div-section">
             <mat-checkbox [(ngModel)]="ptPanelTest">PT panel not tested</mat-checkbox>
           </section>
@@ -288,7 +284,7 @@
       </ion-row>
       <section *ngIf="ptPanelTest==false || !ptPanelTest">     
       <ion-row>
-        <ion-col>
+        <ion-col class="grid-input-col">
           <section class="div-section">
             <p>Please Note :</p>
             <ul>
@@ -303,7 +299,7 @@
         </ion-col>
       </ion-row>
       <ion-row>
-        <ion-col>
+        <ion-col class="grid-input-col">
           <mat-form-field class="login-full-width grid-col-form" appearance="outline">
             <mat-label>Viral Load Calculator (Convert copies/ml to Log10)
             </mat-label>
@@ -316,8 +312,8 @@
 
       <mat-tab-group mat-stretch-tabs>
         <mat-tab label="Control/Sample 1">
-          <ion-row>
-            <ion-col size="6" size-xs>
+          <ion-row class="padding-top-10">
+            <ion-col size="6" size-xs class="grid-input-col">
               <!-- <p>Control/Sample	</p> -->
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Negative Control
@@ -326,7 +322,7 @@
                   (ngModelChange)="calcLog()">
               </mat-form-field>
             </ion-col>
-            <ion-col size="6" size-xs>
+            <ion-col size="6" size-xs class="grid-input-col">
               <!-- <p>TND(Target Not Detected)</p> -->
               <mat-checkbox>TND(Target Not Detected)</mat-checkbox>
 
@@ -334,8 +330,8 @@
           </ion-row>
         </mat-tab>
         <mat-tab label="Control/Sample 2">
-          <ion-row>
-            <ion-col size="6" size-xs>
+          <ion-row class="padding-top-10">
+            <ion-col size="6" size-xs class="grid-input-col">
               <!-- <p>Control/Sample	</p> -->
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Negative Control
@@ -344,19 +340,17 @@
                   (ngModelChange)="calcLog()">
               </mat-form-field>
             </ion-col>
-            <ion-col size="6" size-xs>
+            <ion-col size="6" size-xs class="grid-input-col">
               <!-- <p>TND(Target Not Detected)</p> -->
               <mat-checkbox>TND(Target Not Detected)</mat-checkbox>
-
             </ion-col>
           </ion-row>
         </mat-tab>
-
       </mat-tab-group>
     </section>
     <section *ngIf="ptPanelTest">
      <ion-row>
-       <ion-col size="12">
+       <ion-col size="12" class="grid-input-col">
           <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>
                   Reason for not testing the PT Panel </mat-label>
@@ -369,14 +363,14 @@
                <mat-error *ngIf="!vlNotTestedReason">Please choose the Reason for not testing</mat-error> 
             </mat-form-field>
        </ion-col>
-       <ion-col size="12">
+       <ion-col size="12" class="grid-input-col">
           <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Your Comments</mat-label>
               <textarea matInput placeholder="Enter Your Comments here" [(ngModel)]="ptNotTestedComments" required></textarea>
               <mat-error *ngIf="!ptNotTestedComments">Please Enter Your Comments</mat-error> 
             </mat-form-field>
         </ion-col>
-        <ion-col size="12">
+        <ion-col size="12" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Do you need any support from the PT Provider ?</mat-label>
                 <textarea matInput placeholder="Enter Your Comments here" [(ngModel)]="ptSupportComments" required></textarea>
@@ -401,7 +395,7 @@
 
       <ion-grid>
         <ion-row>
-          <ion-col>
+          <ion-col class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Supervisor Review </mat-label>
               <mat-select [(ngModel)]="supReview" name="supReview">
@@ -411,7 +405,7 @@
               </mat-select>
             </mat-form-field>
           </ion-col>
-          <ion-col *ngIf="supReview=='yes'">
+          <ion-col *ngIf="supReview=='yes'" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Supervisor Name </mat-label>
               <input matInput [(ngModel)]="supName" placeholder="Enter Supervisor Name">
@@ -419,7 +413,7 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col>
+          <ion-col class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Comments</mat-label>
               <textarea matInput placeholder="Enter Comments here" [(ngModel)]="comments"></textarea>
