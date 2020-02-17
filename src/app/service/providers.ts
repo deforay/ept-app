@@ -1,6 +1,6 @@
-import {
-    constantService
-} from '../service/constant.service';
+// import {
+//     constantService
+// } from '../service/constant.service';
 import {
     CrudServiceService
 } from '../service/crud-service.service';
@@ -13,9 +13,10 @@ import {
 
 export {
 
-    constantService,
+    // constantService,
     CrudServiceService,
     ToastService,
-    LoaderService
+    LoaderService,
+    
 
 }

@@ -26,6 +26,26 @@
           <ion-row>
             <ion-col>
                 <mat-form-field class="login-full-width" appearance="outline">
+                    <mat-label>Server Host</mat-label>
+                    <input matInput placeholder="https://caribbeanept.deforay.in/" [formControl]="serverHostFormControl" [errorStateMatcher]="matcher" >
+                    <button mat-icon-button matSuffix>
+                        <mat-icon >local_post_office
+                          </mat-icon>
+                    </button>
+                    
+                    <mat-error *ngIf="serverHostFormControl.hasError('required')">
+                      Please enter a valid Host URL
+                    </mat-error>
+                    <!-- <mat-error *ngIf="emailFormControl.hasError('required')">
+                      Email is <strong>required</strong>
+                    </mat-error> -->
+                  </mat-form-field>
+            </ion-col>
+              
+          </ion-row>
+          <ion-row>
+            <ion-col>
+                <mat-form-field class="login-full-width" appearance="outline">
                     <mat-label>Username</mat-label>
                     <input matInput placeholder="Email Id" [formControl]="emailFormControl" [errorStateMatcher]="matcher">
                     <button mat-icon-button matSuffix>

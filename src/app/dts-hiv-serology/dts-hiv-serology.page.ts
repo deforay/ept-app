@@ -74,7 +74,7 @@ export class DTSHIVSerologyPage implements OnInit {
 
   ngOnInit() {
     if(this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray')){
-      debugger;
+     
       this.selectedTestFormStringify = this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray');
       this.selectedTestFormArray=JSON.parse(this.selectedTestFormStringify);
       console.log(this.selectedTestFormArray);

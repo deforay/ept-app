@@ -16,9 +16,7 @@
     </ion-card-header>
     <ion-card-content class="cardContent">
       <ion-grid>
-
-
-        <ion-row>
+        <ion-row *ngIf="item.shipmentDate">
           <ion-col size="5">
             <p text-wrap>
               <span class="text-title-color">Shipment Date </span>
@@ -37,7 +35,7 @@
         </ion-row>
 
 
-  <ion-row>
+       <ion-row *ngIf="item.shipmentCode">
           <ion-col size="5">
             <p text-wrap>
               <span class="text-title-color">Shipment Code </span>
@@ -56,7 +54,7 @@
         </ion-row>
 
 
-        <ion-row>
+        <ion-row *ngIf="item.participantId">
             <ion-col size="5">
               <p text-wrap>
                 <span class="text-title-color">Participant ID </span>
@@ -76,7 +74,7 @@
 
 
 
-          <ion-row>
+          <ion-row *ngIf="item.participantName">
               <ion-col size="5">
                 <p text-wrap>
                   <span class="text-title-color">Participant Name </span>
@@ -95,7 +93,7 @@
             </ion-row>
 
 
-            <ion-row>
+            <ion-row *ngIf="item.resultDueDate">
                 <ion-col size="5">
                   <p text-wrap>
                     <span class="text-title-color">Result Due Date </span>
@@ -113,7 +111,7 @@
                 </ion-col>
               </ion-row>
 
-              <ion-row>
+              <ion-row *ngIf="item.responseDate">
                   <ion-col size="5">
                     <p text-wrap>
                       <span class="text-title-color">Response Date </span>
@@ -131,7 +129,7 @@
                   </ion-col>
                 </ion-row>
       </ion-grid>
-      <ion-button color="tertiary" expand="block" (click)="goToTestForm(item)">Enter Response</ion-button>
+      <ion-button class="text-center native-btn" (click)="goToTestForm(item)">Enter Response</ion-button>
 <!-- 
       <ion-button color="tertiary" expand="block">Edit Response</ion-button>
 

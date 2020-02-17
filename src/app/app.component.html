@@ -3,18 +3,19 @@
     <ion-menu contentId="main-content" type="overlay">
       <ion-header>
         <ion-toolbar>
-          <div>
-              <img class="logoImage"  src="assets/img/ept-logo.png">
+          <div class="text-center">
+              <img class="logoImage" class="padding-25" src="assets/img/ept-logo.png">
           </div>
 
           <!-- <ion-title>Menu</ion-title> -->
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <ion-list>
+        <ion-list class="no-padding">
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
             <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-              <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
+              <img src="assets/img/{{p.icon}}.png">
+                <!-- <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon> -->
               <!-- <ion-icon slot="start" [name]="p.icon"></ion-icon> -->
               <ion-label>
                 {{p.title}}

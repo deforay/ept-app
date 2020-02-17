@@ -5,66 +5,97 @@ import {
 import {
   Injectable
 } from '@angular/core';
-import { SERVER_URL } from '../service/constant.service';
-import { map } from 'rxjs/operators';
+
+import {
+  Storage
+} from '@ionic/storage';
+import {
+  map
+} from 'rxjs/operators';
 
 ///import 'rxjs/add/operator/map';
 
 @Injectable()
 export class CrudServiceService {
   loading;
+  server_url: any;
 
   constructor(public http: HttpClient,
-    // public loadingCtrl: LoadingController,
- //   public events: Events,
-   // public LoaderService: LoaderService
+    private storage: Storage,
+    //  public loadingCtrl: LoadingController,
+    //   public events: Events,
+    // public LoaderService: LoaderService
   ) {
+
   }
 
 
   //post service call
   postData(URL, credentials) {
-//   this.LoaderService.showLoader();
+   
+    //   this.LoaderService.showLoader();
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
 
     return new Promise((resolve, reject) => {
-    
-      this.http.post(SERVER_URL + URL, JSON.stringify(credentials), {
-          headers: headers
-        })
-        .subscribe(res => {
-      //    this.LoaderService.hideLoader();
-          resolve(res);
-        }, (err) => {
-     //     this.LoaderService.hideLoader();
-        reject(err);
-        });
+
+      this.storage.get('apiUrl').then((url) => {
+        if (url) {
+          var apiurl = url;
+          this.http.post(apiurl + URL, JSON.stringify(credentials), {
+              headers: headers
+            })
+            .subscribe(res => {
+              //    this.LoaderService.hideLoader();
+              resolve(res);
+            }, (err) => {
+              //     this.LoaderService.hideLoader();
+              reject(err);
+            });
+        } else {
+          return false;
+        }
+      })
+
     });
   }
 
-  
   getData(URL) {
+
     return new Promise((resolve, reject) => {
-      this.http.get(SERVER_URL + URL)
-        .subscribe(res => {
-          resolve(res);
-        }, (err) => {
-          reject(err);
-        });
+      this.storage.get('apiUrl').then((url) => {
+        if (url) {
+          var apiurl = url;
+          this.http.get(apiurl + URL)
+            .subscribe(res => {
+              resolve(res);
+            }, (err) => {
+              reject(err);
+            });
+        } else {
+          return false;
+        }
+      })
     });
   }
 
   getById(URL, id) {
     return new Promise((resolve, reject) => {
-      this.http.get(SERVER_URL + URL + id)
-        .subscribe(res => {
+      this.storage.get('apiUrl').then((url) => {
+        if (url) {
+          var apiurl = url;
+          this.http.get(apiurl + URL + id)
+            .subscribe(res => {
 
-          resolve(res);
+              resolve(res);
 
-        }, (err) => {
+            }, (err) => {
 
-          reject(err);
-        });
+              reject(err);
+            });
+        } else {
+          return false;
+        }
+      })
     });
   }
 

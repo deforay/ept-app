@@ -30,22 +30,22 @@ export class AppComponent {
   public appPages = [{
       title: 'All Shipments',
       url: '/all-pt-schemes',
-      icon: 'list'
+      icon: 'shipment'
     },
-    {
-      title: 'DTS HIV Serology',
-      url: '/dts-hiv-serology',
-      icon: 'list'
-    },
-    {
-      title: 'DTS HIV Viral load',
-      url: '/dts-hiv-viralload',
-      icon: 'list'
-    },
+    // {
+    //   title: 'DTS HIV Serology',
+    //   url: '/dts-hiv-serology',
+    //   icon: 'list'
+    // },
+    // {
+    //   title: 'DTS HIV Viral load',
+    //   url: '/dts-hiv-viralload',
+    //   icon: 'list'
+    // },
     {
       title: 'Log Out',
       url: '/login',
-      icon: 'list'
+      icon: 'logout'
     },
 
   ];

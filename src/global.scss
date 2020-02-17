@@ -59,6 +59,9 @@
 .padding-bottom-20{
     padding-bottom: 10px;
 }
+.padding-25{
+    padding:25px;
+}
 .float-left{
     float: left;
 }
@@ -78,6 +81,29 @@ ion-header ion-toolbar ion-title{
     font-size:15px;
     padding: 0px;
 }
+
+// ion-button.button .button-native{ 
+//     height: 30px !important;
+  
+// }
+.native-btn{
+    height: 30px !important;
+    span.button-inner{
+        text-transform: initial !important; 
+    }
+}
+ion-item .item-inner {
+    border:none !important;
+}
+ion-toolbar .toolbar-container{
+    min-height: 30px !important;
+    color: white;
+    height: 40px;
+}
+ion-toolbar .toolbar-background{
+    background: #387ef5;
+}
+
 /* Global CSS Changes Ends */
 
 
@@ -85,6 +111,9 @@ ion-header ion-toolbar ion-title{
 
 
 /* Materialize Global CSS Changes Starts*/
+.mat-fab.mat-primary, .mat-flat-button.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary{
+    background: #3c8dbc;
+}
 .mat-select{
     font-size:13px;
 }
@@ -94,9 +123,24 @@ ion-header ion-toolbar ion-title{
 .mat-focused .mat-form-field-required-marker{
     color: #F44336;
 }
-.mat-form-field-appearance-outline.grid-col-form.mat-form-field-hide-placeholder .mat-form-field-outline-thick {
-    color: #9C27B0 ;
+.mat-form-field-appearance-outline.grid-col-form.mat-form-field-hide-placeholder .mat-form-field-outline-thick ,
+.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick,
+.mat-form-field.mat-focused .mat-form-field-label{
+    color: #3c8dbc ;
 }
+.mat-form-field.mat-form-field.mat-focused.mat-form-field-invalid .mat-form-field-label{
+    color: #F44336;
+}
+.mat-input-element {
+
+    caret-color: 
+    #3c8dbc
+    // #673ab7;
+
+}
+// .mat-form-field.mat-focused .mat-form-field-label{
+
+// }
 .mat-form-field.grid-col-form {
 //    width:calc(100% - 10px) !important;
    width:100% !important;
@@ -156,11 +200,11 @@ ion-header ion-toolbar ion-title{
     height: 37px !important;   
 
 }
-.mat-expansion-panel:nth-child(2n) mat-expansion-panel-header.mat-expanded.mat-expansion-panel-header{
-    height: 37px !important;   
-    background-color: #e1bee7 !important;
-}
-.mat-expansion-panel:nth-child(2n+1) mat-expansion-panel-header.mat-expanded.mat-expansion-panel-header{
+// .mat-expansion-panel:nth-child(2n) mat-expansion-panel-header.mat-expanded.mat-expansion-panel-header{
+//     height: 37px !important;   
+//     background-color: #e1bee7 !important;
+// }
+.mat-expansion-panel:nth-child(n) mat-expansion-panel-header.mat-expanded.mat-expansion-panel-header{
     height: 37px !important;   
     background-color: #b4c0ff!important;
 }

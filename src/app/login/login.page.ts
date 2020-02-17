@@ -58,10 +58,11 @@ export class LoginPage implements OnInit {
     Validators.required,
     trimmedCharsValidator.checkTrimmedThreeChars
   ]);
-  // this.loginForm = this.formBuilder.group({
-  //   username: ['', Validators.compose([Validators.required, trimmedCharsValidator.checkTrimmedThreeChars])],
-  //   password: ['', Validators.compose([Validators.required, trimmedCharsValidator.checkTrimmedSixChars])],
-  // });
+  serverHostFormControl = new FormControl('', [
+    Validators.required,
+    // trimmedCharsValidator.checkTrimmedThreeChars
+  ]);
+  
   matcher = new MyErrorStateMatcher();
   isLinear = false;
   firstFormGroup: FormGroup;
@@ -104,9 +105,11 @@ export class LoginPage implements OnInit {
   }
 
   login() {
-    if (this.emailFormControl.invalid || this.pswdFormControl.invalid) {
+    if (this.emailFormControl.invalid || this.pswdFormControl.invalid || this.serverHostFormControl.invalid) {
       //return false;
     } else {
+      var apiUrl = this.serverHostFormControl.value + 'api/'
+      this.storage.set('apiUrl',apiUrl);
 
       let loginJSON = {
         "userId": this.emailFormControl.value,
