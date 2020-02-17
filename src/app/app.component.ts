@@ -42,12 +42,7 @@ export class AppComponent {
     //   url: '/dts-hiv-viralload',
     //   icon: 'list'
     // },
-    {
-      title: 'Log Out',
-      url: "",
-      icon: 'list'
-    }
-
+    
   ];
 
   constructor(
@@ -84,12 +79,7 @@ export class AppComponent {
 
   }
 
-  openPage(page) {
-    // Reset the content nav to have just this page
-    // we wouldn't want the back button to show in this scenario
-    if (page.title == 'Log Out') {
+  logout() {    
       this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
-    } else {
-    }
   }
 }

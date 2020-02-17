@@ -17,10 +17,21 @@
               <img src="assets/img/{{p.icon}}.png">
                 <!-- <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon> -->
               <!-- <ion-icon slot="start" [name]="p.icon"></ion-icon> -->
-              <ion-label (click)="openPage(p)">
+              <ion-label>
                 {{p.title}}
               </ion-label>
             </ion-item>
+           
+          </ion-menu-toggle>
+          <ion-menu-toggle>
+            <ion-item (click)="logout()">            
+              <img src="assets/img/logout.png">
+            <ion-label >
+             Logout
+            </ion-label> 
+            
+           
+          </ion-item>
           </ion-menu-toggle>
         </ion-list>
       </ion-content>

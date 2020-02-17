@@ -20,7 +20,7 @@
 
       <ion-grid>
 
-          <ion-row>
+          <ion-row *ngIf="partiDetailsArray.participantName">
               <ion-col size="6">
                 <p text-wrap>
                   <span class="text-title-color">Participant Name</span>
@@ -39,7 +39,7 @@
             </ion-row>
 
 
-            <ion-row >
+            <ion-row *ngIf="partiDetailsArray.participantCode">
               <ion-col size="6">
                 <p text-wrap>
                   <span class="text-title-color">Participant Code </span>
@@ -58,7 +58,7 @@
             </ion-row>
 
 
-            <ion-row >
+            <ion-row *ngIf="partiDetailsArray.affiliation">
               <ion-col size="6">
                 <p text-wrap>
                   <span class="text-title-color">Affiliation </span>
@@ -77,7 +77,7 @@
             </ion-row>
 
 
-            <ion-row>
+            <ion-row *ngIf="partiDetailsArray.phone">
               <ion-col size="6">
                 <p text-wrap>
                   <span class="text-title-color">Tel Phone No</span>
@@ -96,7 +96,7 @@
             </ion-row>
 
 
-            <ion-row >
+            <ion-row *ngIf="partiDetailsArray.mobile">
               <ion-col size="6">
                 <p text-wrap>
                   <span class="text-title-color">Mobile No</span>
@@ -130,7 +130,7 @@
       </mat-expansion-panel-header>
 
       <ion-grid>
-        <ion-row>
+        <ion-row *ngIf="shipmentsDetailsArray.shipmentDate">
           <ion-col size="5">
             <p text-wrap>
               <span class="text-title-color">Shipment Date </span>
@@ -147,10 +147,10 @@
             </p>
           </ion-col>
         </ion-row>
-        <ion-row>
+        <ion-row *ngIf="shipmentsDetailsArray.resultDueDate">
           <ion-col size="5">
             <p text-wrap>
-              <span class="text-title-color">Result Due Date :</span>
+              <span class="text-title-color">Result Due Date </span>
             </p>
           </ion-col>
           <ion-col size="1">
@@ -296,7 +296,6 @@
                     {{kitNameItem.show}}
                   </mat-option>
                 </mat-select>
-                <!-- <mat-error *ngIf="!kitname">Please choose the Kit</mat-error> -->
               </mat-form-field>
             </ion-col>
 
@@ -327,8 +326,15 @@
         <button mat-button color="warn" (click)="nextStep()">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
-
     <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          Test Kit Details
+        </mat-panel-title>
+
+      </mat-expansion-panel-header>
+    </mat-expansion-panel>
+    <!-- <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
       <mat-expansion-panel-header>
         <mat-panel-title>
           Sample Details
@@ -348,7 +354,6 @@
                   <mat-option value="2">NONREACTIVE</mat-option>
                   <mat-option value="3">INVALID</mat-option>
                 </mat-select>
-                <!-- <mat-error *ngIf="!kitname">Please choose the Kit</mat-error> -->
               </mat-form-field>
             </ion-col>
             <ion-col size="6">
@@ -360,7 +365,6 @@
                   <mat-option value="2">NONREACTIVE</mat-option>
                   <mat-option value="3">INVALID</mat-option>
                 </mat-select>
-                <!-- <mat-error *ngIf="!kitname">Please choose the Kit</mat-error> -->
               </mat-form-field>
             </ion-col>
           </ion-row>
@@ -380,12 +384,11 @@
                   <mat-option value="2">NONREACTIVE</mat-option>
                   <mat-option value="3">INVALID</mat-option>
                 </mat-select>
-                <!-- <mat-error *ngIf="!kitname">Please choose the Kit</mat-error> -->
               </mat-form-field>
             </ion-col>
             <ion-col size="6">
-              <mat-form-field class="login-fuNDHU203: {Result-1: {…}, Result-2: {…}, Result-3: {…}, Final Result: Array(5)}-width grid-col-form" appearance="outline">
-                <mat-label>S34343</mat-label>NDHU203: {Result-1: {…}, Result-2: {…}, Result-3: {…}, Final Result: Array(5)}
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>S34343</mat-label>
                 <mat-select [(ngModel)]="result2sample2" name="result2sample2">
                   <mat-option>--Select--</mat-option>
                   <mat-option>--Select--</mat-option>
@@ -393,7 +396,6 @@
                   <mat-option value="2">NONREACTIVE</mat-option>
                   <mat-option value="3">INVALID</mat-option>
                 </mat-select>
-                <!-- <mat-error *ngIf="!kitname">Please choose the Kit</mat-error> -->
               </mat-form-field>
             </ion-col>
           </ion-row>
@@ -437,7 +439,7 @@
         <button mat-button color="primary" (click)="prevStep()">Previous</button>
         <button mat-button color="warn"  (click)="nextStep()">Next</button>
       </mat-action-row>
-    </mat-expansion-panel>
+    </mat-expansion-panel> -->
 
   <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)">
     <mat-expansion-panel-header>

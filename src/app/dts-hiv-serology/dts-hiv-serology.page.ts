@@ -54,7 +54,7 @@ export class DTSHIVSerologyPage implements OnInit {
   selectedTestFormStringify: any;
   selectedTestFormArray = [];
   partiDetailsArray = [];
-  shipmentsDetailsArray: any;
+  shipmentsDetailsArray: any ={};
   algorithmUsedSelectArray = [];
   modeOfReceiptArray = [];
   qcRadioArray = [];
@@ -68,6 +68,7 @@ export class DTSHIVSerologyPage implements OnInit {
   resultsTextArray: any;
   sampleDetailsDecArray = [];
   myArray = [];
+  viewAccessMessage:string='';
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -89,19 +90,25 @@ export class DTSHIVSerologyPage implements OnInit {
   ];
 
   ngOnInit() {
-    if (this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray')) {
+    this.storage.get('selectedTestFormArray').then((dtsDataObj)=>{
+      console.log(dtsDataObj)
+      if(dtsDataObj[0].dtsData.access.status=='success'){
 
-      this.selectedTestFormStringify = this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray');
-      this.selectedTestFormArray = JSON.parse(this.selectedTestFormStringify);
+  //  if (this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray')) {
+
+     // this.selectedTestFormStringify = this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray');
+   //  this.selectedTestFormArray = JSON.parse(this.selectedTestFormStringify);
+     this.selectedTestFormArray = dtsDataObj;
       console.log(this.selectedTestFormArray);
-      if (this.selectedTestFormArray[0].dtsData.Heading1.status == true) {
+      if (dtsDataObj[0].dtsData.Heading1.status == true) {
 
-        this.partiDetailsArray = this.selectedTestFormArray[0].dtsData.Heading1.data;
+        this.partiDetailsArray = dtsDataObj[0].dtsData.Heading1.data;
 
       }
-      if (this.selectedTestFormArray[0].dtsData.Heading2.status == true) {
+      if (dtsDataObj[0].dtsData.Heading2.status == true) {
 
-        this.shipmentsDetailsArray = this.selectedTestFormArray[0].dtsData.Heading2.data;
+        this.shipmentsDetailsArray = dtsDataObj[0].dtsData.Heading2.data;
+        console.log(this.shipmentsDetailsArray )
         this.algorithmUsedSelectArray = this.shipmentsDetailsArray.algorithmUsedSelect;
         this.modeOfReceiptArray = this.shipmentsDetailsArray.modeOfReceiptSelect;
         this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
@@ -111,21 +118,21 @@ export class DTSHIVSerologyPage implements OnInit {
 
       }
 
-      if (this.selectedTestFormArray[0].dtsData.Heading3.status == true) {
+      if (dtsDataObj[0].dtsData.Heading3.status == true) {
 
-        this.testKitDetailsArray = this.selectedTestFormArray[0].dtsData.Heading3.data;
+        this.testKitDetailsArray = dtsDataObj[0].dtsData.Heading3.data;
 
         this.testKitNameArray = this.testKitDetailsArray.kitText;
 
       }
 
-      if (this.selectedTestFormArray[0].dtsData.Heading4.status == true) {
+      if (dtsDataObj[0].dtsData.Heading4.status == true) {
      ///   debugger;
-        this.sampleDetailsArray = this.selectedTestFormArray[0].dtsData.Heading4.data;
+        this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
         this.samplesArray = this.sampleDetailsArray.samples;
         this.resultsTextArray = this.sampleDetailsArray.resultsText;
         this.sampleDetailsDecArray.push(this.sampleDetailsArray);
-        this.sampleDetailsDecArray[0].INDHU203["Result-1"].data;
+    //    this.sampleDetailsDecArray[0].INDHU203["Result-1"].data;
         var array1=[];
         this.sampleDetailsDecArray.forEach(sda =>
 
@@ -156,7 +163,10 @@ export class DTSHIVSerologyPage implements OnInit {
         this.otherInfoArray = this.selectedTestFormArray[0].dtsData.Heading5.data;
         this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
       }
+    }else{
+      this.viewAccessMessage = dtsDataObj[0].dtsData.access.message;
     }
+  })
   }
 
   step = 0;

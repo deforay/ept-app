@@ -22,6 +22,7 @@ export class AllPTSchemesPage implements OnInit {
   shippingsArray = [];
   shipmentFormArray = [];
   TestFormArray :any;
+  appVersionNumber:any;
 
 
   constructor(public CrudServiceService: CrudServiceService,
@@ -29,8 +30,15 @@ export class AllPTSchemesPage implements OnInit {
     public ToastService: ToastService,
     public LoaderService: LoaderService,
     private router: Router) {
-    this.getAllShipmentForms();
-    this.getAllShippings();
+      this.storage.get('appVersionNumber').then((appVersionNumber) => {
+        if (appVersionNumber) {
+         this.appVersionNumber=appVersionNumber;
+       
+        }
+        this.getAllShipmentForms();
+        this.getAllShippings();
+      })
+    
   }
 
   ngOnInit() {
@@ -42,7 +50,7 @@ export class AllPTSchemesPage implements OnInit {
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
         //   this.LoaderService.presentLoading();
-        this.CrudServiceService.getData('shipments/get/?authToken=' + partiLoginResult.authToken)
+        this.CrudServiceService.getData('shipments/get/?authToken=' + partiLoginResult.authToken+'&appVersion='+this.appVersionNumber)
           .then(result => {
             //   this.LoaderService.disMissLoading();
             if (result["status"] == 'success') {
@@ -61,7 +69,7 @@ export class AllPTSchemesPage implements OnInit {
 
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
-        this.CrudServiceService.getData('shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken)
+        this.CrudServiceService.getData('shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken+'&appVersion='+this.appVersionNumber)
           .then(result1 => {
             //   this.LoaderService.disMissLoading();
             if (result1["status"] == 'success') {
@@ -90,7 +98,9 @@ export class AllPTSchemesPage implements OnInit {
           this.storage.set('selectedTestFormArray', this.TestFormArray);
           if (this.TestFormArray[0].schemeType == 'dts') {
             if(this.TestFormArray[0].dtsData.access.status=='success'){
-              this.router.navigate(['/dts-hiv-serology',{"selectedTestFormArray":JSON.stringify(this.TestFormArray)}]);
+              this.router.navigate(['/dts-hiv-serology']);
+
+           //   this.router.navigate(['/dts-hiv-serology',{"selectedTestFormArray":JSON.stringify(this.TestFormArray)}]);
             }
           }
           if(this.TestFormArray[0].schemeType == 'vl'){

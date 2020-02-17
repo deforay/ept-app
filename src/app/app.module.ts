@@ -11,7 +11,7 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 //providers
-import { CrudServiceService,constantService,ToastService,LoaderService,AlertService} from '../app/service/providers';
+import { CrudServiceService,ToastService,LoaderService,AlertService} from '../app/service/providers';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { AppVersion } from '@ionic-native/app-version/ngx';
@@ -32,7 +32,6 @@ import { Market } from '@ionic-native/market/ngx';
     StatusBar,
     SplashScreen,
     CrudServiceService,
-    constantService,
     ToastService,
     LoaderService,
     AlertService,

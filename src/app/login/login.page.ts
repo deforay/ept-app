@@ -132,7 +132,7 @@ export class LoginPage implements OnInit {
                 })
                 
               }
-              if (result["status"] == 'version-failed') {
+           else  if (result["status"] == 'version-failed') {
                 this.alertService.presentAlertConfirm('Alert',result["message"],'playStoreAlert');
               }
              else{
