@@ -65,11 +65,17 @@ export class DTSHIVSerologyPage implements OnInit {
   supervisorReviewArray = [];
   samplesArray = [];
   testKitNameArray = [];
+  testKitTextArray = [];
   resultsTextArray: any;
   sampleDetailsDecArray = [];
   myArray = [];
+  lotArray = [];
+  kitName:any[];
+  lot=[];
+  exp =[] ;
   viewAccessMessage:string='';
-
+  testKitIndex:any;
+  sampleIndex:any;
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -121,47 +127,57 @@ export class DTSHIVSerologyPage implements OnInit {
       if (dtsDataObj[0].dtsData.Heading3.status == true) {
 
         this.testKitDetailsArray = dtsDataObj[0].dtsData.Heading3.data;
+        this.testKitIndex =  this.testKitDetailsArray.kitText.length;
+        this.testKitTextArray = this.testKitDetailsArray.kitText;
+        this.testKitNameArray = this.testKitDetailsArray.kitName;
+       // console.log(this.testKitNameArray['kitName'][])
+        // for (let kitNameValue of this.testKitNameArray['kitName'].[this.testKitTextArray[Object.values(this.testKitNameArray['kitName'])) {
+        //   this.kitName.push(kitNameValue); 
+        //   }
 
-        this.testKitNameArray = this.testKitDetailsArray.kitText;
+       for (let lotvalue of Object.values(this.testKitDetailsArray['lotNo'])) {
+        this.lot.push(lotvalue); 
+        
+       }
+        for (let expDatevalue of Object.values(this.testKitDetailsArray['expDate'])) {
+        this.exp.push(expDatevalue); 
+        }
+        console.log( this.testKitDetailsArray.lotNo )
 
-      }
+      console.log(this.testKitNameArray[this.testKitTextArray[0]])
+    }
+    if (dtsDataObj[0].dtsData.Heading4.status == true) {
+      this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
+      this.sampleIndex = this.sampleDetailsArray.samples.length;
+    }
+    //   if (dtsDataObj[0].dtsData.Heading4.status == true) {
+    //  ///   debugger;
+    //     this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
+    //     this.samplesArray = this.sampleDetailsArray.samples;
+    //     this.resultsTextArray = this.sampleDetailsArray.resultsText;
+    //     this.sampleDetailsDecArray.push(this.sampleDetailsArray);
+    //     var array1=[];
+    //     this.sampleDetailsDecArray.forEach(sda =>
 
-      if (dtsDataObj[0].dtsData.Heading4.status == true) {
-     ///   debugger;
-        this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
-        this.samplesArray = this.sampleDetailsArray.samples;
-        this.resultsTextArray = this.sampleDetailsArray.resultsText;
-        this.sampleDetailsDecArray.push(this.sampleDetailsArray);
-    //    this.sampleDetailsDecArray[0].INDHU203["Result-1"].data;
-        var array1=[];
-        this.sampleDetailsDecArray.forEach(sda =>
-
-          //console.log(sda)   
-          this.samplesArray.forEach(sa =>
+    //       this.samplesArray.forEach(sa =>
 
 
-            this.resultsTextArray.forEach((rta, index) =>
+    //         this.resultsTextArray.forEach((rta, index) =>
 
-             // if(index) {
-              this.myArray.push(sda[sa][rta])
-                 
-                
-           //   }
+    //           this.myArray.push(sda[sa][rta])                
+          
+    //         )
+    //       )
+    //     );
+    //     console.log(this.myArray);
 
-              //    console.log(sda)
-              //    this.myArray.push(sda.sa)
-              //   this.myArray.push(sda.sa)
-            )
-          )
-        );
-        console.log(this.myArray);
+    //   }
 
-      }
+      if (dtsDataObj[0].dtsData.Heading5.status == true) {
 
-      if (this.selectedTestFormArray[0].dtsData.Heading5.status == true) {
-
-        this.otherInfoArray = this.selectedTestFormArray[0].dtsData.Heading5.data;
+        this.otherInfoArray = dtsDataObj[0].dtsData.Heading5.data;
         this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
+        console.log(this.supervisorReviewArray )
       }
     }else{
       this.viewAccessMessage = dtsDataObj[0].dtsData.access.message;
