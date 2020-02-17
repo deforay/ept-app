@@ -28,7 +28,8 @@ import {
 import {
   CrudServiceService,
   ToastService,
-  LoaderService
+  LoaderService,
+  AlertService
 } from '../../app/service/providers';
 import {
   Storage
@@ -76,7 +77,8 @@ export class LoginPage implements OnInit {
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
-    public LoaderService: LoaderService) {
+    public LoaderService: LoaderService,
+    public alertService:AlertService) {
 
     // this.statusBar.backgroundColorByHexString("#000000");
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
@@ -125,9 +127,12 @@ export class LoginPage implements OnInit {
                     this.router.navigate(['/all-pt-schemes']);
                   }
                 })
+                
               }
-              if (result["status"] == 'fail') {
-
+              if (result["status"] == 'version-failed') {
+                this.alertService.presentAlertConfirm('Alert',result["message"],'playStoreAlert');
+              }
+             else{
                 this.ToastService.presentToastWithOptions(result["message"]);
               }
 

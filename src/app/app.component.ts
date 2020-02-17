@@ -67,9 +67,7 @@ export class AppComponent {
       this.splashScreen.hide();
       this.appVersion.getVersionNumber().then(value => {
         this.appVersionNumber = value;
-        this.storage.set('appVersionNumber', this.appVersionNumber); 
-
-        
+        this.storage.set('appVersionNumber', this.appVersionNumber);
       }).catch(err => {
      //   console.log(err);
       });
@@ -92,13 +90,6 @@ export class AppComponent {
     if (page.title == 'Log Out') {
       this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
     } else {
-      //this.nav.setRoot(page.component);
     }
-    // this.events.subscribe('logout_alert', (result) => {
-    //   if (result == 'logout') {
-    //     this.storage.clear();
-    //     this.nav.setRoot('LoginPage');
-    //   }
-    // })
   }
 }
