@@ -11,10 +11,11 @@ import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 //providers
-import { CrudServiceService,constantService,ToastService,LoaderService } from '../app/service/providers';
+import { CrudServiceService,constantService,ToastService,LoaderService,AlertService} from '../app/service/providers';
 import { HttpClientModule } from '@angular/common/http';
 import { IonicStorageModule } from '@ionic/storage';
 import { AppVersion } from '@ionic-native/app-version/ngx';
+import { Market } from '@ionic-native/market/ngx';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -34,7 +35,9 @@ import { AppVersion } from '@ionic-native/app-version/ngx';
     constantService,
     ToastService,
     LoaderService,
+    AlertService,
     AppVersion,
+    Market,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
