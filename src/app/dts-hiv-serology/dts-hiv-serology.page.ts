@@ -59,13 +59,15 @@ export class DTSHIVSerologyPage implements OnInit {
   modeOfReceiptArray = [];
   qcRadioArray = [];
   isQCDoneShow: boolean;
-  testKitDetailsArray:any;
-  sampleDetailsArray:any;
-  otherInfoArray:any;
-  supervisorReviewArray=[];
-  samplesArray=[];
-  testKitNameArray=[];
-
+  testKitDetailsArray: any;
+  sampleDetailsArray: any = [];
+  otherInfoArray: any;
+  supervisorReviewArray = [];
+  samplesArray = [];
+  testKitNameArray = [];
+  resultsTextArray: any;
+  sampleDetailsDecArray = [];
+  myArray = [];
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -88,7 +90,7 @@ export class DTSHIVSerologyPage implements OnInit {
 
   ngOnInit() {
     if (this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray')) {
-     
+
       this.selectedTestFormStringify = this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray');
       this.selectedTestFormArray = JSON.parse(this.selectedTestFormStringify);
       console.log(this.selectedTestFormArray);
@@ -108,26 +110,51 @@ export class DTSHIVSerologyPage implements OnInit {
         }
 
       }
-debugger;
+
       if (this.selectedTestFormArray[0].dtsData.Heading3.status == true) {
 
         this.testKitDetailsArray = this.selectedTestFormArray[0].dtsData.Heading3.data;
 
-        this.testKitNameArray=this.testKitDetailsArray.kitText;
+        this.testKitNameArray = this.testKitDetailsArray.kitText;
 
       }
 
       if (this.selectedTestFormArray[0].dtsData.Heading4.status == true) {
-
+     ///   debugger;
         this.sampleDetailsArray = this.selectedTestFormArray[0].dtsData.Heading4.data;
-        this.samplesArray=this.sampleDetailsArray.samples;
-        
+        this.samplesArray = this.sampleDetailsArray.samples;
+        this.resultsTextArray = this.sampleDetailsArray.resultsText;
+        this.sampleDetailsDecArray.push(this.sampleDetailsArray);
+        this.sampleDetailsDecArray[0].INDHU203["Result-1"].data;
+        var array1=[];
+        this.sampleDetailsDecArray.forEach(sda =>
+
+          //console.log(sda)   
+          this.samplesArray.forEach(sa =>
+
+
+            this.resultsTextArray.forEach((rta, index) =>
+
+             // if(index) {
+              this.myArray.push(sda[sa][rta])
+                 
+                
+           //   }
+
+              //    console.log(sda)
+              //    this.myArray.push(sda.sa)
+              //   this.myArray.push(sda.sa)
+            )
+          )
+        );
+        console.log(this.myArray);
+
       }
 
       if (this.selectedTestFormArray[0].dtsData.Heading5.status == true) {
 
         this.otherInfoArray = this.selectedTestFormArray[0].dtsData.Heading5.data;
-        this.supervisorReviewArray=this.otherInfoArray.supervisorReview;
+        this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
       }
     }
   }

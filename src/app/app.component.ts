@@ -17,7 +17,7 @@ import {
 import {
   Storage
 } from '@ionic/storage';
-
+import { AlertService } from '../app/service/providers';
 
 @Component({
   selector: 'app-root',
@@ -44,9 +44,9 @@ export class AppComponent {
     },
     {
       title: 'Log Out',
-      url: '/login',
+      url: "",
       icon: 'list'
-    },
+    }
 
   ];
 
@@ -56,6 +56,7 @@ export class AppComponent {
     private statusBar: StatusBar,
     private appVersion: AppVersion,
     private storage: Storage,
+    public alertService:AlertService
   ) {
     this.initializeApp();
   }
@@ -83,5 +84,21 @@ export class AppComponent {
     //end..... 
 
 
+  }
+
+  openPage(page) {
+    // Reset the content nav to have just this page
+    // we wouldn't want the back button to show in this scenario
+    if (page.title == 'Log Out') {
+      this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
+    } else {
+      //this.nav.setRoot(page.component);
+    }
+    // this.events.subscribe('logout_alert', (result) => {
+    //   if (result == 'logout') {
+    //     this.storage.clear();
+    //     this.nav.setRoot('LoginPage');
+    //   }
+    // })
   }
 }

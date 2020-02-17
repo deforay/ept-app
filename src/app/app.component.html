@@ -16,7 +16,7 @@
             <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
               <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon>
               <!-- <ion-icon slot="start" [name]="p.icon"></ion-icon> -->
-              <ion-label>
+              <ion-label (click)="openPage(p)">
                 {{p.title}}
               </ion-label>
             </ion-item>
