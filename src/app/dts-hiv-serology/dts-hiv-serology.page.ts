@@ -22,9 +22,7 @@ import {
 import {
   Storage
 } from '@ionic/storage';
-import {
-  ActivatedRoute
-} from '@angular/router';
+
 
 /** Error when invalid control is dirty, touched, or submitted. */
 
@@ -51,10 +49,9 @@ interface selectArray {
 export class DTSHIVSerologyPage implements OnInit {
 
   panelOpenState = false;
-  selectedTestFormStringify: any;
   selectedTestFormArray = [];
-  partiDetailsArray = [];
-  shipmentsDetailsArray: any ={};
+  partiDetailsArray: any = [];
+  shipmentsDetailsArray: any = {};
   algorithmUsedSelectArray = [];
   modeOfReceiptArray = [];
   qcRadioArray = [];
@@ -63,29 +60,41 @@ export class DTSHIVSerologyPage implements OnInit {
   sampleDetailsArray: any = [];
   otherInfoArray: any;
   supervisorReviewArray = [];
-  samplesArray = [];
   testKitNameArray = [];
   testKitTextArray = [];
   resultsTextArray: any;
-  sampleDetailsDecArray = [];
-  myArray = [];
-  lotArray = [];
-  kitName:any[];
-  lot=[];
-  exp =[] ;
-  viewAccessMessage:string='';
-  testKitIndex:any;
-  sampleIndex:any;
-  samplesTextArray=[];
+  kitName = [];
+  lot = [];
+  exp = [];
+  expDate: any = [];
+  viewAccessMessage: string = '';
+  testKitIndex: any;
+  sampleIndex: any;
+  samplesTextArray = [];
+  testReceiptDate: any;
+  sampleRhdDate: any;
+  testingDate: any;
+  respDate: any;
+  receiptmode: any;
+  qcDone: any;
+  qcDate: any;
+  qcDoneBy: any;
+  supReview: any;
+  comments: any;
+  supervisorName: any;
+  testKitArray: any;
+  expDateFormat = [];
+  testKitXerologyForm: any = {};
+  sampleResult = [];
+  sampleDetailsJSON: any = {};
 
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
-    private router: Router,
-    private activatedRoute: ActivatedRoute) {
-    //    this.getDynFieldsSerology();
+  ) {
+
   }
   algorithmused: any;
   algUsed: selectArray[] = [{
@@ -99,74 +108,64 @@ export class DTSHIVSerologyPage implements OnInit {
   ];
 
   ngOnInit() {
-    this.storage.get('selectedTestFormArray').then((dtsDataObj)=>{
+    this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
       console.log(dtsDataObj)
-      if(dtsDataObj[0].dtsData.access.status=='success'){
+      if (dtsDataObj[0].dtsData.access.status == 'success') {
+        this.selectedTestFormArray = dtsDataObj;
+        console.log(this.selectedTestFormArray);
+        if (dtsDataObj[0].dtsData.Heading1.status == true) {
 
-  //  if (this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray')) {
+          this.partiDetailsArray = dtsDataObj[0].dtsData.Heading1.data;
 
-     // this.selectedTestFormStringify = this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray');
-   //  this.selectedTestFormArray = JSON.parse(this.selectedTestFormStringify);
-     this.selectedTestFormArray = dtsDataObj;
-      console.log(this.selectedTestFormArray);
-      if (dtsDataObj[0].dtsData.Heading1.status == true) {
+        }
+        if (dtsDataObj[0].dtsData.Heading2.status == true) {
 
-        this.partiDetailsArray = dtsDataObj[0].dtsData.Heading1.data;
-
-      }
-      if (dtsDataObj[0].dtsData.Heading2.status == true) {
-
-        this.shipmentsDetailsArray = dtsDataObj[0].dtsData.Heading2.data;
-        console.log(this.shipmentsDetailsArray )
-        this.algorithmUsedSelectArray = this.shipmentsDetailsArray.algorithmUsedSelect;
-        this.modeOfReceiptArray = this.shipmentsDetailsArray.modeOfReceiptSelect;
-        this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
-        if (this.isQCDoneShow == true) {
-          this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
+          this.shipmentsDetailsArray = dtsDataObj[0].dtsData.Heading2.data;
+          console.log(this.shipmentsDetailsArray);
+          this.algorithmUsedSelectArray = this.shipmentsDetailsArray.algorithmUsedSelect;
+          this.modeOfReceiptArray = this.shipmentsDetailsArray.modeOfReceiptSelect;
+          this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
+          if (this.isQCDoneShow == true) {
+            this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
+          }
         }
 
-      }
+        if (dtsDataObj[0].dtsData.Heading3.status == true) {
 
-      if (dtsDataObj[0].dtsData.Heading3.status == true) {
+          this.testKitDetailsArray = dtsDataObj[0].dtsData.Heading3.data;
+          this.testKitIndex = this.testKitDetailsArray.kitText.length;
+          this.testKitTextArray = this.testKitDetailsArray.kitText;
+          this.testKitNameArray = this.testKitDetailsArray.kitName;
 
-        this.testKitDetailsArray = dtsDataObj[0].dtsData.Heading3.data;
-        this.testKitIndex =  this.testKitDetailsArray.kitText.length;
-        this.testKitTextArray = this.testKitDetailsArray.kitText;
-        this.testKitNameArray = this.testKitDetailsArray.kitName;
-       // console.log(this.testKitNameArray['kitName'][])
-        // for (let kitNameValue of this.testKitNameArray['kitName'].[this.testKitTextArray[Object.values(this.testKitNameArray['kitName'])) {
-        //   this.kitName.push(kitNameValue); 
-        //   }
+          for (let lotvalue of Object.values(this.testKitDetailsArray['lotNo'])) {
+            this.lot.push(lotvalue);
 
-       for (let lotvalue of Object.values(this.testKitDetailsArray['lotNo'])) {
-        this.lot.push(lotvalue); 
-        
-       }
-        for (let expDatevalue of Object.values(this.testKitDetailsArray['expDate'])) {
-        this.exp.push(expDatevalue); 
+          }
+          for (let expDatevalue of Object.values(this.testKitDetailsArray['expDate'])) {
+            this.exp.push(expDatevalue);
+          }
+          console.log(this.testKitDetailsArray.lotNo)
+
+          console.log(this.testKitNameArray[this.testKitTextArray[0]])
         }
-        console.log( this.testKitDetailsArray.lotNo )
+        if (dtsDataObj[0].dtsData.Heading4.status == true) {
+          this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
+          this.sampleIndex = this.sampleDetailsArray.samples.length;
+          this.samplesTextArray = this.sampleDetailsArray.samples;
+          this.resultsTextArray = this.sampleDetailsArray.resultsText;
+        }
 
-      console.log(this.testKitNameArray[this.testKitTextArray[0]])
-    }
-    if (dtsDataObj[0].dtsData.Heading4.status == true) {
-      this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
-      this.sampleIndex = this.sampleDetailsArray.samples.length;
-      this.samplesTextArray=this.sampleDetailsArray.samples;
-      this.resultsTextArray = this.sampleDetailsArray.resultsText;
-    }
-    
 
-      if (dtsDataObj[0].dtsData.Heading5.status == true) {
+        if (dtsDataObj[0].dtsData.Heading5.status == true) {
 
-        this.otherInfoArray = dtsDataObj[0].dtsData.Heading5.data;
-        this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
-        console.log(this.supervisorReviewArray )
+          this.otherInfoArray = dtsDataObj[0].dtsData.Heading5.data;
+          this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
+          console.log(this.supervisorReviewArray)
+        }
+      } else {
+        this.viewAccessMessage = dtsDataObj[0].dtsData.access.message;
       }
-    }else{
-      this.viewAccessMessage = dtsDataObj[0].dtsData.access.message;
-    }
-  })
+    })
   }
 
   step = 0;
@@ -183,8 +182,51 @@ export class DTSHIVSerologyPage implements OnInit {
     this.step--;
   }
 
-  //   getDynFieldsSerology() {
-  // debugger;
-  // console.log(this.selectedTestFormArray);
-  //   }
+  submitXerologyForm() {
+
+    this.expDate.forEach(expDateItem => this.expDateFormat.push(new Date(expDateItem)));
+
+    this.testKitXerologyForm = ({
+      'testKitTextArray': this.testKitTextArray,
+      'kitName': this.kitName,
+      'lot': this.lot,
+      'expDate': this.expDateFormat
+    });
+    this.sampleDetailsJSON = ({
+      "sampleResult": this.sampleResult
+    })
+
+
+    let xerologyJSON = {
+      //participant details
+      "participantName": this.partiDetailsArray.participantName,
+      "participantCode": this.partiDetailsArray.participantCode,
+      "participantAffiliation": this.partiDetailsArray.affiliation,
+      "participantPhone": this.partiDetailsArray.phone,
+      "participantMobile": this.partiDetailsArray.mobile,
+      //shipment details
+      "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
+      "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
+      "testReceiptDate": this.testReceiptDate,
+      "sampleRehydrationDate": this.sampleRhdDate,
+      "testingDate": this.testingDate,
+      "algorithmused": this.algorithmused,
+      "respDate": this.respDate,
+      "receiptmode": this.receiptmode,
+      "qcDone": this.qcDone,
+      "qcDate": this.qcDate,
+      "qcDoneBy": this.qcDoneBy,
+      //test details
+      "testKitArray": this.testKitXerologyForm,
+      //sample details
+      "sampleDetailArray": this.sampleDetailsJSON,
+      //other information
+      "supReview": this.supReview,
+      "supervisorName": this.supervisorName,
+      "comments": this.comments,
+    }
+
+    console.log(xerologyJSON);
+  }
+
 }
