@@ -21,17 +21,17 @@
       <ion-grid>
 
           <ion-row *ngIf="partiDetailsArray.participantName">
-              <ion-col size="6">
+              <ion-col size="6" class="grid-readonly-col">
                 <p text-wrap>
                   <span class="text-title-color">Participant Name</span>
                 </p>
               </ion-col>
-              <ion-col size="1">
+              <ion-col size="1" class="grid-readonly-col">
                 <p text-wrap>
                   <span class="text-title-color">:</span>
                 </p>
               </ion-col>
-              <ion-col>
+              <ion-col class="grid-readonly-col">
                 <p text-wrap class="partiValues">
                   <span>{{partiDetailsArray.participantName}}</span>
                 </p>
@@ -40,18 +40,18 @@
 
 
             <ion-row *ngIf="partiDetailsArray.participantCode">
-              <ion-col size="6">
+              <ion-col size="6" class="grid-readonly-col">
                 <p text-wrap>
                   <span class="text-title-color">Participant Code </span>
                 </p>
               </ion-col>
-              <ion-col size="1">
+              <ion-col size="1" class="grid-readonly-col">
                 <p text-wrap>
                   <span class="text-title-color">:</span>
                 </p>
               </ion-col>
-              <ion-col>
-                <p text-wrap class="partiValues">
+              <ion-col class="grid-readonly-col">
+                <p text-wrap class="partiValues" >
                   <span>{{partiDetailsArray.participantCode}}</span>
                 </p>
               </ion-col>
@@ -59,17 +59,17 @@
 
 
             <ion-row *ngIf="partiDetailsArray.affiliation">
-              <ion-col size="6">
+              <ion-col size="6" class="grid-readonly-col">
                 <p text-wrap>
                   <span class="text-title-color">Affiliation </span>
                 </p>
               </ion-col>
-              <ion-col size="1">
+              <ion-col size="1" class="grid-readonly-col">
                 <p text-wrap>
                   <span class="text-title-color">:</span>
                 </p>
               </ion-col>
-              <ion-col>
+              <ion-col class="grid-readonly-col">
                 <p text-wrap class="partiValues">
                   <span>{{partiDetailsArray.affiliation}}</span>
                 </p>
@@ -78,17 +78,17 @@
 
 
             <ion-row *ngIf="partiDetailsArray.phone">
-              <ion-col size="6">
+              <ion-col size="6" class="grid-readonly-col">
                 <p text-wrap>
                   <span class="text-title-color">Tel Phone No</span>
                 </p>
               </ion-col>
-              <ion-col size="1">
+              <ion-col size="1" class="grid-readonly-col">
                 <p text-wrap>
                   <span class="text-title-color">:</span>
                 </p>
               </ion-col>
-              <ion-col>
+              <ion-col class="grid-readonly-col">
                 <p text-wrap class="partiValues">
                   <span>{{partiDetailsArray.phone}}</span>
                 </p>
@@ -97,17 +97,17 @@
 
 
             <ion-row *ngIf="partiDetailsArray.mobile">
-              <ion-col size="6">
+              <ion-col size="6" class="grid-readonly-col">
                 <p text-wrap>
                   <span class="text-title-color">Mobile No</span>
                 </p>
               </ion-col>
-              <ion-col size="1">
+              <ion-col size="1" class="grid-readonly-col">
                 <p text-wrap>
                   <span class="text-title-color">:</span>
                 </p>
               </ion-col>
-              <ion-col>
+              <ion-col class="grid-readonly-col">
                 <p text-wrap class="partiValues">
                   <span>{{partiDetailsArray.mobile}}</span>
                 </p>
@@ -293,7 +293,7 @@
             <mat-label>Kit Name </mat-label>
             <mat-select [(ngModel)]="kitName[i]" name="kit">
               <mat-option>--Select--</mat-option>
-              <mat-option *ngFor="let kitNameItem of testKitNameArray[kitTextItem].data" [value]="kitNameItem.value">
+              <mat-option *ngFor="let kitNameItem of testKitNameArray[kitTextItem].data" selected="selected" [value]="kitNameItem.value">
                 {{kitNameItem.show}}
               </mat-option>
             </mat-select>
@@ -331,7 +331,7 @@
   <!-- sample details start -->
 <div *ngFor="let sampleTextItem of samplesTextArray;let i = index;" >
 
-  <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" >
+  <mat-expansion-panel [expanded]="step === i+testKitIndex+2" (opened)="setStep(i+testKitIndex+2)" >
     <mat-expansion-panel-header>
       <mat-panel-title>
        {{sampleTextItem}}
@@ -342,7 +342,7 @@
       <ion-col size="12">
         <mat-form-field class="login-full-width grid-col-form" appearance="outline">
           <mat-label>{{resultName}}</mat-label>
-          <mat-select [(ngModel)]="sampleResult[r]" name="sampleResultXerology[r]" [ngModelOptions]="{standalone: true}">
+          <mat-select [(ngModel)]="sampleResultObj[sampleTextItem][resultName]" name="sampleResultXerology[r]" [ngModelOptions]="{standalone: true}">
             <mat-option>--Select--</mat-option>
             <mat-option *ngFor="let item of sampleDetailsArray[sampleTextItem][resultName].data" [value]="item">
               {{item.show}}
@@ -362,7 +362,7 @@
 
     
 
-  <mat-expansion-panel [expanded]="step === testKitIndex+2" (opened)="setStep(testKitIndex+2)">
+  <mat-expansion-panel [expanded]="step === testKitIndex+sampleIndex+2" (opened)="setStep(testKitIndex+sampleIndex+2)">
     <mat-expansion-panel-header>
       <mat-panel-title>
         Other Informations
