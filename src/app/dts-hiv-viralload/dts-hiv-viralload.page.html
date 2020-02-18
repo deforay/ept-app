@@ -187,7 +187,7 @@
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Viral Load Assay </mat-label>
-              <mat-select [(ngModel)]="vlassay" name="vlassay" required>
+              <mat-select [(ngModel)]="vlassay" name="vlassay" (ngModelChange)="changeViralLoadAssay(vlassay)" required>
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let vl of shipmentsDetailsArray['vlAssaySelect']" [value]="vl.value">
                   {{vl.show}}
@@ -198,7 +198,7 @@
             </mat-form-field>
 
           </ion-col>
-          <ion-col size="6" size-xs *ngIf="vlassay=='6'" class="grid-input-col">
+          <ion-col size="6" size-xs *ngIf="isSelectedOther" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Please specify Other Assay Name </mat-label>
               <input matInput [(ngModel)]="othervlassay" placeholder="Enter Other Assay Name" required>
@@ -246,11 +246,9 @@
               <mat-label>Mode of Receipt</mat-label>
               <mat-select [(ngModel)]="receiptmode" name="receiptmode" required>
                 <mat-option>--Select--</mat-option>
-                <mat-option value="1">Online Response</mat-option>
-                <mat-option value="2">Courier</mat-option>
-                <mat-option value="3">Email</mat-option>
-                <mat-option value="4">Scan</mat-option>
-                <mat-option value="5">SMS</mat-option>
+                <mat-option *ngFor="let item of modeOfReceiptArray" [value]="item.value">
+                  {{item.show}}
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="!receiptmode">Please choose the Mode Of Receipt </mat-error>
             </mat-form-field>
