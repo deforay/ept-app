@@ -99,20 +99,14 @@ export class AllPTSchemesPage implements OnInit {
           if (this.TestFormArray[0].schemeType == 'dts') {
             if(this.TestFormArray[0].dtsData.access.status=='success'){
               this.router.navigate(['/dts-hiv-serology']);
-
-           //   this.router.navigate(['/dts-hiv-serology',{"selectedTestFormArray":JSON.stringify(this.TestFormArray)}]);
             }
           }
           if(this.TestFormArray[0].schemeType == 'vl'){
             if(this.TestFormArray[0].vlData.access.status=='success'){
-              this.router.navigate(['/dts-hiv-viralload']);
-              
-            // this.router.navigate(['/dts-hiv-viralload',{"selectedTestFormArray":JSON.stringify(this.TestFormArray)}]);
+              this.router.navigate(['/dts-hiv-viralload']);  
             }
           }
         }
-
-
       }   
     })
   }

@@ -174,7 +174,7 @@
           <ion-col size="12">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Test Receipt Date</mat-label>
-              <input matInput [matDatepicker]="testReceiptPicker" placeholder="Choose a date" required disabled>
+              <input matInput [matDatepicker]="testReceiptPicker" [(ngModel)]="testReceiptDate" placeholder="Choose a date" required disabled>
               <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
               <mat-datepicker #testReceiptPicker disabled="false"></mat-datepicker>
             </mat-form-field>
@@ -182,7 +182,7 @@
           <ion-col size="12">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Sample Rehydration Date</mat-label>
-              <input matInput [matDatepicker]="sampleRhdPicker" placeholder="Choose a date" required disabled>
+              <input matInput [matDatepicker]="sampleRhdPicker" [(ngModel)]="sampleRhdDate"  placeholder="Choose a date" required disabled>
               <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
               <mat-datepicker #sampleRhdPicker disabled="false"></mat-datepicker>
             </mat-form-field>
@@ -192,7 +192,7 @@
           <ion-col size="6">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Testing Date</mat-label>
-              <input matInput [matDatepicker]="testDatePicker" placeholder="Choose a date" required disabled>
+              <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="testingDate"  placeholder="Choose a date" required disabled>
               <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
               <mat-datepicker #testDatePicker disabled="false"></mat-datepicker>
             </mat-form-field>
@@ -255,9 +255,9 @@
           <ion-col size="6">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>QC Date</mat-label>
-              <input matInput [matDatepicker]="qcDate" placeholder="Choose a date" required disabled>
-              <mat-datepicker-toggle matSuffix [for]="qcDate"></mat-datepicker-toggle>
-              <mat-datepicker #qcDate disabled="false"></mat-datepicker>
+              <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" placeholder="Choose a date" required disabled>
+              <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
+              <mat-datepicker #qcDatePicker disabled="false"></mat-datepicker>
             </mat-form-field>
           </ion-col>
           <ion-col size="6">
@@ -277,55 +277,7 @@
       </mat-action-row>
     </mat-expansion-panel>
 
-    <!-- <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Test Kit Details
-        </mat-panel-title>
-
-      </mat-expansion-panel-header>
-      <mat-tab-group mat-stretch-tabs>
-        <mat-tab *ngFor="let item of testKitNameArray" label={{item}}>
-          <ion-row>
-            <ion-col size="12">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Kit Name </mat-label>
-                <mat-select [(ngModel)]="kitname" name="kit">
-                  <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let kitNameItem of testKitDetailsArray.kitName[item].data" [value]="kitNameItem.value">
-                    {{kitNameItem.show}}
-                  </mat-option>
-                </mat-select>
-              </mat-form-field>
-            </ion-col>
-
-          </ion-row>
-          <ion-row class="padding-top-10">
-            <ion-col size="6">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                  <mat-label>Lot Number </mat-label>
-                  <input matInput [(ngModel)]="LotNo" placeholder="Enter Lot Number" >
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="6">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Exp Date</mat-label>
-                <input matInput [matDatepicker]="expDate" placeholder="Choose a date" required disabled>
-                <mat-datepicker-toggle matSuffix [for]="expDate"></mat-datepicker-toggle>
-                <mat-datepicker #expDate disabled="false"></mat-datepicker>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-        </mat-tab>
-   
-      </mat-tab-group>
-
-
-      <mat-action-row>
-        <button mat-button color="primary" (click)="prevStep()">Previous</button>
-        <button mat-button color="warn" (click)="nextStep()">Next</button>
-      </mat-action-row>
-    </mat-expansion-panel> -->
+ 
     <div *ngFor="let kitTextItem of testKitTextArray;let i = index;" >
 
     <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" >
@@ -339,7 +291,7 @@
         <ion-col size="12">
           <mat-form-field class="login-full-width grid-col-form" appearance="outline">
             <mat-label>Kit Name </mat-label>
-            <mat-select [(ngModel)]="kitName" name="kit">
+            <mat-select [(ngModel)]="kitName[i]" name="kit">
               <mat-option>--Select--</mat-option>
               <mat-option *ngFor="let kitNameItem of testKitNameArray[kitTextItem].data" [value]="kitNameItem.value">
                 {{kitNameItem.show}}
@@ -358,18 +310,13 @@
         </ion-col>
       </ion-row>
       <ion-row >
-        <!-- <ion-col size="6">
-          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-              <mat-label>Lot Number </mat-label>
-              <input matInput [(ngModel)]="LotNo" placeholder="Enter Lot Number" >
-          </mat-form-field>
-        </ion-col> -->
+    
         <ion-col size="12">
           <mat-form-field class="login-full-width grid-col-form" appearance="outline">
             <mat-label>Exp Date</mat-label>
-            <input matInput [matDatepicker]="exp[i]" placeholder="Choose a date" required disabled>
-            <mat-datepicker-toggle matSuffix [for]="exp[i]"></mat-datepicker-toggle>
-            <mat-datepicker #exp[i] disabled="false"></mat-datepicker>
+            <input matInput [matDatepicker]="expDatePicker" [(ngModel)]="expDate[i]"  placeholder="Choose a date" required disabled>
+            <mat-datepicker-toggle matSuffix [for]="expDatePicker"></mat-datepicker-toggle>
+            <mat-datepicker #expDatePicker disabled="false"></mat-datepicker>
           </mat-form-field>
         </ion-col>
       </ion-row>
@@ -391,13 +338,13 @@
       </mat-panel-title>
 
     </mat-expansion-panel-header>
-    <ion-row *ngFor="let resultName of resultsTextArray">
+    <ion-row *ngFor="let resultName of resultsTextArray;let r=index">
       <ion-col size="12">
         <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-          <mat-label > {{resultName}}</mat-label>
-          <mat-select [(ngModel)]="kitName" name="kit">
+          <mat-label>{{resultName}}</mat-label>
+          <mat-select [(ngModel)]="sampleResult[r]" name="sampleResultXerology[r]" [ngModelOptions]="{standalone: true}">
             <mat-option>--Select--</mat-option>
-            <mat-option *ngFor="let item of sampleDetailsArray[sampleTextItem][resultName].data" [value]="item.value">
+            <mat-option *ngFor="let item of sampleDetailsArray[sampleTextItem][resultName].data" [value]="item">
               {{item.show}}
             </mat-option>
           </mat-select>
@@ -413,112 +360,7 @@
 </div>
 <!-- sample details end -->
 
-    <!-- <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
-      <mat-expansion-panel-header>
-        <mat-panel-title>
-          Sample Details
-        </mat-panel-title>
-
-      </mat-expansion-panel-header>
-      <mat-tab-group mat-stretch-tabs>
-        <mat-tab label="Result-1">
-
-          <ion-row>
-            <ion-col size="6">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>S23334 </mat-label>
-                <mat-select [(ngModel)]="result1sample1" name="result1sample1">
-                  <mat-option>--Select--</mat-option>
-                  <mat-option value="1">REACTIVE</mat-option>
-                  <mat-option value="2">NONREACTIVE</mat-option>
-                  <mat-option value="3">INVALID</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="6">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>S34343 </mat-label>
-                <mat-select [(ngModel)]="result1sample2" name="result1sample2">
-                  <mat-option>--Select--</mat-option>
-                  <mat-option value="1">REACTIVE</mat-option>
-                  <mat-option value="2">NONREACTIVE</mat-option>
-                  <mat-option value="3">INVALID</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-        </mat-tab>
-
-
-        <mat-tab label="Result-2">
-
-          <ion-row>
-            <ion-col size="6">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>S23334 </mat-label>
-                <mat-select [(ngModel)]="result2sample1" name="result2sample1">
-                  <mat-option>--Select--</mat-option>
-                  <mat-option>--Select--</mat-option>
-                  <mat-option value="1">REACTIVE</mat-option>
-                  <mat-option value="2">NONREACTIVE</mat-option>
-                  <mat-option value="3">INVALID</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="6">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>S34343</mat-label>
-                <mat-select [(ngModel)]="result2sample2" name="result2sample2">
-                  <mat-option>--Select--</mat-option>
-                  <mat-option>--Select--</mat-option>
-                  <mat-option value="1">REACTIVE</mat-option>
-                  <mat-option value="2">NONREACTIVE</mat-option>
-                  <mat-option value="3">INVALID</mat-option>
-                </mat-select>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-        </mat-tab>
-
-        
-        <mat-tab label="Final Result">
-
-          <ion-row>
-            <ion-col size="6">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>S23334 </mat-label>
-                <mat-select [(ngModel)]="finalsample1" name="finalsample1" required>
-                  <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let alg of algUsed" [value]="alg.id">
-                    {{alg.name}}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="!finalsample1">Please choose the Final Result</mat-error>
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="6">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>S34343</mat-label>
-                <mat-select [(ngModel)]="finalsample2" name="finalsample2" required>
-                  <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let alg of algUsed" [value]="alg.id">
-                    {{alg.name}}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="!finalsample2">Please choose the Final Result</mat-error>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-        </mat-tab>
-
-      </mat-tab-group>
-
-
-      <mat-action-row>
-        <button mat-button color="primary" (click)="prevStep()">Previous</button>
-        <button mat-button color="warn"  (click)="nextStep()">Next</button>
-      </mat-action-row>
-    </mat-expansion-panel> -->
+    
 
   <mat-expansion-panel [expanded]="step === testKitIndex+2" (opened)="setStep(testKitIndex+2)">
     <mat-expansion-panel-header>
@@ -546,7 +388,6 @@
             <textarea matInput placeholder="Enter Comments here"  [(ngModel)]="comments"></textarea>
           </mat-form-field>
         </ion-col>
-       
       </ion-row>
 
 
@@ -564,39 +405,10 @@
 
     <mat-action-row>
       <button mat-button color="primary" (click)="prevStep()">Previous</button>
-      <button mat-button color="warn">Submit</button>
+      <button mat-button color="warn" (click)="submitXerologyForm()">Submit</button>
     </mat-action-row>
   </mat-expansion-panel>
 </mat-accordion>
   
 
-<!-- <div class="card-div">
-
-  <mat-card>
-    <mat-card-title> </mat-card-title>
-    <mat-card-content>
-      <ion-row>
-        <ion-col size="12">
-          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-            <mat-label>S23334 </mat-label>
-            <mat-select [(ngModel)]="finalsample1" name="finalsample1" required>
-              <mat-option>--Select--</mat-option>
-              <mat-option *ngFor="let alg of algUsed" [value]="alg.id">
-                {{alg.name}}
-              </mat-option>
-            </mat-select>
-            <mat-error *ngIf="!finalsample1">Please choose the Final Result</mat-error>
-          </mat-form-field>
-        </ion-col>
-        <ion-col size="12">
-          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-            <mat-label>Comments</mat-label>
-            <textarea matInput placeholder="Enter Comments here"></textarea>
-          </mat-form-field>
-        </ion-col>
-      </ion-row>
-
-    </mat-card-content>
-  </mat-card>
-</div> -->
 </ion-content>
