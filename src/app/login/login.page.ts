@@ -50,7 +50,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 export class LoginPage implements OnInit {
 
-  appVersionNumber:any;
+  appVersionNumber: any;
   emailFormControl = new FormControl('', [
     Validators.required,
     EmailIdValidator.patternValidation
@@ -63,7 +63,7 @@ export class LoginPage implements OnInit {
     Validators.required,
     // trimmedCharsValidator.checkTrimmedThreeChars
   ]);
-  
+
   matcher = new MyErrorStateMatcher();
   isLinear = false;
   firstFormGroup: FormGroup;
@@ -79,12 +79,12 @@ export class LoginPage implements OnInit {
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
-    public alertService:AlertService) {
+    public alertService: AlertService) {
 
     // this.statusBar.backgroundColorByHexString("#000000");
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
-       this.appVersionNumber=appVersionNumber;
+        this.appVersionNumber = appVersionNumber;
       }
     })
   }
@@ -111,40 +111,37 @@ export class LoginPage implements OnInit {
       //return false;
     } else {
       var apiUrl = this.serverHostFormControl.value + 'api/'
-      this.storage.set('apiUrl',apiUrl);
+      this.storage.set('apiUrl', apiUrl);
 
       let loginJSON = {
         "userId": this.emailFormControl.value,
         "key": this.pswdFormControl.value,
-        "appVersion":this.appVersionNumber
+        "appVersion": this.appVersionNumber
       }
-  //    this.LoaderService.presentLoading();
+      //    this.LoaderService.presentLoading();
       this.CrudServiceService.postData('login', loginJSON)
         .then((result) => {
-         //   this.LoaderService.disMissLoading();
-            if (result["status"] == 'success') {
+          //   this.LoaderService.disMissLoading();
+          if (result["status"] == 'success') {
 
-              this.storage.set('participantLogin', result['data']);
-              this.storage.get('participantLogin').then((partiLoginResult) => {
-                  if (partiLoginResult) {
-                    this.router.navigate(['/all-pt-schemes']);
-                  }
-                })
-                
+            this.storage.set('participantLogin', result['data']);
+            this.storage.get('participantLogin').then((partiLoginResult) => {
+              if (partiLoginResult) {
+                this.router.navigate(['/all-pt-schemes']);
               }
-           else  if (result["status"] == 'version-failed') {
-                this.alertService.presentAlertConfirm('Alert',result["message"],'playStoreAlert');
-              }
-             else{
-                this.ToastService.presentToastWithOptions(result["message"]);
-              }
+            })
+          } else if (result["status"] == 'version-failed') {
+            this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+          } else {
+            this.ToastService.presentToastWithOptions(result["message"]);
+          }
 
 
-              
-            }, (err) => {
-              this.LoaderService.disMissLoading();
-            });
-        }
+
+        }, (err) => {
+          this.LoaderService.disMissLoading();
+        });
     }
-
   }
+
+}

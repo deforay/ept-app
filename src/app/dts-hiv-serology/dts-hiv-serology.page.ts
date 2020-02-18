@@ -76,6 +76,9 @@ export class DTSHIVSerologyPage implements OnInit {
   viewAccessMessage:string='';
   testKitIndex:any;
   sampleIndex:any;
+  samplesTextArray=[];
+
+
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -149,29 +152,10 @@ export class DTSHIVSerologyPage implements OnInit {
     if (dtsDataObj[0].dtsData.Heading4.status == true) {
       this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
       this.sampleIndex = this.sampleDetailsArray.samples.length;
+      this.samplesTextArray=this.sampleDetailsArray.samples;
+      this.resultsTextArray = this.sampleDetailsArray.resultsText;
     }
-    //   if (dtsDataObj[0].dtsData.Heading4.status == true) {
-    //  ///   debugger;
-    //     this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
-    //     this.samplesArray = this.sampleDetailsArray.samples;
-    //     this.resultsTextArray = this.sampleDetailsArray.resultsText;
-    //     this.sampleDetailsDecArray.push(this.sampleDetailsArray);
-    //     var array1=[];
-    //     this.sampleDetailsDecArray.forEach(sda =>
-
-    //       this.samplesArray.forEach(sa =>
-
-
-    //         this.resultsTextArray.forEach((rta, index) =>
-
-    //           this.myArray.push(sda[sa][rta])                
-          
-    //         )
-    //       )
-    //     );
-    //     console.log(this.myArray);
-
-    //   }
+    
 
       if (dtsDataObj[0].dtsData.Heading5.status == true) {
 

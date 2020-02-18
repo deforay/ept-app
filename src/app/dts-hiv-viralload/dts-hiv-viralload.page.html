@@ -189,8 +189,8 @@
               <mat-label>Viral Load Assay </mat-label>
               <mat-select [(ngModel)]="vlassay" name="vlassay" required>
                 <mat-option>--Select--</mat-option>
-                <mat-option *ngFor="let alg of algUsed" [value]="alg.id">
-                  {{alg.name}}
+                <mat-option *ngFor="let vl of vlAssayArray" [value]="vl.value">
+                  {{vl.show}}
                 </mat-option>
               </mat-select>
 

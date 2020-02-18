@@ -37,7 +37,6 @@ export class constantService {
     }
     getAPIUrl(){
    this.storage.get('apiUrl').then((url) => {
-     debugger;
         if (url) {
           return url;
         }
