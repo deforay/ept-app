@@ -85,34 +85,26 @@ export class DTSHIVSerologyPage implements OnInit {
   testKitArray: any;
   expDateFormat = [];
   testKitXerologyForm: any = {};
-  sampleResult = [];
+  sampleResult:any={};
   sampleDetailsJSON: any = {};
-
+  sampleResultObj= {}
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
   ) {
-
+   
   }
   algorithmused: any;
-  algUsed: selectArray[] = [{
-      id: 1,
-      name: 'Serial'
-    },
-    {
-      id: 2,
-      name: 'Parallel'
-    }
-  ];
+  
 
   ngOnInit() {
     this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
       console.log(dtsDataObj)
       if (dtsDataObj[0].dtsData.access.status == 'success') {
         this.selectedTestFormArray = dtsDataObj;
-        console.log(this.selectedTestFormArray);
+        console.log(dtsDataObj);
         if (dtsDataObj[0].dtsData.Heading1.status == true) {
 
           this.partiDetailsArray = dtsDataObj[0].dtsData.Heading1.data;
@@ -150,9 +142,21 @@ export class DTSHIVSerologyPage implements OnInit {
         }
         if (dtsDataObj[0].dtsData.Heading4.status == true) {
           this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
+          console.log(this.sampleDetailsArray)
           this.sampleIndex = this.sampleDetailsArray.samples.length;
           this.samplesTextArray = this.sampleDetailsArray.samples;
           this.resultsTextArray = this.sampleDetailsArray.resultsText;
+          
+          for(let key of this.resultsTextArray){
+           this.sampleResult[key] = '';
+          }          
+          for(let keycheck of this.samplesTextArray){
+          
+           this.sampleResultObj[keycheck] = this.sampleResult;
+
+         }         
+          console.log( this.sampleResultObj)
+         
         }
 
 
@@ -193,10 +197,11 @@ export class DTSHIVSerologyPage implements OnInit {
       'expDate': this.expDateFormat
     });
     this.sampleDetailsJSON = ({
-      "sampleResult": this.sampleResult
+      "samples": this.sampleResultObj,
+
     })
 
-
+console.log(this.sampleResultObj)
     let xerologyJSON = {
       //participant details
       "participantName": this.partiDetailsArray.participantName,
