@@ -43,3 +43,18 @@
        margin: 0;
        font-size: 13px;
    }
+   .mat-card{
+       padding:0 !important;
+       margin: -1px !important;
+   }
+   .mat-card .mat-card-title {
+       font-size: 14px !important;
+       padding: 10px!important;
+       margin: 0!important;
+       background:#8bcce6 !important;
+       border-top-left-radius: 4px !important;
+       border-top-right-radius: 4px!important ;
+   }
+   .mat-card .mat-card-content{
+    padding: 10px !important;
+   }

@@ -23,7 +23,9 @@ import {
 import {
   ErrorStateMatcher
 } from '@angular/material/core';
-import { debug } from 'util';
+import {
+  debug
+} from 'util';
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -60,63 +62,29 @@ export class DtsHivViralloadPage implements OnInit {
   otherInfoArray = [];
   viewAccessMessage: string = '';
   vlAssayArray = [];
-  // selectedTestFormStringify:any;
-  // selectedTestFormArray=[];
+  isQCDoneShow: boolean;
+  qcDone;
   vlCalc: any;
   vlLog;
   testReceiptDate;
   sampleRhdDate;
+  testDate;
+  othervlassay;
+  specVolTest;
+  assayExpDate;
+  qcRadioArray =[];
   constructor(private activatedRoute: ActivatedRoute, private storage: Storage, public ToastService: ToastService,
     public LoaderService: LoaderService, public CrudServiceService: CrudServiceService) {
-    // this.partDetailsArray = [{
-    //     "key": "Participant Name",
-    //     "value": "Indhu"
-    //   },
-    //   {
-    //     "key": "Participant Code",
-    //     "value": "4125"
-    //   },
-    //   {
-    //     "key": "Affiliation",
-    //     "value": "Laboratory"
-    //   },
-    //   {
-    //     "key": "Tel Phone No",
-    //     "value": "044-345444645"
-    //   },
-    //   {
-    //     "key": "Mobile No",
-    //     "value": "9841119818"
-    //   }
-    // ];
+
   }
 
 
 
   ngOnInit() {
-    // if(this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray')){
 
-    //   this.selectedTestFormStringify = this.activatedRoute.snapshot.paramMap.get('selectedTestFormArray');
-    //   this.selectedTestFormArray=JSON.parse(this.selectedTestFormStringify);
-    //   console.log(this.selectedTestFormArray);
-    //   if(this.selectedTestFormArray[0].vlData.Heading1.status==true){
-
-    //     this.partDetailsArray=this.selectedTestFormArray[0].vlData.Heading1.data;
-    //     console.log(this.partDetailsArray)
-
-    //   }else{
-    //     this.partDetailsArray=[];
-    //   }
-    //   if(this.selectedTestFormArray[0].vlData.Heading2.status==true){
-
-    //     this.shipmentsDetailsArray=this.selectedTestFormArray[0].vlData.Heading2.data;
-
-    //   }else{
-    //     this.shipmentsDetailsArray
-    //   }
-    // }
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
       console.log(vlDataObj[0]);
+
       if (vlDataObj[0].vlData.access.status == 'success') {
 
         if (vlDataObj[0].vlData.Heading1.status == true) {
@@ -131,13 +99,27 @@ export class DtsHivViralloadPage implements OnInit {
           if (this.shipmentsDetailsArray['sampleRehydrationDate']) {
             this.sampleRhdDate = new Date(this.shipmentsDetailsArray['sampleRehydrationDate']);
           }
-          debugger;
-          if (this.shipmentsDetailsArray['vlAssaySelect']) {
-            this.vlAssayArray=this.shipmentsDetailsArray['vlAssaySelect'];
+          if (this.shipmentsDetailsArray['testDate']) {
+            this.testDate = new Date(this.shipmentsDetailsArray['testDate']);
           }
+          if(this.shipmentsDetailsArray['assayExpirationDate']){
+            this.assayExpDate = new Date(this.shipmentsDetailsArray['assayExpirationDate']);
+          }
+          if(this.shipmentsDetailsArray['specimenVolume']){
+            this.specVolTest = this.shipmentsDetailsArray['specimenVolume'];
+          }
+          if(this.shipmentsDetailsArray['qcData'].status==true){
+            this.qcRadioArray = this.shipmentsDetailsArray['qcData'].qcRadio;
+          }
+          
+          
+          // if (this.shipmentsDetailsArray['vlAssaySelect']) {
+          //   this.vlAssayArray = this.shipmentsDetailsArray['vlAssaySelect'];
+          // }
         }
         if (vlDataObj[0].vlData.Heading3.status == true) {
           this.ptPanelTestArray = vlDataObj[0].vlData.Heading3.data;
+          
         }
         if (vlDataObj[0].vlData.Heading4.status == true) {
           this.otherInfoArray = vlDataObj[0].vlData.Heading4.data;
@@ -146,9 +128,7 @@ export class DtsHivViralloadPage implements OnInit {
         this.viewAccessMessage = vlDataObj[0].vlData.access.message;
       }
     })
-    //     else if (this.storage.get('selectedTestFormArray') ){
-    // console.log(this.storage.get('selectedTestFormArray'))
-    //     }
+
   }
   step = 0;
 

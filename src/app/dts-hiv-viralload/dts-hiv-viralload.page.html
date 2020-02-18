@@ -112,8 +112,8 @@
       </mat-action-row>
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
-      <mat-expansion-panel-header>
+     <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+     <mat-expansion-panel-header>
         <mat-panel-title>
           Shipment Details
         </mat-panel-title>
@@ -179,7 +179,7 @@
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Testing Date</mat-label>
-              <input matInput [matDatepicker]="testDatePicker" placeholder="Choose a date" required disabled>
+              <input matInput [matDatepicker]="testDatePicker"  [(ngModel)]="testDate" placeholder="Choose a date" required disabled>
               <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
               <mat-datepicker #testDatePicker disabled="false"></mat-datepicker>
             </mat-form-field>
@@ -189,7 +189,7 @@
               <mat-label>Viral Load Assay </mat-label>
               <mat-select [(ngModel)]="vlassay" name="vlassay" required>
                 <mat-option>--Select--</mat-option>
-                <mat-option *ngFor="let vl of vlAssayArray" [value]="vl.value">
+                <mat-option *ngFor="let vl of shipmentsDetailsArray['vlAssaySelect']" [value]="vl.value">
                   {{vl.show}}
                 </mat-option>
               </mat-select>
@@ -198,7 +198,7 @@
             </mat-form-field>
 
           </ion-col>
-          <ion-col size="6" size-xs *ngIf="vlassay=='1'" class="grid-input-col">
+          <ion-col size="6" size-xs *ngIf="vlassay=='6'" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Please specify Other Assay Name </mat-label>
               <input matInput [(ngModel)]="othervlassay" placeholder="Enter Other Assay Name" required>
@@ -209,34 +209,31 @@
         </ion-row>
 
         <ion-row>
-          <ion-col size="12" class="grid-input-col">
+          <ion-col size="6" size-xs  class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Specimen Volume used for testing</mat-label>
               <input matInput [(ngModel)]="specVolTest" placeholder="Enter Specimen Volume">
             </mat-form-field>
           </ion-col>
         </ion-row>
-
         <ion-row>
-          <ion-col size="6" class="grid-input-col">
+          <ion-col size="6" size-xs  class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Assay Expiration Date</mat-label>
-              <input matInput [matDatepicker]="assayExpDate" placeholder="Choose a date" required disabled>
-              <mat-datepicker-toggle matSuffix [for]="assayExpDate"></mat-datepicker-toggle>
-              <mat-datepicker #assayExpDate disabled="false"></mat-datepicker>
+              <input matInput [matDatepicker]="assayExpiryDate"  [(ngModel)]="assayExpDate" placeholder="Choose a date" required disabled>
+              <mat-datepicker-toggle matSuffix [for]="assayExpiryDate" ></mat-datepicker-toggle>
+              <mat-datepicker #assayExpiryDate disabled="false"></mat-datepicker>
             </mat-form-field>
           </ion-col>
-
-          <ion-col size="6" class="grid-input-col">
+          <ion-col size="6" size-xs  class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Assay Lot Number</mat-label>
               <input matInput [(ngModel)]="assayLotNo" placeholder="Enter Assay Lot Number">
             </mat-form-field>
           </ion-col>
         </ion-row>
-
-        <ion-row>
-          <ion-col size="6" class="grid-input-col">
+          <ion-row>
+          <ion-col size="6" size-xs  class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Response Date</mat-label>
               <input matInput [matDatepicker]="respDate" placeholder="Choose a date" required disabled>
@@ -244,7 +241,7 @@
               <mat-datepicker #respDate disabled="false"></mat-datepicker>
             </mat-form-field>
           </ion-col>
-          <ion-col size="6" class="grid-input-col">
+          <ion-col size="6" size-xs  class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Mode of Receipt</mat-label>
               <mat-select [(ngModel)]="receiptmode" name="receiptmode" required>
@@ -255,11 +252,41 @@
                 <mat-option value="4">Scan</mat-option>
                 <mat-option value="5">SMS</mat-option>
               </mat-select>
-
               <mat-error *ngIf="!receiptmode">Please choose the Mode Of Receipt </mat-error>
             </mat-form-field>
           </ion-col>
         </ion-row>
+       <ion-row *ngIf="isQCDoneShow">
+          <ion-col size="12">
+              <mat-label>QC Done</mat-label> 
+             <mat-radio-group
+              aria-labelledby="example-radio-group-label"
+              class="login-full-width grid-col-form"
+              [(ngModel)]="qcDone">
+              <mat-radio-button class="example-radio-button" *ngFor="let qcData of qcRadioArray" [value]="qcData.value">
+                {{qcData.show}}
+              </mat-radio-button>
+            </mat-radio-group> 
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row *ngIf="isQCDoneShow && qcDone=='yes'">
+          <ion-col size="12">
+            <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+              <mat-label>QC Date</mat-label>
+              <input matInput [matDatepicker]="qcDate" placeholder="Choose a date" required disabled>
+              <mat-datepicker-toggle matSuffix [for]="qcDate"></mat-datepicker-toggle>
+              <mat-datepicker #qcDate disabled="false"></mat-datepicker>
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="12">
+            <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>QC Done By </mat-label>
+                <input matInput [(ngModel)]="qcDoneBy" placeholder="" >
+            </mat-form-field>
+          </ion-col>
+        </ion-row> 
       </ion-grid>
 
       <mat-action-row>
@@ -268,12 +295,11 @@
       </mat-action-row>
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
       <mat-expansion-panel-header>
         <mat-panel-title>
           PT Panel Test
         </mat-panel-title>
-
       </mat-expansion-panel-header>
       <ion-row>
         <ion-col class="grid-input-col">
@@ -301,7 +327,7 @@
       <ion-row>
         <ion-col class="grid-input-col">
           <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-            <mat-label>Viral Load Calculator (Convert copies/ml to Log10)
+            <mat-label>{{ptPanelTestArray.vlResultSectionLabel}}
             </mat-label>
             <input matInput [(ngModel)]="vlCalc" placeholder="Enter result value to calculate log value"
               (ngModelChange)="calcLog()">
@@ -309,45 +335,28 @@
           <p class="log-para">{{vlLog}}</p>
         </ion-col>
       </ion-row>
-
-      <mat-tab-group mat-stretch-tabs>
-        <mat-tab label="Control/Sample 1">
-          <ion-row class="padding-top-10">
-            <ion-col size="6" size-xs class="grid-input-col">
-              <!-- <p>Control/Sample	</p> -->
+      <mat-card>
+        <mat-card-title> 
+          Negative Control
+        </mat-card-title>
+        <mat-card-content>
+          <ion-row>
+            <ion-col size="12" class="grid-input-col">               
+                  <p class="no-padding" style="margin-top: 0;"> {{ptPanelTestArray.tableTxtTh1}}</p>
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Negative Control
+                <mat-label>{{ptPanelTestArray.tableTxtTh2}}
                 </mat-label>
-                <input matInput [(ngModel)]="vlCalc" placeholder="Viral Load (log10 copies/ml)"
-                  (ngModelChange)="calcLog()">
+                <input matInput [(ngModel)]="vlLoad" placeholder="Viral Load (log10 copies/ml)"
+                  >
               </mat-form-field>
             </ion-col>
-            <ion-col size="6" size-xs class="grid-input-col">
-              <!-- <p>TND(Target Not Detected)</p> -->
-              <mat-checkbox>TND(Target Not Detected)</mat-checkbox>
-
+            <ion-col size="12" class="grid-input-col">
+              <mat-checkbox>{{ptPanelTestArray.tableTxtTh3}}</mat-checkbox>
             </ion-col>
           </ion-row>
-        </mat-tab>
-        <mat-tab label="Control/Sample 2">
-          <ion-row class="padding-top-10">
-            <ion-col size="6" size-xs class="grid-input-col">
-              <!-- <p>Control/Sample	</p> -->
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Negative Control
-                </mat-label>
-                <input matInput [(ngModel)]="vlCalc" placeholder="Viral Load (log10 copies/ml)"
-                  (ngModelChange)="calcLog()">
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="6" size-xs class="grid-input-col">
-              <!-- <p>TND(Target Not Detected)</p> -->
-              <mat-checkbox>TND(Target Not Detected)</mat-checkbox>
-            </ion-col>
-          </ion-row>
-        </mat-tab>
-      </mat-tab-group>
-    </section>
+        </mat-card-content>
+      </mat-card>  
+      </section>
     <section *ngIf="ptPanelTest">
      <ion-row>
        <ion-col size="12" class="grid-input-col">
