@@ -32,6 +32,16 @@ export class AppComponent {
       url: '/all-pt-schemes',
       icon: 'shipment'
     },
+    {
+      title: 'Individual Reports',
+      url: '/individual-report',
+      icon: 'shipment' 
+    },
+    {
+      title: 'Summary Reports',
+      url: '/summary-report',
+      icon: 'shipment' 
+    }
     // {
     //   title: 'DTS HIV Serology',
     //   url: '/dts-hiv-serology',

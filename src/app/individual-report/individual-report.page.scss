@@ -1,0 +1,35 @@
+.CardHeader{
+    padding: 3px;
+    background-color:#b4c0ff;
+    padding-left: 3%;
+}
+.schemeName{
+    font-weight: 500;
+    text-transform: capitalize;
+    font-size: 15px;
+    color: #000;
+    margin: 5px;
+}
+.cardContent{
+    padding-bottom: 5px;
+}
+.eptCardRow{
+    padding: 5px;
+}
+.text-normal{
+    color:black;
+}
+ion-grid ion-row ion-col{
+    padding:0 ;
+        p{
+            margin:3px;
+        }
+    } 
+    ion-grid ion-row ion-col:nth-child(3n){
+        text-align: right;
+    } 
+
+    .shipmentValues{
+        color: black;
+        font-size: 13.75px
+    }

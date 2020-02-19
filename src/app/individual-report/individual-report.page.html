@@ -1,0 +1,118 @@
+<ion-header>
+  <ion-toolbar>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="eptHeaderTitle">
+     Individual Report
+    </ion-title>
+  </ion-toolbar>
+</ion-header>
+<ion-content>
+  <ion-card *ngFor="let item of individualReports" class="eptCard">
+    <ion-card-header class="CardHeader">
+      <p text-wrap class="schemeName"> {{item.schemeType}}</p>
+    </ion-card-header>
+    <ion-card-content class="cardContent">
+      <ion-grid>
+        <ion-row *ngIf="item.shipmentDate">
+          <ion-col size="5">
+            <p text-wrap>
+              <span class="text-title-color">Shipment Date </span>
+            </p>
+          </ion-col>
+          <ion-col size="1">
+              <p text-wrap>
+                  <span class="text-title-color">:</span>
+              </p>
+          </ion-col>
+          <ion-col>
+            <p text-wrap class="shipmentValues">
+              <span>{{item.shipmentDate | date :'d MMM y'}}</span>
+            </p>
+          </ion-col>
+        </ion-row>
+
+
+       <ion-row *ngIf="item.shipmentCode">
+          <ion-col size="5">
+            <p text-wrap>
+              <span class="text-title-color">Shipment Code </span>
+            </p>
+          </ion-col>
+          <ion-col size="1">
+              <p text-wrap>
+                  <span class="text-title-color">:</span>
+              </p>
+          </ion-col>
+          <ion-col>
+            <p text-wrap class="shipmentValues">
+              <span>{{item.shipmentCode}}</span>
+            </p>
+          </ion-col>
+        </ion-row>
+
+
+        <ion-row *ngIf="item.uniqueIdentifier">
+            <ion-col size="5">
+              <p text-wrap>
+                <span class="text-title-color">Participant ID </span>
+              </p>
+            </ion-col>
+            <ion-col size="1">
+                <p text-wrap>
+                    <span class="text-title-color">:</span>
+                </p>
+            </ion-col>
+            <ion-col>
+              <p text-wrap class="shipmentValues">
+                <span>{{item.uniqueIdentifier}}</span>
+              </p>
+            </ion-col>
+          </ion-row>
+
+
+
+          <ion-row *ngIf="item.name">
+              <ion-col size="5">
+                <p text-wrap>
+                  <span class="text-title-color">Participant Name </span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                  <p text-wrap>
+                      <span class="text-title-color">:</span>
+                  </p>
+              </ion-col>
+              <ion-col>
+                <p text-wrap class="shipmentValues">
+                  <span>{{item.name}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
+
+
+              <ion-row *ngIf="item.responseDate">
+                  <ion-col size="5">
+                    <p text-wrap>
+                      <span class="text-title-color">Response Date </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size="1">
+                      <p text-wrap>
+                          <span class="text-title-color">:</span>
+                      </p>
+                  </ion-col>
+                  <ion-col>
+                    <p text-wrap class="shipmentValues">
+                      <span>{{item.responseDate  | date :'d MMM y'}}</span>
+                    </p>
+                  </ion-col>
+                </ion-row>
+      </ion-grid>
+      <ion-button class="text-center native-btn" (click)="download(item)">Download Report</ion-button>
+
+    </ion-card-content>
+  </ion-card>
+
+</ion-content>
