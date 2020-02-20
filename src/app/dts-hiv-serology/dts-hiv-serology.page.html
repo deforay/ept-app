@@ -329,7 +329,7 @@
 
 
   <!-- sample details start -->
-<div *ngFor="let sampleTextItem of samplesTextArray;let i = index;" >
+<!-- <div *ngFor="let sampleTextItem of samplesTextArray;let i = index;" >
 
   <mat-expansion-panel [expanded]="step === i+testKitIndex+2" (opened)="setStep(i+testKitIndex+2)" >
     <mat-expansion-panel-header>
@@ -351,6 +351,42 @@
         </mat-form-field>
       </ion-col>
     </ion-row>
+
+    <mat-action-row>
+      <button mat-button color="primary" (click)="prevStep()">Previous</button>
+      <button mat-button color="warn" (click)="nextStep()">Next</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</div> -->
+
+
+<div *ngFor="let sampleTextItem of samplesTextArray ;let i = index;" >
+
+  <mat-expansion-panel [expanded]="step === i+testKitIndex+2" (opened)="setStep(i+testKitIndex+2)" >
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+       {{sampleTextItem}}
+      </mat-panel-title>
+
+    </mat-expansion-panel-header>
+    <div *ngFor="let resultName of resultsTextArray;let r=index">
+
+    <ion-row>
+      <ion-col size="12"> 
+        <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+          <mat-label>{{resultName}} </mat-label>
+          <mat-select  id ="{{resultName}}_{{r+1}" [(ngModel)]="sampleResultObj[sampleTextItem][resultName]" name="{{resultName}}_{{r+1}}[]">
+            <mat-option>--Select--</mat-option>
+            <mat-option *ngFor="let item of sampleDetailsArray[sampleTextItem][resultName].data" 
+            [value]="item.value">
+              {{item.show}}
+            </mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ion-col>   
+
+    </ion-row>
+  </div>
 
     <mat-action-row>
       <button mat-button color="primary" (click)="prevStep()">Previous</button>

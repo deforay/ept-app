@@ -85,19 +85,21 @@ export class DTSHIVSerologyPage implements OnInit {
   testKitArray: any;
   expDateFormat = [];
   testKitXerologyForm: any = {};
-  sampleResult:any={};
+  sampleResult: any = {};
   sampleDetailsJSON: any = {};
-  sampleResultObj= {}
+  sampleResultObj = {}
+  newSampObj = {}
 
+  newSampArray = {};
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
   ) {
-   
+
   }
   algorithmused: any;
-  
+selected;
 
   ngOnInit() {
     this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
@@ -136,35 +138,45 @@ export class DTSHIVSerologyPage implements OnInit {
           for (let expDatevalue of Object.values(this.testKitDetailsArray['expDate'])) {
             this.exp.push(expDatevalue);
           }
-          console.log(this.testKitDetailsArray.lotNo)
-
-          console.log(this.testKitNameArray[this.testKitTextArray[0]])
+          //  console.log(this.testKitDetailsArray.lotNo)
+          //   console.log(this.testKitNameArray[this.testKitTextArray[0]])
         }
         if (dtsDataObj[0].dtsData.Heading4.status == true) {
           this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
-          console.log(this.sampleDetailsArray)
+          console.log(this.sampleDetailsArray);
+          for (let [key, value] of Object.entries(this.sampleDetailsArray)) {
+            if (key != 'resultsText' && key != 'samples') {
+              this.newSampArray[key] = value;
+            }
+          }
+          console.log(this.newSampArray)
+        
           this.sampleIndex = this.sampleDetailsArray.samples.length;
           this.samplesTextArray = this.sampleDetailsArray.samples;
           this.resultsTextArray = this.sampleDetailsArray.resultsText;
-          
-          for(let key of this.resultsTextArray){
-           this.sampleResult[key] = '';
-          }          
-          for(let keycheck of this.samplesTextArray){
-          
-           this.sampleResultObj[keycheck] = this.sampleResult;
 
-         }         
-          console.log( this.sampleResultObj)
-         
+          for (let [index,key] of this.resultsTextArray.entries()) {
+          //  key = key + '_'+(index+1);
+            this.sampleResult[key] = '';
+
+          }
+          for (let keycheck of this.samplesTextArray) {
+            
+            this.sampleResultObj[keycheck] = this.sampleResult;
+          }
+          console.log(this.sampleResultObj)
+
         }
-
+      // for(let [key,value] of Object.entries(this.newSampArray)){
+      //   console.log(value)
+      //   console.log(value['data'])
+      // }
 
         if (dtsDataObj[0].dtsData.Heading5.status == true) {
 
           this.otherInfoArray = dtsDataObj[0].dtsData.Heading5.data;
           this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
-          console.log(this.supervisorReviewArray)
+          //    console.log(this.supervisorReviewArray)
         }
       } else {
         this.viewAccessMessage = dtsDataObj[0].dtsData.access.message;
@@ -185,6 +197,10 @@ export class DTSHIVSerologyPage implements OnInit {
   prevStep() {
     this.step--;
   }
+  checksample(event){
+    console.log(event)
+
+  }
 
   submitXerologyForm() {
 
@@ -201,7 +217,6 @@ export class DTSHIVSerologyPage implements OnInit {
 
     })
 
-console.log(this.sampleResultObj)
     let xerologyJSON = {
       //participant details
       "participantName": this.partiDetailsArray.participantName,

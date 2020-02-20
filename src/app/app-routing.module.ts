@@ -26,6 +26,14 @@ const routes: Routes = [
   {
     path: 'all-pt-schemes',
     loadChildren: () => import('./all-pt-schemes/all-pt-schemes.module').then( m => m.AllPTSchemesPageModule)
+  },
+  {
+    path: 'individual-report',
+    loadChildren: () => import('./individual-report/individual-report.module').then( m => m.IndividualReportPageModule)
+  },
+  {
+    path: 'summary-report',
+    loadChildren: () => import('./summary-report/summary-report.module').then( m => m.SummaryReportPageModule)
   }
 ];
 
