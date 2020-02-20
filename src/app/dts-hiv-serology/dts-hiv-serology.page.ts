@@ -6,7 +6,8 @@ import {
   FormControl,
   FormGroupDirective,
   NgForm,
-  Validators
+  Validators,
+  DefaultValueAccessor
 } from '@angular/forms';
 import {
   Router
@@ -89,21 +90,44 @@ export class DTSHIVSerologyPage implements OnInit {
   sampleDetailsJSON: any = {};
   sampleResultObj = {}
   newSampObj = {}
-
   newSampArray = {};
+  appVersionNumber: any;
+  authToken: any;
+  participantID: any;
+  participantName: any;
+  algorithmused: any;
+  selected;
+  dtsDataObj: any;
+  formattedDate;
+
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
   ) {
-
+    this.storage.get('appVersionNumber').then((appVersionNumber) => {
+      if (appVersionNumber) {
+        this.appVersionNumber = appVersionNumber;
+      }
+    })
+    this.storage.get('participantLogin').then((participantLogin) => {
+      if (participantLogin) {
+        this.authToken = participantLogin.authToken;
+        this.participantID = participantLogin.id;
+        this.participantName = participantLogin.name;
+      }
+    })
   }
-  algorithmused: any;
-selected;
+
+  dateFormat(dateObj) {
+    return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
+  }
 
   ngOnInit() {
+  
     this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
-      console.log(dtsDataObj)
+      console.log(dtsDataObj);
+      this.dtsDataObj = dtsDataObj[0];
       if (dtsDataObj[0].dtsData.access.status == 'success') {
         this.selectedTestFormArray = dtsDataObj;
         console.log(dtsDataObj);
@@ -150,27 +174,27 @@ selected;
             }
           }
           console.log(this.newSampArray)
-        
+
           this.sampleIndex = this.sampleDetailsArray.samples.length;
           this.samplesTextArray = this.sampleDetailsArray.samples;
           this.resultsTextArray = this.sampleDetailsArray.resultsText;
 
-          for (let [index,key] of this.resultsTextArray.entries()) {
-          //  key = key + '_'+(index+1);
+          for (let [index, key] of this.resultsTextArray.entries()) {
+            //  key = key + '_'+(index+1);
             this.sampleResult[key] = '';
 
           }
           for (let keycheck of this.samplesTextArray) {
-            
+
             this.sampleResultObj[keycheck] = this.sampleResult;
           }
           console.log(this.sampleResultObj)
 
         }
-      // for(let [key,value] of Object.entries(this.newSampArray)){
-      //   console.log(value)
-      //   console.log(value['data'])
-      // }
+        // for(let [key,value] of Object.entries(this.newSampArray)){
+        //   console.log(value)
+        //   console.log(value['data'])
+        // }
 
         if (dtsDataObj[0].dtsData.Heading5.status == true) {
 
@@ -197,7 +221,7 @@ selected;
   prevStep() {
     this.step--;
   }
-  checksample(event){
+  checksample(event) {
     console.log(event)
 
   }
@@ -214,39 +238,57 @@ selected;
     });
     this.sampleDetailsJSON = ({
       "samples": this.sampleResultObj,
-
     })
 
     let xerologyJSON = {
-      //participant details
-      "participantName": this.partiDetailsArray.participantName,
-      "participantCode": this.partiDetailsArray.participantCode,
-      "participantAffiliation": this.partiDetailsArray.affiliation,
-      "participantPhone": this.partiDetailsArray.phone,
-      "participantMobile": this.partiDetailsArray.mobile,
-      //shipment details
-      "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
-      "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
-      "testReceiptDate": this.testReceiptDate,
-      "sampleRehydrationDate": this.sampleRhdDate,
-      "testingDate": this.testingDate,
-      "algorithmused": this.algorithmused,
-      "respDate": this.respDate,
-      "receiptmode": this.receiptmode,
-      "qcDone": this.qcDone,
-      "qcDate": this.qcDate,
-      "qcDoneBy": this.qcDoneBy,
-      //test details
-      "testKitArray": this.testKitXerologyForm,
-      //sample details
-      "sampleDetailArray": this.sampleDetailsJSON,
-      //other information
-      "supReview": this.supReview,
-      "supervisorName": this.supervisorName,
-      "comments": this.comments,
+
+      "authToken": this.authToken,
+      "appVersion": this.appVersionNumber,
+      "evaluationStatus": this.dtsDataObj.evaluationStatus,
+      "participantId": this.dtsDataObj.participantId,
+      "schemeType": this.dtsDataObj.schemeType,
+      "shipmentId": this.dtsDataObj.shipmentId,
+      "dtsData": {
+        "Heading1": {
+          //participant details
+          "participantName": this.partiDetailsArray.participantName,
+          "participantCode": this.partiDetailsArray.participantCode,
+          "participantAffiliation": this.partiDetailsArray.affiliation,
+          "participantPhone": this.partiDetailsArray.phone,
+          "participantMobile": this.partiDetailsArray.mobile,
+        },
+        "Heading2": {
+          //shipment details
+          "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
+          "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
+          "testReceiptDate":  this.testReceiptDate,
+          "sampleRehydrationDate":  this.sampleRhdDate,
+          "testingDate": this.testingDate,
+          "algorithmused": this.algorithmused,
+          "respDate": this.respDate,
+          "receiptmode": this.receiptmode,
+          "qcDone": this.qcDone,
+          "qcDate":  this.qcDate,
+          "qcDoneBy": this.qcDoneBy,
+        },
+        "Heading3": {
+          //test details
+          "testKitArray": this.testKitXerologyForm,
+        },
+        "Heading4": {
+          //sample details
+          "sampleDetailArray": this.sampleDetailsJSON,
+        },
+        "Heading5": {
+        //other information
+        "supReview": this.supReview,
+        "supervisorName": this.supervisorName,
+        "comments": this.comments,
+        }
+      }
     }
 
-    console.log(xerologyJSON);
-  }
+      console.log(xerologyJSON);
+    }
 
-}
+  }
