@@ -432,8 +432,9 @@
               <mat-label>Supervisor Review </mat-label>
               <mat-select [(ngModel)]="supReview" name="supReview">
                 <mat-option>--Select--</mat-option>
-                <mat-option value="yes">YES</mat-option>
-                <mat-option value="no">NO</mat-option>
+                <mat-option *ngFor="let sr of supervisorReviewArray" [value]="sr.value">
+                  {{sr.show}}
+                </mat-option>
               </mat-select>
             </mat-form-field>
           </ion-col>

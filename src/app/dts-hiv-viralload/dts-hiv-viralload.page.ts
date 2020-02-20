@@ -58,7 +58,7 @@ export class DtsHivViralloadPage implements OnInit {
   partDetailsArray: any = [];
   shipmentsDetailsArray: any = [];
   ptPanelTestArray = [];
-  otherInfoArray = [];
+  otherInfoArray :any= [];
   viewAccessMessage: string = '';
   vlAssayArray = [];
   isQCDoneShow: boolean;
@@ -97,6 +97,7 @@ export class DtsHivViralloadPage implements OnInit {
   tndRadioArray = [];
   selectedTNDArray = [];
   selectedTNDRadioArray = [];
+  supervisorReviewArray=[];
   constructor(private activatedRoute: ActivatedRoute, private storage: Storage, public ToastService: ToastService,
     public LoaderService: LoaderService, public CrudServiceService: CrudServiceService) {
 
@@ -177,18 +178,20 @@ export class DtsHivViralloadPage implements OnInit {
               this.selectedTNDRadioArray.push(element.filter(
                 tndRadio => tndRadio.selected == "selected"))
             })
-            this.selectedTNDRadioArray.forEach((element,index) => {
-              this.tndArray[index]=element[0].value;
+            this.selectedTNDRadioArray.forEach((element, index) => {
+              this.tndArray[index] = element[0].value;
             })
             console.log(this.ptPanelTestArray);
             console.log(this.selectedTNDRadioArray)
           } else {
             this.ptPanelTest = true;
           };
-          vlDataObj[0].vlData.Heading3.data.selectedTNDRadioArray=this.selectedTNDRadioArray;
+          vlDataObj[0].vlData.Heading3.data.selectedTNDRadioArray = this.selectedTNDRadioArray;
         }
         if (vlDataObj[0].vlData.Heading4.status == true) {
           this.otherInfoArray = vlDataObj[0].vlData.Heading4.data;
+          this.supervisorReviewArray=this.otherInfoArray.supervisorReview;
+
         }
       } else {
         this.viewAccessMessage = vlDataObj[0].vlData.access.message;
