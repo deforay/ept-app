@@ -47,7 +47,7 @@ export class DtsHivViralloadPage implements OnInit {
   panelOpenState = false;
   partDetailsArray: any = [];
   shipmentsDetailsArray: any = [];
-  ptPanelTestArray = [];
+  ptPanelTestArray: any = [];
   otherInfoArray: any = [];
   viewAccessMessage: string = '';
   vlAssayArray = [];
@@ -97,8 +97,10 @@ export class DtsHivViralloadPage implements OnInit {
   participantID: any;
   localVLData = [];
   participantName: any;
-  viralLoadArray=[];
-  existingVLParticipantArray=[];
+  viralLoadArray = [];
+  existingVLParticipantArray = [];
+  selectedTNDRadioArrayFormat = [];
+
 
   constructor(private activatedRoute: ActivatedRoute, private storage: Storage, public ToastService: ToastService,
     public LoaderService: LoaderService, public CrudServiceService: CrudServiceService) {
@@ -189,7 +191,6 @@ export class DtsHivViralloadPage implements OnInit {
           }
         }
         if (vlDataObj[0].vlData.Heading3.status == true) {
-
           this.ptPanelTestArray = vlDataObj[0].vlData.Heading3.data;
           if (this.ptPanelTestArray['isPtTestNotPerformedRadio'] == 'no') {
             this.ptPanelTest = false;
@@ -202,9 +203,10 @@ export class DtsHivViralloadPage implements OnInit {
               this.selectedTNDRadioArray.push(element.filter(
                 tndRadio => tndRadio.selected == "selected"))
             })
-            // this.selectedTNDRadioArray.forEach(element => {
-            //   this.selectedTNDRadioArray = element[0];
-            // })
+            this.selectedTNDRadioArray.forEach(element => {
+              this.selectedTNDRadioArrayFormat.push(element[0]);
+            })
+            console.log(this.selectedTNDRadioArrayFormat);
             this.selectedTNDRadioArray.forEach((element, index) => {
               this.tndArray[index] = element[0].value;
             })
@@ -213,7 +215,7 @@ export class DtsHivViralloadPage implements OnInit {
           } else {
             this.ptPanelTest = true;
           };
-          vlDataObj[0].vlData.Heading3.data.selectedTNDRadioArray = this.selectedTNDRadioArray;
+          this.ptPanelTestArray.selectedTNDRadioArray = this.selectedTNDRadioArrayFormat;
         }
         if (vlDataObj[0].vlData.Heading4.status == true) {
           this.otherInfoArray = vlDataObj[0].vlData.Heading4.data;
@@ -269,6 +271,16 @@ export class DtsHivViralloadPage implements OnInit {
     }
   }
 
+  changeTND(tnd, j) {
+  
+    if (tnd.value == 'yes') {
+    //  debugger;
+      this.ptPanelTestArray.selectedTNDRadioArray[j].value="yes";
+      this.ptPanelTestArray.selectedTNDRadioArray[j].show="Yes";
+      this.tndRadioArray = this.ptPanelTestArray['tndReferenceRadio'];
+    }
+  }
+
   submitViralLoad() {
 
     if (this.ptPanelTest == true) {
@@ -282,6 +294,7 @@ export class DtsHivViralloadPage implements OnInit {
       "participantId": this.vlDataArray.participantId,
       "schemeType": this.vlDataArray.schemeType,
       "shipmentId": this.vlDataArray.shipmentId,
+      "mapId": this.vlDataArray.mapId,
       "vlData": {
         "Heading1": {
           //participant details
@@ -331,7 +344,7 @@ export class DtsHivViralloadPage implements OnInit {
     this.viralLoadArray.push(viralLoadJSON);
     this.existingVLParticipantArray = this.viralLoadArray.filter(
       vlArray => vlArray.participantID == this.participantID);
-   // if()
+    // if()
     this.localVLData.push({
       "participant_ID": this.participantID,
       "participant_Name": this.participantName,

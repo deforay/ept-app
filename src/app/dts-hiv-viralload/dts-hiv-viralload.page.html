@@ -276,7 +276,8 @@
           <ion-col size="12">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>QC Date</mat-label>
-              <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" placeholder="Choose a date" required disabled>
+              <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" placeholder="Choose a date" required
+                disabled>
               <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
               <mat-datepicker #qcDatePicker disabled="false"></mat-datepicker>
             </mat-form-field>
@@ -335,48 +336,46 @@
         </ion-row>
         <div *ngFor="let controls of controlArray.label ;let i = index">
 
-        <mat-card>
-          <mat-card-title>
-           {{controls}}
-          </mat-card-title>
-          <mat-card-content>
-            <ion-row>
-              <div *ngFor="let check of ptPanelTestArray.vlResult;let k = index">
+          <mat-card>
+            <mat-card-title>
+              {{controls}}
+            </mat-card-title>
+            <mat-card-content>
+              <ion-row>
+                <div *ngFor="let check of ptPanelTestArray.vlResult;let k = index">
+                  <ion-col size="12" class="grid-input-col" *ngIf="k==i">
+                    <p class="no-padding" style="margin-top: 0;">
+                      {{controlHeads[controlHeads.length-3]}}
+                    </p>
+                    <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                      <mat-label>{{controlHeads[controlHeads.length-2]}}
+                      </mat-label>
+                      <input matInput [disabled]="ptPanelTestArray.selectedTNDRadioArray[k].value=='yes'"
+                        [(ngModel)]="vlResult[k]" placeholder="Viral Load (log10 copies/ml)">
+                    </mat-form-field>
+                  </ion-col>
+                </div>
 
-              <ion-col size="12" class="grid-input-col" *ngIf="k==i">
-                <p class="no-padding" style="margin-top: 0;"> 
-                  {{controlHeads[controlHeads.length-3]}}
-                </p>
-                <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                  <mat-label>{{controlHeads[controlHeads.length-2]}}
-                  </mat-label>
-                  <!-- [disabled]="ptPanelTestArray.selectedTNDRadioArray.show=='yes'" -->
-                  <input  matInput [(ngModel)]="vlResult[k]" placeholder="Viral Load (log10 copies/ml)">
-                </mat-form-field>
-              </ion-col>
-            </div>
+                <div *ngFor="let item of ptPanelTestArray.note;let j= index">
+                  <ion-col size="12" class="grid-input-col" *ngIf="j==i">
+                    <p class="no-padding" style="margin-top: 0;">
+                      {{controlHeads[controlHeads.length-1]}}
+                    </p>
+                    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                      [(ngModel)]="tndArray[j]">
+                      <mat-radio-button class="example-radio-button" *ngFor="let tnd of tndRadioArray[j]"
+                        [value]="tnd.value" (change)="changeTND(tnd,j)">
+                        {{tnd.show}}
+                      </mat-radio-button>
+                    </mat-radio-group>
+                  </ion-col>
+                </div>
 
-              <div *ngFor="let item of ptPanelTestArray.note;let j= index">
-                <ion-col size="12" class="grid-input-col" *ngIf="j==i">
-                    <p class="no-padding" style="margin-top: 0;"> 
-                        {{controlHeads[controlHeads.length-1]}}
-                      </p>
-                    <mat-radio-group
-                    aria-labelledby="example-radio-group-label"
-                    class="example-radio-group"
-                    [(ngModel)]="tndArray[j]">
-                    <mat-radio-button class="example-radio-button" *ngFor="let tnd of tndRadioArray[j]" [value]="tnd.value" >
-                      {{tnd.show}}
-                    </mat-radio-button>
-                  </mat-radio-group>
-                </ion-col>
-              </div>
-              
-            </ion-row>
-          </mat-card-content>
-        </mat-card>
+              </ion-row>
+            </mat-card-content>
+          </mat-card>
 
-      </div>
+        </div>
       </section>
       <section *ngIf="ptPanelTest">
         <ion-row>
