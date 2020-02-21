@@ -47,6 +47,9 @@
        padding:0 !important;
        margin: -1px !important;
    }
+//    .mat-card.dynamic-card{
+
+//    }
    .mat-card .mat-card-title {
        font-size: 14px !important;
        padding: 10px!important;
@@ -55,6 +58,13 @@
        border-top-left-radius: 4px !important;
        border-top-right-radius: 4px!important ;
    }
+   .mat-radio-group .mat-radio-button{
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+   }
    .mat-card .mat-card-content{
     padding: 10px !important;
+   }
+   .login-full-width{
+       width: 100%;
    }

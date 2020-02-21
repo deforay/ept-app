@@ -297,7 +297,7 @@
       </mat-action-row>
     </mat-expansion-panel>
 
-    <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
       <mat-expansion-panel-header>
         <mat-panel-title>
           PT Panel Test
@@ -336,42 +336,49 @@
         </ion-row>
         <div *ngFor="let controls of controlArray.label ;let i = index">
 
-          <mat-card>
+          <mat-card class="dynamic-card">
             <mat-card-title>
               {{controls}}
             </mat-card-title>
             <mat-card-content>
-              <ion-row>
+           
                 <div *ngFor="let check of ptPanelTestArray.vlResult;let k = index">
-                  <ion-col size="12" class="grid-input-col" *ngIf="k==i">
+                  <ion-row>
+                  <ion-col  class="grid-input-col" *ngIf="k==i">
                     <p class="no-padding" style="margin-top: 0;">
                       {{controlHeads[controlHeads.length-3]}}
                     </p>
-                    <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                    <mat-form-field class="login-full-width " appearance="outline">
                       <mat-label>{{controlHeads[controlHeads.length-2]}}
                       </mat-label>
                       <input matInput [disabled]="ptPanelTestArray.selectedTNDRadioArray[k].value=='yes'"
                         [(ngModel)]="vlResult[k]" placeholder="Viral Load (log10 copies/ml)">
                     </mat-form-field>
                   </ion-col>
+                </ion-row>
                 </div>
-
-                <div *ngFor="let item of ptPanelTestArray.note;let j= index">
-                  <ion-col size="12" class="grid-input-col" *ngIf="j==i">
+              
+            
+                <div *ngFor="let item of ptPanelTestArray.tndReferenceRadio;let j= index">
+                  <ion-row>
+                  <ion-col  class="grid-input-col" *ngIf="j==i">
                     <p class="no-padding" style="margin-top: 0;">
                       {{controlHeads[controlHeads.length-1]}}
                     </p>
+                    {{tndArray[i]}}
                     <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                      [(ngModel)]="tndArray[j]">
+                      [(ngModel)]="tndArray[j]" (ngModelChange)="changeTND(j,tndArray[j])" >
                       <mat-radio-button class="example-radio-button" *ngFor="let tnd of tndRadioArray[j]"
-                        [value]="tnd.value" (change)="changeTND(tnd,j)">
-                        {{tnd.show}}
+                        [value]="tnd.value">
+                        {{tnd.show}} 
+                        <!--  (change)="changeTND(i,tndArray[i])" -->
                       </mat-radio-button>
                     </mat-radio-group>
                   </ion-col>
-                </div>
+               
 
               </ion-row>
+            </div>
             </mat-card-content>
           </mat-card>
 
