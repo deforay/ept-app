@@ -277,6 +277,7 @@ export class DtsHivViralloadPage implements OnInit {
     //  debugger;
       this.ptPanelTestArray.selectedTNDRadioArray[j].value="yes";
       this.ptPanelTestArray.selectedTNDRadioArray[j].show="Yes";
+      
       //this.tndRadioArray = this.ptPanelTestArray['tndReferenceRadio'];
     }
   }
