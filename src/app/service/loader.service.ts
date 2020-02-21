@@ -10,8 +10,10 @@ import {
 })
 
 export class LoaderService {
+  // loader: any;
 
   constructor(public loadingController: LoadingController) {}
+
 
   async presentLoading() {
 
@@ -22,16 +24,34 @@ export class LoaderService {
     await loading.present();
 
   }
-  
-  async disMissLoading() {
+  async Loading(load) {
     const loading = await this.loadingController.create({
       spinner: 'dots',
       message: 'Please wait',
     });
- //   await loading.present();
-    const { role, data } = await loading.onDidDismiss();
+    if (load == 'present') {
+      await loading.present();
+
+    } else {
+   //   const {role,data } = await loading.onDidDismiss();
+ await loading.dismiss();
+      console.log('Loading dismissed!');
+    }
+  }
+  async disMissLoading() {
+
+    const loading = await this.loadingController.create({
+      spinner: 'dots',
+      message: 'Please wait',
+    });
+    await loading.dismiss();
+    //   await loading.present();
+    const {
+      role,
+      data
+    } = await loading.onDidDismiss();
     //this.loadingController.dismiss();
-    await loading.onDidDismiss();
+    await this.loadingController.dismiss();
 
   }
 

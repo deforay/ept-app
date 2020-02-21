@@ -14,12 +14,16 @@ import {
     AlertService
 } from '../service/alert.service';
 
+import {
+    NetworkService
+} from '../service/network/network.service';
 export {
 
     // constantService,
     CrudServiceService,
     ToastService,
     LoaderService,
-    AlertService
+    AlertService,
+    NetworkService
 
 }

@@ -34,6 +34,9 @@ import {
 import {
   Storage
 } from '@ionic/storage';
+import {
+  LoadingController
+} from '@ionic/angular';
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -75,7 +78,8 @@ export class LoginPage implements OnInit {
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
-    public alertService: AlertService) {
+    public alertService: AlertService,
+    public loadingController: LoadingController) {
 
     // this.statusBar.backgroundColorByHexString("#000000");
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
@@ -96,8 +100,17 @@ export class LoginPage implements OnInit {
     // enable the root left menu when leaving this page
     this.menu.enable(true);
   }
+  // async presentLoading(){
+  //   const loading =  this.loadingController.create({
+  //     spinner: 'dots',
+  //     message: 'Please wait',
+  //   });
 
+  // }
+  
   login() {
+
+   
     if (this.emailFormControl.invalid || this.pswdFormControl.invalid || this.serverHostFormControl.invalid) {
     } else {
       var apiUrl = '';
@@ -116,10 +129,8 @@ export class LoginPage implements OnInit {
         "key": this.pswdFormControl.value,
         "appVersion": this.appVersionNumber
       }
-      //    this.LoaderService.presentLoading();
       this.CrudServiceService.postData('login', loginJSON)
         .then((result) => {
-          //   this.LoaderService.disMissLoading();
           if (result["status"] == 'success') {
 
             this.storage.set('participantLogin', result['data']);
@@ -137,7 +148,7 @@ export class LoginPage implements OnInit {
 
 
         }, (err) => {
-        //  this.LoaderService.disMissLoading();
+      //  this.LoaderService.disMissLoading();
         });
     }
   }

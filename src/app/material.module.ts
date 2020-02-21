@@ -21,7 +21,8 @@ import {
   MatTabsModule,
   MatMenuModule,
   MatListModule,
-  MatRadioModule
+  MatRadioModule,
+  MatProgressSpinnerModule
 
 //  ErrorStateMatcher
 } from "@angular/material";
@@ -52,7 +53,8 @@ import {
     MatTabsModule,
     MatMenuModule,
     MatListModule,
-    MatRadioModule
+    MatRadioModule,
+    MatProgressSpinnerModule
 
    // ErrorStateMatcher
   ]

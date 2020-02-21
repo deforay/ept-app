@@ -74,8 +74,13 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-      this.statusBar.styleDefault();
+      // this.statusBar.styleDefault();
+      if (this.platform.is('android')) {
+        this.statusBar.styleLightContent();
+        this.statusBar.backgroundColorByHexString("#000000");
+      }
       this.splashScreen.hide();
+
       this.appVersion.getVersionNumber().then(value => {
         this.appVersionNumber = value;
         this.storage.set('appVersionNumber', this.appVersionNumber);
@@ -94,7 +99,7 @@ export class AppComponent {
 
 
   }
-
+ 
   logout() {    
       this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
   }

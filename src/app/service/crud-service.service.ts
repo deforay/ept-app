@@ -5,7 +5,9 @@ import {
 import {
   Injectable
 } from '@angular/core';
-
+import {
+  LoadingController
+} from '@ionic/angular';
 import {
   Storage
 } from '@ionic/storage';
@@ -17,12 +19,12 @@ import {
 
 @Injectable()
 export class CrudServiceService {
-  loading;
+ // loading;
   server_url: any;
 
   constructor(public http: HttpClient,
     private storage: Storage,
-    //  public loadingCtrl: LoadingController,
+      public loadingCtrl: LoadingController,
     //   public events: Events,
     // public LoaderService: LoaderService
   ) {
@@ -31,10 +33,15 @@ export class CrudServiceService {
 
 
   //post service call
-  postData(URL, credentials) {
+  async postData(URL, credentials) {
    
     //   this.LoaderService.showLoader();
     const headers = new HttpHeaders().set('Content-Type', 'application/json');
+    const loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      message: 'Please wait',
+    });
+    await loading.present();
 
     return new Promise((resolve, reject) => {
 
@@ -45,9 +52,16 @@ export class CrudServiceService {
               headers: headers
             })
             .subscribe(res => {
+              if(loading){
+                loading.dismiss();
+              }
+            
               //    this.LoaderService.hideLoader();
               resolve(res);
             }, (err) => {
+              if(loading){
+                loading.dismiss();
+              }        
               //     this.LoaderService.hideLoader();
               reject(err);
             });
