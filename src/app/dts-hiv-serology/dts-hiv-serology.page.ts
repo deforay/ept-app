@@ -248,6 +248,7 @@ export class DTSHIVSerologyPage implements OnInit {
       "participantId": this.dtsDataObj.participantId,
       "schemeType": this.dtsDataObj.schemeType,
       "shipmentId": this.dtsDataObj.shipmentId,
+      "mapId":this.dtsDataObj.mapId,
       "dtsData": {
         "Heading1": {
           //participant details

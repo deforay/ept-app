@@ -23,6 +23,7 @@
     "@angular/platform-browser": "~8.1.2",
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
+    "@ionic-native/android-permissions": "^5.21.5",
     "@ionic-native/app-version": "^5.21.5",
     "@ionic-native/core": "^5.21.5",
     "@ionic-native/market": "^5.21.5",
@@ -31,6 +32,7 @@
     "@ionic/angular": "^4.7.1",
     "@ionic/storage": "^2.2.0",
     "cordova-android": "8.1.0",
+    "cordova-plugin-android-permissions": "1.0.2",
     "cordova-plugin-app-version": "0.1.9",
     "core-js": "^2.5.4",
     "hammerjs": "^2.0.8",
@@ -83,7 +85,8 @@
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-app-version": {}
+      "cordova-plugin-app-version": {},
+      "cordova-plugin-android-permissions": {}
     },
     "platforms": [
       "android"
