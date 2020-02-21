@@ -3,16 +3,16 @@
 // } from '../service/constant.service';
 import {
     CrudServiceService
-} from '../service/crud-service.service';
+} from '../service/crud/crud-service.service';
 import {
     ToastService
-} from '../service/toast.service';
+} from '../service/toast/toast.service';
 import {
     LoaderService
-} from '../service/loader.service';
+} from '../service/loader/loader.service';
 import {
     AlertService
-} from '../service/alert.service';
+} from '../service/alert/alert.service';
 
 import {
     NetworkService

@@ -52,7 +52,6 @@ export class trimmedCharsValidator {
 
     let isTrimmedThreeChars: Boolean;
     let isValid: boolean;
-    console.log(control);
 
     if (((control.value || '').trim().length < 3)) {
       isTrimmedThreeChars = true;
