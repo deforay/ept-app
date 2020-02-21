@@ -23,7 +23,7 @@ import {
 import {
   ErrorStateMatcher
 } from '@angular/material/core';
-
+import{ ChangeDetectorRef } from '@angular/core';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 
@@ -103,7 +103,7 @@ export class DtsHivViralloadPage implements OnInit {
 
 
   constructor(private activatedRoute: ActivatedRoute, private storage: Storage, public ToastService: ToastService,
-    public LoaderService: LoaderService, public CrudServiceService: CrudServiceService) {
+    public LoaderService: LoaderService, public CrudServiceService: CrudServiceService,private cdRef : ChangeDetectorRef) {
 
     this.vlNotTestedReason = '';
     this.ptNotTestedComments = '';
@@ -118,6 +118,8 @@ export class DtsHivViralloadPage implements OnInit {
         this.authToken = participantLogin.authToken;
         this.participantID = participantLogin.id;
         this.participantName = participantLogin.name;
+        this.getVLFormDetails();
+        this.cdRef.detectChanges();     
       }
     })
   }
@@ -125,116 +127,120 @@ export class DtsHivViralloadPage implements OnInit {
   dateFormat(dateObj) {
     return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
   }
+getVLFormDetails(){
 
+  this.storage.get('selectedTestFormArray').then((vlDataObj) => {
+    console.log(vlDataObj[0]);
+    this.vlDataArray = vlDataObj[0];
+    if (vlDataObj[0].vlData.access.status == 'success') {
+
+      if (vlDataObj[0].vlData.Heading1.status == true) {
+        this.partDetailsArray = vlDataObj[0].vlData.Heading1.data;
+      }
+      if (vlDataObj[0].vlData.Heading2.status == true) {
+        this.shipmentsDetailsArray = vlDataObj[0].vlData.Heading2.data;
+        console.log(this.shipmentsDetailsArray);
+        if (this.shipmentsDetailsArray['receiptDate']) {
+          this.testReceiptDate = new Date(this.shipmentsDetailsArray['receiptDate']);
+        }
+        if (this.shipmentsDetailsArray['sampleRehydrationDate']) {
+          this.sampleRhdDate = new Date(this.shipmentsDetailsArray['sampleRehydrationDate']);
+        }
+        if (this.shipmentsDetailsArray['testDate']) {
+          this.testDate = new Date(this.shipmentsDetailsArray['testDate']);
+        }
+        if (this.shipmentsDetailsArray['assayExpirationDate']) {
+          this.assayExpDate = new Date(this.shipmentsDetailsArray['assayExpirationDate']);
+        }
+        if (this.shipmentsDetailsArray['specimenVolume']) {
+          this.specVolTest = this.shipmentsDetailsArray['specimenVolume'];
+        }
+        if (this.shipmentsDetailsArray['qcData'].status == true) {
+          this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
+          if (this.isQCDoneShow == true) {
+            this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
+            this.selectedQCRadio = this.qcRadioArray.filter(
+              qcRadio => qcRadio.selected == "selected");
+            this.qcDone = this.selectedQCRadio[0].value;
+            this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
+            this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
+          }
+        }
+        if (this.shipmentsDetailsArray['modeOfReceiptSelect']) {
+          this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'];
+          this.selectedModeOfReceipt = this.modeOfReceiptArray.filter(
+            modeOfRec => modeOfRec.selected == "selected");
+          this.receiptmode = this.selectedModeOfReceipt[0].value;
+        }
+        if (this.shipmentsDetailsArray['vlAssaySelect']) {
+          this.isSelectedOther = false;
+          this.selectedVlAssay = this.shipmentsDetailsArray['vlAssaySelect'].filter(
+            vlAssay => vlAssay.selected == "selected");
+          this.vlassay = this.selectedVlAssay[0].value;
+          if (this.shipmentsDetailsArray['otherAssay']) {
+            this.othervlassay = this.shipmentsDetailsArray['otherAssay'];
+            if (this.selectedVlAssay[0].selected == 'selected') {
+              this.isSelectedOther = true;
+            }
+          }
+        }
+        if (this.shipmentsDetailsArray['responseDate']) {
+          this.responseDate = new Date(this.shipmentsDetailsArray['responseDate']);
+        }
+        if (this.shipmentsDetailsArray['assayLotNumber']) {
+          this.assayLotNo = this.shipmentsDetailsArray['assayLotNumber'];
+        }
+      }
+      if (vlDataObj[0].vlData.Heading3.status == true) {
+        this.ptPanelTestArray = vlDataObj[0].vlData.Heading3.data;
+        if (this.ptPanelTestArray['isPtTestNotPerformedRadio'] == 'no') {
+          this.ptPanelTest = false;
+          this.controlHeads = this.ptPanelTestArray['tableHeading'];
+          this.controlArray = this.ptPanelTestArray['tableRowTxt'];
+          this.vlResult = this.ptPanelTestArray['vlResult'];
+         // console.log(this.vlResult);
+          this.tndRadioArray = this.ptPanelTestArray['tndReferenceRadio'];
+          this.tndRadioArray.forEach(element => {
+            this.selectedTNDRadioArray.push(element.filter(
+              tndRadio => tndRadio.selected == "selected"))
+          })
+          this.selectedTNDRadioArray.forEach(element => {
+            this.selectedTNDRadioArrayFormat.push(element[0]);
+          })
+          console.log(this.selectedTNDRadioArrayFormat);
+          this.selectedTNDRadioArray.forEach((element, index) => {
+            this.tndArray[index] = element[0].value;
+          })
+        //  console.log(this.ptPanelTestArray);
+          console.log(this.selectedTNDRadioArray);
+          console.log(this.tndArray);
+
+        } else {
+          this.ptPanelTest = true;
+        };
+        this.ptPanelTestArray.selectedTNDRadioArray = this.selectedTNDRadioArrayFormat;
+      }
+      if (vlDataObj[0].vlData.Heading4.status == true) {
+        this.otherInfoArray = vlDataObj[0].vlData.Heading4.data;
+        this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
+        if (this.supervisorReviewArray) {
+          this.selectedSupReviewArray = this.supervisorReviewArray.filter(
+            supReviewItem => supReviewItem.selected == "selected");
+          this.supReview = this.selectedSupReviewArray[0].value;
+        }
+        this.selectedSupReviewArray =
+          this.supName = this.otherInfoArray.approvalInputText;
+        if (this.otherInfoArray.comments) {
+          this.comments = this.otherInfoArray.comments;
+        }
+      }
+    } else {
+      this.viewAccessMessage = vlDataObj[0].vlData.access.message;
+    }
+  })
+}
   ngOnInit() {
 
-    this.storage.get('selectedTestFormArray').then((vlDataObj) => {
-      console.log(vlDataObj[0]);
-      this.vlDataArray = vlDataObj[0];
-      if (vlDataObj[0].vlData.access.status == 'success') {
-
-        if (vlDataObj[0].vlData.Heading1.status == true) {
-          this.partDetailsArray = vlDataObj[0].vlData.Heading1.data;
-        }
-        if (vlDataObj[0].vlData.Heading2.status == true) {
-          this.shipmentsDetailsArray = vlDataObj[0].vlData.Heading2.data;
-          console.log(this.shipmentsDetailsArray);
-          if (this.shipmentsDetailsArray['receiptDate']) {
-            this.testReceiptDate = new Date(this.shipmentsDetailsArray['receiptDate']);
-          }
-          if (this.shipmentsDetailsArray['sampleRehydrationDate']) {
-            this.sampleRhdDate = new Date(this.shipmentsDetailsArray['sampleRehydrationDate']);
-          }
-          if (this.shipmentsDetailsArray['testDate']) {
-            this.testDate = new Date(this.shipmentsDetailsArray['testDate']);
-          }
-          if (this.shipmentsDetailsArray['assayExpirationDate']) {
-            this.assayExpDate = new Date(this.shipmentsDetailsArray['assayExpirationDate']);
-          }
-          if (this.shipmentsDetailsArray['specimenVolume']) {
-            this.specVolTest = this.shipmentsDetailsArray['specimenVolume'];
-          }
-          if (this.shipmentsDetailsArray['qcData'].status == true) {
-            this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
-            if (this.isQCDoneShow == true) {
-              this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
-              this.selectedQCRadio = this.qcRadioArray.filter(
-                qcRadio => qcRadio.selected == "selected");
-              this.qcDone = this.selectedQCRadio[0].value;
-              this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
-              this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
-            }
-          }
-          if (this.shipmentsDetailsArray['modeOfReceiptSelect']) {
-            this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'];
-            this.selectedModeOfReceipt = this.modeOfReceiptArray.filter(
-              modeOfRec => modeOfRec.selected == "selected");
-            this.receiptmode = this.selectedModeOfReceipt[0].value;
-          }
-          if (this.shipmentsDetailsArray['vlAssaySelect']) {
-            this.isSelectedOther = false;
-            this.selectedVlAssay = this.shipmentsDetailsArray['vlAssaySelect'].filter(
-              vlAssay => vlAssay.selected == "selected");
-            this.vlassay = this.selectedVlAssay[0].value;
-            if (this.shipmentsDetailsArray['otherAssay']) {
-              this.othervlassay = this.shipmentsDetailsArray['otherAssay'];
-              if (this.selectedVlAssay[0].selected == 'selected') {
-                this.isSelectedOther = true;
-              }
-            }
-          }
-          if (this.shipmentsDetailsArray['responseDate']) {
-            this.responseDate = new Date(this.shipmentsDetailsArray['responseDate']);
-          }
-          if (this.shipmentsDetailsArray['assayLotNumber']) {
-            this.assayLotNo = this.shipmentsDetailsArray['assayLotNumber'];
-          }
-        }
-        if (vlDataObj[0].vlData.Heading3.status == true) {
-          this.ptPanelTestArray = vlDataObj[0].vlData.Heading3.data;
-          if (this.ptPanelTestArray['isPtTestNotPerformedRadio'] == 'no') {
-            this.ptPanelTest = false;
-            this.controlHeads = this.ptPanelTestArray['tableHeading'];
-            this.controlArray = this.ptPanelTestArray['tableRowTxt'];
-            this.vlResult = this.ptPanelTestArray['vlResult'];
-            console.log(this.vlResult);
-            this.tndRadioArray = this.ptPanelTestArray['tndReferenceRadio'];
-            this.tndRadioArray.forEach(element => {
-              this.selectedTNDRadioArray.push(element.filter(
-                tndRadio => tndRadio.selected == "selected"))
-            })
-            this.selectedTNDRadioArray.forEach(element => {
-              this.selectedTNDRadioArrayFormat.push(element[0]);
-            })
-            console.log(this.selectedTNDRadioArrayFormat);
-            this.selectedTNDRadioArray.forEach((element, index) => {
-              this.tndArray[index] = element[0].value;
-            })
-            console.log(this.ptPanelTestArray);
-            console.log(this.selectedTNDRadioArray)
-          } else {
-            this.ptPanelTest = true;
-          };
-          this.ptPanelTestArray.selectedTNDRadioArray = this.selectedTNDRadioArrayFormat;
-        }
-        if (vlDataObj[0].vlData.Heading4.status == true) {
-          this.otherInfoArray = vlDataObj[0].vlData.Heading4.data;
-          this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
-          if (this.supervisorReviewArray) {
-            this.selectedSupReviewArray = this.supervisorReviewArray.filter(
-              supReviewItem => supReviewItem.selected == "selected");
-            this.supReview = this.selectedSupReviewArray[0].value;
-          }
-          this.selectedSupReviewArray =
-            this.supName = this.otherInfoArray.approvalInputText;
-          if (this.otherInfoArray.comments) {
-            this.comments = this.otherInfoArray.comments;
-          }
-        }
-      } else {
-        this.viewAccessMessage = vlDataObj[0].vlData.access.message;
-      }
-    })
 
   }
   step = 0;
@@ -271,12 +277,26 @@ export class DtsHivViralloadPage implements OnInit {
     }
   }
 
-  changeTND(tnd, j) {
-  
-    if (tnd.value == 'yes') {
-    //  debugger;
-      this.ptPanelTestArray.selectedTNDRadioArray[j].value="yes";
-      this.ptPanelTestArray.selectedTNDRadioArray[j].show="Yes";
+  changeTND(index,data) {
+
+  console.log(index,data);
+  // console.log(this.ptPanelTestArray.selectedTNDRadioArray);
+  // console.log(this.ptPanelTestArray.selectedTNDRadioArray[index]);
+  // console.log(this.ptPanelTestArray.tndReferenceRadio[index]);
+  // console.log(this.ptPanelTestArray.tndReferenceRadio);
+  console.log(this.tndArray[index]);
+
+var selectTND = this.ptPanelTestArray.tndReferenceRadio[index].filter(
+    item => item.value == this.tndArray[index]);
+    console.log(selectTND);
+  //  selectTND[0].selected="selected";
+    this.ptPanelTestArray.selectedTNDRadioArray[index].value=selectTND[0].value;
+
+
+  //  if (tnd.value == 'yes') {
+     
+      // this.ptPanelTestArray.selectedTNDRadioArray[index].value="yes";
+      // this.ptPanelTestArray.selectedTNDRadioArray[index].show="Yes";
       
       //this.tndRadioArray = this.ptPanelTestArray['tndReferenceRadio'];
     }
