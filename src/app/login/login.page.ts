@@ -65,16 +65,12 @@ export class LoginPage implements OnInit {
   ]);
 
   matcher = new MyErrorStateMatcher();
-  isLinear = false;
-  firstFormGroup: FormGroup;
-  secondFormGroup: FormGroup;
   pswdhide = true;
 
 
   constructor(
     public menu: MenuController,
     private router: Router,
-    private _formBuilder: FormBuilder,
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -89,12 +85,7 @@ export class LoginPage implements OnInit {
     })
   }
   ngOnInit() {
-    this.firstFormGroup = this._formBuilder.group({
-      firstCtrl: ['', Validators.required]
-    });
-    this.secondFormGroup = this._formBuilder.group({
-      secondCtrl: ['', Validators.required]
-    });
+  
   }
   ionViewDidEnter() {
     // the root left menu should be disabled on this page
@@ -108,9 +99,16 @@ export class LoginPage implements OnInit {
 
   login() {
     if (this.emailFormControl.invalid || this.pswdFormControl.invalid || this.serverHostFormControl.invalid) {
-      //return false;
     } else {
-      var apiUrl = this.serverHostFormControl.value + 'api/'
+      var apiUrl = '';
+      if (this.serverHostFormControl.value.indexOf("https://") == 0 || this.serverHostFormControl.value.indexOf("Https://") == 0) {
+        apiUrl = this.serverHostFormControl.value + '/api/'
+      } else if (this.serverHostFormControl.value.indexOf("http://") == 0 || this.serverHostFormControl.value.indexOf("Http://") == 0) {
+        apiUrl = this.serverHostFormControl.value + '/api/'
+      } else {
+        apiUrl = "https://" + this.serverHostFormControl.value + '/api/'
+      }
+
       this.storage.set('apiUrl', apiUrl);
 
       let loginJSON = {
@@ -139,7 +137,7 @@ export class LoginPage implements OnInit {
 
 
         }, (err) => {
-          this.LoaderService.disMissLoading();
+        //  this.LoaderService.disMissLoading();
         });
     }
   }

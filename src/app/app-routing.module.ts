@@ -34,6 +34,14 @@ const routes: Routes = [
   {
     path: 'summary-report',
     loadChildren: () => import('./summary-report/summary-report.module').then( m => m.SummaryReportPageModule)
+  },
+  {
+    path: 'change-password',
+    loadChildren: () => import('./change-password/change-password.module').then( m => m.ChangePasswordPageModule)
+  },
+  {
+    path: 'app-password',
+    loadChildren: () => import('./app-password/app-password.module').then( m => m.AppPasswordPageModule)
   }
 ];
 

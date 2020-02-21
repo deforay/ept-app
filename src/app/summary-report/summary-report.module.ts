@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { SummaryReportPageRoutingModule } from './summary-report-routing.module';
 
 import { SummaryReportPage } from './summary-report.page';
+import { MaterialModule } from '../material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    MaterialModule,
     SummaryReportPageRoutingModule
   ],
   declarations: [SummaryReportPage]

@@ -5,24 +5,23 @@ import {
 
 export class trimmedCharsValidator {
 
-  static checkTrimmedFiveChars(control: FormControl) {
+  static checkTrimmedEightChars(control: FormControl) {
 
-    let isTrimmedFiveChars: Boolean;
+    let isTrimmedEightChars: Boolean;
     let isValid: boolean;
-
-    if (((control.value || '').trim().length < 5)) {
-      isTrimmedFiveChars = true;
-      isValid = !isTrimmedFiveChars;
+    if (((control.value || '').trim().length < 8)) {
+      isTrimmedEightChars = true;
+      isValid = !isTrimmedEightChars;
       return isValid ? null : {
-        'trimmedFiveChars': true
-      }; // return 'trimmedFiveChars'as true if isValid is true
+        'trimmedEightChars': true
+      }; // return 'trimmedEightChars'as true if isValid is true
 
     }
      else {
-      isTrimmedFiveChars = false;
-      isValid = !isTrimmedFiveChars;
+      isTrimmedEightChars = false;
+      isValid = !isTrimmedEightChars;
       return isValid ? null : {
-        'trimmedFiveChars': true
+        'trimmedEightChars': true
       }; // return null if isValid is false
     }
   }
@@ -53,6 +52,7 @@ export class trimmedCharsValidator {
 
     let isTrimmedThreeChars: Boolean;
     let isValid: boolean;
+    console.log(control);
 
     if (((control.value || '').trim().length < 3)) {
       isTrimmedThreeChars = true;

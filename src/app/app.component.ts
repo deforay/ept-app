@@ -41,6 +41,12 @@ export class AppComponent {
       title: 'Summary Reports',
       url: '/summary-report',
       icon: 'shipment' 
+    },
+    {
+      title: 'Change Password',
+      url: '/change-password',
+      icon: 'shipment' 
+     
     }
     // {
     //   title: 'DTS HIV Serology',

@@ -7,12 +7,14 @@ import { IonicModule } from '@ionic/angular';
 import { IndividualReportPageRoutingModule } from './individual-report-routing.module';
 
 import { IndividualReportPage } from './individual-report.page';
+import { MaterialModule } from '../material.module';
 
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    MaterialModule,
     IndividualReportPageRoutingModule
   ],
   declarations: [IndividualReportPage]
