@@ -300,7 +300,7 @@ var selectTND = this.ptPanelTestArray.tndReferenceRadio[index].filter(
       
       //this.tndRadioArray = this.ptPanelTestArray['tndReferenceRadio'];
     }
-  }
+  //}
 
   submitViralLoad() {
 

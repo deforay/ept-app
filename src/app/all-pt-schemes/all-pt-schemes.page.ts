@@ -110,5 +110,4 @@ export class AllPTSchemesPage implements OnInit {
       }   
     })
   }
-
 }

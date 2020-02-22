@@ -104,7 +104,13 @@ export class DTSHIVSerologyPage implements OnInit {
   selectedQCRadio: any[];
   selectedSupReviewArray: any[];
   selectedKitNameArray: any;
-  kitArray
+  kitArray;
+  sampleArray = [];
+  sampleDetailsPushArray: any = [];
+  samplesTextPushArray: any = [];
+  resultsTextPushArray: any = [];
+  myArray = [];
+  myArray1 = [];
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -122,15 +128,22 @@ export class DTSHIVSerologyPage implements OnInit {
         this.participantName = participantLogin.name;
       }
     })
+    this.getXerologyDetails();
   }
 
   dateFormat(dateObj) {
     return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
   }
 
+
   ngOnInit() {
 
+  }
+
+  getXerologyDetails() {
+
     this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
+
       console.log(dtsDataObj);
       this.dtsDataObj = dtsDataObj[0];
       if (dtsDataObj[0].dtsData.access.status == 'success') {
@@ -173,27 +186,14 @@ export class DTSHIVSerologyPage implements OnInit {
         }
 
         if (dtsDataObj[0].dtsData.Heading3.status == true) {
-        //  debugger;
           this.testKitDetailsArray = dtsDataObj[0].dtsData.Heading3.data;
           console.log(this.testKitDetailsArray);
           this.testKitIndex = this.testKitDetailsArray.kitText.length;
           this.testKitTextArray = this.testKitDetailsArray.kitText;
-          this.testKitNameArray.push(this.testKitDetailsArray.kitName);
-          this.testKitNameArray.forEach(element1 => {
-            //debugger;
-            this.testKitTextArray.forEach(element => {
-              this.kitArray.push(element1[element]);
-            })
-
+          this.testKitNameArray = (this.testKitDetailsArray.kitName);
+          this.testKitDetailsArray.kitSelected.forEach((element, index) => {
+            this.kitName[index] = element.kitValue
           })
-          //      for (let kitNameItem of this.testKitNameArray['kitTextItem'].data) {
-          //  this.testKitNameArray['kitTextItem'].data.forEach(kitNameItem => {
-          //   this.selectedKitNameArray.push(kitNameItem.filter(
-          //     kit => kit.selected == "selected"))
-          // })
-          //  }
-
-
           for (let lotvalue of Object.values(this.testKitDetailsArray['lotNo'])) {
             this.lot.push(lotvalue);
           }
@@ -207,8 +207,14 @@ export class DTSHIVSerologyPage implements OnInit {
           //   console.log(this.testKitNameArray[this.testKitTextArray[0]])
         }
         if (dtsDataObj[0].dtsData.Heading4.status == true) {
+          //debugger;
           this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
+          this.sampleDetailsPushArray.push(dtsDataObj[0].dtsData.Heading4.data);
           console.log(this.sampleDetailsArray);
+          // this.sampleDetailsArray.sampleName.forEach((element,index) => {
+          //   this.sampleResultObj.=element.kitValue
+          // })
+
           for (let [key, value] of Object.entries(this.sampleDetailsArray)) {
             if (key != 'resultsText' && key != 'samples') {
               this.newSampArray[key] = value;
@@ -217,19 +223,76 @@ export class DTSHIVSerologyPage implements OnInit {
           console.log(this.newSampArray)
 
           this.sampleIndex = this.sampleDetailsArray.samples.length;
+          this.samplesTextPushArray.push(this.sampleDetailsArray.samples);
           this.samplesTextArray = this.sampleDetailsArray.samples;
           this.resultsTextArray = this.sampleDetailsArray.resultsText;
+          this.resultsTextPushArray.push(this.sampleDetailsArray.resultsText);
 
-          for (let [index, key] of this.resultsTextArray.entries()) {
-            //  key = key + '_'+(index+1);
-            this.sampleResult[key] = '';
+          // for (let [index, key] of this.resultsTextArray.entries()) {
+          //   //  key = key + '_'+(index+1);
+          //   this.sampleResult[key] = '';
 
-          }
-          for (let keycheck of this.samplesTextArray) {
+          // }
+          // for (let keycheck of this.samplesTextArray) {
 
-            this.sampleResultObj[keycheck] = this.sampleResult;
-          }
-          console.log(this.sampleResultObj)
+          //   this.sampleResultObj[keycheck] = this.sampleResult;
+          // }
+
+          // console.log(this.sampleResultObj);
+
+          this.sampleDetailsPushArray.forEach((sampleDetailsElement, index) => {
+
+            this.samplesTextPushArray.forEach((samplesElement, sindex) => {
+
+              // this.resultsTextPushArray.forEach((resultTextElement, rindex) => {
+              //  debugger;
+              //   console.log(samplesElement);
+              //   console.log(rindex);
+              // this.myArray.push(this.sampleDetailsPushArray[0]['sampleName'][samplesElement[sindex]][sindex]['resultValue']);
+              //  this.myArray1.push(this.sampleDetailsPushArray[0]['sampleName']['INDHU203'][1]['resultValue']);
+            })
+
+          })
+
+          // })
+
+          this.sampleDetailsArray['INDHU203']['Result-1']['0'] = "1";
+
+          this.sampleDetailsPushArray.forEach((samplesElement, sindex) => {
+
+
+            this.samplesTextPushArray.forEach((samplesTextNameItem, stindex) => {
+             // debugger;
+
+              this.resultsTextPushArray.forEach((resultTextElement, rindex) => {
+                // this.myArray.push([samplesElement]['sampleName'][samplesTextElement[stindex]][stindex]['resultValue']);
+                // samplesElement.sampleName.INDHU203[0].resultValue
+
+                this.myArray.push(samplesElement.sampleName[samplesTextNameItem[stindex]][rindex].resultValue);
+
+              })
+            })
+
+
+          })
+
+          this.sampleDetailsPushArray.forEach((samplesElement, sindex) => {
+
+          
+            this.samplesTextPushArray.forEach((samplesTextNameItem, stindex) => {
+
+              console.log(samplesTextNameItem[stindex]);
+              console.log( this.myArray.push(samplesElement.sampleName));
+            })
+
+          })
+          console.log(this.myArray)
+
+          // for(let [index,samplesTextNameItem] of this.samplesTextPushArray[0]){
+          //   debugger;
+          //   this.myArray.push(this.sampleDetailsPushArray[0].sampleName[samplesTextNameItem[index]].resultValue);
+          // }
+          // console.log(this.myArray)
 
         }
         // for(let [key,value] of Object.entries(this.newSampArray)){
@@ -274,6 +337,16 @@ export class DTSHIVSerologyPage implements OnInit {
   checksample(event) {
     console.log(event)
 
+  }
+
+  pushSampleDetails(sample) {
+    debugger;
+    console.log(this.sampleResultObj)
+
+  }
+
+  trackByIdx(index: number, obj: any): any {
+    return index;
   }
 
   submitXerologyForm() {
