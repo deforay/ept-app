@@ -99,7 +99,12 @@ export class DTSHIVSerologyPage implements OnInit {
   selected;
   dtsDataObj: any;
   formattedDate;
-
+  selectedAlgUsed: any[];
+  selectedModeOfRec: any[];
+  selectedQCRadio: any[];
+  selectedSupReviewArray: any[];
+  selectedKitNameArray: any;
+  kitArray
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -124,7 +129,7 @@ export class DTSHIVSerologyPage implements OnInit {
   }
 
   ngOnInit() {
-  
+
     this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
       console.log(dtsDataObj);
       this.dtsDataObj = dtsDataObj[0];
@@ -140,27 +145,63 @@ export class DTSHIVSerologyPage implements OnInit {
 
           this.shipmentsDetailsArray = dtsDataObj[0].dtsData.Heading2.data;
           console.log(this.shipmentsDetailsArray);
+          this.testReceiptDate = new Date(this.shipmentsDetailsArray.testReceiptDate);
+          this.sampleRhdDate = new Date(this.shipmentsDetailsArray.sampleRehydrationDate);
+          this.testingDate = new Date(this.shipmentsDetailsArray.testingDate);
+          this.respDate = new Date(this.shipmentsDetailsArray.responseDate);
           this.algorithmUsedSelectArray = this.shipmentsDetailsArray.algorithmUsedSelect;
+          if (this.algorithmUsedSelectArray) {
+            this.selectedAlgUsed = this.algorithmUsedSelectArray.filter(
+              alg => alg.selected == "selected");
+            this.algorithmused = this.selectedAlgUsed[0].value;
+          }
           this.modeOfReceiptArray = this.shipmentsDetailsArray.modeOfReceiptSelect;
+          if (this.modeOfReceiptArray) {
+            this.selectedModeOfRec = this.modeOfReceiptArray.filter(
+              modeOfRec => modeOfRec.selected == "selected");
+            this.receiptmode = this.selectedModeOfRec[0].value;
+          }
           this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
           if (this.isQCDoneShow == true) {
             this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
+            this.selectedQCRadio = this.qcRadioArray.filter(
+              qcRadio => qcRadio.selected == "selected");
+            this.qcDone = this.selectedQCRadio[0].value;
+            this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
+            this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
           }
         }
 
         if (dtsDataObj[0].dtsData.Heading3.status == true) {
-
+        //  debugger;
           this.testKitDetailsArray = dtsDataObj[0].dtsData.Heading3.data;
+          console.log(this.testKitDetailsArray);
           this.testKitIndex = this.testKitDetailsArray.kitText.length;
           this.testKitTextArray = this.testKitDetailsArray.kitText;
-          this.testKitNameArray = this.testKitDetailsArray.kitName;
+          this.testKitNameArray.push(this.testKitDetailsArray.kitName);
+          this.testKitNameArray.forEach(element1 => {
+            //debugger;
+            this.testKitTextArray.forEach(element => {
+              this.kitArray.push(element1[element]);
+            })
+
+          })
+          //      for (let kitNameItem of this.testKitNameArray['kitTextItem'].data) {
+          //  this.testKitNameArray['kitTextItem'].data.forEach(kitNameItem => {
+          //   this.selectedKitNameArray.push(kitNameItem.filter(
+          //     kit => kit.selected == "selected"))
+          // })
+          //  }
+
 
           for (let lotvalue of Object.values(this.testKitDetailsArray['lotNo'])) {
             this.lot.push(lotvalue);
-
           }
           for (let expDatevalue of Object.values(this.testKitDetailsArray['expDate'])) {
             this.exp.push(expDatevalue);
+          }
+          for (let expItem of this.exp) {
+            this.expDate.push(new Date(expItem));
           }
           //  console.log(this.testKitDetailsArray.lotNo)
           //   console.log(this.testKitNameArray[this.testKitTextArray[0]])
@@ -200,7 +241,16 @@ export class DTSHIVSerologyPage implements OnInit {
 
           this.otherInfoArray = dtsDataObj[0].dtsData.Heading5.data;
           this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
-          //    console.log(this.supervisorReviewArray)
+          if (this.supervisorReviewArray) {
+            this.selectedSupReviewArray = this.supervisorReviewArray.filter(
+              supReviewItem => supReviewItem.selected == "selected");
+            this.supReview = this.selectedSupReviewArray[0].value;
+          }
+          this.selectedSupReviewArray =
+            this.supervisorName = this.otherInfoArray.approvalInputText;
+          if (this.otherInfoArray.comments) {
+            this.comments = this.otherInfoArray.comments;
+          }
         }
       } else {
         this.viewAccessMessage = dtsDataObj[0].dtsData.access.message;
@@ -248,7 +298,7 @@ export class DTSHIVSerologyPage implements OnInit {
       "participantId": this.dtsDataObj.participantId,
       "schemeType": this.dtsDataObj.schemeType,
       "shipmentId": this.dtsDataObj.shipmentId,
-      "mapId":this.dtsDataObj.mapId,
+      "mapId": this.dtsDataObj.mapId,
       "dtsData": {
         "Heading1": {
           //participant details
@@ -262,14 +312,14 @@ export class DTSHIVSerologyPage implements OnInit {
           //shipment details
           "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
           "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
-          "testReceiptDate":  this.testReceiptDate,
-          "sampleRehydrationDate":  this.sampleRhdDate,
+          "testReceiptDate": this.testReceiptDate,
+          "sampleRehydrationDate": this.sampleRhdDate,
           "testingDate": this.testingDate,
           "algorithmused": this.algorithmused,
           "respDate": this.respDate,
           "receiptmode": this.receiptmode,
           "qcDone": this.qcDone,
-          "qcDate":  this.qcDate,
+          "qcDate": this.qcDate,
           "qcDoneBy": this.qcDoneBy,
         },
         "Heading3": {
@@ -281,15 +331,15 @@ export class DTSHIVSerologyPage implements OnInit {
           "sampleDetailArray": this.sampleDetailsJSON,
         },
         "Heading5": {
-        //other information
-        "supReview": this.supReview,
-        "supervisorName": this.supervisorName,
-        "comments": this.comments,
+          //other information
+          "supReview": this.supReview,
+          "supervisorName": this.supervisorName,
+          "comments": this.comments,
         }
       }
     }
 
-      console.log(xerologyJSON);
-    }
-
+    console.log(xerologyJSON);
   }
+
+}

@@ -188,7 +188,7 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col size="6">
+          <ion-col size="12">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Testing Date</mat-label>
               <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="testingDate"  placeholder="Choose a date" required disabled>
@@ -196,7 +196,9 @@
               <mat-datepicker #testDatePicker disabled="false"></mat-datepicker>
             </mat-form-field>
           </ion-col>
-          <ion-col size="6">
+        </ion-row>
+        <ion-row>
+          <ion-col size="12">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Response Date</mat-label>
               <input matInput [matDatepicker]="respDatePicker" [(ngModel)]="respDate" placeholder="Choose a date"
@@ -251,7 +253,7 @@
 
 
         <ion-row *ngIf="isQCDoneShow && qcDone=='yes'">
-          <ion-col size="6">
+          <ion-col size="12">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>QC Date</mat-label>
               <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" placeholder="Choose a date" required disabled>
@@ -259,14 +261,15 @@
               <mat-datepicker #qcDatePicker disabled="false"></mat-datepicker>
             </mat-form-field>
           </ion-col>
-          <ion-col size="6">
-            <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>QC Done By </mat-label>
-                <input matInput [(ngModel)]="qcDoneBy" placeholder="" >
-            </mat-form-field>
-          </ion-col>
         </ion-row>
-
+        <ion-row *ngIf="isQCDoneShow && qcDone=='yes'">
+        <ion-col size="12">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+              <mat-label>QC Done By </mat-label>
+              <input matInput [(ngModel)]="qcDoneBy" placeholder="" >
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
 
       </ion-grid>
 
@@ -284,7 +287,6 @@
         <mat-panel-title>
          {{kitTextItem}}
         </mat-panel-title>
-
       </mat-expansion-panel-header>
       <ion-row>
         <ion-col size="12">
@@ -298,7 +300,6 @@
             </mat-select>
           </mat-form-field>
         </ion-col>
-
       </ion-row>
       <ion-row >
         <ion-col size="12">
@@ -366,7 +367,6 @@
       <mat-panel-title>
        {{sampleTextItem}}
       </mat-panel-title>
-
     </mat-expansion-panel-header>
     <div *ngFor="let resultName of resultsTextArray;let r=index">
 
