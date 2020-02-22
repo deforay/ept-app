@@ -80,8 +80,31 @@ margin:10px;
 ion-header ion-toolbar ion-title{
     font-size:15px;
     padding: 0px;
+    margin-top: -8px;;
+}
+ion-header ion-toolbar ion-buttons{
+
+    margin-top: -8px;;
+}
+ion-header ion-toolbar .toolbar-container{
+    background: #387ef5 !important;
+    color: #fff !important;
+    height: 40px !important;
+    max-height: 45px !important;
+    min-height: 40px !important;
+}
+ion-header ion-toolbar{
+    height: 45px!important;
+}
+ion-header ion-toolbar.main-toolbar{
+    height: 100px!important;
+
 }
 
+.toolbar-background{
+    background: #387ef5 !important;
+
+}
 // ion-button.button .button-native{ 
 //     height: 30px !important;
   
@@ -95,13 +118,16 @@ ion-header ion-toolbar ion-title{
  .item-inner {
     border:none !important;
 }
-ion-toolbar .toolbar-container{
-    min-height: 30px !important;
-    color: white;
-    height: 40px;
-}
-ion-toolbar .toolbar-background{
-    background: #387ef5;
+// ion-toolbar .toolbar-container{
+//     min-height: 30px !important;
+//     color: white;
+//     height: 40px;
+// }
+// ion-toolbar .toolbar-background{
+//     background: #387ef5;
+// }
+.danger-text{
+    color:#E31E24;
 }
 
 /* Global CSS Changes Ends */
@@ -113,6 +139,12 @@ ion-toolbar .toolbar-background{
 /* Materialize Global CSS Changes Starts*/
 .mat-fab.mat-primary, .mat-flat-button.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary{
     background: #3c8dbc;
+}
+.mat-radio-button.mat-accent .mat-radio-inner-circle, .mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple), .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple, .mat-radio-button.mat-accent:active .mat-radio-persistent-ripple{
+    background-color: #42A5F5 !important;
+   }
+   .mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+    border-color: #1565C0 !important;
 }
 .mat-select{
     font-size:13px;
@@ -137,6 +169,10 @@ ion-toolbar .toolbar-background{
     #3c8dbc
     // #673ab7;
 
+}
+.datepicker-input.mat-input-element:disabled,
+.datepicker-input.mat-input-element::placeholder{
+   color: #000000 !important;
 }
 // .mat-form-field.mat-focused .mat-form-field-label{
 

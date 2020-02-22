@@ -162,19 +162,25 @@
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Test Receipt Date</mat-label>
-              <input matInput [matDatepicker]="testReceiptPicker" [(ngModel)]="testReceiptDate"
-                placeholder="Choose a date" required disabled>
+              <input matInput [matDatepicker]="testReceiptPicker" class="datepicker-input"[(ngModel)]="testReceiptDate"
+                placeholder="Choose Test Receipt date" required >
               <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
               <mat-datepicker #testReceiptPicker disabled="false"></mat-datepicker>
+              <mat-error *ngIf="!testReceiptDate">Please Choose Test Receipt Date. Eg: 28-Feb-2020</mat-error>
+
+
             </mat-form-field>
           </ion-col>
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Sample Rehydration Date</mat-label>
               <input matInput [matDatepicker]="sampleRhdPicker" [(ngModel)]="sampleRhdDate" placeholder="Choose a date"
-                required disabled>
+                required>
               <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
               <mat-datepicker #sampleRhdPicker disabled="false"></mat-datepicker>
+              <mat-error *ngIf="!sampleRhdDate">Please Choose Test Sample Rehydration Date.</mat-error>
+              <!-- <mat-error *ngIf="!sampleRhdDate" style="margin-bottom:10px">Eg: 28-Feb-2020</mat-error> -->
+
             </mat-form-field>
           </ion-col>
 
@@ -182,9 +188,11 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Testing Date</mat-label>
               <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="testDate" placeholder="Choose a date"
-                required disabled>
+                required >
               <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
               <mat-datepicker #testDatePicker disabled="false"></mat-datepicker>
+              <mat-error *ngIf="!testDate">Please Choose Testing Date. Eg: 28-Feb-2020</mat-error>
+
             </mat-form-field>
           </ion-col>
           <ion-col size="6" size-xs class="grid-input-col">
@@ -224,9 +232,11 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Assay Expiration Date</mat-label>
               <input matInput [matDatepicker]="assayExpiryDate" [(ngModel)]="assayExpDate" placeholder="Choose a date"
-                required disabled>
+                required >
               <mat-datepicker-toggle matSuffix [for]="assayExpiryDate"></mat-datepicker-toggle>
               <mat-datepicker #assayExpiryDate disabled="false"></mat-datepicker>
+              <mat-error *ngIf="!assayExpDate">Please Choose Testing Date. Eg: 28-Feb-2020</mat-error>
+
             </mat-form-field>
           </ion-col>
           <ion-col size="6" size-xs class="grid-input-col">
@@ -240,10 +250,10 @@
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Response Date</mat-label>
-              <input matInput [matDatepicker]="respDate" placeholder="Choose a date" [(ngModel)]="responseDate" required
-                disabled>
+              <input matInput [matDatepicker]="respDate" placeholder="Choose a date" [(ngModel)]="responseDate" required>
               <mat-datepicker-toggle matSuffix [for]="respDate"></mat-datepicker-toggle>
               <mat-datepicker #respDate disabled="false"></mat-datepicker>
+              <mat-error *ngIf="!responseDate">Please Choose Testing Date. Eg: 28-Feb-2020</mat-error>
             </mat-form-field>
           </ion-col>
           <ion-col size="6" size-xs class="grid-input-col">
@@ -261,7 +271,7 @@
         </ion-row>
         <ion-row *ngIf="isQCDoneShow">
           <ion-col size="12">
-            <mat-label>QC Done</mat-label>
+            <mat-label style="margin-left: 10px;">QC Done</mat-label>
             <mat-radio-group aria-labelledby="example-radio-group-label" class="login-full-width grid-col-form"
               [(ngModel)]="qcDone">
               <mat-radio-button class="example-radio-button" *ngFor="let qcData of qcRadioArray" [value]="qcData.value">
@@ -277,7 +287,7 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>QC Date</mat-label>
               <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" placeholder="Choose a date" required
-                disabled>
+                >
               <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
               <mat-datepicker #qcDatePicker disabled="false"></mat-datepicker>
             </mat-form-field>
@@ -316,8 +326,8 @@
             <section class="div-section">
               <p>Please Note :</p>
               <ul>
-                <li *ngFor="let item of ptPanelTestArray.note">
-                  {{item}}
+                <li *ngFor="let item of notes">
+                <div innerHtml="{{item}}"></div> 
                 </li>
               </ul>
             </section>
@@ -338,7 +348,7 @@
 
           <mat-card class="dynamic-card">
             <mat-card-title>
-              {{controls}}
+              {{controls}} <span class="danger-text" *ngIf="controlArray.mandatory[i]==true">*</span>
             </mat-card-title>
             <mat-card-content>
            
@@ -349,10 +359,11 @@
                       {{controlHeads[controlHeads.length-3]}}
                     </p>
                     <mat-form-field class="login-full-width " appearance="outline">
-                      <mat-label>{{controlHeads[controlHeads.length-2]}}
-                      </mat-label>
-                      <input matInput [disabled]="ptPanelTestArray.selectedTNDRadioArray[k].value=='yes'"
+                      <mat-label><div [innerHTML]="controlHeads[controlHeads.length-2]"></div></mat-label>
+                      <input matInput [disabled]="tndArray[i]=='yes'" [required]="controlArray.mandatory[i]==true"
                         [(ngModel)]="vlResult[k]" placeholder="Viral Load (log10 copies/ml)">
+                     <mat-error *ngIf="controlArray.mandatory[i]==true && !vlResult[k]">Please Enter {{controlHeads[controlHeads.length-2]}}</mat-error>
+
                     </mat-form-field>
                   </ion-col>
                 </ion-row>
@@ -365,10 +376,10 @@
                     <p class="no-padding" style="margin-top: 0;">
                       {{controlHeads[controlHeads.length-1]}}
                     </p>
-                    {{tndArray[i]}}
                     <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                      [(ngModel)]="tndArray[j]" (ngModelChange)="changeTND(j,tndArray[j])" >
-                      <mat-radio-button class="example-radio-button" *ngFor="let tnd of tndRadioArray[j]"
+                      [(ngModel)]="tndArray[j]" (ngModelChange)="changeTND(j,tndArray[j])" [required]="controlArray.mandatory[i]==true">
+                      <mat-radio-button class="example-radio-button" 
+                      *ngFor="let tnd of ptPanelTestArray.tndReferenceRadio[j]"
                         [value]="tnd.value">
                         {{tnd.show}} 
                         <!--  (change)="changeTND(i,tndArray[i])" -->
@@ -389,29 +400,29 @@
           <ion-col size="12" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>
-                Reason for not testing the PT Panel </mat-label>
-              <mat-select [(ngModel)]="vlNotTestedReason" name="vlNotTestedReason" required>
+                {{ptPanelNotTestArray.vlNotTestedReasonText}} </mat-label>
+              <mat-select [(ngModel)]="vlNotTestedReason" name="vlNotTested" [required]="ptPanelTest">
                 <mat-option>--Select--</mat-option>
-                <mat-option value="1">No Reagents For Testing Of PT Panel</mat-option>
-                <mat-option value="2">No Lab Personal For Testing Of PT Panel</mat-option>
-                <mat-option value="3"> Instrument Down</mat-option>
+                <mat-option *ngFor="let item of ptNotTestedReasonArray" [value]="item.value">
+                  {{item.show}}
+                </mat-option>
               </mat-select>
               <mat-error *ngIf="!vlNotTestedReason">Please choose the Reason for not testing</mat-error>
             </mat-form-field>
           </ion-col>
           <ion-col size="12" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-              <mat-label>Your Comments</mat-label>
+              <mat-label>{{ptPanelNotTestArray.commentsText}}</mat-label>
               <textarea matInput placeholder="Enter Your Comments here" [(ngModel)]="ptNotTestedComments"
-                required></textarea>
+              [required]="ptPanelTest"></textarea>
               <mat-error *ngIf="!ptNotTestedComments">Please Enter Your Comments</mat-error>
             </mat-form-field>
           </ion-col>
           <ion-col size="12" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-              <mat-label>Do you need any support from the PT Provider ?</mat-label>
+              <mat-label>{{ptPanelNotTestArray.supportText}}</mat-label>
               <textarea matInput placeholder="Enter Your Comments here" [(ngModel)]="ptSupportComments"
-                required></textarea>
+              [required]="ptPanelTest"></textarea>
               <mat-error *ngIf="!ptSupportComments">Please Enter Your Comments</mat-error>
             </mat-form-field>
           </ion-col>
