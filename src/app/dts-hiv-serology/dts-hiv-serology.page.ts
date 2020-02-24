@@ -88,7 +88,8 @@ export class DTSHIVSerologyPage implements OnInit {
   testKitXerologyForm: any = {};
   sampleResult: any = {};
   sampleDetailsJSON: any = {};
-  sampleResultObj = {}
+  sampleResultObj = {};
+  sampleResultArray = [];
   newSampObj = {}
   newSampArray = {};
   appVersionNumber: any;
@@ -111,6 +112,9 @@ export class DTSHIVSerologyPage implements OnInit {
   resultsTextPushArray: any = [];
   myArray = [];
   myArray1 = [];
+  sampleSelectedArray = [];
+  sampleSelected = [];
+  sampleNameSelectedArray = [];
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -207,8 +211,10 @@ export class DTSHIVSerologyPage implements OnInit {
           //   console.log(this.testKitNameArray[this.testKitTextArray[0]])
         }
         if (dtsDataObj[0].dtsData.Heading4.status == true) {
-          //debugger;
+
           this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
+          this.sampleSelectedArray.push(this.sampleDetailsArray.sampleSelect);
+          this.sampleNameSelectedArray.push(this.sampleDetailsArray.sampleName);
           this.sampleDetailsPushArray.push(dtsDataObj[0].dtsData.Heading4.data);
           console.log(this.sampleDetailsArray);
           // this.sampleDetailsArray.sampleName.forEach((element,index) => {
@@ -228,77 +234,36 @@ export class DTSHIVSerologyPage implements OnInit {
           this.resultsTextArray = this.sampleDetailsArray.resultsText;
           this.resultsTextPushArray.push(this.sampleDetailsArray.resultsText);
 
-          // for (let [index, key] of this.resultsTextArray.entries()) {
-          //   //  key = key + '_'+(index+1);
-          //   this.sampleResult[key] = '';
 
-          // }
-          // for (let keycheck of this.samplesTextArray) {
+          for (let [index, key] of this.resultsTextArray.entries()) {
+            //  key = key + '_'+(index+1);
+            this.sampleResult[key] = '';
 
-          //   this.sampleResultObj[keycheck] = this.sampleResult;
-          // }
+          }
+          for (let keycheck of this.samplesTextArray) {
 
-          // console.log(this.sampleResultObj);
+            this.sampleResultObj[keycheck] = this.sampleResult;
+          }
+          for (let keycheck of this.samplesTextArray) {
 
-          this.sampleDetailsPushArray.forEach((sampleDetailsElement, index) => {
+            this.sampleResultObj[keycheck] = this.sampleResult;
+          }
+          this.sampleResultArray.push(this.sampleResultObj);
+          console.log(this.sampleResultArray);
 
-            this.samplesTextPushArray.forEach((samplesElement, sindex) => {
+        
+          console.log(this.sampleResultArray);
+          console.log(this.sampleDetailsArray);
+          this.sampleDetailsArray['INDHU203']['Result-1']['test-value'] = "1";
+          this.sampleDetailsArray['INDHU203']['Result-2']['test-value'] = "2";
+          this.sampleDetailsArray['INDHU203']['Result-3']['test-value'] = "2";
+          this.sampleDetailsArray['INDHU203']['Final-Result']['test-value'] = "4";
+          this.sampleDetailsArray['INDHU204']['Result-1']['0'] = "3";
+          this.sampleDetailsArray['INDHU204']['Result-2']['1'] = "3";
+          this.sampleDetailsArray['INDHU204']['Result-3']['2'] = "3";
 
-              // this.resultsTextPushArray.forEach((resultTextElement, rindex) => {
-              //  debugger;
-              //   console.log(samplesElement);
-              //   console.log(rindex);
-              // this.myArray.push(this.sampleDetailsPushArray[0]['sampleName'][samplesElement[sindex]][sindex]['resultValue']);
-              //  this.myArray1.push(this.sampleDetailsPushArray[0]['sampleName']['INDHU203'][1]['resultValue']);
-            })
-
-          })
-
-          // })
-
-          this.sampleDetailsArray['INDHU203']['Result-1']['0'] = "1";
-
-          this.sampleDetailsPushArray.forEach((samplesElement, sindex) => {
-
-
-            this.samplesTextPushArray.forEach((samplesTextNameItem, stindex) => {
-             // debugger;
-
-              this.resultsTextPushArray.forEach((resultTextElement, rindex) => {
-                // this.myArray.push([samplesElement]['sampleName'][samplesTextElement[stindex]][stindex]['resultValue']);
-                // samplesElement.sampleName.INDHU203[0].resultValue
-
-                this.myArray.push(samplesElement.sampleName[samplesTextNameItem[stindex]][rindex].resultValue);
-
-              })
-            })
-
-
-          })
-
-          this.sampleDetailsPushArray.forEach((samplesElement, sindex) => {
-
-          
-            this.samplesTextPushArray.forEach((samplesTextNameItem, stindex) => {
-
-              console.log(samplesTextNameItem[stindex]);
-              console.log( this.myArray.push(samplesElement.sampleName));
-            })
-
-          })
-          console.log(this.myArray)
-
-          // for(let [index,samplesTextNameItem] of this.samplesTextPushArray[0]){
-          //   debugger;
-          //   this.myArray.push(this.sampleDetailsPushArray[0].sampleName[samplesTextNameItem[index]].resultValue);
-          // }
-          // console.log(this.myArray)
 
         }
-        // for(let [key,value] of Object.entries(this.newSampArray)){
-        //   console.log(value)
-        //   console.log(value['data'])
-        // }
 
         if (dtsDataObj[0].dtsData.Heading5.status == true) {
 
@@ -336,12 +301,6 @@ export class DTSHIVSerologyPage implements OnInit {
   }
   checksample(event) {
     console.log(event)
-
-  }
-
-  pushSampleDetails(sample) {
-    debugger;
-    console.log(this.sampleResultObj)
 
   }
 

@@ -304,7 +304,7 @@ export class DtsHivViralloadPage implements OnInit {
       if(tndData=='yes'){
           this.vlResult[index]="0.0";
       }
-  //}
+  }
 
   submitViralLoad() {
 
