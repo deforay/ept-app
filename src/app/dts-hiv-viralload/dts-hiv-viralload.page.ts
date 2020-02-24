@@ -193,10 +193,10 @@ export class DtsHivViralloadPage implements OnInit {
           }
         }
         if (vlDataObj[0].vlData.Heading3.status == true) {
+          this.ptPanelTestArray = vlDataObj[0].vlData.Heading3.data['no'];
+          this.ptPanelNotTestArray = vlDataObj[0].vlData.Heading3.data['yes'];
+
           if (vlDataObj[0].vlData.Heading3.data['isPtTestNotPerformedRadio'] == 'no') {
-
-          this.ptPanelTestArray = vlDataObj[0].vlData.Heading3.data;
-
             this.ptPanelTest = false;
             this.controlHeads = this.ptPanelTestArray['tableHeading'];
             this.controlArray = this.ptPanelTestArray['tableRowTxt'];
@@ -217,28 +217,18 @@ export class DtsHivViralloadPage implements OnInit {
             this.selectedTNDRadioArray.forEach((element, index) => {
               this.tndArray[index] = element[0].value;
               this.selectedTNDRadioArrayFormat.push(element[0]);
-
             })
-         
-
           } else {
             this.ptPanelTest = true;
-            console.log(vlDataObj[0].vlData.Heading3.data)
-          this.ptPanelNotTestArray = vlDataObj[0].vlData.Heading3.data;
 
           this.ptSupportComments = this.ptPanelNotTestArray.supportTextArea;
           this.ptNotTestedComments = this.ptPanelNotTestArray.commentsTextArea;
           this.ptNotTestedReasonArray =  this.ptPanelNotTestArray.vlNotTestedReasonSelect;
           var vlReason = this.ptNotTestedReasonArray.filter(          
             selectreason => { selectreason.selected == "selected";
-          console.log(selectreason)
-
           })         
-          console.log(vlReason)
-
           this.vlNotTestedReason = vlReason.value;
-          console.log(this.vlNotTestedReason)
-          console.log(vlReason)
+         
 
           
           };
@@ -304,7 +294,7 @@ export class DtsHivViralloadPage implements OnInit {
       if(tndData=='yes'){
           this.vlResult[index]="0.0";
       }
-  //}
+  }
 
   submitViralLoad() {
 
@@ -378,6 +368,6 @@ export class DtsHivViralloadPage implements OnInit {
     })
     console.log(viralLoadJSON);
     this.storage.set("localVLData", this.localVLData);
-
   }
+  
 }

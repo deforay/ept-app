@@ -1,0 +1,84 @@
+.partiHeaders{
+    font-weight: 500;
+}
+.example-headers-align{
+    position: relative;
+    top: 20px;
+}
+    ion-grid ion-row ion-col{
+    width:calc(100% - 10px);
+    p{
+        margin:5px !important;
+    }
+    } 
+    .mat-card ion-row ion-col{
+        p{
+            font-size: 13px !important; 
+            margin-bottom: 5px !important;
+        }
+    }
+    ion-grid ion-row ion-col.grid-readonly-col{
+        padding:0px!important;
+    }
+    ion-grid ion-row ion-col.grid-input-col{
+    padding:4px !important;
+    
+    }
+    ion-grid ion-row ion-col:nth-child(3n){
+        text-align: right;
+    } 
+    .card-div{
+        width: calc(100% - 20px) !important;
+        margin: auto !important;
+    }
+    .card-div mat-card{
+        padding:0;
+    }
+   .div-section ul{
+       padding-left:30px;
+    li {
+        font-size:13px;
+    }
+   } 
+   p.log-para{
+    margin: 0;
+    margin-top: 10px;
+    color: red;
+    padding-left: 10px;
+   }
+   p.label-para{
+       margin: 0;
+       font-size: 13px;
+   }
+   .mat-card{
+       padding:0 !important;
+       margin: -1px !important;
+       margin-bottom: 10px !important;
+   }
+//    .mat-card.dynamic-card{
+
+//    }
+   .mat-card .mat-card-title {
+       font-size: 14px !important;
+       padding: 5px 10px !important;
+       margin: 0!important;
+       background:#8bcce6 !important;
+       border-top-left-radius: 4px !important;
+       border-top-right-radius: 4px!important ;
+   }
+   .mat-radio-group .mat-radio-button{
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+   }
+   .mat-card .mat-card-content{
+    padding: 10px !important;
+    padding-top: 0 !important;
+   }
+   .login-full-width{
+       width: 100%;
+   }
+   mat-radio-group{
+       font-size:13px !important;
+   }
+
+ 

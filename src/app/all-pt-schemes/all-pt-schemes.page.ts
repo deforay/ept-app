@@ -71,6 +71,7 @@ export class AllPTSchemesPage implements OnInit {
       if (partiLoginResult.authToken) {
         this.CrudServiceService.getData('shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken+'&appVersion='+this.appVersionNumber)
           .then(result1 => {
+            console.log(result1)
             //   this.LoaderService.disMissLoading();
             if (result1["status"] == 'success') {
               this.shipmentFormArray = result1['data'];
@@ -78,6 +79,7 @@ export class AllPTSchemesPage implements OnInit {
               this.storage.set("shipmentFormArray", this.shipmentFormArray);
             }
           }, (err) => {
+            console.log(err);
             //    this.LoaderService.disMissLoading();
           });
       }
@@ -105,6 +107,11 @@ export class AllPTSchemesPage implements OnInit {
             if(this.TestFormArray[0].vlData.access.status=='success'){
               this.router.navigate(['/dts-hiv-viralload']);  
             }
+          }
+          if(this.TestFormArray[0].schemeType == 'eid'){
+           // if(this.TestFormArray[0].eidData.access.status=='success'){
+              this.router.navigate(['/dbs-eid']);  
+          //  }
           }
         }
       }   

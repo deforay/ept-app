@@ -42,6 +42,10 @@ const routes: Routes = [
   {
     path: 'app-password',
     loadChildren: () => import('./app-password/app-password.module').then( m => m.AppPasswordPageModule)
+  },
+  {
+    path: 'dbs-eid',
+    loadChildren: () => import('./dbs-eid/dbs-eid.module').then( m => m.DbsEidPageModule)
   }
 ];
 
