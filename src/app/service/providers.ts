@@ -1,6 +1,3 @@
-// import {
-//     constantService
-// } from '../service/constant.service';
 import {
     CrudServiceService
 } from '../service/crud/crud-service.service';
@@ -13,17 +10,17 @@ import {
 import {
     AlertService
 } from '../service/alert/alert.service';
-
 import {
     NetworkService
 } from '../service/network/network.service';
+import {
+    GeolocationService
+} from '../service/geolocation/geolocation.service';
 export {
-
-    // constantService,
     CrudServiceService,
     ToastService,
     LoaderService,
     AlertService,
-    NetworkService
-
+    NetworkService,
+    GeolocationService
 }

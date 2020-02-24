@@ -17,7 +17,9 @@ import {
 import {
   Storage
 } from '@ionic/storage';
-import { AlertService } from '../app/service/providers';
+import { AlertService,GeolocationService } from '../app/service/providers';
+import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
+import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 
 @Component({
   selector: 'app-root',
@@ -67,7 +69,10 @@ export class AppComponent {
     private statusBar: StatusBar,
     private appVersion: AppVersion,
     private storage: Storage,
-    public alertService:AlertService
+    public alertService:AlertService,
+    private androidPermissions: AndroidPermissions,
+    private locationAccuracy: LocationAccuracy,
+    public GeolocationService:GeolocationService
   ) {
     this.initializeApp();
   }
@@ -87,14 +92,15 @@ export class AppComponent {
       }).catch(err => {
      //   console.log(err);
       });
+      this.checkGPSPermission()
     });
 
 
     //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-    if(!this.appVersionNumber) {
-      this.appVersionNumber ="0.0.1";
-      this.storage.set('appVersionNumber', this.appVersionNumber); 
-    }
+    // if(!this.appVersionNumber) {
+    //   this.appVersionNumber ="0.0.1";
+    //   this.storage.set('appVersionNumber', this.appVersionNumber); 
+    // }
     //end..... 
 
 
@@ -102,5 +108,47 @@ export class AppComponent {
  
   logout() {    
       this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
+  }
+
+  //Check if application having GPS access permission  
+  checkGPSPermission() {
+    alert("check gps ")
+    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
+      result => {
+        if (result.hasPermission) {
+ 
+          //If having permission show 'Turn On GPS' dialogue
+          this.GeolocationService.askToTurnOnGPS();
+        } else {
+ 
+          //If not having permission ask for permission
+          this.requestGPSPermission();
+        }
+      },
+      err => {
+        alert(err);
+      }
+    );
+  }
+ 
+  requestGPSPermission() {
+    this.locationAccuracy.canRequest().then((canRequest: boolean) => {
+      if (canRequest) {
+        console.log("4");
+      } else {
+        //Show 'GPS Permission Request' dialogue
+        this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
+          .then(
+            () => {
+              // call method to turn on GPS
+              this.GeolocationService.askToTurnOnGPS();
+            },
+            error => {
+              //Show alert if user click on 'No Thanks'
+              alert('requestPermission Error requesting location permissions ' + error)
+            }
+          );
+      }
+    });
   }
 }

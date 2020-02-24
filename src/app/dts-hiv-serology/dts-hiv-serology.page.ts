@@ -18,7 +18,8 @@ import {
 import {
   CrudServiceService,
   ToastService,
-  LoaderService
+  LoaderService,
+  GeolocationService
 } from '../../app/service/providers';
 import {
   Storage
@@ -119,6 +120,7 @@ export class DTSHIVSerologyPage implements OnInit {
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
+    public GeolocationService:GeolocationService
   ) {
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
@@ -190,6 +192,7 @@ export class DTSHIVSerologyPage implements OnInit {
         }
 
         if (dtsDataObj[0].dtsData.Heading3.status == true) {
+
           this.testKitDetailsArray = dtsDataObj[0].dtsData.Heading3.data;
           console.log(this.testKitDetailsArray);
           this.testKitIndex = this.testKitDetailsArray.kitText.length;
@@ -213,24 +216,24 @@ export class DTSHIVSerologyPage implements OnInit {
         if (dtsDataObj[0].dtsData.Heading4.status == true) {
 
           this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
-          this.sampleSelectedArray.push(this.sampleDetailsArray.sampleSelect);
-          this.sampleNameSelectedArray.push(this.sampleDetailsArray.sampleName);
-          this.sampleDetailsPushArray.push(dtsDataObj[0].dtsData.Heading4.data);
+         // this.sampleSelectedArray.push(this.sampleDetailsArray.sampleSelect);
+          //this.sampleNameSelectedArray.push(this.sampleDetailsArray.sampleName);
+         // this.sampleDetailsPushArray.push(dtsDataObj[0].dtsData.Heading4.data);
           console.log(this.sampleDetailsArray);
           // this.sampleDetailsArray.sampleName.forEach((element,index) => {
           //   this.sampleResultObj.=element.kitValue
           // })
 
-          for (let [key, value] of Object.entries(this.sampleDetailsArray)) {
-            if (key != 'resultsText' && key != 'samples') {
-              this.newSampArray[key] = value;
-            }
-          }
-          console.log(this.newSampArray)
+          // for (let [key, value] of Object.entries(this.sampleDetailsArray)) {
+          //   if (key != 'resultsText' && key != 'samples') {
+          //     this.newSampArray[key] = value;
+          //   }
+          // }
+          // console.log(this.newSampArray)
 
           this.sampleIndex = this.sampleDetailsArray.samples.length;
-          this.samplesTextPushArray.push(this.sampleDetailsArray.samples);
-          this.samplesTextArray = this.sampleDetailsArray.samples;
+          this.samplesTextPushArray.push(this.sampleDetailsArray.samples.label);
+          this.samplesTextArray = this.sampleDetailsArray.samples.label;
           this.resultsTextArray = this.sampleDetailsArray.resultsText;
           this.resultsTextPushArray.push(this.sampleDetailsArray.resultsText);
 
@@ -254,8 +257,8 @@ export class DTSHIVSerologyPage implements OnInit {
         
           console.log(this.sampleResultArray);
           console.log(this.sampleDetailsArray);
-          this.sampleDetailsArray['INDHU203']['Result-1']['test-value'] = "1";
-          this.sampleDetailsArray['INDHU203']['Result-2']['test-value'] = "2";
+          this.sampleDetailsArray['INDHU203']['Result-1']['0'] = "1";
+          this.sampleDetailsArray['INDHU203']['Result-2']['1'] = "2";
           this.sampleDetailsArray['INDHU203']['Result-3']['test-value'] = "2";
           this.sampleDetailsArray['INDHU203']['Final-Result']['test-value'] = "4";
           this.sampleDetailsArray['INDHU204']['Result-1']['0'] = "3";
@@ -331,6 +334,7 @@ export class DTSHIVSerologyPage implements OnInit {
       "schemeType": this.dtsDataObj.schemeType,
       "shipmentId": this.dtsDataObj.shipmentId,
       "mapId": this.dtsDataObj.mapId,
+      "createdOn": this.GeolocationService.getTimeStamp(),
       "dtsData": {
         "Heading1": {
           //participant details
