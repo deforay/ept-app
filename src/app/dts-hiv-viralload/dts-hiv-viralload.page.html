@@ -447,7 +447,7 @@
           <ion-col class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Supervisor Review </mat-label>
-              <mat-select [(ngModel)]="supReview" name="supReview">
+              <mat-select [(ngModel)]="supReview" name="supReview" (ngModelChange)="changeSupervisorReview(supReview)">
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let sr of supervisorReviewArray" [value]="sr.value">
                   {{sr.show}}

@@ -24,7 +24,10 @@ import {
   ErrorStateMatcher
 } from '@angular/material/core';
 
-import {BrowserModule, DomSanitizer} from '@angular/platform-browser'
+import {
+  BrowserModule,
+  DomSanitizer
+} from '@angular/platform-browser'
 
 /** Error when invalid control is dirty, touched, or submitted. */
 
@@ -49,7 +52,7 @@ export class DtsHivViralloadPage implements OnInit {
   partDetailsArray: any = [];
   shipmentsDetailsArray: any = [];
   ptPanelTestArray: any = [];
-  ptPanelNotTestArray:any=[];
+  ptPanelNotTestArray: any = [];
   otherInfoArray: any = [];
   viewAccessMessage: string = '';
   vlAssayArray = [];
@@ -82,7 +85,7 @@ export class DtsHivViralloadPage implements OnInit {
   vlNotTestedReason: any;
   ptNotTestedComments: any;
   ptSupportComments: any;
-  ptNotTestedReasonArray:any =[];
+  ptNotTestedReasonArray: any = [];
   controlHeads = [];
   controlArray: any = [];
   vlResult = [];
@@ -103,14 +106,18 @@ export class DtsHivViralloadPage implements OnInit {
   viralLoadArray = [];
   existingVLParticipantArray = [];
   selectedTNDRadioArrayFormat = [];
-  notes:any =[];
+  notes: any = [];
+  formattedQCDate: any;
+  sampleIDArrray = [];
 
   constructor(private activatedRoute: ActivatedRoute, private storage: Storage, public ToastService: ToastService,
-    public LoaderService: LoaderService, public CrudServiceService: CrudServiceService,private sanitizer: DomSanitizer) {
+    public LoaderService: LoaderService, public CrudServiceService: CrudServiceService, private sanitizer: DomSanitizer) {
 
     this.vlNotTestedReason = '';
     this.ptNotTestedComments = '';
     this.ptSupportComments = '';
+    this.supName = "";
+    this.othervlassay = "";
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
@@ -127,7 +134,7 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   dateFormat(dateObj) {
-    return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
+    return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + (dateObj.getDate())).slice(-2);
   }
   getVLFormDetails() {
 
@@ -200,17 +207,18 @@ export class DtsHivViralloadPage implements OnInit {
             this.ptPanelTest = false;
             this.controlHeads = this.ptPanelTestArray['tableHeading'];
             this.controlArray = this.ptPanelTestArray['tableRowTxt'];
+            this.sampleIDArrray = ["1", "2", "3", "4"];
             this.notes = [...this.ptPanelTestArray.note];
-            this.notes.forEach(note=>{
+            this.notes.forEach(note => {
               note = this.sanitizer.bypassSecurityTrustHtml(note);
             })
             this.vlResult = [...this.ptPanelTestArray['vlResult']];
             // console.log(this.vlResult);
-            this.selectedTNDRadioArray=[];
+            this.selectedTNDRadioArray = [];
             this.tndRadioArray = [...this.ptPanelTestArray['tndReferenceRadio']];
             this.tndRadioArray.forEach(element => {
-                  let obj ={};
-                obj =  element.filter(tndRadio => tndRadio.selected == "selected")
+              let obj = {};
+              obj = element.filter(tndRadio => tndRadio.selected == "selected")
               this.selectedTNDRadioArray.push(obj)
             })
 
@@ -221,16 +229,17 @@ export class DtsHivViralloadPage implements OnInit {
           } else {
             this.ptPanelTest = true;
 
-          this.ptSupportComments = this.ptPanelNotTestArray.supportTextArea;
-          this.ptNotTestedComments = this.ptPanelNotTestArray.commentsTextArea;
-          this.ptNotTestedReasonArray =  this.ptPanelNotTestArray.vlNotTestedReasonSelect;
-          var vlReason = this.ptNotTestedReasonArray.filter(          
-            selectreason => { selectreason.selected == "selected";
-          })         
-          this.vlNotTestedReason = vlReason.value;
-         
+            this.ptSupportComments = this.ptPanelNotTestArray.supportTextArea;
+            this.ptNotTestedComments = this.ptPanelNotTestArray.commentsTextArea;
+            this.ptNotTestedReasonArray = this.ptPanelNotTestArray.vlNotTestedReasonSelect;
+            var vlReason = this.ptNotTestedReasonArray.filter(
+              selectreason => {
+                selectreason.selected == "selected";
+              })
+            this.vlNotTestedReason = vlReason.value;
 
-          
+
+
           };
         }
         if (vlDataObj[0].vlData.Heading4.status == true) {
@@ -288,20 +297,39 @@ export class DtsHivViralloadPage implements OnInit {
 
     } else {
       this.isSelectedOther = false;
-      this.othervlassay="";
+      this.othervlassay = "";
     }
   }
 
   changeTND(index, tndData) {
-      if(tndData=='yes'){
-          this.vlResult[index]="0.0";
-      }
+    if (tndData == 'yes') {
+      this.vlResult[index] = "0.0";
+    }
+  }
+
+  changeSupervisorReview(supReview) {
+    if (supReview == "no") {
+      this.supName = "";
+    }
   }
 
   submitViralLoad() {
     if (this.ptPanelTest == true) {
       this.vlResult = [];
       this.tndArray = [];
+      this.controlArray.label = [];
+      this.sampleIDArrray = [];
+    } else {
+      this.vlNotTestedReason = '';
+      this.ptNotTestedComments = '';
+      this.ptSupportComments = '';
+    }
+    if (this.qcDone == 'no') {
+      this.qcDate = "";
+      this.qcDoneBy = "";
+      this.formattedQCDate = "";
+    } else {
+      this.formattedQCDate = this.dateFormat(new Date(this.qcDate));
     }
     let viralLoadJSON = {
       "authToken": this.authToken,
@@ -311,6 +339,9 @@ export class DtsHivViralloadPage implements OnInit {
       "schemeType": this.vlDataArray.schemeType,
       "shipmentId": this.vlDataArray.shipmentId,
       "mapId": this.vlDataArray.mapId,
+      "createdOn": "",
+      "updatedOn": "",
+      "updatedStatus": false,
       "vlData": {
         "Heading1": {
           //participant details
@@ -335,7 +366,7 @@ export class DtsHivViralloadPage implements OnInit {
           "responseDate": this.dateFormat(this.responseDate),
           "receiptmode": this.receiptmode,
           "qcDone": this.qcDone,
-          "qcDate": this.dateFormat(this.qcDate),
+          "qcDate": this.formattedQCDate,
           "qcDoneBy": this.qcDoneBy,
         },
         "Heading3": {
@@ -346,7 +377,8 @@ export class DtsHivViralloadPage implements OnInit {
           "ptSupportComments": this.ptSupportComments,
           "vlResult": this.vlResult,
           "isTND": this.tndArray,
-          "controlArray": this.controlArray.label
+          "sampleLabels": this.controlArray.label,
+          "sampleId": this.sampleIDArrray,
         },
         "Heading4": {
           //other information
@@ -356,19 +388,37 @@ export class DtsHivViralloadPage implements OnInit {
         }
       }
     }
+    console.log(viralLoadJSON);
+    this.CrudServiceService.postData('shipments/save-form', viralLoadJSON)
+      .then((result) => {
+        if (result["status"] == 'success') {
 
+         // debugger;
+        }
+      }, (err) => {
+  
+      });
     this.viralLoadArray.push(viralLoadJSON);
     this.existingVLParticipantArray = this.viralLoadArray.filter(
       vlArray => vlArray.participantID == this.participantID);
-    // if()
-    this.localVLData.push({
-      "participant_ID": this.participantID,
-      "participant_Name": this.participantName,
-      "schemeType": this.vlDataArray.schemeType,
-      "testDataArray": this.viralLoadArray
-    })
-    console.log(viralLoadJSON);
+    if (this.existingVLParticipantArray.length==0) {
+      this.localVLData.push({
+        "participant_ID": this.participantID,
+        "participant_Name": this.participantName,
+        "schemeType": this.vlDataArray.schemeType,
+        "testDataArray": this.viralLoadArray
+      })
+    }
+    else{
+      this.existingVLParticipantArray = this.localVLData.filter(
+        vlData => vlData.participantID == this.participantID);
+      this.localVLData.push({
+
+        "testDataArray": this.viralLoadArray
+
+      })
+    }
     this.storage.set("localVLData", this.localVLData);
   }
-  
+
 }
