@@ -1,6 +1,12 @@
-import { Injectable } from '@angular/core';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
+import {
+  Injectable
+} from '@angular/core';
+import {
+  Geolocation
+} from '@ionic-native/geolocation/ngx';
+import {
+  LocationAccuracy
+} from '@ionic-native/location-accuracy/ngx';
 
 @Injectable({
   providedIn: 'root'
@@ -9,16 +15,17 @@ export class GeolocationService {
 
   locationCoords: any;
   time: any;
-  constructor( private geolocation: Geolocation,
-    private locationAccuracy: LocationAccuracy) { 
-      this.locationCoords = {
-        latitude: "",
-        longitude: "",
-        accuracy: "",
-        timestamp: ""
-      }
-      this.time = Date.now();
+  timestamp: any;
+  constructor(private geolocation: Geolocation,
+    private locationAccuracy: LocationAccuracy) {
+    this.locationCoords = {
+      latitude: "",
+      longitude: "",
+      accuracy: "",
+      timestamp: ""
     }
+    this.time = Date.now();
+  }
 
   askToTurnOnGPS() {
     this.locationAccuracy.request(this.locationAccuracy.REQUEST_PRIORITY_HIGH_ACCURACY).then(
@@ -30,7 +37,7 @@ export class GeolocationService {
       error => alert('Error requesting location permissions ' + JSON.stringify(error))
     );
   }
- 
+
   // Methos to get device accurate coordinates using device GPS
   getLocationCoordinates() {
     this.geolocation.getCurrentPosition().then((resp) => {
@@ -38,7 +45,6 @@ export class GeolocationService {
       this.locationCoords.longitude = resp.coords.longitude;
       this.locationCoords.accuracy = resp.coords.accuracy;
       this.locationCoords.timestamp = resp.timestamp;
-      console.log("timeStamp"+this.locationCoords.timestamp)
     }).catch((error) => {
       alert('Error getting location' + error);
     });
@@ -46,11 +52,12 @@ export class GeolocationService {
 
   getTimeStamp() {
     this.geolocation.getCurrentPosition().then((resp) => {
-      this.locationCoords.timestamp = resp.timestamp;
-      console.log("timeStamp"+this.locationCoords.timestamp)
+      var currdate = new Date(resp.timestamp);
+      this.timestamp = currdate.toString().split(' GMT')[0];
+      console.log("timeStamp" + this.timestamp)
     }).catch((error) => {
       alert('Error getting location' + error);
     });
-    return this.locationCoords.timestamp
+    return this.timestamp
   }
 }

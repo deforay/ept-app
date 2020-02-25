@@ -92,15 +92,15 @@ export class AppComponent {
       }).catch(err => {
      //   console.log(err);
       });
-      this.checkGPSPermission()
+    // this.checkGPSPermission()
     });
 
 
     //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-    // if(!this.appVersionNumber) {
-    //   this.appVersionNumber ="0.0.1";
-    //   this.storage.set('appVersionNumber', this.appVersionNumber); 
-    // }
+    if(!this.appVersionNumber) {
+      this.appVersionNumber ="0.0.1";
+      this.storage.set('appVersionNumber', this.appVersionNumber); 
+    }
     //end..... 
 
 
@@ -112,7 +112,6 @@ export class AppComponent {
 
   //Check if application having GPS access permission  
   checkGPSPermission() {
-    alert("check gps ")
     this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
       result => {
         if (result.hasPermission) {

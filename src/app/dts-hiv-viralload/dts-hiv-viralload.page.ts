@@ -285,8 +285,10 @@ export class DtsHivViralloadPage implements OnInit {
     }
     if (this.changedVlAssay.length != 0) {
       this.isSelectedOther = true;
+
     } else {
       this.isSelectedOther = false;
+      this.othervlassay="";
     }
   }
 
@@ -297,7 +299,6 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   submitViralLoad() {
-
     if (this.ptPanelTest == true) {
       this.vlResult = [];
       this.tndArray = [];
