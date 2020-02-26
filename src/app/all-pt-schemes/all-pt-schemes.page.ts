@@ -109,9 +109,9 @@ export class AllPTSchemesPage implements OnInit {
             }
           }
           if(this.TestFormArray[0].schemeType == 'eid'){
-           // if(this.TestFormArray[0].eidData.access.status=='success'){
+            if(this.TestFormArray[0].eidData.access.status=='success'){
               this.router.navigate(['/dbs-eid']);  
-          //  }
+           }
           }
         }
       }   
