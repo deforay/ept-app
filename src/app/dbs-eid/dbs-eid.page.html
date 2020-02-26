@@ -475,7 +475,7 @@
           </ion-col>
           <ion-col *ngIf="otherInfoData.supervisorReview=='yes'" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-              <mat-label>Supervisor Name </mat-label>
+              <mat-label>{{otherInfoData.supervisorLabel}} </mat-label>
               <input matInput [(ngModel)]="otherInfoData.supervisorName" placeholder="Enter Supervisor Name">
             </mat-form-field>
           </ion-col>

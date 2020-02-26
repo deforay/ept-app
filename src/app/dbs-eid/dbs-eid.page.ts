@@ -121,8 +121,8 @@ export class DbsEidPage implements OnInit {
             this.shipmentData['extractionAssayDropdown'] = this.eidArray[0].eidData.Heading2.data.extractionAssaySelect;
             this.shipmentData['detectionAssayDropdown'] = this.eidArray[0].eidData.Heading2.data.detectionAssaySelect;
             this.shipmentData['modeOfReceiptDropdown'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelect;
-            this.shipmentData['extractionAssay'] = this.eidArray[0].eidData.Heading2.data.extractionAssaySelected;
-            this.shipmentData['detectionAssay'] = this.eidArray[0].eidData.Heading2.data.detectionAssaySelected;
+            this.shipmentData['extractionAssay'] = parseInt(this.eidArray[0].eidData.Heading2.data.extractionAssaySelected);
+            this.shipmentData['detectionAssay'] = parseInt(this.eidArray[0].eidData.Heading2.data.detectionAssaySelected);
             this.shipmentData['modeOfReceipt'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected;
           }else{
             this.shipmentData ={};
@@ -163,7 +163,8 @@ export class DbsEidPage implements OnInit {
             this.otherInfoData['comments'] = this.eidArray[0].eidData.Heading4.data.comments;
             this.otherInfoData['supervisorReviewDropdown'] = this.eidArray[0].eidData.Heading4.data.supervisorReview;
             this.otherInfoData['supervisorReview'] = this.eidArray[0].eidData.Heading4.data.supervisorReviewSelected;
-            this.otherInfoData['supervisorName'] ='';
+            this.otherInfoData['supervisorName'] =this.eidArray[0].eidData.Heading4.data.approvalInputText;
+            this.otherInfoData['supervisorLabel'] =this.eidArray[0].eidData.Heading4.data.approvalLabel;
           }else{
             this.showOtherInfoData = false;
 
