@@ -28,7 +28,7 @@ import {
   BrowserModule,
   DomSanitizer
 } from '@angular/platform-browser'
-
+import _ from "lodash";
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -100,24 +100,42 @@ export class DtsHivViralloadPage implements OnInit {
   formattedDate;
   appVersionNumber: any;
   authToken: any;
-  participantID: any;
+  loginID: any;
   localVLData = [];
-  participantName: any;
+  labName: any;
   viralLoadArray = [];
-  existingVLParticipantArray = [];
+  existingVLLabArray = [];
   selectedTNDRadioArrayFormat = [];
   notes: any = [];
   formattedQCDate: any;
   sampleIDArrray = [];
+  selectedParticipantID: any;
+  localVLDataArray: any = [];
+  existingVLShipmentArray: any = [];
+  existingVLArray = [];
+  existingVLParticipantArray = [];
+  shipmentArray = [];
+  selectedShipmentID: any;
+  participantArray = [];
+  existingShipmentArray = [];
+  existingVLLabIndex: any;
+  existingVLShipmentIndex: any;
+  existingVLShipPartiArray=[];
 
-  constructor(private activatedRoute: ActivatedRoute, private storage: Storage, public ToastService: ToastService,
-    public LoaderService: LoaderService, public CrudServiceService: CrudServiceService, private sanitizer: DomSanitizer) {
+  constructor(private activatedRoute: ActivatedRoute,
+    private storage: Storage,
+    public ToastService: ToastService,
+    public LoaderService: LoaderService,
+    public CrudServiceService: CrudServiceService,
+    private sanitizer: DomSanitizer,
+    private router: Router) {
 
     this.vlNotTestedReason = '';
     this.ptNotTestedComments = '';
     this.ptSupportComments = '';
     this.supName = "";
     this.othervlassay = "";
+    this.comments = "";
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
@@ -126,9 +144,14 @@ export class DtsHivViralloadPage implements OnInit {
     this.storage.get('participantLogin').then((participantLogin) => {
       if (participantLogin) {
         this.authToken = participantLogin.authToken;
-        this.participantID = participantLogin.id;
-        this.participantName = participantLogin.name;
+        this.loginID = participantLogin.id;
+        this.labName = participantLogin.name;
         this.getVLFormDetails();
+      }
+    })
+    this.storage.get('localVLData').then((localVLData) => {
+      if (localVLData) {} else {
+        this.storage.set('localVLData', []);
       }
     })
   }
@@ -141,8 +164,10 @@ export class DtsHivViralloadPage implements OnInit {
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
       console.log(vlDataObj[0]);
       this.vlDataArray = vlDataObj[0];
-      if (vlDataObj[0].vlData.access.status == 'success') {
 
+      if (vlDataObj[0].vlData.access.status == 'success') {
+        this.selectedParticipantID = vlDataObj[0].participantId;
+        this.selectedShipmentID = vlDataObj[0].shipmentId;
         if (vlDataObj[0].vlData.Heading1.status == true) {
           this.partDetailsArray = vlDataObj[0].vlData.Heading1.data;
         }
@@ -178,13 +203,17 @@ export class DtsHivViralloadPage implements OnInit {
             this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'];
             this.selectedModeOfReceipt = this.modeOfReceiptArray.filter(
               modeOfRec => modeOfRec.selected == "selected");
-            this.receiptmode = this.selectedModeOfReceipt[0].value;
+            if (this.selectedModeOfReceipt.length != 0) {
+              this.receiptmode = this.selectedModeOfReceipt[0].value;
+            }
           }
           if (this.shipmentsDetailsArray['vlAssaySelect']) {
             this.isSelectedOther = false;
             this.selectedVlAssay = this.shipmentsDetailsArray['vlAssaySelect'].filter(
               vlAssay => vlAssay.selected == "selected");
-            this.vlassay = this.selectedVlAssay[0].value;
+            if (this.selectedVlAssay.length != 0) {
+              this.vlassay = this.selectedVlAssay[0].value;
+            }
             if (this.shipmentsDetailsArray['otherAssay']) {
               this.othervlassay = this.shipmentsDetailsArray['otherAssay'];
               if (this.selectedVlAssay[0].selected == 'selected') {
@@ -207,7 +236,7 @@ export class DtsHivViralloadPage implements OnInit {
             this.ptPanelTest = false;
             this.controlHeads = this.ptPanelTestArray['tableHeading'];
             this.controlArray = this.ptPanelTestArray['tableRowTxt'];
-            this.sampleIDArrray = ["1", "2", "3", "4"];
+            this.sampleIDArrray = this.ptPanelTestArray['tableRowTxt'].id;
             this.notes = [...this.ptPanelTestArray.note];
             this.notes.forEach(note => {
               note = this.sanitizer.bypassSecurityTrustHtml(note);
@@ -248,7 +277,9 @@ export class DtsHivViralloadPage implements OnInit {
           if (this.supervisorReviewArray) {
             this.selectedSupReviewArray = this.supervisorReviewArray.filter(
               supReviewItem => supReviewItem.selected == "selected");
-            this.supReview = this.selectedSupReviewArray[0].value;
+            if (this.selectedSupReviewArray.length != 0) {
+              this.supReview = this.selectedSupReviewArray[0].value;
+            }
           }
           this.selectedSupReviewArray =
             this.supName = this.otherInfoArray.approvalInputText;
@@ -389,36 +420,103 @@ export class DtsHivViralloadPage implements OnInit {
       }
     }
     console.log(viralLoadJSON);
-    this.CrudServiceService.postData('shipments/save-form', viralLoadJSON)
-      .then((result) => {
-        if (result["status"] == 'success') {
-
-         // debugger;
-        }
-      }, (err) => {
-  
-      });
     this.viralLoadArray.push(viralLoadJSON);
-    this.existingVLParticipantArray = this.viralLoadArray.filter(
-      vlArray => vlArray.participantID == this.participantID);
-    if (this.existingVLParticipantArray.length==0) {
-      this.localVLData.push({
-        "participant_ID": this.participantID,
-        "participant_Name": this.participantName,
-        "schemeType": this.vlDataArray.schemeType,
-        "testDataArray": this.viralLoadArray
-      })
-    }
-    else{
-      this.existingVLParticipantArray = this.localVLData.filter(
-        vlData => vlData.participantID == this.participantID);
-      this.localVLData.push({
+    this.offlineViralLoad()
+    // this.CrudServiceService.postData('shipments/save-form', viralLoadJSON)
+    //   .then((result) => {
+    //     if (result["status"] == 'success') {
 
-        "testDataArray": this.viralLoadArray
+    //        this.ToastService.presentToastWithOptions(result['message']);
+    //        this.router.navigate(['/all-pt-schemes']);
 
-      })
-    }
-    this.storage.set("localVLData", this.localVLData);
+    //     }
+    //   }, (err) => {
+
+    //   });
+  }
+
+
+  offlineViralLoad() {
+    this.storage.get('localVLData').then((localVLData) => {
+      if (localVLData) {
+        debugger;
+        this.localVLDataArray = localVLData;
+        this.storage.get('participantLogin').then((participantLogin) => {
+          if (participantLogin) {
+            debugger;
+            this.existingVLLabArray = this.localVLDataArray.filter(
+              vlArray => vlArray.loginID == participantLogin.id);
+            if (this.existingVLLabArray.length == 0) {
+
+              this.participantArray = [{
+                "participantID": this.selectedParticipantID,
+                "testArray": this.viralLoadArray
+              }]
+              this.shipmentArray = [{
+                "shipmentID": this.selectedShipmentID,
+                "participantArray": this.participantArray,
+              }]
+              this.localVLDataArray.push({
+                "loginID": participantLogin.id,
+                "labName": participantLogin.name,
+                "shipmentArray": this.shipmentArray
+              })
+            } else {
+              debugger;
+              this.existingVLLabIndex = _.findIndex(this.localVLDataArray, {
+                loginID: participantLogin.id
+              });
+
+              this.existingVLShipmentArray = this.localVLDataArray[this.existingVLLabIndex].shipmentArray.filter(
+                item => item.shipmentID == this.selectedShipmentID);
+
+
+
+              if (this.existingVLShipmentArray.length != 0) {
+                this.existingVLShipmentIndex = _.findIndex(this.localVLDataArray[this.existingVLLabIndex].shipmentArray, {
+                  shipmentID: this.selectedShipmentID
+                });
+                this.existingVLShipmentArray.forEach((element, index) => {
+
+                  this.existingVLParticipantArray = element.participantArray.filter(
+                    item => item.participantID == this.selectedParticipantID);
+
+
+                })
+
+                if (this.existingVLParticipantArray.length == 0) {
+
+                  this.existingVLShipmentArray.forEach((element, index) => {
+                    this.existingVLShipPartiArray=element.participantArray;
+                  })
+                  this.participantArray = [{
+                    "participantID": this.selectedParticipantID,
+                    "testArray": this.viralLoadArray
+                  }]
+                  this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray = this.participantArray.concat(this.existingVLShipPartiArray);
+                }
+
+              } else {
+                this.existingShipmentArray = this.localVLDataArray[this.existingVLLabIndex].shipmentArray;
+
+                this.participantArray = [{
+                  "participantID": this.selectedParticipantID,
+                  "testArray": this.viralLoadArray
+                }]
+                this.shipmentArray = [{
+                  "shipmentID": this.selectedShipmentID,
+                  "participantArray": this.participantArray,
+                }]
+                this.localVLDataArray[this.existingVLLabIndex].shipmentArray = this.existingShipmentArray.concat(this.shipmentArray);
+              }
+            }
+
+            this.storage.set("localVLData", this.localVLDataArray);
+          }
+        })
+      }
+
+    })
   }
 
 }
