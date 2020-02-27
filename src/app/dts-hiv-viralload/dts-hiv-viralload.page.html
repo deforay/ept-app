@@ -326,7 +326,7 @@
             <section class="div-section">
               <p>Please Note :</p>
               <ul>
-                <li *ngFor="let item of notes">
+                <li *ngFor="let item of ptPanelTestData.notes">
                 <div innerHtml="{{item}}"></div> 
                 </li>
               </ul>
@@ -344,11 +344,10 @@
             <p class="log-para">{{vlLog}}</p>
           </ion-col>
         </ion-row>
-        <div *ngFor="let controls of controlArray.label ;let i = index">
-
-          <mat-card class="dynamic-card">
+        <div *ngIf="ptPanelTestData.controlArray">
+          <mat-card class="dynamic-card" *ngFor="let controls of ptPanelTestData.controlArray.label ;let i = index">
             <mat-card-title>
-              {{controls}} <span class="danger-text" *ngIf="controlArray.mandatory[i]==true">*</span>
+              {{controls}} <span class="danger-text" *ngIf="ptPanelTestData.controlArray.mandatory[i]==true">*</span>
             </mat-card-title>
             <mat-card-content>
            
@@ -356,13 +355,15 @@
                   <ion-row>
                   <ion-col  class="grid-input-col" *ngIf="k==i">
                     <p class="no-padding" style="margin-top: 0;">
-                      {{controlHeads[controlHeads.length-3]}}
+                      {{ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-3]}}
                     </p>
                     <mat-form-field class="login-full-width " appearance="outline">
-                      <mat-label><div [innerHTML]="controlHeads[controlHeads.length-2]"></div></mat-label>
-                      <input matInput [disabled]="tndArray[i]=='yes'" [required]="controlArray.mandatory[i]==true"
-                        [(ngModel)]="vlResult[k]" placeholder="Viral Load (log10 copies/ml)">
-                     <mat-error *ngIf="controlArray.mandatory[i]==true && !vlResult[k]">Please Enter {{controlHeads[controlHeads.length-2]}}</mat-error>
+                      <mat-label><div [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]"></div></mat-label>
+                      <input matInput [disabled]="ptPanelTestData.tndArray[i]=='yes'"
+                       [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest)"
+                        [(ngModel)]="ptPanelTestData.vlResult[k]" placeholder="Viral Load (log10 copies/ml)">
+                     <mat-error *ngIf="ptPanelTestData.controlArray.mandatory[i]==true && !ptPanelTestData.vlResult[k] && (ptPanelTest==false || !ptPanelTest)">
+                       Please Enter {{ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]}}</mat-error>
 
                     </mat-form-field>
                   </ion-col>
@@ -370,20 +371,22 @@
                 </div>
               
             
-                <div *ngFor="let item of ptPanelTestArray.tndReferenceRadio;let j= index">
+                <div *ngFor="let item of ptPanelTestData.tndRadioArray;let j= index">
                   <ion-row>
                   <ion-col  class="grid-input-col" *ngIf="j==i">
                     <p class="no-padding" style="margin-top: 0;">
-                      {{controlHeads[controlHeads.length-1]}}
+                      {{ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-1]}}
                     </p>
                     <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                      [(ngModel)]="tndArray[j]" (ngModelChange)="changeTND(j,tndArray[j])" [required]="controlArray.mandatory[i]==true">
+                      [(ngModel)]="ptPanelTestData.tndArray[j]" (ngModelChange)="changeTND(j,ptPanelTestData.tndArray[j])" 
+                      [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest) ">
                       <mat-radio-button class="example-radio-button" 
-                      *ngFor="let tnd of ptPanelTestArray.tndReferenceRadio[j]"
+                      *ngFor="let tnd of item"
                         [value]="tnd.value">
                         {{tnd.show}} 
-                        <!--  (change)="changeTND(i,tndArray[i])" -->
                       </mat-radio-button>
+                      <mat-error *ngIf="ptPanelTestData.controlArray.mandatory[i]==true && !ptPanelTestData.tndArray[j] && (ptPanelTest==false || !ptPanelTest)">
+                        Please Enter {{ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-1]}}</mat-error>
                     </mat-radio-group>
                   </ion-col>
                
@@ -400,30 +403,30 @@
           <ion-col size="12" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>
-                {{ptPanelNotTestArray.vlNotTestedReasonText}} </mat-label>
-              <mat-select [(ngModel)]="vlNotTestedReason" name="vlNotTested" [required]="ptPanelTest">
+                {{ptPanelNotTestData.ptNotTestedReasonLabel}} </mat-label>
+              <mat-select [(ngModel)]="ptPanelNotTestData.vlNotTestedReason" name="vlNotTested" [required]="ptPanelTest">
                 <mat-option>--Select--</mat-option>
-                <mat-option *ngFor="let item of ptNotTestedReasonArray" [value]="item.value">
+                <mat-option *ngFor="let item of ptPanelNotTestData.ptNotTestedReasonArray" [value]="item.value">
                   {{item.show}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="!vlNotTestedReason">Please choose the Reason for not testing</mat-error>
+              <mat-error *ngIf="!ptPanelNotTestData.vlNotTestedReason && ptPanelTest">Please choose the Reason for not testing</mat-error>
             </mat-form-field>
           </ion-col>
           <ion-col size="12" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-              <mat-label>{{ptPanelNotTestArray.commentsText}}</mat-label>
-              <textarea matInput placeholder="Enter Your Comments here" [(ngModel)]="ptNotTestedComments"
+              <mat-label>{{ptPanelNotTestData.ptNotTestedCommentsLabel}}</mat-label>
+              <textarea matInput placeholder="Enter Your Comments here" [(ngModel)]="ptPanelNotTestData.ptNotTestedComments"
               [required]="ptPanelTest"></textarea>
-              <mat-error *ngIf="!ptNotTestedComments">Please Enter Your Comments</mat-error>
+              <mat-error *ngIf="!ptPanelNotTestData.ptNotTestedComments && ptPanelTest">Please Enter Your Comments</mat-error>
             </mat-form-field>
           </ion-col>
           <ion-col size="12" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-              <mat-label>{{ptPanelNotTestArray.supportText}}</mat-label>
-              <textarea matInput placeholder="Enter Your Comments here" [(ngModel)]="ptSupportComments"
+              <mat-label>{{ptPanelNotTestData.ptSupportCommentsLabel}}</mat-label>
+              <textarea matInput placeholder="Enter Your Comments here" [(ngModel)]="ptPanelNotTestData.ptSupportComments"
               [required]="ptPanelTest"></textarea>
-              <mat-error *ngIf="!ptSupportComments">Please Enter Your Comments</mat-error>
+              <mat-error *ngIf="!ptPanelNotTestData.ptSupportComments && ptPanelTest">Please Enter Your Comments</mat-error>
             </mat-form-field>
           </ion-col>
         </ion-row>

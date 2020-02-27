@@ -86,13 +86,7 @@ export class DtsHivViralloadPage implements OnInit {
   ptNotTestedComments: any;
   ptSupportComments: any;
   ptNotTestedReasonArray: any = [];
-  controlHeads = [];
-  controlArray: any = [];
-  vlResult = [];
-  tndArray = [];
-  tndRadioArray = [];
-  selectedTNDArray = [];
-  selectedTNDRadioArray = [];
+
   supervisorReviewArray: any = [];
   selectedSupReviewArray: any = [];
   vlDataArray: any = [];
@@ -105,7 +99,6 @@ export class DtsHivViralloadPage implements OnInit {
   labName: any;
   viralLoadArray = [];
   existingVLLabArray = [];
-  selectedTNDRadioArrayFormat = [];
   notes: any = [];
   formattedQCDate: any;
   sampleIDArrray = [];
@@ -120,8 +113,9 @@ export class DtsHivViralloadPage implements OnInit {
   existingShipmentArray = [];
   existingVLLabIndex: any;
   existingVLShipmentIndex: any;
-  existingVLShipPartiArray=[];
-
+  existingVLShipPartiArray = [];
+  ptPanelTestData = {};
+  ptPanelNotTestData = {};
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public ToastService: ToastService,
@@ -231,44 +225,30 @@ export class DtsHivViralloadPage implements OnInit {
         if (vlDataObj[0].vlData.Heading3.status == true) {
           this.ptPanelTestArray = vlDataObj[0].vlData.Heading3.data['no'];
           this.ptPanelNotTestArray = vlDataObj[0].vlData.Heading3.data['yes'];
+          this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
+          this.ptPanelTestData['controlArray'] = this.ptPanelTestArray['tableRowTxt'];
+          this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['vlResult'];
+          this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
+          this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio']; 
+          this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
+          this.ptPanelTestData['notes'] = [...this.ptPanelTestArray.note];
+          this.ptPanelTestData['notes'].forEach(note => {
+            note = this.sanitizer.bypassSecurityTrustHtml(note);
+          })
+  
+
+          this.ptPanelNotTestData['ptSupportCommentsLabel'] = this.ptPanelNotTestArray.supportText;
+          this.ptPanelNotTestData['ptNotTestedCommentsLabel'] = this.ptPanelNotTestArray.commentsText;
+          this.ptPanelNotTestData['ptNotTestedReasonLabel'] = this.ptPanelNotTestArray.vlNotTestedReasonText;
+          this.ptPanelNotTestData['ptNotTestedReasonArray'] = this.ptPanelNotTestArray.vlNotTestedReasonSelect;
+          this.ptPanelNotTestData['ptSupportComments'] = this.ptPanelNotTestArray.supportTextArea;
+          this.ptPanelNotTestData['ptNotTestedComments'] = this.ptPanelNotTestArray.commentsTextArea;        
+          this.ptPanelNotTestData['vlNotTestedReason'] = this.ptPanelNotTestArray.vlNotTestedReasonSelected;
 
           if (vlDataObj[0].vlData.Heading3.data['isPtTestNotPerformedRadio'] == 'no') {
             this.ptPanelTest = false;
-            this.controlHeads = this.ptPanelTestArray['tableHeading'];
-            this.controlArray = this.ptPanelTestArray['tableRowTxt'];
-            this.sampleIDArrray = this.ptPanelTestArray['tableRowTxt'].id;
-            this.notes = [...this.ptPanelTestArray.note];
-            this.notes.forEach(note => {
-              note = this.sanitizer.bypassSecurityTrustHtml(note);
-            })
-            this.vlResult = [...this.ptPanelTestArray['vlResult']];
-            // console.log(this.vlResult);
-            this.selectedTNDRadioArray = [];
-            this.tndRadioArray = [...this.ptPanelTestArray['tndReferenceRadio']];
-            this.tndRadioArray.forEach(element => {
-              let obj = {};
-              obj = element.filter(tndRadio => tndRadio.selected == "selected")
-              this.selectedTNDRadioArray.push(obj)
-            })
-
-            this.selectedTNDRadioArray.forEach((element, index) => {
-              this.tndArray[index] = element[0].value;
-              this.selectedTNDRadioArrayFormat.push(element[0]);
-            })
           } else {
             this.ptPanelTest = true;
-
-            this.ptSupportComments = this.ptPanelNotTestArray.supportTextArea;
-            this.ptNotTestedComments = this.ptPanelNotTestArray.commentsTextArea;
-            this.ptNotTestedReasonArray = this.ptPanelNotTestArray.vlNotTestedReasonSelect;
-            var vlReason = this.ptNotTestedReasonArray.filter(
-              selectreason => {
-                selectreason.selected == "selected";
-              })
-            this.vlNotTestedReason = vlReason.value;
-
-
-
           };
         }
         if (vlDataObj[0].vlData.Heading4.status == true) {
@@ -334,7 +314,7 @@ export class DtsHivViralloadPage implements OnInit {
 
   changeTND(index, tndData) {
     if (tndData == 'yes') {
-      this.vlResult[index] = "0.0";
+      this.ptPanelTestData['vlResult'][index] = "0.0";
     }
   }
 
@@ -345,16 +325,18 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   submitViralLoad() {
-    if (this.ptPanelTest == true) {
-      this.vlResult = [];
-      this.tndArray = [];
-      this.controlArray.label = [];
-      this.sampleIDArrray = [];
-    } else {
-      this.vlNotTestedReason = '';
-      this.ptNotTestedComments = '';
-      this.ptSupportComments = '';
-    }
+    // if (this.ptPanelTest == true) {
+    //   this.vlResult = [];
+    //   this.tndArray = [];
+    //   this.controlArray.label = [];
+    //   this.sampleIDArrray = [];
+    // } else {
+    //   this.vlNotTestedReason = '';
+    //   this.ptNotTestedComments = '';
+    //   this.ptSupportComments = '';
+    // }
+    console.log(this.ptPanelTestData)
+    console.log(this.ptPanelNotTestData)
     if (this.qcDone == 'no') {
       this.qcDate = "";
       this.qcDoneBy = "";
@@ -406,9 +388,9 @@ export class DtsHivViralloadPage implements OnInit {
           "vlNotTestedReason": this.vlNotTestedReason,
           "ptNotTestedComments": this.ptNotTestedComments,
           "ptSupportComments": this.ptSupportComments,
-          "vlResult": this.vlResult,
-          "isTND": this.tndArray,
-          "sampleLabels": this.controlArray.label,
+          "vlResult": this.ptPanelTestData['vlResult'],
+          "isTND": this.ptPanelTestData['tndArray'],
+          "sampleLabels": this.ptPanelTestData['controlArray'].label,
           "sampleId": this.sampleIDArrray,
         },
         "Heading4": {
@@ -487,7 +469,7 @@ export class DtsHivViralloadPage implements OnInit {
                 if (this.existingVLParticipantArray.length == 0) {
 
                   this.existingVLShipmentArray.forEach((element, index) => {
-                    this.existingVLShipPartiArray=element.participantArray;
+                    this.existingVLShipPartiArray = element.participantArray;
                   })
                   this.participantArray = [{
                     "participantID": this.selectedParticipantID,
