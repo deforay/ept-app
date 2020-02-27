@@ -1,7 +1,6 @@
 import {
   Component
 } from '@angular/core';
-
 import {
   Platform
 } from '@ionic/angular';
@@ -17,10 +16,17 @@ import {
 import {
   Storage
 } from '@ionic/storage';
-import { AlertService,GeolocationService } from '../app/service/providers';
-import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
-
+import {
+  AlertService,
+  ToastService
+} from '../app/service/providers';
+import {
+  Network
+} from '@ionic-native/network/ngx';
+import {
+  Events
+} from '@ionic/angular';
+import { NetworkService} from '../app/service/network.service';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -28,39 +34,28 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 })
 export class AppComponent {
 
-  appVersionNumber:any;
+  appVersionNumber: any;
   public appPages = [{
       title: 'All Shipments',
       url: '/all-pt-schemes',
-      icon: 'shipment'
+      icon: 'list'
     },
     {
-      title: 'Individual Reports',
-      url: '/individual-report',
-      icon: 'shipment' 
+      title: 'DTS HIV Serology',
+      url: '/dts-hiv-serology',
+      icon: 'list'
     },
     {
-      title: 'Summary Reports',
-      url: '/summary-report',
-      icon: 'shipment' 
+      title: 'DTS HIV Viral load',
+      url: '/dts-hiv-viralload',
+      icon: 'list'
     },
     {
-      title: 'Change Password',
-      url: '/change-password',
-      icon: 'shipment' 
-     
+      title: 'Log Out',
+      url: "",
+      icon: 'list'
     }
-    // {
-    //   title: 'DTS HIV Serology',
-    //   url: '/dts-hiv-serology',
-    //   icon: 'list'
-    // },
-    // {
-    //   title: 'DTS HIV Viral load',
-    //   url: '/dts-hiv-viralload',
-    //   icon: 'list'
-    // },
-    
+
   ];
 
   constructor(
@@ -69,85 +64,65 @@ export class AppComponent {
     private statusBar: StatusBar,
     private appVersion: AppVersion,
     private storage: Storage,
-    public alertService:AlertService,
-    private androidPermissions: AndroidPermissions,
-    private locationAccuracy: LocationAccuracy,
-    public GeolocationService:GeolocationService
+    public alertService: AlertService,
+    public NetworkService: NetworkService,
+    public network: Network,
+    public events: Events,
+    public ToastService: ToastService
   ) {
     this.initializeApp();
+    this.appVersion.getVersionNumber().then(value => {
+      this.appVersionNumber = value;
+      this.storage.set('appVersionNumber', this.appVersionNumber);
+    }).catch(err => {
+      //   console.log(err);
+    });
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
-      // this.statusBar.styleDefault();
-      if (this.platform.is('android')) {
-        this.statusBar.styleLightContent();
-        this.statusBar.backgroundColorByHexString("#000000");
-      }
+    //  this.statusBar.styleDefault();
+    this.statusBar.styleLightContent();
       this.splashScreen.hide();
-
       this.appVersion.getVersionNumber().then(value => {
         this.appVersionNumber = value;
         this.storage.set('appVersionNumber', this.appVersionNumber);
       }).catch(err => {
-     //   console.log(err);
+        //   console.log(err);
       });
-    // this.checkGPSPermission()
+
+        this.NetworkService.initializeNetworkEvents();
+      if (this.network.type == 'none') {
+          console.log("None");
+        let networkconnectivity = false;
+        this.events.publish('network:offline', networkconnectivity);
+        this.ToastService.presentToastWithOptions("You are in offline");
+        this.storage.set('networkConnectivity', networkconnectivity);
+      }
+      else{
+
+      //  this.ToastService.presentToastWithOptions("You are in online");
+
+      }
+
     });
 
 
     //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-    if(!this.appVersionNumber) {
-      this.appVersionNumber ="0.0.1";
-      this.storage.set('appVersionNumber', this.appVersionNumber); 
-    }
+    // if (!this.appVersionNumber) {
+    //   this.appVersionNumber = "0.0.1";
+    //   this.storage.set('appVersionNumber', this.appVersionNumber);
+    // }
     //end..... 
 
 
   }
- 
-  logout() {    
-      this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
-  }
 
-  //Check if application having GPS access permission  
-  checkGPSPermission() {
-    this.androidPermissions.checkPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION).then(
-      result => {
-        if (result.hasPermission) {
- 
-          //If having permission show 'Turn On GPS' dialogue
-          this.GeolocationService.askToTurnOnGPS();
-        } else {
- 
-          //If not having permission ask for permission
-          this.requestGPSPermission();
-        }
-      },
-      err => {
-        alert(err);
-      }
-    );
-  }
- 
-  requestGPSPermission() {
-    this.locationAccuracy.canRequest().then((canRequest: boolean) => {
-      if (canRequest) {
-        console.log("4");
-      } else {
-        //Show 'GPS Permission Request' dialogue
-        this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.ACCESS_COARSE_LOCATION)
-          .then(
-            () => {
-              // call method to turn on GPS
-              this.GeolocationService.askToTurnOnGPS();
-            },
-            error => {
-              //Show alert if user click on 'No Thanks'
-              alert('requestPermission Error requesting location permissions ' + error)
-            }
-          );
-      }
-    });
+  openPage(page) {
+    // Reset the content nav to have just this page
+    // we wouldn't want the back button to show in this scenario
+    if (page.title == 'Log Out') {
+      this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
+    } else {}
   }
 }

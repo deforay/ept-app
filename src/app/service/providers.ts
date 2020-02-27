@@ -10,17 +10,18 @@ import {
 import {
     AlertService
 } from '../service/alert/alert.service';
-import {
-    NetworkService
-} from '../service/network/network.service';
+// import {
+//     NetworkService
+// } from '../service/network/network.service';
 import {
     GeolocationService
 } from '../service/geolocation/geolocation.service';
+//import {NetworkService} from '../service/network.service';
 export {
     CrudServiceService,
     ToastService,
     LoaderService,
     AlertService,
-    NetworkService,
+  //  NetworkService,
     GeolocationService
 }

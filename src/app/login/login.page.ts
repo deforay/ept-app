@@ -82,14 +82,9 @@ export class LoginPage implements OnInit {
     public loadingController: LoadingController) {
 
     // this.statusBar.backgroundColorByHexString("#000000");
-    this.storage.get('appVersionNumber').then((appVersionNumber) => {
-      if (appVersionNumber) {
-        this.appVersionNumber = appVersionNumber;
-      }
-    })
   }
   ngOnInit() {
-  
+
   }
   ionViewDidEnter() {
     // the root left menu should be disabled on this page
@@ -107,12 +102,11 @@ export class LoginPage implements OnInit {
   //   });
 
   // }
-  
+
   login() {
 
-   
-    if (this.emailFormControl.invalid || this.pswdFormControl.invalid || this.serverHostFormControl.invalid) {
-    } else {
+
+    if (this.emailFormControl.invalid || this.pswdFormControl.invalid || this.serverHostFormControl.invalid) {} else {
       var apiUrl = '';
       if (this.serverHostFormControl.value.indexOf("https://") == 0 || this.serverHostFormControl.value.indexOf("Https://") == 0) {
         apiUrl = this.serverHostFormControl.value + '/api/'
@@ -123,34 +117,36 @@ export class LoginPage implements OnInit {
       }
 
       this.storage.set('apiUrl', apiUrl);
+      this.storage.get('appVersionNumber').then((appVersionNumber) => {
+        if (appVersionNumber) {
+          this.appVersionNumber = appVersionNumber;
+          if (this.appVersionNumber) {
+            let loginJSON = {
+              "userId": this.emailFormControl.value,
+              "key": this.pswdFormControl.value,
+              "appVersion": this.appVersionNumber
+            }
+            this.CrudServiceService.postData('login', loginJSON)
+              .then((result) => {
+                if (result["status"] == 'success') {
 
-      let loginJSON = {
-        "userId": this.emailFormControl.value,
-        "key": this.pswdFormControl.value,
-        "appVersion": this.appVersionNumber
-      }
-      this.CrudServiceService.postData('login', loginJSON)
-        .then((result) => {
-          if (result["status"] == 'success') {
-
-            this.storage.set('participantLogin', result['data']);
-            this.storage.get('participantLogin').then((partiLoginResult) => {
-              if (partiLoginResult) {
-                this.router.navigate(['/all-pt-schemes']);
-              }
-            })
-          } else if (result["status"] == 'version-failed') {
-            this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
-          } else {
-            this.ToastService.presentToastWithOptions(result["message"]);
+                  this.storage.set('participantLogin', result['data']);
+                  this.storage.get('participantLogin').then((partiLoginResult) => {
+                    if (partiLoginResult) {
+                      this.router.navigate(['/all-pt-schemes']);
+                    }
+                  })
+                } else if (result["status"] == 'version-failed') {
+                  this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+                } else {
+                  this.ToastService.presentToastWithOptions(result["message"]);
+                }
+              }, (err) => {
+                //  this.LoaderService.disMissLoading();
+              });
           }
-
-
-
-        }, (err) => {
-      //  this.LoaderService.disMissLoading();
-        });
+        }
+      })
     }
   }
-
 }

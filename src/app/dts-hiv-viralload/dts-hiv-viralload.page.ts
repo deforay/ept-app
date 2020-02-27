@@ -29,6 +29,10 @@ import {
   DomSanitizer
 } from '@angular/platform-browser'
 import _ from "lodash";
+import {
+  Network
+} from '@ionic-native/network/ngx';
+import { debug } from 'util';
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -116,13 +120,15 @@ export class DtsHivViralloadPage implements OnInit {
   existingVLShipPartiArray = [];
   ptPanelTestData = {};
   ptPanelNotTestData = {};
+  viralLoadJSON={};
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
     public CrudServiceService: CrudServiceService,
     private sanitizer: DomSanitizer,
-    private router: Router) {
+    private router: Router,
+    public network: Network) {
 
     this.vlNotTestedReason = '';
     this.ptNotTestedComments = '';
@@ -229,20 +235,20 @@ export class DtsHivViralloadPage implements OnInit {
           this.ptPanelTestData['controlArray'] = this.ptPanelTestArray['tableRowTxt'];
           this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['vlResult'];
           this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
-          this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio']; 
+          this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
           this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
           this.ptPanelTestData['notes'] = [...this.ptPanelTestArray.note];
           this.ptPanelTestData['notes'].forEach(note => {
             note = this.sanitizer.bypassSecurityTrustHtml(note);
           })
-  
+
 
           this.ptPanelNotTestData['ptSupportCommentsLabel'] = this.ptPanelNotTestArray.supportText;
           this.ptPanelNotTestData['ptNotTestedCommentsLabel'] = this.ptPanelNotTestArray.commentsText;
           this.ptPanelNotTestData['ptNotTestedReasonLabel'] = this.ptPanelNotTestArray.vlNotTestedReasonText;
           this.ptPanelNotTestData['ptNotTestedReasonArray'] = this.ptPanelNotTestArray.vlNotTestedReasonSelect;
           this.ptPanelNotTestData['ptSupportComments'] = this.ptPanelNotTestArray.supportTextArea;
-          this.ptPanelNotTestData['ptNotTestedComments'] = this.ptPanelNotTestArray.commentsTextArea;        
+          this.ptPanelNotTestData['ptNotTestedComments'] = this.ptPanelNotTestArray.commentsTextArea;
           this.ptPanelNotTestData['vlNotTestedReason'] = this.ptPanelNotTestArray.vlNotTestedReasonSelected;
 
           if (vlDataObj[0].vlData.Heading3.data['isPtTestNotPerformedRadio'] == 'no') {
@@ -344,7 +350,7 @@ export class DtsHivViralloadPage implements OnInit {
     } else {
       this.formattedQCDate = this.dateFormat(new Date(this.qcDate));
     }
-    let viralLoadJSON = {
+    this.viralLoadJSON = {
       "authToken": this.authToken,
       "appVersion": this.appVersionNumber,
       "evaluationStatus": this.vlDataArray.evaluationStatus,
@@ -352,6 +358,7 @@ export class DtsHivViralloadPage implements OnInit {
       "schemeType": this.vlDataArray.schemeType,
       "shipmentId": this.vlDataArray.shipmentId,
       "mapId": this.vlDataArray.mapId,
+      "isSynced": '',
       "createdOn": "",
       "updatedOn": "",
       "updatedStatus": false,
@@ -401,31 +408,43 @@ export class DtsHivViralloadPage implements OnInit {
         }
       }
     }
-    console.log(viralLoadJSON);
-    this.viralLoadArray.push(viralLoadJSON);
-    this.offlineViralLoad()
-    // this.CrudServiceService.postData('shipments/save-form', viralLoadJSON)
-    //   .then((result) => {
-    //     if (result["status"] == 'success') {
+    
+    console.log(this.viralLoadJSON);
+  
+   
+    // if (this.network.type == 'none') {
+      this.viralLoadJSON['isSynced']=false;
+      this.viralLoadArray.push(this.viralLoadJSON);
+      this.offlineViralLoad();
+      this.ToastService.presentToastWithOptions("U are in offline in vl");
+    // } else {
+      // this.viralLoadJSON['isSynced']=true;
+      // this.ToastService.presentToastWithOptions("U are in online in vl");
+      // this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON)
+      // .then((result) => {
 
-    //        this.ToastService.presentToastWithOptions(result['message']);
-    //        this.router.navigate(['/all-pt-schemes']);
+      //   if (result["status"] == 'success') {
+      //      this.ToastService.presentToastWithOptions(result['message']);
+      //      this.router.navigate(['/all-pt-schemes']);
+      //   }
 
-    //     }
-    //   }, (err) => {
+      // }, (err) => {
 
-    //   });
+      // });
+  //  }
   }
 
 
   offlineViralLoad() {
+
+
     this.storage.get('localVLData').then((localVLData) => {
       if (localVLData) {
-        debugger;
+
         this.localVLDataArray = localVLData;
         this.storage.get('participantLogin').then((participantLogin) => {
           if (participantLogin) {
-            debugger;
+
             this.existingVLLabArray = this.localVLDataArray.filter(
               vlArray => vlArray.loginID == participantLogin.id);
             if (this.existingVLLabArray.length == 0) {
@@ -444,7 +463,7 @@ export class DtsHivViralloadPage implements OnInit {
                 "shipmentArray": this.shipmentArray
               })
             } else {
-              debugger;
+
               this.existingVLLabIndex = _.findIndex(this.localVLDataArray, {
                 loginID: participantLogin.id
               });
