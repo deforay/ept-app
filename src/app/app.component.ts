@@ -41,21 +41,15 @@ export class AppComponent {
       icon: 'list'
     },
     {
-      title: 'DTS HIV Serology',
-      url: '/dts-hiv-serology',
+      title: 'Individual Report',
+      url: '/individual-report',
       icon: 'list'
     },
     {
-      title: 'DTS HIV Viral load',
-      url: '/dts-hiv-viralload',
-      icon: 'list'
-    },
-    {
-      title: 'Log Out',
-      url: "",
+      title: 'Summary Report',
+      url: '/summary-report',
       icon: 'list'
     }
-
   ];
 
   constructor(
@@ -71,12 +65,6 @@ export class AppComponent {
     public ToastService: ToastService
   ) {
     this.initializeApp();
-    this.appVersion.getVersionNumber().then(value => {
-      this.appVersionNumber = value;
-      this.storage.set('appVersionNumber', this.appVersionNumber);
-    }).catch(err => {
-      //   console.log(err);
-    });
   }
 
   initializeApp() {
@@ -109,10 +97,10 @@ export class AppComponent {
 
 
     //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-    // if (!this.appVersionNumber) {
-    //   this.appVersionNumber = "0.0.1";
-    //   this.storage.set('appVersionNumber', this.appVersionNumber);
-    // }
+    if (!this.appVersionNumber) {
+      this.appVersionNumber = "0.0.1";
+      this.storage.set('appVersionNumber', this.appVersionNumber);
+    }
     //end..... 
 
 

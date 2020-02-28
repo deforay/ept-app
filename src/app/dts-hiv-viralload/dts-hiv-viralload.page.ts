@@ -23,7 +23,6 @@ import {
 import {
   ErrorStateMatcher
 } from '@angular/material/core';
-
 import {
   BrowserModule,
   DomSanitizer
@@ -32,7 +31,7 @@ import _ from "lodash";
 import {
   Network
 } from '@ionic-native/network/ngx';
-import { debug } from 'util';
+
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -90,7 +89,6 @@ export class DtsHivViralloadPage implements OnInit {
   ptNotTestedComments: any;
   ptSupportComments: any;
   ptNotTestedReasonArray: any = [];
-
   supervisorReviewArray: any = [];
   selectedSupReviewArray: any = [];
   vlDataArray: any = [];
@@ -162,9 +160,21 @@ export class DtsHivViralloadPage implements OnInit {
   getVLFormDetails() {
 
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
-      console.log(vlDataObj[0]);
-      this.vlDataArray = vlDataObj[0];
 
+    //  debugger;
+      console.log(vlDataObj[0]);
+      if(vlDataObj[0].isSynced=='false'){
+        this.storage.get('localStorageSelectedFormArray').then((localFormArray) => {
+     //     debugger;
+        if((localFormArray.isSynced==vlDataObj[0].isSynced)&&(localFormArray.evaluationStatus==vlDataObj[0].evaluationStatus)&&(localFormArray.mapId==vlDataObj[0].mapId)&&(localFormArray.participantId==vlDataObj[0].participantId)&&(localFormArray.shipmentId==vlDataObj[0].shipmentId)&&(localFormArray.schemeType==vlDataObj[0].schemeType)){
+
+          this.vlDataArray=localFormArray;
+        }
+      })
+      }
+      else{
+      this.vlDataArray = vlDataObj[0];
+      }
       if (vlDataObj[0].vlData.access.status == 'success') {
         this.selectedParticipantID = vlDataObj[0].participantId;
         this.selectedShipmentID = vlDataObj[0].shipmentId;
@@ -358,21 +368,26 @@ export class DtsHivViralloadPage implements OnInit {
       "schemeType": this.vlDataArray.schemeType,
       "shipmentId": this.vlDataArray.shipmentId,
       "mapId": this.vlDataArray.mapId,
-      "isSynced": '',
+      "isSynced": true,
       "createdOn": "",
       "updatedOn": "",
       "updatedStatus": false,
       "vlData": {
         "Heading1": {
           //participant details
+          "status":true,
+          "data":{     
           "participantName": this.partDetailsArray.participantName,
           "participantCode": this.partDetailsArray.participantCode,
           "participantAffiliation": this.partDetailsArray.affiliation,
           "participantPhone": this.partDetailsArray.phone,
           "participantMobile": this.partDetailsArray.mobile,
+          }
         },
         "Heading2": {
           //shipment details 
+          "status":true,
+          "data":{     
           "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
           "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
           "testReceiptDate": this.dateFormat(this.testReceiptDate),
@@ -388,9 +403,12 @@ export class DtsHivViralloadPage implements OnInit {
           "qcDone": this.qcDone,
           "qcDate": this.formattedQCDate,
           "qcDoneBy": this.qcDoneBy,
+          }
         },
         "Heading3": {
           //PT panel details
+          "status":true,
+          "data":{   
           "ptPanelTest": this.ptPanelTest,
           "vlNotTestedReason": this.vlNotTestedReason,
           "ptNotTestedComments": this.ptNotTestedComments,
@@ -398,25 +416,28 @@ export class DtsHivViralloadPage implements OnInit {
           "vlResult": this.ptPanelTestData['vlResult'],
           "isTND": this.ptPanelTestData['tndArray'],
           "sampleLabels": this.ptPanelTestData['controlArray'].label,
-          "sampleId": this.sampleIDArrray,
+          "sampleId": this.sampleIDArrray
+          }
         },
         "Heading4": {
           //other information
+          "status":true,
+          "data":{   
           "supReview": this.supReview,
           "supervisorName": this.supName,
           "comments": this.comments
+          }
         }
       }
     }
-    
+    debugger;
     console.log(this.viralLoadJSON);
-  
-   
     // if (this.network.type == 'none') {
       this.viralLoadJSON['isSynced']=false;
       this.viralLoadArray.push(this.viralLoadJSON);
       this.offlineViralLoad();
-      this.ToastService.presentToastWithOptions("U are in offline in vl");
+ 
+
     // } else {
       // this.viralLoadJSON['isSynced']=true;
       // this.ToastService.presentToastWithOptions("U are in online in vl");
@@ -513,6 +534,11 @@ export class DtsHivViralloadPage implements OnInit {
             }
 
             this.storage.set("localVLData", this.localVLDataArray);
+
+            if(this.localVLDataArray.length!=0){
+              this.ToastService.presentToastWithOptions("Vl form is stored in offline.Please sync the record when you are in online");
+              this.router.navigate(['/all-pt-schemes']);
+            }
           }
         })
       }
