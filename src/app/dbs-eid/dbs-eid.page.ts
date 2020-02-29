@@ -56,6 +56,10 @@ export class DbsEidPage implements OnInit {
   otherInfoData ={};
   constructor(private activatedRoute: ActivatedRoute, private storage: Storage, public ToastService: ToastService,
     public LoaderService: LoaderService, public CrudServiceService: CrudServiceService,private sanitizer: DomSanitizer) { 
+     
+  }
+
+  ionViewWillEnter(){
       this.storage.get('appVersionNumber').then((appVersionNumber) => {
         if (appVersionNumber) {
           this.appVersionNumber = appVersionNumber;
@@ -69,7 +73,8 @@ export class DbsEidPage implements OnInit {
           this.getEIDFormDetails();
         }
       })
-    }
+
+}
     step = 0;
 
     setStep(index: number) {

@@ -118,7 +118,11 @@ export class DtsHivViralloadPage implements OnInit {
   existingVLShipPartiArray = [];
   ptPanelTestData = {};
   ptPanelNotTestData = {};
-  viralLoadJSON={};
+  viralLoadJSON = {};
+  vlResult = [];
+  tndArray = [];
+  controlArray: any = [];
+
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public ToastService: ToastService,
@@ -127,6 +131,10 @@ export class DtsHivViralloadPage implements OnInit {
     private sanitizer: DomSanitizer,
     private router: Router,
     public network: Network) {
+
+  }
+
+  ionViewWillEnter() {
 
     this.vlNotTestedReason = '';
     this.ptNotTestedComments = '';
@@ -152,8 +160,8 @@ export class DtsHivViralloadPage implements OnInit {
         this.storage.set('localVLData', []);
       }
     })
-  }
 
+  }
   dateFormat(dateObj) {
     return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + (dateObj.getDate())).slice(-2);
   }
@@ -161,20 +169,20 @@ export class DtsHivViralloadPage implements OnInit {
 
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
 
-    //  debugger;
+      
       console.log(vlDataObj[0]);
-      if(vlDataObj[0].isSynced=='false'){
-        this.storage.get('localStorageSelectedFormArray').then((localFormArray) => {
-     //     debugger;
-        if((localFormArray.isSynced==vlDataObj[0].isSynced)&&(localFormArray.evaluationStatus==vlDataObj[0].evaluationStatus)&&(localFormArray.mapId==vlDataObj[0].mapId)&&(localFormArray.participantId==vlDataObj[0].participantId)&&(localFormArray.shipmentId==vlDataObj[0].shipmentId)&&(localFormArray.schemeType==vlDataObj[0].schemeType)){
+      //   if(vlDataObj[0].isSynced=='false'){
+      //     this.storage.get('localStorageSelectedFormArray').then((localFormArray) => {
+      //  //     debugger;
+      //     if((localFormArray.isSynced==vlDataObj[0].isSynced)&&(localFormArray.evaluationStatus==vlDataObj[0].evaluationStatus)&&(localFormArray.mapId==vlDataObj[0].mapId)&&(localFormArray.participantId==vlDataObj[0].participantId)&&(localFormArray.shipmentId==vlDataObj[0].shipmentId)&&(localFormArray.schemeType==vlDataObj[0].schemeType)){
 
-          this.vlDataArray=localFormArray;
-        }
-      })
-      }
-      else{
+      //       this.vlDataArray=localFormArray;
+      //     }
+      //   })
+      //   }
+      //   else{
       this.vlDataArray = vlDataObj[0];
-      }
+      // }
       if (vlDataObj[0].vlData.access.status == 'success') {
         this.selectedParticipantID = vlDataObj[0].participantId;
         this.selectedShipmentID = vlDataObj[0].shipmentId;
@@ -239,6 +247,7 @@ export class DtsHivViralloadPage implements OnInit {
           }
         }
         if (vlDataObj[0].vlData.Heading3.status == true) {
+        
           this.ptPanelTestArray = vlDataObj[0].vlData.Heading3.data['no'];
           this.ptPanelNotTestArray = vlDataObj[0].vlData.Heading3.data['yes'];
           this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
@@ -341,18 +350,19 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   submitViralLoad() {
-    // if (this.ptPanelTest == true) {
-    //   this.vlResult = [];
-    //   this.tndArray = [];
-    //   this.controlArray.label = [];
-    //   this.sampleIDArrray = [];
-    // } else {
-    //   this.vlNotTestedReason = '';
-    //   this.ptNotTestedComments = '';
-    //   this.ptSupportComments = '';
-    // }
-    console.log(this.ptPanelTestData)
-    console.log(this.ptPanelNotTestData)
+  
+    if (this.ptPanelTest == true) {
+      this.ptPanelTestData['vlResult'] = [];
+      this.ptPanelTestData['tndArray'] = [];
+      this.ptPanelTestData['controlArray'].label = [];
+      this.ptPanelTestData['sampleIDArrray'] = [];
+    } else {
+      this.ptPanelNotTestData['vlNotTestedReason']= '';
+      this.ptPanelNotTestData['ptNotTestedComments']= '';
+      this.ptPanelNotTestData['ptSupportComments']= '';
+    }
+    console.log(this.ptPanelTestData);
+    console.log(this.ptPanelNotTestData);
     if (this.qcDone == 'no') {
       this.qcDate = "";
       this.qcDoneBy = "";
@@ -375,84 +385,84 @@ export class DtsHivViralloadPage implements OnInit {
       "vlData": {
         "Heading1": {
           //participant details
-          "status":true,
-          "data":{     
-          "participantName": this.partDetailsArray.participantName,
-          "participantCode": this.partDetailsArray.participantCode,
-          "participantAffiliation": this.partDetailsArray.affiliation,
-          "participantPhone": this.partDetailsArray.phone,
-          "participantMobile": this.partDetailsArray.mobile,
+          "status": true,
+          "data": {
+            "participantName": this.partDetailsArray.participantName,
+            "participantCode": this.partDetailsArray.participantCode,
+            "participantAffiliation": this.partDetailsArray.affiliation,
+            "participantPhone": this.partDetailsArray.phone,
+            "participantMobile": this.partDetailsArray.mobile,
           }
         },
         "Heading2": {
           //shipment details 
-          "status":true,
-          "data":{     
-          "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
-          "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
-          "testReceiptDate": this.dateFormat(this.testReceiptDate),
-          "sampleRhdDate": this.dateFormat(this.sampleRhdDate),
-          "testingDate": this.dateFormat(this.testDate),
-          "vlassay": this.vlassay,
-          "othervlassay": this.othervlassay,
-          "specVolTest": this.specVolTest,
-          "assayExpDate": this.dateFormat(this.assayExpDate),
-          "assayLotNo": this.assayLotNo,
-          "responseDate": this.dateFormat(this.responseDate),
-          "receiptmode": this.receiptmode,
-          "qcDone": this.qcDone,
-          "qcDate": this.formattedQCDate,
-          "qcDoneBy": this.qcDoneBy,
+          "status": true,
+          "data": {
+            "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
+            "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
+            "testReceiptDate": this.dateFormat(this.testReceiptDate),
+            "sampleRhdDate": this.dateFormat(this.sampleRhdDate),
+            "testingDate": this.dateFormat(this.testDate),
+            "vlassay": this.vlassay,
+            "othervlassay": this.othervlassay,
+            "specVolTest": this.specVolTest,
+            "assayExpDate": this.dateFormat(this.assayExpDate),
+            "assayLotNo": this.assayLotNo,
+            "responseDate": this.dateFormat(this.responseDate),
+            "receiptmode": this.receiptmode,
+            "qcDone": this.qcDone,
+            "qcDate": this.formattedQCDate,
+            "qcDoneBy": this.qcDoneBy,
           }
         },
         "Heading3": {
           //PT panel details
-          "status":true,
-          "data":{   
-          "ptPanelTest": this.ptPanelTest,
-          "vlNotTestedReason": this.vlNotTestedReason,
-          "ptNotTestedComments": this.ptNotTestedComments,
-          "ptSupportComments": this.ptSupportComments,
-          "vlResult": this.ptPanelTestData['vlResult'],
-          "isTND": this.ptPanelTestData['tndArray'],
-          "sampleLabels": this.ptPanelTestData['controlArray'].label,
-          "sampleId": this.sampleIDArrray
+
+          "status": true,
+          "data": {
+            "ptPanelTest": this.ptPanelTest,
+            "vlNotTestedReason": this.ptPanelNotTestData['vlNotTestedReason'],
+            "ptNotTestedComments": this.ptPanelNotTestData['ptNotTestedComments'],
+            "ptSupportComments": this.ptPanelNotTestData['ptSupportComments'],
+            "vlResult": this.ptPanelTestData['vlResult'],
+            "isTND": this.ptPanelTestData['tndArray'],
+            "sampleLabels": this.ptPanelTestData['controlArray'].label,
+            "sampleId": this.ptPanelTestData['sampleIDArrray']
           }
         },
         "Heading4": {
           //other information
-          "status":true,
-          "data":{   
-          "supReview": this.supReview,
-          "supervisorName": this.supName,
-          "comments": this.comments
+          "status": true,
+          "data": {
+            "supReview": this.supReview,
+            "supervisorName": this.supName,
+            "comments": this.comments
           }
         }
       }
     }
-    debugger;
+ 
     console.log(this.viralLoadJSON);
     // if (this.network.type == 'none') {
-      this.viralLoadJSON['isSynced']=false;
-      this.viralLoadArray.push(this.viralLoadJSON);
-      this.offlineViralLoad();
- 
+    // this.viralLoadJSON['isSynced'] = false;
+    // this.viralLoadArray.push(this.viralLoadJSON);
+    // this.offlineViralLoad();
+
 
     // } else {
-      // this.viralLoadJSON['isSynced']=true;
-      // this.ToastService.presentToastWithOptions("U are in online in vl");
-      // this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON)
-      // .then((result) => {
+    // this.viralLoadJSON['isSynced']=true;
+    this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON)
+    .then((result) => {
 
-      //   if (result["status"] == 'success') {
-      //      this.ToastService.presentToastWithOptions(result['message']);
-      //      this.router.navigate(['/all-pt-schemes']);
-      //   }
+      if (result["status"] == 'success') {
+         this.ToastService.presentToastWithOptions(result['message']);
+         this.router.navigate(['/all-pt-schemes']);
+      }
 
-      // }, (err) => {
+    }, (err) => {
 
-      // });
-  //  }
+    });
+   //  }
   }
 
 
@@ -535,7 +545,7 @@ export class DtsHivViralloadPage implements OnInit {
 
             this.storage.set("localVLData", this.localVLDataArray);
 
-            if(this.localVLDataArray.length!=0){
+            if (this.localVLDataArray.length != 0) {
               this.ToastService.presentToastWithOptions("Vl form is stored in offline.Please sync the record when you are in online");
               this.router.navigate(['/all-pt-schemes']);
             }

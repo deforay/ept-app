@@ -114,7 +114,7 @@
         <ion-row *ngIf="item.responseDate">
           <ion-col size="5">
             <p text-wrap>
-              <span class="text-title-color">Response Date</span>
+              <span class="text-title-color">Response Date {{item.isSynced}} {{networkType}}</span>
             </p>
           </ion-col>
           <ion-col size="1">
@@ -128,23 +128,29 @@
             </p>
           </ion-col>
         </ion-row>
-
+      
         <ion-row>
           <ion-col size="9">
-            <ion-button size="small" class="text-center native-btn" (click)="goToTestForm(item,item.isSynced)">Enter Response</ion-button>
-            <!-- 
-                  <ion-button color="tertiary" expand="block">Edit Response</ion-button>
-            
-                  <ion-button color="tertiary" expand="block">View Response</ion-button> -->
+
+            <ion-button *ngIf="item.createdOn=='' && responseSwitch==on" size="small"
+              class="text-center native-btn" (click)="goToTestForm(item,item.isSynced)">Enter
+              Response </ion-button>
+
+            <ion-button *ngIf="item.createdOn!='' && responseSwitch==on" size="small"
+              class="text-center native-btn" (click)="goToTestForm(item,item.isSynced)">Edit Response</ion-button>
+
+            <ion-button *ngIf="item.createdOn!=''" size="small"
+            class="text-center native-btn" >View Response</ion-button>
+
           </ion-col>
-          <ion-col *ngIf="item.isSynced=='false'&& networkType!='none'"  size="3">
+          <ion-col *ngIf="item.isSynced=='false'&& networkType!='none'" size="3">
             <ion-button size="small" class="text-center native-btn">
               <ion-icon ios="ios-sync" md="md-sync"></ion-icon>
               Sync
             </ion-button>
           </ion-col>
         </ion-row>
- </ion-grid>
+      </ion-grid>
 
     </ion-card-content>
   </ion-card>

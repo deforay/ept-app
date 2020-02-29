@@ -4,19 +4,21 @@ import {
 } from '@angular/core';
 import {
   Router
-}from '@angular/router';
+} from '@angular/router';
 import {
   CrudServiceService,
   ToastService,
   LoaderService
-}from '../../app/service/providers';
+} from '../../app/service/providers';
 import {
   Storage
-}from '@ionic/storage';
+} from '@ionic/storage';
 import {
   Network
 } from '@ionic-native/network/ngx';
-
+import {
+  Events
+} from '@ionic/angular';
 @Component({
     selector: 'app-all-pt-schemes',
     templateUrl: './all-pt-schemes.page.html',
@@ -36,22 +38,80 @@ import {
   localShipmentArray: any = [];
   localParticipantArray: any = [];
   localStorageSelectedFormArray: any = [];
-  networkType:string;
-  
+  networkType: string;
+  currentDate: any;
+  formattedDate: string;
+
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
     private router: Router,
-    public network: Network) {
-    this.storage.get('appVersionNumber').then((appVersionNumber) => {
-      if (appVersionNumber) {
-        this.appVersionNumber = appVersionNumber;
-      }
-      this.getAllShipmentForms();
-      this.getAllShippings();
+    public network: Network,
+    public events: Events) {
+
+
+  }
+
+  dateFormat(dateObj) {
+    return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
+  }
+
+  ionViewWillEnter() {
+    console.log("ionViewWillEnter called");
+    this.networkType = this.network.type;
+    console.log(this.networkType);
+
+    //comment when take buid start
+
+    this.networkType = "4G";
+
+    //end...
+
+    // Offline event
+    this.events.subscribe('network:offline', (data) => {
+      this.networkType = this.network.type;
+      console.log("event offline triggered" + '' + this.networkType)
     })
-    this.networkType=this.network.type;
+
+    // Online event
+    this.events.subscribe('network:online', () => {
+      this.networkType = this.network.type;
+      console.log("event online triggered" + '' + this.networkType)
+    })
+
+    this.currentDate = this.dateFormat(new Date());
+    console.log(this.currentDate);
+
+
+    if (this.networkType == 'none' || this.networkType == null) {
+      this.storage.get('shipmentArray').then((shipmentArray) => {
+        if (shipmentArray.length != 0) {
+          this.shippingsArray = shipmentArray;
+        }
+      })
+      this.storage.get('shipmentFormArray').then((shipmentFormArray) => {
+        if (shipmentFormArray.length != 0) {
+          this.shipmentFormArray = shipmentFormArray;
+        }
+      })
+    } else {
+      this.storage.get('appVersionNumber').then((appVersionNumber) => {
+        if (appVersionNumber) {
+          this.appVersionNumber = appVersionNumber;
+        }
+        this.getAllShipmentForms();
+        this.getAllShippings();
+      })
+    }
+
+    this.storage.get('localVLData').then((localVLData) => {
+      if (!localVLData || localVLData.length == 0) {
+        this.storage.set('localVLData', []);
+      } else {
+
+      }
+    })
   }
 
   ngOnInit() {}
@@ -59,73 +119,76 @@ import {
   getAllShippings() {
 
     this.storage.get('participantLogin').then((partiLoginResult) => {
-        if (partiLoginResult.authToken) {
+      if (partiLoginResult.authToken) {
 
-          //   this.LoaderService.presentLoading();
-          this.CrudServiceService.getData('shipments/get/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
+        //   this.LoaderService.presentLoading();
+        this.CrudServiceService.getData('shipments/get/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
-              // debugger;
-              //   this.LoaderService.disMissLoading();
-              if (result["status"] == 'success') {
-                this.shippingsArray = result['data'];
-                console.log(this.shippingsArray);
-                this.storage.set("shipmentArray", this.shippingsArray);
+          // debugger;
+          //   this.LoaderService.disMissLoading();
+          if (result["status"] == 'success') {
+            //   debugger;
+            this.shippingsArray = result['data'];
+            console.log(this.shippingsArray);
+        
+            this.shippingsArray.forEach((element, index) => {
+              element.createdOn = "2020-02-01";
+            })
+            this.shippingsArray[1].createdOn = "";
+            this.shippingsArray[2].createdOn = "";
+            this.storage.set("shipmentArray", this.shippingsArray);
 
-                this.storage.get('localVLData').then((localVLData) => {
-                  if (localVLData.length != 0) {
-                    this.localVLDataArray = localVLData;
+            this.storage.get('localVLData').then((localVLData) => {
+              if (localVLData.length != 0) {
+                this.localVLDataArray = localVLData;
 
-                    this.localVLDataArray.forEach((element, index) => {
-                      if (element.loginID == partiLoginResult.id) {
-                        this.existingVLLabArray = element;
-                      }
-                    })
-
-                    if (this.existingVLLabArray) {
-                      this.existingVLLabArray.shipmentArray.forEach((localStoreElement, index) => {
-                        this.shippingsArray.forEach((element, index) => {
-                          if (localStoreElement.shipmentID == element.shipmentId) {
-                            this.localShipmentArray = localStoreElement;
-                          }
-                        })
-                        console.log(this.localShipmentArray);
-                      })
-                    }
-                    if (this.localShipmentArray) {
-                      this.localShipmentArray.participantArray.forEach((localStoreElement, index) => {
-                        this.shippingsArray.forEach((element, index) => {
-                          if (localStoreElement.participantID == element.participantId) {
-                            this.localParticipantArray = localStoreElement;
-                          }
-                        })
-                      })
-                      console.log(this.localParticipantArray);
-                    }
-                    if (this.localParticipantArray) {
-                      this.localParticipantArray.testArray.forEach((localStoreElement, index) => {
-                        this.shippingsArray.forEach((element, index) => {
-                          if ((localStoreElement.evaluationStatus == element.evaluationStatus) && (localStoreElement.mapId == element.mapId) && (localStoreElement.participantId == element.participantId) && (localStoreElement.shipmentId == element.shipmentId)) {
-
-                            element.isSynced = 'false';
-                            this.localStorageSelectedFormArray = localStoreElement
-
-
-                          }
-                        })
-                      })
-                    }
+                this.localVLDataArray.forEach((element, index) => {
+                  if (element.loginID == partiLoginResult.id) {
+                    this.existingVLLabArray = element;
                   }
                 })
+
+                if (this.existingVLLabArray) {
+                  this.existingVLLabArray.shipmentArray.forEach((localStoreElement, index) => {
+                    this.shippingsArray.forEach((element, index) => {
+                      if (localStoreElement.shipmentID == element.shipmentId) {
+                        this.localShipmentArray = localStoreElement;
+                      }
+                    })
+                    console.log(this.localShipmentArray);
+                  })
+                }
+                if (this.localShipmentArray) {
+                  this.localShipmentArray.participantArray.forEach((localStoreElement, index) => {
+                    this.shippingsArray.forEach((element, index) => {
+                      if (localStoreElement.participantID == element.participantId) {
+                        this.localParticipantArray = localStoreElement;
+                      }
+                    })
+                  })
+                  console.log(this.localParticipantArray);
+                }
+                if (this.localParticipantArray) {
+                  this.localParticipantArray.testArray.forEach((localStoreElement, index) => {
+                    this.shippingsArray.forEach((element, index) => {
+                      if ((localStoreElement.evaluationStatus == element.evaluationStatus) && (localStoreElement.mapId == element.mapId) && (localStoreElement.participantId == element.participantId) && (localStoreElement.shipmentId == element.shipmentId)) {
+
+                        element.isSynced = 'false';
+                        this.localStorageSelectedFormArray = localStoreElement
+
+
+                      }
+                    })
+                  })
+                }
               }
-            }, (err) => {
-              //    this.LoaderService.disMissLoading();
-            }
-
-          );
-        }
+            })
+          }
+        }, (err) => {
+          //    this.LoaderService.disMissLoading();
+        });
       }
-
-    );
+    });
   }
 
 
