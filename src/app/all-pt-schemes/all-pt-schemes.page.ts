@@ -41,6 +41,8 @@ import {
   networkType: string;
   currentDate: any;
   formattedDate: string;
+  localStorageUnSyncedArray:any=[];
+
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -124,21 +126,15 @@ import {
         //   this.LoaderService.presentLoading();
         this.CrudServiceService.getData('shipments/get/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
-          // debugger;
+         
           //   this.LoaderService.disMissLoading();
           if (result["status"] == 'success') {
-            //   debugger;
+        
             this.shippingsArray = result['data'];
             console.log(this.shippingsArray);
-        
-            this.shippingsArray.forEach((element, index) => {
-              element.createdOn = "2020-02-01";
-            })
-            this.shippingsArray[1].createdOn = "";
-            this.shippingsArray[2].createdOn = "";
             this.storage.set("shipmentArray", this.shippingsArray);
-
             this.storage.get('localVLData').then((localVLData) => {
+            
               if (localVLData.length != 0) {
                 this.localVLDataArray = localVLData;
 
@@ -168,13 +164,15 @@ import {
                   })
                   console.log(this.localParticipantArray);
                 }
+          
                 if (this.localParticipantArray) {
                   this.localParticipantArray.testArray.forEach((localStoreElement, index) => {
                     this.shippingsArray.forEach((element, index) => {
+                   
                       if ((localStoreElement.evaluationStatus == element.evaluationStatus) && (localStoreElement.mapId == element.mapId) && (localStoreElement.participantId == element.participantId) && (localStoreElement.shipmentId == element.shipmentId)) {
 
                         element.isSynced = 'false';
-                        this.localStorageSelectedFormArray = localStoreElement
+                        this.localStorageUnSyncedArray.push(localStoreElement);
 
 
                       }
@@ -183,6 +181,7 @@ import {
                 }
               }
             })
+            console.log(this.shippingsArray)
           }
         }, (err) => {
           //    this.LoaderService.disMissLoading();
@@ -197,61 +196,67 @@ import {
     this.storage.get('participantLogin').then((partiLoginResult) => {
         if (partiLoginResult.authToken) {
           this.CrudServiceService.getData('shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result1 => {
-              console.log(result1) //   this.LoaderService.disMissLoading();
-
-              if (result1["status"] == 'success') {
-                this.shipmentFormArray = result1['data'];
-                console.log(this.shipmentFormArray);
-                this.storage.set("shipmentFormArray", this.shipmentFormArray);
-              }
+            console.log(result1)
+            if (result1["status"] == 'success') {
+            
+              this.shipmentFormArray = result1['data'];
+              console.log(this.shipmentFormArray);
+              this.storage.set("shipmentFormArray", this.shipmentFormArray);
             }
-
-            , (err) => {
-              console.log(err);
-              //    this.LoaderService.disMissLoading();
-            }
-
-          );
+          }, (err) => {
+        
+            console.log(err);
+          });
         }
       }
-
     );
   }
 
   goToTestForm(item, isSynced) {
 
     this.storage.get('shipmentFormArray').then((shipmentFormArray) => {
-        if (shipmentFormArray) {
+      if (shipmentFormArray) {
+        
+        this.TestFormArray = shipmentFormArray.filter(i => i.schemeType == item.schemeType && i.shipmentId == item.shipmentId && i.evaluationStatus == item.evaluationStatus && i.participantId == item.participantId);
+        console.log(this.TestFormArray);
 
-          this.TestFormArray = shipmentFormArray.filter(i => i.schemeType == item.schemeType && i.shipmentId == item.shipmentId && i.evaluationStatus == item.evaluationStatus && i.participantId == item.participantId);
-          console.log(this.TestFormArray);
-          this.TestFormArray[0].isSynced = isSynced;
+        this.TestFormArray[0].isSynced = isSynced;
 
-          if (this.TestFormArray) {
-            this.storage.set('selectedTestFormArray', this.TestFormArray);
+        
+        this.localStorageSelectedFormArray=this.localStorageUnSyncedArray.filter(i=>i.schemeType == item.schemeType && i.shipmentId == item.shipmentId && i.evaluationStatus == item.evaluationStatus && i.participantId == item.participantId);
+        if (this.TestFormArray) {
+          this.storage.set('selectedTestFormArray', this.TestFormArray);
+          if (this.TestFormArray[0].isSynced == "false") {
             this.storage.set('localStorageSelectedFormArray', this.localStorageSelectedFormArray);
-
-            if (this.TestFormArray[0].schemeType == 'dts') {
-              if (this.TestFormArray[0].dtsData.access.status == 'success') {
-                this.router.navigate(['/dts-hiv-serology']);
-              }
+          }
+          if (this.TestFormArray[0].schemeType == 'dts') {
+            if (this.TestFormArray[0].dtsData.access.status == 'success') {
+              this.router.navigate(['/dts-hiv-serology']);
             }
-
-            if (this.TestFormArray[0].schemeType == 'vl') {
-              if (this.TestFormArray[0].vlData.access.status == 'success') {
-                this.router.navigate(['/dts-hiv-viralload']);
-              }
+            else{
+              this.ToastService.presentToastWithOptions(this.TestFormArray[0].dtsData.access.message);
             }
+          }
 
-            if (this.TestFormArray[0].schemeType == 'eid') {
-              if (this.TestFormArray[0].eidData.access.status == 'success') {
-                this.router.navigate(['/dbs-eid']);
-              }
+          if (this.TestFormArray[0].schemeType == 'vl') {
+            if (this.TestFormArray[0].vlData.access.status == 'success') {
+              this.router.navigate(['/dts-hiv-viralload']);
+            }
+            else{
+              this.ToastService.presentToastWithOptions(this.TestFormArray[0].vlData.access.message)
+            }
+          }
+
+          if (this.TestFormArray[0].schemeType == 'eid') {
+            if (this.TestFormArray[0].eidData.access.status == 'success') {
+              this.router.navigate(['/dbs-eid']);
+            }
+            else{
+              this.ToastService.presentToastWithOptions(this.TestFormArray[0].eidData.access.message)
             }
           }
         }
       }
-
-    )
+    })
   }
 }
