@@ -256,6 +256,8 @@
               <mat-error *ngIf="!responseDate">Please Choose Testing Date. Eg: 28-Feb-2020</mat-error>
             </mat-form-field>
           </ion-col>
+
+          
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Mode of Receipt</mat-label>
@@ -460,7 +462,7 @@
           </ion-col>
           <ion-col *ngIf="supReview=='yes'" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-              <mat-label>Supervisor Name </mat-label>
+              <mat-label>{{approvalLabel }}</mat-label>
               <input matInput [(ngModel)]="supName" placeholder="Enter Supervisor Name">
             </mat-form-field>
           </ion-col>

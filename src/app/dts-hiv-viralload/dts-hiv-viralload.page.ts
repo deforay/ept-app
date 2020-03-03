@@ -25,7 +25,8 @@ import {
 } from '@angular/material/core';
 import {
   BrowserModule,
-  DomSanitizer
+  DomSanitizer,
+  disableDebugTools
 } from '@angular/platform-browser'
 import _ from "lodash";
 import {
@@ -123,6 +124,10 @@ export class DtsHivViralloadPage implements OnInit {
   tndArray = [];
   controlArray: any = [];
   isPTPerformedRadio: any;
+  approvalLabel: any;
+  updatedStatus: any;
+  existingOldArray: any;
+  existingVLShipmentPartiIndex: any;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -178,7 +183,7 @@ export class DtsHivViralloadPage implements OnInit {
         this.storage.get('localStorageSelectedFormArray').then((localFormArray) => {
 
           if ((localFormArray[0].isSynced == vlDataObj[0].isSynced) && (localFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localFormArray[0].mapId == vlDataObj[0].mapId) && (localFormArray[0].participantId == vlDataObj[0].participantId) && (localFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localFormArray[0].schemeType == vlDataObj[0].schemeType)) {
-        debugger;
+     
             this.vlDataArray = localFormArray;
             console.log(this.vlDataArray);
             this.bindVLData();
@@ -218,25 +223,20 @@ export class DtsHivViralloadPage implements OnInit {
           this.specVolTest = this.shipmentsDetailsArray['specimenVolume'];
         }
         if (this.shipmentsDetailsArray['qcData'].status == true) {
+       //   debugger;
           this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
           if (this.isQCDoneShow == true) {
-            if(this.shipmentsDetailsArray.qcData.qcRadio){
             this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
-            this.selectedQCRadio = this.qcRadioArray.filter(
-              qcRadio => qcRadio.selected == "selected");
-            this.qcDone = this.selectedQCRadio[0].value;
-            }
+            this.qcDone=this.shipmentsDetailsArray.qcData['qcRadioSelected']?this.shipmentsDetailsArray.qcData['qcRadioSelected']:'';
+            if(this.shipmentsDetailsArray.qcData.qcDate){
             this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
+            }
             this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
           }
         }
         if (this.shipmentsDetailsArray['modeOfReceiptSelect']) {
           this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'];
-          this.selectedModeOfReceipt = this.modeOfReceiptArray.filter(
-            modeOfRec => modeOfRec.selected == "selected");
-          if (this.selectedModeOfReceipt.length != 0) {
-            this.receiptmode = this.selectedModeOfReceipt[0].value;
-          }
+          this.receiptmode=this.shipmentsDetailsArray['modeOfReceiptSelected']?this.shipmentsDetailsArray['modeOfReceiptSelected']:'';
         }
         if (this.shipmentsDetailsArray['vlAssaySelect']) {
           this.isSelectedOther = false;
@@ -303,6 +303,7 @@ export class DtsHivViralloadPage implements OnInit {
         }
         this.selectedSupReviewArray =
           this.supName = this.otherInfoArray.approvalInputText;
+          this.approvalLabel =this.otherInfoArray.approvalLabel;    
         if (this.otherInfoArray.comments) {
           this.comments = this.otherInfoArray.comments;
         }
@@ -384,6 +385,7 @@ export class DtsHivViralloadPage implements OnInit {
     } else {
       this.formattedQCDate = this.dateFormat(new Date(this.qcDate));
     }
+    this.updatedStatus=this.vlDataArray[0].updatedStatus;
     this.viralLoadJSON = {
       "authToken": this.authToken,
       "appVersion": this.appVersionNumber,
@@ -393,9 +395,9 @@ export class DtsHivViralloadPage implements OnInit {
       "shipmentId": this.vlDataArray[0].shipmentId,
       "mapId": this.vlDataArray[0].mapId,
       "isSynced": true,
-      "createdOn": "",
-      "updatedOn": "",
-      "updatedStatus": false,
+      "createdOn": this.vlDataArray[0].createdOn? this.vlDataArray[0].createdOn:"",
+      "updatedOn": this.vlDataArray[0].updatedOn? this.vlDataArray[0].updatedOn:"",
+      "updatedStatus": this.updatedStatus,
       "vlData": {
         "access": {
           "status": this.vlDataArray[0].vlData.access.status
@@ -420,19 +422,22 @@ export class DtsHivViralloadPage implements OnInit {
             "testReceiptDate": this.dateFormat(new Date(this.testReceiptDate)),
             "sampleRehydrationDate": this.dateFormat(new Date(this.sampleRhdDate)),
             "testDate": this.dateFormat(new Date(this.testDate)),
+            "vlAssaySelect":this.shipmentsDetailsArray['vlAssaySelect'],
             "vlAssaySelected": this.vlassay,
             "otherAssay": this.othervlassay,
             "specimenVolume": this.specVolTest,
             "assayExpirationDate": this.dateFormat(new Date(this.assayExpDate)),
             "assayLotNumber": this.assayLotNo,
             "responseDate": this.dateFormat(new Date(this.responseDate)),
+            "modeOfReceiptSelect":this.modeOfReceiptArray,
             "modeOfReceiptSelected": this.receiptmode,
             "qcData":{
               "qcRadioSelected": this.qcDone,
               "qcDate": this.formattedQCDate,
               "qcDoneBy": this.qcDoneBy,
-              "status":this.isQCDoneShow
-            }    
+              "status":this.isQCDoneShow,
+              "qcRadio":this.qcRadioArray
+            }
           }
         },
         "Heading3": {
@@ -441,10 +446,12 @@ export class DtsHivViralloadPage implements OnInit {
           "data": {
             "isPtTestNotPerformedRadio": this.isPTPerformedRadio,
             "no":{
+              "note":this.ptPanelTestData['notes'],
+              "tableHeading":this.ptPanelTestData['controlHeads'],
               "tableRowTxt":{
                 "id":this.ptPanelTestData['sampleIDArrray'],
                 "label":this.ptPanelTestData['controlArray'].label,
-                "mandatory":this.ptPanelTestData['controlArray'].mandatory
+                "mandatory":this.ptPanelTestData['controlArray'].mandatory,
               },
               "tndReferenceRadioSelected":this.ptPanelTestData['tndArray'],
               "vlResult": this.ptPanelTestData['vlResult'],
@@ -453,6 +460,10 @@ export class DtsHivViralloadPage implements OnInit {
               "vlNotTestedReasonSelected":this.ptPanelNotTestData['vlNotTestedReason'],
               "commentsTextArea":this.ptPanelNotTestData['ptNotTestedComments'],
               "supportTextArea":this.ptPanelNotTestData['ptSupportComments'],
+              "commentsText":this.ptPanelNotTestData['ptNotTestedCommentsLabel'],
+              "supportText":this.ptPanelNotTestData['ptSupportCommentsLabel'],
+              "vlNotTestedReasonSelect":this.ptPanelNotTestData['ptNotTestedReasonArray'],
+              "vlNotTestedReasonText": this.ptPanelNotTestData['ptNotTestedReasonLabel']
           }
           }
         },
@@ -460,6 +471,8 @@ export class DtsHivViralloadPage implements OnInit {
           //other information
           "status": true,
           "data": {
+            "supervisorReview":this.supervisorReviewArray,
+            "approvalLabel":this.approvalLabel,
             "supervisorReviewSelected": this.supReview,
             "approvalInputText": this.supName,
             "comments": this.comments
@@ -467,7 +480,7 @@ export class DtsHivViralloadPage implements OnInit {
         }
       }
     }
-debugger;
+
     console.log(this.viralLoadJSON);
 
     if (this.network.type == 'none'||this.network.type == null) {
@@ -541,7 +554,7 @@ debugger;
 
 
                 })
-
+               
                 if (this.existingVLParticipantArray.length == 0) {
 
                   this.existingVLShipmentArray.forEach((element, index) => {
@@ -553,8 +566,17 @@ debugger;
                   }]
                   this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray = this.participantArray.concat(this.existingVLShipPartiArray);
                 }
+                else{
+       
+                  this.existingVLShipmentPartiIndex = _.findIndex(this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray, {
+                    participantID: this.selectedParticipantID
+                  });
+                  this.existingOldArray=this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray[this.existingVLShipmentPartiIndex];
+                  this.existingOldArray.testArray[0]=this.viralLoadArray[0];
+                }
 
               } else {
+            
                 this.existingShipmentArray = this.localVLDataArray[this.existingVLLabIndex].shipmentArray;
 
                 this.participantArray = [{
