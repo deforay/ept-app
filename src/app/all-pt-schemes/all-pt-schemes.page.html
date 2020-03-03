@@ -128,26 +128,38 @@
             </p>
           </ion-col>
         </ion-row>
-      
-        <ion-row>
-          <ion-col size="9">
 
-            <ion-button *ngIf="item.createdOn=='' && responseSwitch==on" size="small"
-              class="text-center native-btn" (click)="goToTestForm(item,item.isSynced)">Enter
+        <ion-row>
+          <ion-col size="12">
+
+            <ion-button *ngIf="item.updatedOn=='' && responseSwitch==on" size="small" class="text-center native-btn"
+              (click)="goToTestForm(item,item.isSynced)">Enter
               Response </ion-button>
 
-            <ion-button *ngIf="item.createdOn!='' && responseSwitch==on" size="small"
-              class="text-center native-btn" (click)="goToTestForm(item,item.isSynced)">Edit Response</ion-button>
-
-            <ion-button *ngIf="item.createdOn!=''" size="small"
-            class="text-center native-btn" >View Response</ion-button>
+            <ion-button *ngIf="item.updatedOn!='' && responseSwitch==on" size="small" class="text-center native-btn"
+              (click)="goToTestForm(item,item.isSynced)">Edit Response</ion-button>
 
           </ion-col>
-          <ion-col *ngIf="item.isSynced=='false'&& networkType!='none'" size="3">
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <ion-button *ngIf="item.updatedOn!=''" size="small" class="text-center native-btn">View Response
+            </ion-button>
+          </ion-col>
+        </ion-row>
+
+
+
+        <!-- <ion-col *ngIf="item.isSynced=='false'&& networkType!='none'" size="3">
             <ion-button size="small" class="text-center native-btn">
               <ion-icon ios="ios-sync" md="md-sync"></ion-icon>
               Sync
             </ion-button>
+          </ion-col> -->
+        <ion-row>
+          <ion-col size="12">
+            <ion-icon ios="ios-sync" md="md-sync"></ion-icon>Unsynced
           </ion-col>
         </ion-row>
       </ion-grid>

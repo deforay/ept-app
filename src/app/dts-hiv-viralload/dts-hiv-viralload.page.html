@@ -215,7 +215,6 @@
               <input matInput [(ngModel)]="othervlassay" placeholder="Enter Other Assay Name" required>
               <mat-error *ngIf="!othervlassay">Please specify Other Assay Name </mat-error>
             </mat-form-field>
-
           </ion-col>
         </ion-row>
 
@@ -338,7 +337,7 @@
         <ion-row>
           <ion-col class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-              <mat-label>{{ptPanelTestArray.vlResultSectionLabel}}
+              <mat-label>{{ptPanelTestData.vlResultSectionLabel}}
               </mat-label>
               <input matInput [(ngModel)]="vlCalc" placeholder="Enter result value to calculate log value"
                 (ngModelChange)="calcLog()">

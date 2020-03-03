@@ -169,9 +169,9 @@ export class DtsHivViralloadPage implements OnInit {
 
   }
   dateFormat(dateObj) {
-  
+
     return this.formattedDate = (dateObj.getFullYear()) + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + (dateObj.getDate())).slice(-2);
- 
+
   }
   getVLFormDetails() {
 
@@ -183,7 +183,7 @@ export class DtsHivViralloadPage implements OnInit {
         this.storage.get('localStorageSelectedFormArray').then((localFormArray) => {
 
           if ((localFormArray[0].isSynced == vlDataObj[0].isSynced) && (localFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localFormArray[0].mapId == vlDataObj[0].mapId) && (localFormArray[0].participantId == vlDataObj[0].participantId) && (localFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localFormArray[0].schemeType == vlDataObj[0].schemeType)) {
-     
+
             this.vlDataArray = localFormArray;
             console.log(this.vlDataArray);
             this.bindVLData();
@@ -197,7 +197,7 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   bindVLData() {
-   
+
     if (this.vlDataArray[0].vlData.access.status == 'success') {
       this.selectedParticipantID = this.vlDataArray[0].participantId;
       this.selectedShipmentID = this.vlDataArray[0].shipmentId;
@@ -205,7 +205,7 @@ export class DtsHivViralloadPage implements OnInit {
         this.partDetailsArray = this.vlDataArray[0].vlData.Heading1.data;
       }
       if (this.vlDataArray[0].vlData.Heading2.status == true) {
-      
+
         this.shipmentsDetailsArray = this.vlDataArray[0].vlData.Heading2.data;
         if (this.shipmentsDetailsArray['testReceiptDate']) {
           this.testReceiptDate = new Date(this.shipmentsDetailsArray['testReceiptDate']);
@@ -223,33 +223,26 @@ export class DtsHivViralloadPage implements OnInit {
           this.specVolTest = this.shipmentsDetailsArray['specimenVolume'];
         }
         if (this.shipmentsDetailsArray['qcData'].status == true) {
-       //   debugger;
           this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
           if (this.isQCDoneShow == true) {
             this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
-            this.qcDone=this.shipmentsDetailsArray.qcData['qcRadioSelected']?this.shipmentsDetailsArray.qcData['qcRadioSelected']:'';
-            if(this.shipmentsDetailsArray.qcData.qcDate){
-            this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
+            this.qcDone = this.shipmentsDetailsArray.qcData['qcRadioSelected'] ? this.shipmentsDetailsArray.qcData['qcRadioSelected'] : '';
+            if (this.shipmentsDetailsArray.qcData.qcDate) {
+              this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
             }
             this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
           }
         }
         if (this.shipmentsDetailsArray['modeOfReceiptSelect']) {
           this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'];
-          this.receiptmode=this.shipmentsDetailsArray['modeOfReceiptSelected']?this.shipmentsDetailsArray['modeOfReceiptSelected']:'';
+          this.receiptmode = this.shipmentsDetailsArray['modeOfReceiptSelected'] ? this.shipmentsDetailsArray['modeOfReceiptSelected'] : '';
         }
         if (this.shipmentsDetailsArray['vlAssaySelect']) {
           this.isSelectedOther = false;
-          this.selectedVlAssay = this.shipmentsDetailsArray['vlAssaySelect'].filter(
-            vlAssay => vlAssay.selected == "selected");
-          if (this.selectedVlAssay.length != 0) {
-            this.vlassay = this.selectedVlAssay[0].value;
-          }
+          this.vlassay = this.shipmentsDetailsArray['vlAssaySelected'] ? this.shipmentsDetailsArray['vlAssaySelected'] : '';
           if (this.shipmentsDetailsArray['otherAssay']) {
             this.othervlassay = this.shipmentsDetailsArray['otherAssay'];
-            if (this.selectedVlAssay[0].selected == 'selected') {
-              this.isSelectedOther = true;
-            }
+            this.isSelectedOther = true;
           }
         }
         if (this.shipmentsDetailsArray['responseDate']) {
@@ -261,7 +254,7 @@ export class DtsHivViralloadPage implements OnInit {
       }
       if (this.vlDataArray[0].vlData.Heading3.status == true) {
 
-        this.isPTPerformedRadio=this.vlDataArray[0].vlData.Heading3.data['isPtTestNotPerformedRadio'];
+        this.isPTPerformedRadio = this.vlDataArray[0].vlData.Heading3.data['isPtTestNotPerformedRadio'];
         this.ptPanelTestArray = this.vlDataArray[0].vlData.Heading3.data['no'];
         this.ptPanelNotTestArray = this.vlDataArray[0].vlData.Heading3.data['yes'];
         this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
@@ -270,12 +263,13 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
         this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
+        this.ptPanelTestData['vlResultSectionLabel'] = this.ptPanelTestArray['vlResultSectionLabel'];
         this.ptPanelTestData['notes'] = this.ptPanelTestArray.note;
-        if(this.ptPanelTestData['notes']){
-        this.ptPanelTestData['notes'].forEach(note => {
-          note = this.sanitizer.bypassSecurityTrustHtml(note);
-        })
-      }
+        if (this.ptPanelTestData['notes']) {
+          this.ptPanelTestData['notes'].forEach(note => {
+            note = this.sanitizer.bypassSecurityTrustHtml(note);
+          })
+        }
 
         this.ptPanelNotTestData['ptSupportCommentsLabel'] = this.ptPanelNotTestArray.supportText;
         this.ptPanelNotTestData['ptNotTestedCommentsLabel'] = this.ptPanelNotTestArray.commentsText;
@@ -292,18 +286,12 @@ export class DtsHivViralloadPage implements OnInit {
         };
       }
       if (this.vlDataArray[0].vlData.Heading4.status == true) {
+
         this.otherInfoArray = this.vlDataArray[0].vlData.Heading4.data;
         this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
-        if (this.supervisorReviewArray) {
-          this.selectedSupReviewArray = this.supervisorReviewArray.filter(
-            supReviewItem => supReviewItem.selected == "selected");
-          if (this.selectedSupReviewArray.length != 0) {
-            this.supReview = this.selectedSupReviewArray[0].value;
-          }
-        }
-        this.selectedSupReviewArray =
-          this.supName = this.otherInfoArray.approvalInputText;
-          this.approvalLabel =this.otherInfoArray.approvalLabel;    
+        this.supReview = this.otherInfoArray.supervisorReviewSelected ? this.otherInfoArray.supervisorReviewSelected : "";
+        this.supName = this.otherInfoArray.approvalInputText;
+        this.approvalLabel = this.otherInfoArray.approvalLabel;
         if (this.otherInfoArray.comments) {
           this.comments = this.otherInfoArray.comments;
         }
@@ -367,14 +355,9 @@ export class DtsHivViralloadPage implements OnInit {
   submitViralLoad() {
 
     if (this.ptPanelTest == true) {
-      this.ptPanelTestData['vlResult'] = [];
-      this.ptPanelTestData['tndArray'] = [];
-      this.ptPanelTestData['controlArray'].label = [];
-      this.ptPanelTestData['sampleIDArrray'] = [];
+      this.isPTPerformedRadio = 'yes';
     } else {
-      this.ptPanelNotTestData['vlNotTestedReason'] = '';
-      this.ptPanelNotTestData['ptNotTestedComments'] = '';
-      this.ptPanelNotTestData['ptSupportComments'] = '';
+      this.isPTPerformedRadio = 'no';
     }
     console.log(this.ptPanelTestData);
     console.log(this.ptPanelNotTestData);
@@ -385,97 +368,102 @@ export class DtsHivViralloadPage implements OnInit {
     } else {
       this.formattedQCDate = this.dateFormat(new Date(this.qcDate));
     }
-    this.updatedStatus=this.vlDataArray[0].updatedStatus;
+    this.updatedStatus = this.vlDataArray[0].updatedStatus;
     this.viralLoadJSON = {
       "authToken": this.authToken,
       "appVersion": this.appVersionNumber,
-      "evaluationStatus": this.vlDataArray[0].evaluationStatus,
-      "participantId": this.vlDataArray[0].participantId,
-      "schemeType": this.vlDataArray[0].schemeType,
-      "shipmentId": this.vlDataArray[0].shipmentId,
-      "mapId": this.vlDataArray[0].mapId,
-      "isSynced": true,
-      "createdOn": this.vlDataArray[0].createdOn? this.vlDataArray[0].createdOn:"",
-      "updatedOn": this.vlDataArray[0].updatedOn? this.vlDataArray[0].updatedOn:"",
-      "updatedStatus": this.updatedStatus,
-      "vlData": {
-        "access": {
-          "status": this.vlDataArray[0].vlData.access.status
-        },
-        "Heading1": {
-          //participant details
-          "status": true,
-          "data": {
-            "participantName": this.partDetailsArray.participantName,
-            "participantCode": this.partDetailsArray.participantCode,
-            "participantAffiliation": this.partDetailsArray.affiliation,
-            "participantPhone": this.partDetailsArray.phone,
-            "participantMobile": this.partDetailsArray.mobile,
-          }
-        },
-        "Heading2": {
-          //shipment details 
-          "status": true,
-          "data": {
-            "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
-            "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
-            "testReceiptDate": this.dateFormat(new Date(this.testReceiptDate)),
-            "sampleRehydrationDate": this.dateFormat(new Date(this.sampleRhdDate)),
-            "testDate": this.dateFormat(new Date(this.testDate)),
-            "vlAssaySelect":this.shipmentsDetailsArray['vlAssaySelect'],
-            "vlAssaySelected": this.vlassay,
-            "otherAssay": this.othervlassay,
-            "specimenVolume": this.specVolTest,
-            "assayExpirationDate": this.dateFormat(new Date(this.assayExpDate)),
-            "assayLotNumber": this.assayLotNo,
-            "responseDate": this.dateFormat(new Date(this.responseDate)),
-            "modeOfReceiptSelect":this.modeOfReceiptArray,
-            "modeOfReceiptSelected": this.receiptmode,
-            "qcData":{
-              "qcRadioSelected": this.qcDone,
-              "qcDate": this.formattedQCDate,
-              "qcDoneBy": this.qcDoneBy,
-              "status":this.isQCDoneShow,
-              "qcRadio":this.qcRadioArray
+      "syncType": "single",
+      "data": {
+        "evaluationStatus": this.vlDataArray[0].evaluationStatus,
+        "participantId": this.vlDataArray[0].participantId,
+        "schemeType": this.vlDataArray[0].schemeType,
+        "shipmentId": this.vlDataArray[0].shipmentId,
+        "mapId": this.vlDataArray[0].mapId,
+        "isSynced": true,
+        "createdOn": this.vlDataArray[0].createdOn ? this.vlDataArray[0].createdOn : "",
+        "updatedOn": this.vlDataArray[0].updatedOn ? this.vlDataArray[0].updatedOn : "",
+        "updatedStatus": this.updatedStatus,
+        "vlData": {
+          "access": {
+            "status": this.vlDataArray[0].vlData.access.status
+          },
+          "Heading1": {
+            //participant details
+            "status": true,
+            "data": {
+              "participantName": this.partDetailsArray.participantName,
+              "participantCode": this.partDetailsArray.participantCode,
+              "participantAffiliation": this.partDetailsArray.affiliation,
+              "participantPhone": this.partDetailsArray.phone,
+              "participantMobile": this.partDetailsArray.mobile,
             }
-          }
-        },
-        "Heading3": {
-          //PT panel details
-          "status": true,
-          "data": {
-            "isPtTestNotPerformedRadio": this.isPTPerformedRadio,
-            "no":{
-              "note":this.ptPanelTestData['notes'],
-              "tableHeading":this.ptPanelTestData['controlHeads'],
-              "tableRowTxt":{
-                "id":this.ptPanelTestData['sampleIDArrray'],
-                "label":this.ptPanelTestData['controlArray'].label,
-                "mandatory":this.ptPanelTestData['controlArray'].mandatory,
+          },
+          "Heading2": {
+            //shipment details vlResultSectionLabel
+            "status": true,
+            "data": {
+              "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
+              "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
+              "testReceiptDate": this.dateFormat(new Date(this.testReceiptDate)),
+              "sampleRehydrationDate": this.dateFormat(new Date(this.sampleRhdDate)),
+              "testDate": this.dateFormat(new Date(this.testDate)),
+              "vlAssaySelect": this.shipmentsDetailsArray['vlAssaySelect'],
+              "vlAssaySelected": this.vlassay,
+              "otherAssay": this.othervlassay,
+              "specimenVolume": this.specVolTest,
+              "assayExpirationDate": this.dateFormat(new Date(this.assayExpDate)),
+              "assayLotNumber": this.assayLotNo,
+              "responseDate": this.dateFormat(new Date(this.responseDate)),
+              "modeOfReceiptSelect": this.modeOfReceiptArray,
+              "modeOfReceiptSelected": this.receiptmode,
+              "qcData": {
+                "qcRadioSelected": this.qcDone,
+                "qcDate": this.formattedQCDate,
+                "qcDoneBy": this.qcDoneBy,
+                "status": this.isQCDoneShow,
+                "qcRadio": this.qcRadioArray
+              }
+            }
+          },
+          "Heading3": {
+            //PT panel details
+            "status": true,
+            "data": {
+              "isPtTestNotPerformedRadio": this.isPTPerformedRadio,
+              "no": {
+                "note": this.ptPanelTestData['notes'],
+                "tableHeading": this.ptPanelTestData['controlHeads'],
+                "tableRowTxt": {
+                  "id": this.ptPanelTestData['sampleIDArrray'],
+                  "label": this.ptPanelTestData['controlArray'].label,
+                  "mandatory": this.ptPanelTestData['controlArray'].mandatory,
+                },
+                "tndReferenceRadio": this.ptPanelTestData['tndRadioArray'],
+                "tndReferenceRadioSelected": this.ptPanelTestData['tndArray'],
+                "vlResult": this.ptPanelTestData['vlResult'],
+                "vlResultSectionLabel": this.ptPanelTestData['vlResultSectionLabel']
               },
-              "tndReferenceRadioSelected":this.ptPanelTestData['tndArray'],
-              "vlResult": this.ptPanelTestData['vlResult'],
-             },
-             "yes":{
-              "vlNotTestedReasonSelected":this.ptPanelNotTestData['vlNotTestedReason'],
-              "commentsTextArea":this.ptPanelNotTestData['ptNotTestedComments'],
-              "supportTextArea":this.ptPanelNotTestData['ptSupportComments'],
-              "commentsText":this.ptPanelNotTestData['ptNotTestedCommentsLabel'],
-              "supportText":this.ptPanelNotTestData['ptSupportCommentsLabel'],
-              "vlNotTestedReasonSelect":this.ptPanelNotTestData['ptNotTestedReasonArray'],
-              "vlNotTestedReasonText": this.ptPanelNotTestData['ptNotTestedReasonLabel']
-          }
-          }
-        },
-        "Heading4": {
-          //other information
-          "status": true,
-          "data": {
-            "supervisorReview":this.supervisorReviewArray,
-            "approvalLabel":this.approvalLabel,
-            "supervisorReviewSelected": this.supReview,
-            "approvalInputText": this.supName,
-            "comments": this.comments
+              "yes": {
+                "vlNotTestedReasonSelected": this.ptPanelNotTestData['vlNotTestedReason'],
+                "commentsTextArea": this.ptPanelNotTestData['ptNotTestedComments'],
+                "supportTextArea": this.ptPanelNotTestData['ptSupportComments'],
+                "commentsText": this.ptPanelNotTestData['ptNotTestedCommentsLabel'],
+                "supportText": this.ptPanelNotTestData['ptSupportCommentsLabel'],
+                "vlNotTestedReasonSelect": this.ptPanelNotTestData['ptNotTestedReasonArray'],
+                "vlNotTestedReasonText": this.ptPanelNotTestData['ptNotTestedReasonLabel']
+              }
+            }
+          },
+          "Heading4": {
+            //other information
+            "status": true,
+            "data": {
+              "supervisorReview": this.supervisorReviewArray,
+              "approvalLabel": this.approvalLabel,
+              "supervisorReviewSelected": this.supReview,
+              "approvalInputText": this.supName,
+              "comments": this.comments
+            }
           }
         }
       }
@@ -483,25 +471,26 @@ export class DtsHivViralloadPage implements OnInit {
 
     console.log(this.viralLoadJSON);
 
-    if (this.network.type == 'none'||this.network.type == null) {
-    this.viralLoadJSON['isSynced'] = 'false';
-    this.viralLoadArray.push(this.viralLoadJSON);
-    this.offlineViralLoad();
+    if (this.network.type == 'none' || this.network.type == null) {
+      this.viralLoadArray = [];
+      this.viralLoadJSON['data']['isSynced'] = 'false';
+      this.viralLoadArray.push(this.viralLoadJSON);
+      this.offlineViralLoad();
 
     } else {
-    this.viralLoadJSON['isSynced']='true';
-    this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON)
-    .then((result) => {
+      this.viralLoadJSON['isSynced'] = 'true';
+      this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON)
+        .then((result) => {
 
-      if (result["status"] == 'success') {
-         this.ToastService.presentToastWithOptions(result['message']);
-         this.router.navigate(['/all-pt-schemes']);
-      }
+          if (result["status"] == 'success') {
+            this.ToastService.presentToastWithOptions(result['message']);
+            this.router.navigate(['/all-pt-schemes']);
+          }
 
-    }, (err) => {
-     console.log(err);
-    });
-     }
+        }, (err) => {
+          console.log(err);
+        });
+    }
   }
 
 
@@ -554,7 +543,7 @@ export class DtsHivViralloadPage implements OnInit {
 
 
                 })
-               
+
                 if (this.existingVLParticipantArray.length == 0) {
 
                   this.existingVLShipmentArray.forEach((element, index) => {
@@ -565,18 +554,19 @@ export class DtsHivViralloadPage implements OnInit {
                     "testArray": this.viralLoadArray
                   }]
                   this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray = this.participantArray.concat(this.existingVLShipPartiArray);
-                }
-                else{
-       
+                } else {
+
                   this.existingVLShipmentPartiIndex = _.findIndex(this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray, {
                     participantID: this.selectedParticipantID
                   });
-                  this.existingOldArray=this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray[this.existingVLShipmentPartiIndex];
-                  this.existingOldArray.testArray[0]=this.viralLoadArray[0];
+                  this.existingOldArray = this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray[this.existingVLShipmentPartiIndex];
+                  if (this.existingOldArray.length != 0) {
+                    this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray[this.existingVLShipmentPartiIndex].testArray[0] = this.viralLoadArray[0];
+                  }
                 }
 
               } else {
-            
+
                 this.existingShipmentArray = this.localVLDataArray[this.existingVLLabIndex].shipmentArray;
 
                 this.participantArray = [{
