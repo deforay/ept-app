@@ -176,15 +176,15 @@ export class DtsHivViralloadPage implements OnInit {
   getVLFormDetails() {
 
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
-
-
+      debugger;
       console.log(vlDataObj[0]);
       if (vlDataObj[0].isSynced == 'false') {
-        this.storage.get('localStorageSelectedFormArray').then((localFormArray) => {
+        this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
+debugger;
 
-          if ((localFormArray[0].isSynced == vlDataObj[0].isSynced) && (localFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localFormArray[0].mapId == vlDataObj[0].mapId) && (localFormArray[0].participantId == vlDataObj[0].participantId) && (localFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localFormArray[0].schemeType == vlDataObj[0].schemeType)) {
+          if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
 
-            this.vlDataArray = localFormArray;
+            this.vlDataArray.push(localStorageSelectedFormArray[0]);
             console.log(this.vlDataArray);
             this.bindVLData();
           }
@@ -474,11 +474,12 @@ export class DtsHivViralloadPage implements OnInit {
     if (this.network.type == 'none' || this.network.type == null) {
       this.viralLoadArray = [];
       this.viralLoadJSON['data']['isSynced'] = 'false';
+      this.viralLoadJSON['syncType']='group';
       this.viralLoadArray.push(this.viralLoadJSON);
       this.offlineViralLoad();
 
     } else {
-      this.viralLoadJSON['isSynced'] = 'true';
+      this.viralLoadJSON['data']['isSynced'] = 'true';
       this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON)
         .then((result) => {
 

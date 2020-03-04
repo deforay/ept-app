@@ -10,6 +10,19 @@
 </ion-header>
 
 <ion-content>
+
+  <ion-grid>
+    <ion-row>
+      <ion-col *ngIf="localStorageUnSyncedArray.length!=0&& networkType!='none'" size="6">
+        <ion-button size="small" class="text-center native-btn" (click)="syncShipments()">
+          <ion-icon ios="ios-sync" md="md-sync"></ion-icon>
+          Sync All
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+
+
   <ion-card *ngFor="let item of shippingsArray" class="eptCard">
     <ion-card-header class="CardHeader">
       <p text-wrap class="schemeName"> {{item.schemeName}}</p>
@@ -149,17 +162,9 @@
           </ion-col>
         </ion-row>
 
-
-
-        <!-- <ion-col *ngIf="item.isSynced=='false'&& networkType!='none'" size="3">
-            <ion-button size="small" class="text-center native-btn">
-              <ion-icon ios="ios-sync" md="md-sync"></ion-icon>
-              Sync
-            </ion-button>
-          </ion-col> -->
         <ion-row>
-          <ion-col size="12">
-            <ion-icon ios="ios-sync" md="md-sync"></ion-icon>Unsynced
+          <ion-col *ngIf="item.isSynced=='false'&& networkType!='none'" size="12">
+            <ion-icon ios="ios-sync" md="md-sync"></ion-icon>Unsynced shipment
           </ion-col>
         </ion-row>
       </ion-grid>

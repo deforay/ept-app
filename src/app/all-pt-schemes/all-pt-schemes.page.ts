@@ -19,6 +19,12 @@ import {
 import {
   Events
 } from '@ionic/angular';
+import {
+  syncDataLimit
+} from '../service/constant';
+import {
+  debounce
+} from 'rxjs/operators';
 @Component({
     selector: 'app-all-pt-schemes',
     templateUrl: './all-pt-schemes.page.html',
@@ -42,8 +48,10 @@ import {
   currentDate: any;
   formattedDate: string;
   localStorageUnSyncedArray: any = [];
-
-
+  syncDataLimit: any;
+  addOne: number;
+  copylocalStorageUnSyncedArray = [];
+  localUniqueUnSyncedArray = [];
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -145,6 +153,16 @@ import {
                 })
 
                 if (this.existingVLLabArray) {
+                  this.localUniqueUnSyncedArray=[];
+                  this.existingVLLabArray.shipmentArray.forEach((shipmentItem, index) => {
+
+                    shipmentItem.participantArray.forEach((shipmentPartiItem, index) => {
+
+                      this.localUniqueUnSyncedArray.push(shipmentPartiItem.testArray[0].data);
+                    })
+                  })
+                  console.log(this.localUniqueUnSyncedArray);
+                  this.storage.set("localStorageUnSyncedArray",this.localUniqueUnSyncedArray)
                   this.existingVLLabArray.shipmentArray.forEach((localStoreElement, index) => {
                     this.shippingsArray.forEach((element, index) => {
                       if (localStoreElement.shipmentID == element.shipmentId) {
@@ -155,35 +173,39 @@ import {
                   })
                 }
                 if (this.localShipmentArray) {
-                  this.localShipmentArray.participantArray.forEach((localStoreElement, index) => {
+                  this.localShipmentArray.participantArray.forEach((localShipmentStoreElement, index) => {
                     this.shippingsArray.forEach((element, index) => {
-                      if (localStoreElement.participantID == element.participantId) {
-                        this.localParticipantArray = localStoreElement;
+                      if (localShipmentStoreElement.participantID == element.participantId) {
+                        this.localParticipantArray.push(localShipmentStoreElement);
                       }
                     })
                   })
-                  console.log(this.localParticipantArray);
                 }
-
+                console.log(this.localParticipantArray);
                 if (this.localParticipantArray) {
-                  this.localStorageUnSyncedArray=[];
-                  this.localParticipantArray.testArray.forEach((localStoreElement, index) => {
+
+                  this.localParticipantArray.forEach((localParticipantStoreElement, index) => {
+
                     this.shippingsArray.forEach((element, index) => {
 
-                      if ((localStoreElement.evaluationStatus == element.evaluationStatus) && (localStoreElement.mapId == element.mapId) && (localStoreElement.participantId == element.participantId) && (localStoreElement.shipmentId == element.shipmentId)) {
+                      if (localParticipantStoreElement.participantID == element.participantId) {
 
-                        element.isSynced = 'false';
+                        if ((localParticipantStoreElement.testArray[0].data.evaluationStatus == element.evaluationStatus) && (localParticipantStoreElement.testArray[0].data.mapId == element.mapId) && (localParticipantStoreElement.testArray[0].data.participantId == element.participantId) && (localParticipantStoreElement.testArray[0].data.shipmentId == element.shipmentId)) {
 
-                        this.localStorageUnSyncedArray.push(localStoreElement);
-                        console.log("localStorageUnSyncedArray", this.localStorageUnSyncedArray)
+                          element.isSynced = 'false';
 
+                        }
                       }
                     })
+
                   })
+
+
                 }
               }
             })
-            console.log(this.shippingsArray)
+            console.log(this.shippingsArray);
+        
           }
         }, (err) => {
           //    this.LoaderService.disMissLoading();
@@ -224,7 +246,7 @@ import {
         this.TestFormArray[0].isSynced = isSynced;
 
 
-        this.localStorageSelectedFormArray = this.localStorageUnSyncedArray.filter(i => i.schemeType == item.schemeType && i.shipmentId == item.shipmentId && i.evaluationStatus == item.evaluationStatus && i.participantId == item.participantId);
+        this.localStorageSelectedFormArray = this.localUniqueUnSyncedArray.filter(i => i.schemeType == item.schemeType && i.shipmentId == item.shipmentId && i.evaluationStatus == item.evaluationStatus && i.participantId == item.participantId);
         if (this.TestFormArray) {
 
           this.storage.set('selectedTestFormArray', this.TestFormArray);
@@ -255,6 +277,30 @@ import {
             }
           }
         }
+      }
+    })
+  }
+
+  syncShipments() {
+    this.storage.get('localStorageUnSyncedArray').then((localStorageUnSyncedArray) => {
+      if (localStorageUnSyncedArray.length != 0) {
+        debugger;
+        this.localStorageUnSyncedArray = localStorageUnSyncedArray;
+        console.log(syncDataLimit);
+
+
+        this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
+        let x = syncDataLimit;
+        let y = this.copylocalStorageUnSyncedArray.length;
+        let quotient = Math.floor(y / x);
+        let remainder = (y % x);
+        if (remainder < x && remainder != 0) {
+          this.addOne = 1;
+        } else {
+          this.addOne = 0;
+        }
+        let iterationLength = quotient + this.addOne;
+        console.log(iterationLength);
       }
     })
   }
