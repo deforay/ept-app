@@ -284,7 +284,7 @@ import {
   syncShipments() {
     this.storage.get('localStorageUnSyncedArray').then((localStorageUnSyncedArray) => {
       if (localStorageUnSyncedArray.length != 0) {
-        debugger;
+     
         this.localStorageUnSyncedArray = localStorageUnSyncedArray;
         console.log(syncDataLimit);
 
