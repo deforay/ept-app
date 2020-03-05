@@ -185,9 +185,12 @@ ion-header ion-toolbar.main-toolbar{
     padding-bottom: 0px;
 }
 .mat-form-field.mat-form-field-invalid .mat-form-field-wrapper{
-    padding-bottom:20px;
+    padding-bottom:25px;
 
 }
+.mat-form-field-subscript-wrapper {
+    margin-top: 0 !important;
+  }
 .mat-form-field-appearance-outline .mat-form-field-wrapper {
     margin: .07em 0 !important;
 }
@@ -201,6 +204,13 @@ ion-header ion-toolbar.main-toolbar{
         }
     }
 }
+.vlCalc.mat-form-field-appearance-outline .mat-form-field-outline-gap{
+    width: 190px !important;
+
+}
+.vlResultInput.mat-form-field-appearance-outline .mat-form-field-outline-gap{
+    width: 150px !important;
+   }
 .mat-error{
     strong {
         font-weight: 500;
@@ -215,7 +225,8 @@ ion-header ion-toolbar.main-toolbar{
     background: aliceblue;
     // background: linear-gradient(90deg, rgba(38,48,142,1) 19%, rgba(44,159,162,1) 50%, rgba(0,212,255,1) 100%);
 }
-.mat-accordion .mat-expansion-panel{
+.mat-accordion .mat-expansion-panel
+{
     margin-bottom: 10px !important;
 }
 .mat-accordion .mat-expansion-panel:first-child{
@@ -242,7 +253,9 @@ ion-header ion-toolbar.main-toolbar{
 // }
 .mat-expansion-panel:nth-child(n) mat-expansion-panel-header.mat-expanded.mat-expansion-panel-header{
     height: 37px !important;   
-    background-color: #b4c0ff!important;
+    // background-color: #b4c0ff!important;
+    background-color: #53c2f5ba !important;
+    
 }
 
 // .mat-expansion-panel.mat-expanded .mat-expansion-panel-header {

@@ -259,15 +259,21 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelNotTestArray = this.vlDataArray[0].vlData.Heading3.data['yes'];
         this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
         this.ptPanelTestData['controlArray'] = this.ptPanelTestArray['tableRowTxt'];
-        this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['vlResult'];
+       // this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['vlResult'];
+        this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
         this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
         this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
-        this.ptPanelTestData['vlResultSectionLabel'] = this.ptPanelTestArray['vlResultSectionLabel'];
+        this.ptPanelTestData['vlResultSectionLabel'] = unescape(this.ptPanelTestArray['vlResultSectionLabel']);
+        //this.ptPanelTestData['vlResult1']="0.0"; 
         this.ptPanelTestData['notes'] = this.ptPanelTestArray.note;
         if (this.ptPanelTestData['notes']) {
-          this.ptPanelTestData['notes'].forEach(note => {
-            note = this.sanitizer.bypassSecurityTrustHtml(note);
+          this.ptPanelTestData['notes'].forEach((note,index )=> {
+            console.log(note);
+          //  note = unescape(note);
+          this.ptPanelTestData['notes'][index] = unescape(note);
+            console.log(this.ptPanelTestData['notes'][index]);
+          //  note = this.sanitizer.bypassSecurityTrustHtml(note);
           })
         }
 

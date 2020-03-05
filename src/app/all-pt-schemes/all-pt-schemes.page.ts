@@ -236,7 +236,7 @@ import {
   }
 
   goToTestForm(item, isSynced) {
-
+console.log(item,isSynced)
     this.storage.get('shipmentFormArray').then((shipmentFormArray) => {
       if (shipmentFormArray) {
 
@@ -270,6 +270,7 @@ import {
           }
 
           if (this.TestFormArray[0].schemeType == 'eid') {
+            console.log(this.TestFormArray[0].eidData)
             if (this.TestFormArray[0].eidData.access.status == 'success') {
               this.router.navigate(['/dbs-eid']);
             } else {

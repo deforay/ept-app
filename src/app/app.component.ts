@@ -36,20 +36,25 @@ export class AppComponent {
 
   appVersionNumber: any;
   public appPages = [{
-      title: 'All Shipments',
-      url: '/all-pt-schemes',
-      icon: 'list'
-    },
-    {
-      title: 'Individual Report',
-      url: '/individual-report',
-      icon: 'list'
-    },
-    {
-      title: 'Summary Report',
-      url: '/summary-report',
-      icon: 'list'
-    }
+    title: 'All Shipments',
+    url: '/all-pt-schemes',
+    icon: 'shipment'
+  },
+  {
+    title: 'Individual Reports',
+    url: '/individual-report',
+    icon: 'shipment' 
+  },
+  {
+    title: 'Summary Reports',
+    url: '/summary-report',
+    icon: 'shipment' 
+  },
+  {
+    title: 'Change Password',
+    url: '/change-password',
+    icon: 'shipment'      
+  }
   ];
 
   constructor(
@@ -105,7 +110,9 @@ export class AppComponent {
 
 
   }
-
+  logout() {    
+    this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
+}
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
