@@ -52,6 +52,9 @@ import {
   addOne: number;
   copylocalStorageUnSyncedArray = [];
   localUniqueUnSyncedArray = [];
+  slicedShipementArray=[];
+
+
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -153,7 +156,7 @@ import {
                 })
 
                 if (this.existingVLLabArray) {
-                  this.localUniqueUnSyncedArray=[];
+                  this.localUniqueUnSyncedArray = [];
                   this.existingVLLabArray.shipmentArray.forEach((shipmentItem, index) => {
 
                     shipmentItem.participantArray.forEach((shipmentPartiItem, index) => {
@@ -162,7 +165,7 @@ import {
                     })
                   })
                   console.log(this.localUniqueUnSyncedArray);
-                  this.storage.set("localStorageUnSyncedArray",this.localUniqueUnSyncedArray)
+                  this.storage.set("localStorageUnSyncedArray", this.localUniqueUnSyncedArray)
                   this.existingVLLabArray.shipmentArray.forEach((localStoreElement, index) => {
                     this.shippingsArray.forEach((element, index) => {
                       if (localStoreElement.shipmentID == element.shipmentId) {
@@ -173,11 +176,13 @@ import {
                   })
                 }
                 if (this.localShipmentArray) {
-                  this.localShipmentArray.participantArray.forEach((localShipmentStoreElement, index) => {
-                    this.shippingsArray.forEach((element, index) => {
-                      if (localShipmentStoreElement.participantID == element.participantId) {
-                        this.localParticipantArray.push(localShipmentStoreElement);
-                      }
+                  this.existingVLLabArray.shipmentArray.forEach((localShipmentElement, index) => {
+                    localShipmentElement.participantArray.forEach((localShipmentStoreElement, index) => {
+                      this.shippingsArray.forEach((element, index) => {
+                        if (localShipmentStoreElement.participantID == element.participantId) {
+                          this.localParticipantArray.push(localShipmentStoreElement);
+                        }
+                      })
                     })
                   })
                 }
@@ -205,7 +210,7 @@ import {
               }
             })
             console.log(this.shippingsArray);
-        
+
           }
         }, (err) => {
           //    this.LoaderService.disMissLoading();
@@ -282,13 +287,10 @@ import {
   }
 
   syncShipments() {
-    this.storage.get('localStorageUnSyncedArray').then((localStorageUnSyncedArray) => {
-      if (localStorageUnSyncedArray.length != 0) {
-     
-        this.localStorageUnSyncedArray = localStorageUnSyncedArray;
-        console.log(syncDataLimit);
-
-
+    this.storage.get('localStorageUnSyncedArray').then((localUniqueUnSyncedArray) => {
+      if (localUniqueUnSyncedArray.length != 0) {
+       
+        this.localStorageUnSyncedArray = localUniqueUnSyncedArray;
         this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
         let x = syncDataLimit;
         let y = this.copylocalStorageUnSyncedArray.length;
@@ -301,6 +303,25 @@ import {
         }
         let iterationLength = quotient + this.addOne;
         console.log(iterationLength);
+        if (iterationLength != 1) {
+          this.slicedShipementArray = this.copylocalStorageUnSyncedArray.splice(0, syncDataLimit);
+        }
+        else{
+          this.slicedShipementArray=this.copylocalStorageUnSyncedArray;
+        }
+
+        for (let m = 0, p = Promise.resolve(); m < iterationLength; m++) {
+          p = p.then(_ => new Promise(resolve =>
+            setTimeout(function () {
+            
+             
+              for (let n = 0; n < this.localStorageUnSyncedArray.length; n++) {
+
+             
+              }
+            })
+          ))
+        }
       }
     })
   }

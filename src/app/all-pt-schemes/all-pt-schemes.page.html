@@ -13,7 +13,7 @@
 
   <ion-grid>
     <ion-row>
-      <ion-col *ngIf="localStorageUnSyncedArray.length!=0&& networkType!='none'" size="6">
+      <ion-col *ngIf="localUniqueUnSyncedArray.length!=0&& networkType!='none'" size="6">
         <ion-button size="small" class="text-center native-btn" (click)="syncShipments()">
           <ion-icon ios="ios-sync" md="md-sync"></ion-icon>
           Sync All
