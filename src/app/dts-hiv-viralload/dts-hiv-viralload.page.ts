@@ -260,7 +260,12 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
         this.ptPanelTestData['controlArray'] = this.ptPanelTestArray['tableRowTxt'];
        // this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['vlResult'];
-        this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
+       this.ptPanelTestData['vlResult'] = [];
+        this.ptPanelTestData['vlResult'][0] = "3.2";
+        this.ptPanelTestData['vlResult'][1] = "0.0";
+        this.ptPanelTestData['vlResult'][2] = "0";
+        this.ptPanelTestData['vlResult'][3] = "5.2";
+        console.log(this.ptPanelTestData['vlResult'])
         this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
         this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
