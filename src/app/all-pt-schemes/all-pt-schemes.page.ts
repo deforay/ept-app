@@ -22,9 +22,7 @@ import {
 import {
   syncDataLimit
 } from '../service/constant';
-import {
-  debounce
-} from 'rxjs/operators';
+import * as _ from 'lodash';
 @Component({
     selector: 'app-all-pt-schemes',
     templateUrl: './all-pt-schemes.page.html',
@@ -52,8 +50,14 @@ import {
   addOne: number;
   copylocalStorageUnSyncedArray = [];
   localUniqueUnSyncedArray = [];
-  slicedShipementArray=[];
-
+  slicedShipementArray = [];
+  syncDataCount: number;
+  syncShipmentsJSON = {};
+  shipmentSubListArray = [];
+  responseRecCount: number;
+  resultArray = [];
+  syncedShipmentIndex: any;
+  loginID:any;
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -93,9 +97,20 @@ import {
       console.log("event online triggered" + '' + this.networkType)
     })
 
-    this.currentDate = this.dateFormat(new Date());
-    console.log(this.currentDate);
+    this.storage.get('appVersionNumber').then((appVersionNumber) => {
+      if (appVersionNumber) {
+        this.appVersionNumber = appVersionNumber;
+      }
+    })
 
+    this.storage.get('participantLogin').then((partiLoginResult) => {
+      if (partiLoginResult.authToken) {
+        this.authToken = partiLoginResult.authToken;
+      }
+      if (partiLoginResult.id) {
+        this.loginID = partiLoginResult.id;
+      }
+    })
 
     if (this.networkType == 'none' || this.networkType == null) {
       this.storage.get('shipmentArray').then((shipmentArray) => {
@@ -109,13 +124,8 @@ import {
         }
       })
     } else {
-      this.storage.get('appVersionNumber').then((appVersionNumber) => {
-        if (appVersionNumber) {
-          this.appVersionNumber = appVersionNumber;
-        }
-        this.getAllShipmentForms();
-        this.getAllShippings();
-      })
+      this.getAllShipmentForms();
+      this.getAllShippings();
     }
 
     this.storage.get('localVLData').then((localVLData) => {
@@ -241,7 +251,7 @@ import {
   }
 
   goToTestForm(item, isSynced) {
-console.log(item,isSynced)
+    console.log(item, isSynced)
     this.storage.get('shipmentFormArray').then((shipmentFormArray) => {
       if (shipmentFormArray) {
 
@@ -290,38 +300,120 @@ console.log(item,isSynced)
   syncShipments() {
     this.storage.get('localStorageUnSyncedArray').then((localUniqueUnSyncedArray) => {
       if (localUniqueUnSyncedArray.length != 0) {
-       
+
+
         this.localStorageUnSyncedArray = localUniqueUnSyncedArray;
         this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
-        let x = syncDataLimit;
-        let y = this.copylocalStorageUnSyncedArray.length;
-        let quotient = Math.floor(y / x);
-        let remainder = (y % x);
-        if (remainder < x && remainder != 0) {
-          this.addOne = 1;
-        } else {
-          this.addOne = 0;
-        }
-        let iterationLength = quotient + this.addOne;
-        console.log(iterationLength);
-        if (iterationLength != 1) {
-          this.slicedShipementArray = this.copylocalStorageUnSyncedArray.splice(0, syncDataLimit);
-        }
-        else{
-          this.slicedShipementArray=this.copylocalStorageUnSyncedArray;
-        }
 
-        for (let m = 0, p = Promise.resolve(); m < iterationLength; m++) {
-          p = p.then(_ => new Promise(resolve =>
-            setTimeout(function () {
-            
-             
-              for (let n = 0; n < this.localStorageUnSyncedArray.length; n++) {
+        var totLength = this.copylocalStorageUnSyncedArray.length;
 
-             
+        if (totLength > syncDataLimit) {
+          this.syncDataCount = Math.floor(totLength / syncDataLimit) + (totLength % syncDataLimit);
+        } else if (totLength <= syncDataLimit) {
+          this.syncDataCount = 1;
+        } else {}
+      
+        if (this.syncDataCount == 1) {
+
+          this.responseRecCount = 0;
+          this.syncShipmentsJSON = {
+            "authToken": this.authToken,
+            "appVersion": this.appVersionNumber,
+            "syncType": "group",
+            "data": this.copylocalStorageUnSyncedArray
+          }
+          console.log(this.syncShipmentsJSON);
+          this.CrudServiceService.postData('shipments/save-form', this.syncShipmentsJSON)
+            .then((result) => {
+              console.log(result);
+              this.resultArray=[];
+              this.resultArray.push(result);
+              this.resultArray[0].forEach((result, index) => {
+                if (result.status == "success") {
+                  this.responseRecCount = this.responseRecCount + 1;
+                  this.copylocalStorageUnSyncedArray.forEach((localUnSynced, index) => {
+                    if (localUnSynced.mapId == result.data.mapId) {
+                      this.syncedShipmentIndex = _.findIndex(this.copylocalStorageUnSyncedArray, {
+                        mapId: result.data.mapId
+                      });  
+                      this.copylocalStorageUnSyncedArray.splice(this.syncedShipmentIndex, 1);
+                    }
+                  })
+                }
+              })
+            this.storage.set("localStorageUnSyncedArray", this.copylocalStorageUnSyncedArray);
+              if (this.responseRecCount == this.localStorageUnSyncedArray.length) {
+                this.ToastService.presentToastWithOptions(+this.responseRecCount+ ' records synced successfully');
               }
+
+              this.storage.get('localVLData').then((localVLData) => {
+
+                if (localVLData.length != 0) {
+                  this.localVLDataArray = localVLData;
+  
+                  this.localVLDataArray.forEach((element, index) => {
+                    if (element.loginID ==this.loginID) {
+                      this.existingVLLabArray = element;
+                    }
+                  })
+  
+                  if (this.existingVLLabArray) {
+                    this.localUniqueUnSyncedArray = [];
+                    this.existingVLLabArray.shipmentArray.forEach((shipmentItem, index) => {
+  
+                      shipmentItem.participantArray.forEach((shipmentPartiItem, index) => {
+                        
+                        this.localUniqueUnSyncedArray.push(shipmentPartiItem.testArray[0].data);
+                      })
+                    })
+                  }
+                }
+              })
             })
-          ))
+        } else {
+        
+          this.responseRecCount = 0;
+          _.times(this.syncDataCount, () => {
+      
+            this.shipmentSubListArray = this.copylocalStorageUnSyncedArray.splice(0, syncDataLimit);
+
+            this.syncShipmentsJSON = {
+              "authToken": this.authToken,
+              "appVersion": this.appVersionNumber,
+              "syncType": "group",
+              "data": this.shipmentSubListArray
+            }
+         
+            console.log(this.syncShipmentsJSON);
+            this.CrudServiceService.postData('shipments/save-form', this.syncShipmentsJSON)
+              .then((result) => {
+            
+                console.log(result);
+                this.resultArray=[];
+                this.resultArray.push(result);
+
+                this.resultArray[0].forEach((result, index) => {
+                
+                  if (result.status == "success") {
+               
+                    this.responseRecCount = this.responseRecCount + 1;
+                    this.localStorageUnSyncedArray.forEach((localSubUnSynced, index) => {
+             
+                      if (localSubUnSynced.mapId == result.data.mapId) {
+                        let syncedSubShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
+                          mapId: result.data.mapId
+                        });  
+                        this.localStorageUnSyncedArray.splice(syncedSubShipmentIndex, 1);
+                      }
+                    })
+                  }
+                })
+                this.storage.set("localStorageUnSyncedArray", this.localStorageUnSyncedArray);
+                if (this.responseRecCount == this.localStorageUnSyncedArray.length) {
+                  this.ToastService.presentToastWithOptions(+this.responseRecCount+ ' records synced successfully');
+                }
+              })
+          })
         }
       }
     })

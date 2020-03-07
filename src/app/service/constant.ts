@@ -1,1 +1,1 @@
-export const syncDataLimit:number=5;
+export const syncDataLimit:number=2;
