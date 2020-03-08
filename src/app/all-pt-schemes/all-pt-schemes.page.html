@@ -11,24 +11,12 @@
 
 <ion-content>
 
-  <ion-grid>
-    <ion-row>
-      <ion-col *ngIf="localUniqueUnSyncedArray.length!=0&& networkType!='none'" size="6">
-        <ion-button size="small" class="text-center native-btn" (click)="syncShipments()">
-          <ion-icon ios="ios-sync" md="md-sync"></ion-icon>
-          Sync All
-        </ion-button>
-      </ion-col>
-    </ion-row>
-  </ion-grid>
-
-
-  <ion-card *ngFor="let item of shippingsArray" class="eptCard">
+ <ion-card *ngFor="let item of shippingsArray" class="eptCard">
     <ion-card-header class="CardHeader">
       <p text-wrap class="schemeName"> {{item.schemeName}}</p>
     </ion-card-header>
     <ion-card-content class="cardContent">
-      <ion-grid>
+      <ion-grid class="shipmentGrid">
         <ion-row *ngIf="item.shipmentDate">
           <ion-col size="5">
             <p text-wrap>
@@ -127,7 +115,7 @@
         <ion-row *ngIf="item.responseDate">
           <ion-col size="5">
             <p text-wrap>
-              <span class="text-title-color">Response Date {{item.isSynced}} {{networkType}}</span>
+              <span class="text-title-color">Response Date </span>
             </p>
           </ion-col>
           <ion-col size="1">
@@ -143,33 +131,48 @@
         </ion-row>
 
         <ion-row>
-          <ion-col size="12">
-
-            <ion-button *ngIf="item.updatedOn=='' && responseSwitch==on" size="small" class="text-center native-btn"
-              (click)="goToTestForm(item,item.isSynced)">Enter
-              Response </ion-button>
-
-            <ion-button *ngIf="item.updatedOn!='' && responseSwitch==on" size="small" class="text-center native-btn"
-              (click)="goToTestForm(item,item.isSynced)">Edit Response</ion-button>
-
+          <ion-col *ngIf="item.isSynced=='false'&& networkType!='none'" size="12">
+            <p text-wrap>
+              <span class="text-title-color unSynced"> Unsynced shipment </span>
+            </p>
           </ion-col>
         </ion-row>
 
         <ion-row>
-          <ion-col size="12">
-            <ion-button *ngIf="item.updatedOn!=''" size="small" class="text-center native-btn">View Response
+          <ion-col size="6">
+
+            <ion-button *ngIf="item.updatedOn=='' && responseSwitch==on" size="small" class="text-center native-btn" 
+              (click)="goToTestForm(item)">Enter Response
+               </ion-button>
+          
+            <ion-button *ngIf="item.updatedOn!='' && responseSwitch==on" size="small" class="text-center native-btn"
+              (click)="goToTestForm(item)">Edit Response</ion-button>
+
+          </ion-col>
+       
+          <ion-col size="6">
+            <ion-button *ngIf="item.updatedOn!=''" size="small" class="text-center native-btn viewResponse" (click)="goToTestForm(item,'true')">View Response
             </ion-button>
           </ion-col>
         </ion-row>
-
-        <ion-row>
-          <ion-col *ngIf="item.isSynced=='false'&& networkType!='none'" size="12">
-            <ion-icon ios="ios-sync" md="md-sync"></ion-icon>Unsynced shipment
-          </ion-col>
-        </ion-row>
+     
       </ion-grid>
 
     </ion-card-content>
   </ion-card>
 
 </ion-content>
+
+
+<ion-footer class="ion-no-border syncButton" *ngIf="localStorageUnSyncedArray.length!=0&& networkType!='none'">
+  <ion-toolbar>
+    <ion-item text-center>
+      <ion-col size="12" text-center>
+        <ion-button size="small" class="text-center native-btn syncAll" (click)="syncShipments()">
+          <ion-icon ios="ios-sync" md="md-sync"></ion-icon>
+          Sync All
+        </ion-button>
+      </ion-col>
+    </ion-item>
+  </ion-toolbar>
+</ion-footer>

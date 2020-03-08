@@ -115,7 +115,7 @@
     <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Shipment Details
+          Shipment Details {{isView}}
         </mat-panel-title>
 
       </mat-expansion-panel-header>
@@ -165,7 +165,7 @@
               <input matInput [matDatepicker]="testReceiptPicker" class="datepicker-input" [(ngModel)]="testReceiptDate"
                 placeholder="Choose Test Receipt date" required>
               <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
-              <mat-datepicker #testReceiptPicker disabled="false"></mat-datepicker>
+              <mat-datepicker #testReceiptPicker disabled="false" ></mat-datepicker>
               <mat-error *ngIf="!testReceiptDate">Please Choose Test Receipt Date. Eg: 28-Feb-2020</mat-error>
 
 
@@ -177,7 +177,7 @@
               <input matInput [matDatepicker]="sampleRhdPicker" [(ngModel)]="sampleRhdDate" placeholder="Choose a date"
                 required>
               <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
-              <mat-datepicker #sampleRhdPicker disabled="false"></mat-datepicker>
+              <mat-datepicker #sampleRhdPicker disabled={{isView}}></mat-datepicker>
               <mat-error *ngIf="!sampleRhdDate">Please Choose Test Sample Rehydration Date.</mat-error>
               <!-- <mat-error *ngIf="!sampleRhdDate" style="margin-bottom:10px">Eg: 28-Feb-2020</mat-error> -->
 
@@ -198,7 +198,7 @@
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Viral Load Assay </mat-label>
-              <mat-select [(ngModel)]="vlassay" name="vlassay" (ngModelChange)="changeViralLoadAssay(vlassay)" required>
+              <mat-select [(ngModel)]="vlassay" name="vlassay" (ngModelChange)="changeViralLoadAssay(vlassay)"  required  [disabled]="isView=='true'"  >
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let vl of shipmentsDetailsArray['vlAssaySelect']" [value]="vl.value">
                   {{vl.show}}
@@ -212,7 +212,7 @@
           <ion-col size="6" size-xs *ngIf="isSelectedOther" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Please specify Other Assay Name </mat-label>
-              <input matInput [(ngModel)]="othervlassay" placeholder="Enter Other Assay Name" required>
+              <input matInput  [(ngModel)]="othervlassay" placeholder="Enter Other Assay Name" required  [disabled]="isView=='true'" >
               <mat-error *ngIf="!othervlassay">Please specify Other Assay Name </mat-error>
             </mat-form-field>
           </ion-col>
@@ -222,7 +222,7 @@
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Specimen Volume used for testing</mat-label>
-              <input matInput [(ngModel)]="specVolTest" placeholder="Enter Specimen Volume">
+              <input matInput [(ngModel)]="specVolTest" placeholder="Enter Specimen Volume"  [disabled]="isView=='true'">
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -241,7 +241,7 @@
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Assay Lot Number</mat-label>
-              <input matInput [(ngModel)]="assayLotNo" placeholder="Enter Assay Lot Number">
+              <input matInput [(ngModel)]="assayLotNo" placeholder="Enter Assay Lot Number"  [disabled]="isView=='true'">
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -261,7 +261,7 @@
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Mode of Receipt</mat-label>
-              <mat-select [(ngModel)]="receiptmode" name="receiptmode" required>
+              <mat-select [(ngModel)]="receiptmode" name="receiptmode" required  [disabled]="isView=='true'">
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let item of modeOfReceiptArray" [value]="item.value">
                   {{item.show}}
@@ -275,7 +275,7 @@
           <ion-col size="12">
             <mat-label style="margin-left: 10px;">QC Done</mat-label>
             <mat-radio-group aria-labelledby="example-radio-group-label" class="login-full-width grid-col-form"
-              [(ngModel)]="qcDone">
+              [(ngModel)]="qcDone"  [disabled]="isView=='true'">
               <mat-radio-button class="example-radio-button" *ngFor="let qcData of qcRadioArray" [value]="qcData.value">
                 {{qcData.show}}
               </mat-radio-button>
@@ -296,7 +296,7 @@
           <ion-col size="12">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>QC Done By </mat-label>
-              <input matInput [(ngModel)]="qcDoneBy" placeholder="">
+              <input matInput [(ngModel)]="qcDoneBy" placeholder="" [disabled]="isView=='true'">
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -317,7 +317,7 @@
       <ion-row>
         <ion-col class="grid-input-col">
           <section class="div-section">
-            <mat-checkbox [(ngModel)]="ptPanelTest">PT panel not tested</mat-checkbox>
+            <mat-checkbox [(ngModel)]="ptPanelTest" [disabled]="isView=='true'">PT panel not tested</mat-checkbox>
           </section>
         </ion-col>
       </ion-row>
@@ -334,12 +334,12 @@
             </section>
           </ion-col>
         </ion-row>
-        <ion-row>
+        
+        <ion-row *ngIf="isView!='true'">
           <ion-col class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form vlCalc" appearance="outline">
               <mat-label>
                 <div [innerHtml]="ptPanelTestData.vlResultSectionLabel">
-
                 </div>
               </mat-label>
               <input matInput [(ngModel)]="vlCalc" placeholder="Enter result value to calculate log value"
@@ -348,6 +348,7 @@
             <p class="log-para">{{vlLog}}</p>
           </ion-col>
         </ion-row>
+
         <div *ngIf="ptPanelTestData.controlArray">
           <mat-card class="dynamic-card" *ngFor="let controls of ptPanelTestData.controlArray.label ;let i = index">
             <mat-card-title>
@@ -370,7 +371,7 @@
                         </mat-label>
 
                         <input matInput [(ngModel)]="ptPanelTestData.vlResult[k]"
-                          placeholder="Viral Load (log10 copies/ml)" [disabled]="ptPanelTestData.tndArray[i]=='yes'"
+                          placeholder="Viral Load (log10 copies/ml)" [disabled]="ptPanelTestData.tndArray[i]=='yes'||isView=='true'" 
                           [required]="(ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest))">
 
                         <mat-error
@@ -394,7 +395,7 @@
                     <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
                       [(ngModel)]="ptPanelTestData.tndArray[j]"
                       (ngModelChange)="changeTND(j,ptPanelTestData.tndArray[j])"
-                      [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest) ">
+                      [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest)" [disabled]="isView=='true'">
                       <mat-radio-button class="example-radio-button" *ngFor="let tnd of item" [value]="tnd.value">
                         {{tnd.show}}
                       </mat-radio-button>
@@ -419,7 +420,7 @@
               <mat-label>
                 {{ptPanelNotTestData.ptNotTestedReasonLabel}} </mat-label>
               <mat-select [(ngModel)]="ptPanelNotTestData.vlNotTestedReason" name="vlNotTested"
-                [required]="ptPanelTest">
+                [required]="ptPanelTest" [disabled]="isView=='true'">
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let item of ptPanelNotTestData.ptNotTestedReasonArray" [value]="item.value">
                   {{item.show}}
@@ -433,7 +434,7 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>{{ptPanelNotTestData.ptNotTestedCommentsLabel}}</mat-label>
               <textarea matInput placeholder="Enter Your Comments here"
-                [(ngModel)]="ptPanelNotTestData.ptNotTestedComments" [required]="ptPanelTest"></textarea>
+                [(ngModel)]="ptPanelNotTestData.ptNotTestedComments" [required]="ptPanelTest" [disabled]="isView=='true'"></textarea>
               <mat-error *ngIf="!ptPanelNotTestData.ptNotTestedComments && ptPanelTest">Please Enter Your Comments
               </mat-error>
             </mat-form-field>
@@ -442,7 +443,7 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>{{ptPanelNotTestData.ptSupportCommentsLabel}}</mat-label>
               <textarea matInput placeholder="Enter Your Comments here"
-                [(ngModel)]="ptPanelNotTestData.ptSupportComments" [required]="ptPanelTest"></textarea>
+                [(ngModel)]="ptPanelNotTestData.ptSupportComments" [required]="ptPanelTest" [disabled]="isView=='true'"></textarea>
               <mat-error *ngIf="!ptPanelNotTestData.ptSupportComments && ptPanelTest">Please Enter Your Comments
               </mat-error>
             </mat-form-field>
@@ -468,7 +469,7 @@
           <ion-col class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Supervisor Review </mat-label>
-              <mat-select [(ngModel)]="supReview" name="supReview" (ngModelChange)="changeSupervisorReview(supReview)">
+              <mat-select [(ngModel)]="supReview" name="supReview" (ngModelChange)="changeSupervisorReview(supReview)" [disabled]="isView=='true'">
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let sr of supervisorReviewArray" [value]="sr.value">
                   {{sr.show}}
@@ -479,7 +480,7 @@
           <ion-col *ngIf="supReview=='yes'" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>{{approvalLabel }}</mat-label>
-              <input matInput [(ngModel)]="supName" placeholder="Enter Supervisor Name">
+              <input matInput [(ngModel)]="supName" placeholder="Enter Supervisor Name" [disabled]="isView=='true'">
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -487,7 +488,7 @@
           <ion-col class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Comments</mat-label>
-              <textarea matInput placeholder="Enter Comments here" [(ngModel)]="comments"></textarea>
+              <textarea matInput placeholder="Enter Comments here" [(ngModel)]="comments" [disabled]="isView=='true'"></textarea>
             </mat-form-field>
           </ion-col>
         </ion-row>

@@ -18,7 +18,7 @@ import {
 import {
   CrudServiceService,
   ToastService,
-  LoaderService
+  LoaderService,
 } from '../../app/service/providers';
 import {
   ErrorStateMatcher
@@ -28,10 +28,10 @@ import {
   DomSanitizer,
   disableDebugTools
 } from '@angular/platform-browser'
-import _ from "lodash";
 import {
   Network
 } from '@ionic-native/network/ngx';
+import { LocalShipmentFormService } from '../../app/service/localShipmentForm/local-shipment-form.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 
@@ -98,25 +98,14 @@ export class DtsHivViralloadPage implements OnInit {
   appVersionNumber: any;
   authToken: any;
   loginID: any;
-  localVLData = [];
-  labName: any;
   viralLoadArray = [];
-  existingVLLabArray = [];
   notes: any = [];
   formattedQCDate: any;
   sampleIDArrray = [];
   selectedParticipantID: any;
-  localVLDataArray: any = [];
-  existingVLShipmentArray: any = [];
-  existingVLArray = [];
-  existingVLParticipantArray = [];
   shipmentArray = [];
   selectedShipmentID: any;
   participantArray = [];
-  existingShipmentArray = [];
-  existingVLLabIndex: any;
-  existingVLShipmentIndex: any;
-  existingVLShipPartiArray = [];
   ptPanelTestData = {};
   ptPanelNotTestData = {};
   viralLoadJSON = {};
@@ -126,8 +115,8 @@ export class DtsHivViralloadPage implements OnInit {
   isPTPerformedRadio: any;
   approvalLabel: any;
   updatedStatus: any;
-  existingOldArray: any;
-  existingVLShipmentPartiIndex: any;
+  isView:any;
+
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -136,7 +125,8 @@ export class DtsHivViralloadPage implements OnInit {
     public CrudServiceService: CrudServiceService,
     private sanitizer: DomSanitizer,
     private router: Router,
-    public network: Network) {
+    public network: Network,
+    public LocalShipmentFormService:LocalShipmentFormService) {
 
   }
 
@@ -157,16 +147,9 @@ export class DtsHivViralloadPage implements OnInit {
       if (participantLogin) {
         this.authToken = participantLogin.authToken;
         this.loginID = participantLogin.id;
-        this.labName = participantLogin.name;
         this.getVLFormDetails();
       }
     })
-    this.storage.get('localVLData').then((localVLData) => {
-      if (localVLData) {} else {
-        this.storage.set('localVLData', []);
-      }
-    })
-
   }
   dateFormat(dateObj) {
 
@@ -176,17 +159,19 @@ export class DtsHivViralloadPage implements OnInit {
   getVLFormDetails() {
 
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
+     debugger;
+      this.isView=vlDataObj[0].isView;
      
-      console.log(vlDataObj[0]);
       if (vlDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
-
-
+          
           if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
 
+            this.isView=localStorageSelectedFormArray[0].isView;
             this.vlDataArray.push(localStorageSelectedFormArray[0]);
             console.log(this.vlDataArray);
             this.bindVLData();
+            
           }
         })
       } else {
@@ -194,6 +179,7 @@ export class DtsHivViralloadPage implements OnInit {
         this.bindVLData();
       }
     })
+    console.log(this.isView)
   }
 
   bindVLData() {
@@ -265,7 +251,7 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelTestData['vlResult'][1] = "0.0";
         this.ptPanelTestData['vlResult'][2] = "0";
         this.ptPanelTestData['vlResult'][3] = "5.2";
-        console.log(this.ptPanelTestData['vlResult'])
+        
         this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
         this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
@@ -274,10 +260,10 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelTestData['notes'] = this.ptPanelTestArray.note;
         if (this.ptPanelTestData['notes']) {
           this.ptPanelTestData['notes'].forEach((note,index )=> {
-            console.log(note);
+         
           //  note = unescape(note);
           this.ptPanelTestData['notes'][index] = unescape(note);
-            console.log(this.ptPanelTestData['notes'][index]);
+       
           //  note = this.sanitizer.bypassSecurityTrustHtml(note);
           })
         }
@@ -370,8 +356,6 @@ export class DtsHivViralloadPage implements OnInit {
     } else {
       this.isPTPerformedRadio = 'no';
     }
-    console.log(this.ptPanelTestData);
-    console.log(this.ptPanelNotTestData);
     if (this.qcDone == 'no') {
       this.qcDate = "";
       this.qcDoneBy = "";
@@ -389,6 +373,7 @@ export class DtsHivViralloadPage implements OnInit {
         "participantId": this.vlDataArray[0].participantId,
         "schemeType": this.vlDataArray[0].schemeType,
         "shipmentId": this.vlDataArray[0].shipmentId,
+      //  "shipmentCode":
         "mapId": this.vlDataArray[0].mapId,
         "isSynced": true,
         "createdOn": this.vlDataArray[0].createdOn ? this.vlDataArray[0].createdOn : "",
@@ -483,13 +468,11 @@ export class DtsHivViralloadPage implements OnInit {
     console.log(this.viralLoadJSON);
 
     if (this.network.type == 'none' || this.network.type == null) {
-      this.viralLoadArray = [];
       this.viralLoadJSON['data']['isSynced'] = 'false';
-      this.viralLoadJSON['syncType']='group';
-      this.viralLoadArray.push(this.viralLoadJSON);
-      this.offlineViralLoad();
+      this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
 
     } else {
+
       this.viralLoadJSON['data']['isSynced'] = 'true';
       this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON)
         .then((result) => {
@@ -503,107 +486,6 @@ export class DtsHivViralloadPage implements OnInit {
           console.log(err);
         });
     }
-  }
-
-
-  offlineViralLoad() {
-
-
-    this.storage.get('localVLData').then((localVLData) => {
-      if (localVLData) {
-
-        this.localVLDataArray = localVLData;
-        this.storage.get('participantLogin').then((participantLogin) => {
-          if (participantLogin) {
-
-            this.existingVLLabArray = this.localVLDataArray.filter(
-              vlArray => vlArray.loginID == participantLogin.id);
-            if (this.existingVLLabArray.length == 0) {
-
-              this.participantArray = [{
-                "participantID": this.selectedParticipantID,
-                "testArray": this.viralLoadArray
-              }]
-              this.shipmentArray = [{
-                "shipmentID": this.selectedShipmentID,
-                "participantArray": this.participantArray,
-              }]
-              this.localVLDataArray.push({
-                "loginID": participantLogin.id,
-                "labName": participantLogin.name,
-                "shipmentArray": this.shipmentArray
-              })
-            } else {
-
-              this.existingVLLabIndex = _.findIndex(this.localVLDataArray, {
-                loginID: participantLogin.id
-              });
-
-              this.existingVLShipmentArray = this.localVLDataArray[this.existingVLLabIndex].shipmentArray.filter(
-                item => item.shipmentID == this.selectedShipmentID);
-
-
-
-              if (this.existingVLShipmentArray.length != 0) {
-                this.existingVLShipmentIndex = _.findIndex(this.localVLDataArray[this.existingVLLabIndex].shipmentArray, {
-                  shipmentID: this.selectedShipmentID
-                });
-                this.existingVLShipmentArray.forEach((element, index) => {
-
-                  this.existingVLParticipantArray = element.participantArray.filter(
-                    item => item.participantID == this.selectedParticipantID);
-
-
-                })
-
-                if (this.existingVLParticipantArray.length == 0) {
-
-                  this.existingVLShipmentArray.forEach((element, index) => {
-                    this.existingVLShipPartiArray = element.participantArray;
-                  })
-                  this.participantArray = [{
-                    "participantID": this.selectedParticipantID,
-                    "testArray": this.viralLoadArray
-                  }]
-                  this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray = this.participantArray.concat(this.existingVLShipPartiArray);
-                } else {
-
-                  this.existingVLShipmentPartiIndex = _.findIndex(this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray, {
-                    participantID: this.selectedParticipantID
-                  });
-                  this.existingOldArray = this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray[this.existingVLShipmentPartiIndex];
-                  if (this.existingOldArray.length != 0) {
-                    this.localVLDataArray[this.existingVLLabIndex].shipmentArray[this.existingVLShipmentIndex].participantArray[this.existingVLShipmentPartiIndex].testArray[0] = this.viralLoadArray[0];
-                  }
-                }
-
-              } else {
-
-                this.existingShipmentArray = this.localVLDataArray[this.existingVLLabIndex].shipmentArray;
-
-                this.participantArray = [{
-                  "participantID": this.selectedParticipantID,
-                  "testArray": this.viralLoadArray
-                }]
-                this.shipmentArray = [{
-                  "shipmentID": this.selectedShipmentID,
-                  "participantArray": this.participantArray,
-                }]
-                this.localVLDataArray[this.existingVLLabIndex].shipmentArray = this.existingShipmentArray.concat(this.shipmentArray);
-              }
-            }
-
-            this.storage.set("localVLData", this.localVLDataArray);
-
-            if (this.localVLDataArray.length != 0) {
-              this.ToastService.presentToastWithOptions("Vl form is stored in offline.Please sync the record when you are in online");
-              this.router.navigate(['/all-pt-schemes']);
-            }
-          }
-        })
-      }
-
-    })
   }
 
 }

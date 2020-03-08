@@ -31,7 +31,6 @@ import {
   CrudServiceService,
   ToastService,
   LoaderService,
-  GeolocationService
 }
 
 from '../../app/service/providers';
@@ -161,7 +160,7 @@ interface selectArray {
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
-    public GeolocationService: GeolocationService) {
+   ) {
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
@@ -412,7 +411,7 @@ interface selectArray {
       "schemeType": this.dtsDataObj.schemeType,
       "shipmentId": this.dtsDataObj.shipmentId,
       "mapId": this.dtsDataObj.mapId,
-      "createdOn": this.GeolocationService.getTimeStamp(),
+      "createdOn":"",
       "dtsData": {
         "Heading1": {
           //participant details
