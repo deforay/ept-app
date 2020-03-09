@@ -1,13 +1,6 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title class="eptHeaderTitle">
-     Summary Report
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header [titleHeader]="'Summary Report'" [isMenuOrBackButton]="'menu'"></app-header>
+
+
 <ion-content>
   <ion-card *ngFor="let item of summaryReports" class="eptCard">
     <ion-card-header class="CardHeader">

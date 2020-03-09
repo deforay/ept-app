@@ -9,7 +9,7 @@ import { DbsEidPageRoutingModule } from './dbs-eid-routing.module';
 import { DbsEidPage } from './dbs-eid.page';
 import { MaterialModule } from '../material.module';
 import { MomentModule } from '../moment.module';
-
+import { ComponentsModule } from '../component/components.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -17,6 +17,7 @@ import { MomentModule } from '../moment.module';
     IonicModule,
     MaterialModule,
     MomentModule,
+    ComponentsModule,
     DbsEidPageRoutingModule
   ],
   declarations: [DbsEidPage]

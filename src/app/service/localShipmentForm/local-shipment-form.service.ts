@@ -31,11 +31,11 @@ export class LocalShipmentFormService {
     public ToastService: ToastService,
     private router: Router) {
 
-    this.storage.get('localShipmentForm').then((localShipmentForm) => {
-      if (localShipmentForm.length==0) {
-        this.storage.set('localShipmentForm', []);
-      }
-    })
+      this.storage.get('localShipmentForm').then((localShipmentForm) => {
+        if (localShipmentForm== null) {
+          this.storage.set('localShipmentForm', []);
+        }
+      })
 
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {

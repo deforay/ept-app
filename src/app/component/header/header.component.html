@@ -1,0 +1,11 @@
+<ion-header>
+  <ion-toolbar class="eptHeaderToolbar">
+    <ion-buttons slot="start">
+      <ion-menu-button *ngIf="isMenuOrBackButton=='menu'"></ion-menu-button>
+      <ion-back-button *ngIf="isMenuOrBackButton=='back'" (click)="goBack(titleHeader)"></ion-back-button>
+    </ion-buttons>
+    <ion-title class="eptHeaderTitle">
+      {{titleHeader}}
+    </ion-title>
+  </ion-toolbar>
+</ion-header>

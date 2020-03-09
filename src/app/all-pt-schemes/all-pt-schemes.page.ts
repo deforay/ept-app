@@ -58,6 +58,7 @@ import * as _ from 'lodash';
   syncedShipmentIndex: any;
   loginID: any;
   existingLabIndex: any;
+  totSyncArrayLength: number;
 
 
   constructor(public CrudServiceService: CrudServiceService,
@@ -77,10 +78,10 @@ import * as _ from 'lodash';
 
   ionViewWillEnter() {
     this.networkType = this.network.type;
-   
+
     //comment when take buid start
 
-    this.networkType = "4G";
+   // this.networkType = "4G";
 
     //end...
 
@@ -110,7 +111,7 @@ import * as _ from 'lodash';
     })
 
     this.storage.get('localShipmentForm').then((localShipmentForm) => {
-      if (localShipmentForm.length == 0) {
+      if (localShipmentForm == null) {
         this.storage.set('localShipmentForm', []);
       }
     })
@@ -150,9 +151,9 @@ import * as _ from 'lodash';
           if (result["status"] == 'success') {
 
             this.shippingsArray = result['data'];
-        
+
             this.storage.set("shipmentArray", this.shippingsArray);
-            
+
 
             this.storage.get('localShipmentForm').then((localShipmentForm) => {
               if (localShipmentForm.length != 0) {
@@ -190,7 +191,7 @@ import * as _ from 'lodash';
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
         this.CrudServiceService.getData('shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result1 => {
-         
+
           if (result1["status"] == 'success') {
 
             this.shipmentFormArray = result1['data'];
@@ -207,6 +208,10 @@ import * as _ from 'lodash';
 
   goToTestForm(item, isView) {
 
+    if (isView == undefined) {
+      isView = "false"
+    };
+
     this.storage.get('shipmentFormArray').then((shipmentFormArray) => {
       if (shipmentFormArray) {
 
@@ -221,10 +226,10 @@ import * as _ from 'lodash';
 
         if (this.TestFormArray) {
 
+          this.TestFormArray[0].isView = isView;
           this.storage.set('selectedTestFormArray', this.TestFormArray);
-          this.TestFormArray[0].isView=isView?isView:'false';
-          this.localStorageSelectedFormArray[0].isView?isView:'false';
           if (this.TestFormArray[0].isSynced == "false") {
+            this.localStorageSelectedFormArray[0].isView = isView;
             this.storage.set('localStorageSelectedFormArray', this.localStorageSelectedFormArray);
           }
 
@@ -246,12 +251,12 @@ import * as _ from 'lodash';
             if (isView == 'true') {
               this.router.navigate(['/dts-hiv-viralload']);
             } else {
-            if (this.TestFormArray[0].vlData.access.status == 'success') {
-              this.router.navigate(['/dts-hiv-viralload']);
-            } else {
-              this.ToastService.presentToastWithOptions(this.TestFormArray[0].vlData.access.message)
+              if (this.TestFormArray[0].vlData.access.status == 'success') {
+                this.router.navigate(['/dts-hiv-viralload']);
+              } else {
+                this.ToastService.presentToastWithOptions(this.TestFormArray[0].vlData.access.message)
+              }
             }
-          }
           }
 
 
@@ -259,12 +264,12 @@ import * as _ from 'lodash';
             if (isView == 'true') {
               this.router.navigate(['/dbs-eid']);
             } else {
-            if (this.TestFormArray[0].eidData.access.status == 'success') {
-              this.router.navigate(['/dbs-eid']);
-            } else {
-              this.ToastService.presentToastWithOptions(this.TestFormArray[0].eidData.access.message)
+              if (this.TestFormArray[0].eidData.access.status == 'success') {
+                this.router.navigate(['/dbs-eid']);
+              } else {
+                this.ToastService.presentToastWithOptions(this.TestFormArray[0].eidData.access.message)
+              }
             }
-          }
           }
         }
       }
@@ -274,10 +279,10 @@ import * as _ from 'lodash';
   syncShipments() {
 
 
-    var totLength = this.localStorageUnSyncedArray.length;
-    if (totLength > syncDataLimit) {
-      this.syncDataCount = Math.floor(totLength / syncDataLimit) + (totLength % syncDataLimit);
-    } else if (totLength <= syncDataLimit) {
+    this.totSyncArrayLength = this.localStorageUnSyncedArray.length;
+    if (this.totSyncArrayLength > syncDataLimit) {
+      this.syncDataCount = Math.floor(this.totSyncArrayLength / syncDataLimit) + (this.totSyncArrayLength % syncDataLimit);
+    } else if (this.totSyncArrayLength <= syncDataLimit) {
       this.syncDataCount = 1;
     } else {}
 
@@ -292,16 +297,15 @@ import * as _ from 'lodash';
       }
       this.CrudServiceService.postData('shipments/save-form', this.syncShipmentsJSON)
         .then((result) => {
-       
-          console.log(result);
+    
           this.resultArray = [];
           this.resultArray.push(result);
           this.resultArray[0].forEach((result, index) => {
+
+            this.responseRecCount = this.responseRecCount + 1;
             if (result.status == "success") {
-              this.responseRecCount = this.responseRecCount + 1;
               this.localStorageUnSyncedArray.forEach((localUnSynced, index) => {
                 if (localUnSynced.mapId == result.data.mapId) {
-                  
                   this.syncedShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
                     mapId: result.data.mapId
                   });
@@ -312,10 +316,10 @@ import * as _ from 'lodash';
           })
 
           this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
-
-          //   this.storage.set("localShipmentForm", this.localStorageUnSyncedArray);
-          if (this.responseRecCount == this.localStorageUnSyncedArray.length) {
-            this.ToastService.presentToastWithOptions('All records(' + this.responseRecCount + ') synced successfully');
+          this.storage.set("localShipmentForm", this.localShipmentArray);
+          if (this.responseRecCount == this.totSyncArrayLength) {
+            this.getAllShippings();
+            this.ToastService.presentToastWithOptions('All records (' + this.responseRecCount + ') synced successfully');
           }
 
         })
@@ -325,7 +329,7 @@ import * as _ from 'lodash';
       _.times(this.syncDataCount, () => {
         this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
 
-        this.shipmentSubListArray = this.copylocalStorageUnSyncedArray.splice(0, syncDataLimit);
+        this.shipmentSubListArray = this.localStorageUnSyncedArray.splice(0, syncDataLimit);
 
         this.syncShipmentsJSON = {
           "authToken": this.authToken,
@@ -333,22 +337,15 @@ import * as _ from 'lodash';
           "syncType": "group",
           "data": this.shipmentSubListArray
         }
-
-        console.log(this.syncShipmentsJSON);
         this.CrudServiceService.postData('shipments/save-form', this.syncShipmentsJSON)
           .then((result) => {
-
-            console.log(result);
+       
             this.resultArray = [];
             this.resultArray.push(result);
-
             this.resultArray[0].forEach((result, index) => {
-
+              this.responseRecCount = this.responseRecCount + 1;
               if (result.status == "success") {
-
-                this.responseRecCount = this.responseRecCount + 1;
                 this.localStorageUnSyncedArray.forEach((localSubUnSynced, index) => {
-
                   if (localSubUnSynced.mapId == result.data.mapId) {
                     let syncedSubShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
                       mapId: result.data.mapId
@@ -358,9 +355,11 @@ import * as _ from 'lodash';
                 })
               }
             })
-            //  this.storage.set("localStorageUnSyncedArray", this.localStorageUnSyncedArray);
-            if (this.responseRecCount == this.localStorageUnSyncedArray.length) {
-              this.ToastService.presentToastWithOptions(+this.responseRecCount + ' records synced successfully');
+            this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
+            this.storage.set("localShipmentForm", this.localShipmentArray);
+            if (this.responseRecCount == this.totSyncArrayLength) {
+              this.getAllShippings();
+              this.ToastService.presentToastWithOptions('All records (' + this.responseRecCount + ') synced successfully');
             }
           })
       })

@@ -9,7 +9,7 @@ import { MomentModule } from '../moment.module';
 import { DTSHIVSerologyPageRoutingModule } from './dts-hiv-serology-routing.module';
 
 import { DTSHIVSerologyPage } from './dts-hiv-serology.page';
-
+import { ComponentsModule } from '../component/components.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -18,6 +18,7 @@ import { DTSHIVSerologyPage } from './dts-hiv-serology.page';
     IonicModule,
     MaterialModule,
     MomentModule,
+    ComponentsModule,
     DTSHIVSerologyPageRoutingModule
   ],
  

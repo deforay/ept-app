@@ -159,17 +159,15 @@ export class DtsHivViralloadPage implements OnInit {
   getVLFormDetails() {
 
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
-     debugger;
+
       this.isView=vlDataObj[0].isView;
-     
       if (vlDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
-          
+       
           if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
 
             this.isView=localStorageSelectedFormArray[0].isView;
             this.vlDataArray.push(localStorageSelectedFormArray[0]);
-            console.log(this.vlDataArray);
             this.bindVLData();
             
           }
@@ -179,7 +177,6 @@ export class DtsHivViralloadPage implements OnInit {
         this.bindVLData();
       }
     })
-    console.log(this.isView)
   }
 
   bindVLData() {
@@ -245,12 +242,12 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelNotTestArray = this.vlDataArray[0].vlData.Heading3.data['yes'];
         this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
         this.ptPanelTestData['controlArray'] = this.ptPanelTestArray['tableRowTxt'];
-       // this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['vlResult'];
-       this.ptPanelTestData['vlResult'] = [];
-        this.ptPanelTestData['vlResult'][0] = "3.2";
-        this.ptPanelTestData['vlResult'][1] = "0.0";
-        this.ptPanelTestData['vlResult'][2] = "0";
-        this.ptPanelTestData['vlResult'][3] = "5.2";
+        this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['vlResult'];
+        // this.ptPanelTestData['vlResult'] = [];
+        // this.ptPanelTestData['vlResult'][0] = "3.2";
+        // this.ptPanelTestData['vlResult'][1] = "0.0";
+        // this.ptPanelTestData['vlResult'][2] = "0";
+        // this.ptPanelTestData['vlResult'][3] = "5.2";
         
         this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
@@ -464,8 +461,6 @@ export class DtsHivViralloadPage implements OnInit {
         }
       }
     }
-
-    console.log(this.viralLoadJSON);
 
     if (this.network.type == 'none' || this.network.type == null) {
       this.viralLoadJSON['data']['isSynced'] = 'false';

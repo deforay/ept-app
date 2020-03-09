@@ -8,7 +8,7 @@ import { ChangePasswordPageRoutingModule } from './change-password-routing.modul
 
 import { ChangePasswordPage } from './change-password.page';
 import { MaterialModule } from '../material.module';
-
+import { ComponentsModule } from '../component/components.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -16,7 +16,7 @@ import { MaterialModule } from '../material.module';
     IonicModule,
     MaterialModule,
     ReactiveFormsModule,
-
+    ComponentsModule,
     ChangePasswordPageRoutingModule
   ],
   declarations: [ChangePasswordPage]

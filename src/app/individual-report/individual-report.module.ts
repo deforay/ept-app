@@ -8,13 +8,14 @@ import { IndividualReportPageRoutingModule } from './individual-report-routing.m
 
 import { IndividualReportPage } from './individual-report.page';
 import { MaterialModule } from '../material.module';
-
+import { ComponentsModule } from '../component/components.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     MaterialModule,
+    ComponentsModule,
     IndividualReportPageRoutingModule
   ],
   declarations: [IndividualReportPage]

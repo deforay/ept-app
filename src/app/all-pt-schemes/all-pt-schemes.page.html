@@ -1,13 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title class="eptHeaderTitle">
-      All Shipments
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header [titleHeader]="'All Shipments'" [isMenuOrBackButton]="'menu'"></app-header>
 
 <ion-content>
 
@@ -170,7 +161,7 @@
       <ion-col size="12" text-center>
         <ion-button size="small" class="text-center native-btn syncAll" (click)="syncShipments()">
           <ion-icon ios="ios-sync" md="md-sync"></ion-icon>
-          Sync All
+          Sync All ({{localStorageUnSyncedArray.length}})
         </ion-button>
       </ion-col>
     </ion-item>

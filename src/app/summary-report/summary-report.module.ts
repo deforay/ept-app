@@ -8,13 +8,14 @@ import { SummaryReportPageRoutingModule } from './summary-report-routing.module'
 
 import { SummaryReportPage } from './summary-report.page';
 import { MaterialModule } from '../material.module';
-
+import { ComponentsModule } from '../component/components.module';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
     MaterialModule,
+    ComponentsModule,
     SummaryReportPageRoutingModule
   ],
   declarations: [SummaryReportPage]

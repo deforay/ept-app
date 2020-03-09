@@ -1,13 +1,4 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title class="eptHeaderTitle">
-      DTS - HIV Serology
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header [titleHeader]="'DTS - HIV Serology'" [isMenuOrBackButton]="'back'"></app-header>
 
 <ion-content>
   <mat-accordion>
@@ -370,7 +361,7 @@
     </mat-expansion-panel-header>
     <div *ngFor="let resultName of resultsTextArray;let r=index">
 
-    <ion-row>
+    <ion-row><app-header [titleHeader]="'DTS- HIV Viral Load'" [isMenuOrBackButton]="'back'"></app-header>
       <ion-col size="12"> 
         <mat-form-field class="login-full-width grid-col-form" appearance="outline">
           <mat-label>{{resultName}} </mat-label>

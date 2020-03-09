@@ -1,13 +1,5 @@
-<ion-header>
-  <ion-toolbar>
-    <ion-buttons slot="start">
-      <ion-menu-button></ion-menu-button>
-    </ion-buttons>
-    <ion-title class="eptHeaderTitle">
-     Individual Report
-    </ion-title>
-  </ion-toolbar>
-</ion-header>
+<app-header [titleHeader]="'Individual Report'" [isMenuOrBackButton]="'menu'"></app-header>
+
 <ion-content>
   <ion-card *ngFor="let item of individualReports" class="eptCard">
     <ion-card-header class="CardHeader">
