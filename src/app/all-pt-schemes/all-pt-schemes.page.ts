@@ -43,12 +43,10 @@ import * as _ from 'lodash';
   localParticipantArray: any = [];
   localStorageSelectedFormArray: any = [];
   networkType: string;
-  currentDate: any;
   formattedDate: string;
   localStorageUnSyncedArray: any = [];
   syncDataLimit: any;
   addOne: number;
-  copylocalStorageUnSyncedArray = [];
   slicedShipementArray = [];
   syncDataCount: number;
   syncShipmentsJSON = {};
@@ -59,7 +57,12 @@ import * as _ from 'lodash';
   loginID: any;
   existingLabIndex: any;
   totSyncArrayLength: number;
-
+  responseSuccessCount: number;
+  responseErrorCount: number;
+  copylocalStorageUnSyncedArray = [];
+  subListRespSuccessCount: number;
+  subListRespErrorCount: number;
+  dupLocalStorageUnSyncedArray = [];
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -88,11 +91,13 @@ import * as _ from 'lodash';
     // Offline event
     this.events.subscribe('network:offline', (data) => {
       this.networkType = this.network.type;
+      this.callOfflineFunctions();
     })
 
     // Online event
     this.events.subscribe('network:online', () => {
       this.networkType = this.network.type;
+      this.callOnlineFunctions();
     })
 
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
@@ -116,24 +121,35 @@ import * as _ from 'lodash';
       }
     })
 
+    this.checkIsSynced();
 
     if (this.networkType == 'none' || this.networkType == null) {
-      this.storage.get('shipmentArray').then((shipmentArray) => {
-        if (shipmentArray.length != 0) {
-          this.shippingsArray = shipmentArray;
-        }
-      })
-      this.storage.get('shipmentFormArray').then((shipmentFormArray) => {
-        if (shipmentFormArray.length != 0) {
-          this.shipmentFormArray = shipmentFormArray;
-        }
-      })
-
+    this.callOfflineFunctions();
 
     } else {
-      this.getAllShipmentForms();
-      this.getAllShippings();
+     this.callOnlineFunctions();
     }
+  }
+
+
+  callOnlineFunctions(){
+
+    this.getAllShipmentForms();
+    this.getAllShippings();
+  }
+
+  callOfflineFunctions(){
+    this.storage.get('shipmentArray').then((shipmentArray) => {
+      if (shipmentArray.length != 0) {
+        this.shippingsArray = shipmentArray;
+      }
+    })
+    this.storage.get('shipmentFormArray').then((shipmentFormArray) => {
+      if (shipmentFormArray.length != 0) {
+        this.shipmentFormArray = shipmentFormArray;
+      }
+    })
+    this.checkIsSynced();
   }
 
   ngOnInit() {}
@@ -154,29 +170,8 @@ import * as _ from 'lodash';
 
             this.storage.set("shipmentArray", this.shippingsArray);
 
+            this.checkIsSynced();
 
-            this.storage.get('localShipmentForm').then((localShipmentForm) => {
-              if (localShipmentForm.length != 0) {
-                this.localShipmentArray = localShipmentForm;
-                this.existingLabIndex = _.findIndex(localShipmentForm, {
-                  loginID: this.loginID
-                });
-
-                if (this.existingLabIndex != 1) {
-
-                  this.localStorageUnSyncedArray = localShipmentForm[this.existingLabIndex].shipmentArray;
-                  localShipmentForm[this.existingLabIndex].shipmentArray.forEach((localShipment, index) => {
-                    this.shippingsArray.forEach((shipmentAPI, index) => {
-
-                      if (shipmentAPI.mapId == localShipment.mapId) {
-                        shipmentAPI.isSynced = "false";
-                      }
-
-                    })
-                  })
-                }
-              }
-            })
           }
         }, (err) => {
           //    this.LoaderService.disMissLoading();
@@ -205,6 +200,33 @@ import * as _ from 'lodash';
       }
     });
   }
+
+  checkIsSynced() {
+    this.storage.get('localShipmentForm').then((localShipmentForm) => {
+
+      if (localShipmentForm.length != 0) {
+        this.localShipmentArray = localShipmentForm;
+        this.existingLabIndex = _.findIndex(localShipmentForm, {
+          loginID: this.loginID
+        });
+
+        if (this.existingLabIndex != 1) {
+
+          this.localStorageUnSyncedArray = localShipmentForm[this.existingLabIndex].shipmentArray;
+          localShipmentForm[this.existingLabIndex].shipmentArray.forEach((localShipment, index) => {
+            this.shippingsArray.forEach((shipmentAPI, index) => {
+
+              if (shipmentAPI.mapId == localShipment.mapId) {
+                shipmentAPI.isSynced = "false";
+              }
+
+            })
+          })
+        }
+      }
+    })
+  }
+
 
   goToTestForm(item, isView) {
 
@@ -280,6 +302,7 @@ import * as _ from 'lodash';
 
 
     this.totSyncArrayLength = this.localStorageUnSyncedArray.length;
+    this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
     if (this.totSyncArrayLength > syncDataLimit) {
       this.syncDataCount = Math.floor(this.totSyncArrayLength / syncDataLimit) + (this.totSyncArrayLength % syncDataLimit);
     } else if (this.totSyncArrayLength <= syncDataLimit) {
@@ -288,7 +311,8 @@ import * as _ from 'lodash';
 
     if (this.syncDataCount == 1) {
 
-      this.responseRecCount = 0;
+      this.responseSuccessCount = 0;
+      this.responseErrorCount = 0;
       this.syncShipmentsJSON = {
         "authToken": this.authToken,
         "appVersion": this.appVersionNumber,
@@ -297,13 +321,13 @@ import * as _ from 'lodash';
       }
       this.CrudServiceService.postData('shipments/save-form', this.syncShipmentsJSON)
         .then((result) => {
-    
+
+          console.log(result);
           this.resultArray = [];
           this.resultArray.push(result);
           this.resultArray[0].forEach((result, index) => {
-
-            this.responseRecCount = this.responseRecCount + 1;
             if (result.status == "success") {
+              this.responseSuccessCount = this.responseSuccessCount + 1;
               this.localStorageUnSyncedArray.forEach((localUnSynced, index) => {
                 if (localUnSynced.mapId == result.data.mapId) {
                   this.syncedShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
@@ -312,24 +336,32 @@ import * as _ from 'lodash';
                   this.localStorageUnSyncedArray.splice(this.syncedShipmentIndex, 1);
                 }
               })
+            } else {
+              this.responseErrorCount = this.responseErrorCount + 1;
             }
           })
 
           this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
           this.storage.set("localShipmentForm", this.localShipmentArray);
-          if (this.responseRecCount == this.totSyncArrayLength) {
+          if ((this.responseSuccessCount + this.responseErrorCount) == this.totSyncArrayLength) {
             this.getAllShippings();
-            this.ToastService.presentToastWithOptions('All records (' + this.responseRecCount + ') synced successfully');
+            if (this.responseSuccessCount != 0 && this.responseErrorCount == 0) {
+              this.ToastService.presentToastWithOptions(+this.responseSuccessCount + ' records synced successfully');
+            }
+            if (this.responseSuccessCount != 0 && this.responseErrorCount != 0) {
+              this.ToastService.presentToastWithOptions(+this.responseSuccessCount + ' records synced and ' + this.responseErrorCount + ' records unsynced successfully');
+            }
+            if (this.responseSuccessCount == 0 && this.responseErrorCount != 0) {
+              this.ToastService.presentToastWithOptions(+this.responseErrorCount + ' records unsynced');
+            }
           }
-
         })
     } else {
 
-      this.responseRecCount = 0;
+      this.subListRespSuccessCount = 0;
+      this.subListRespErrorCount = 0;
       _.times(this.syncDataCount, () => {
-        this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
-
-        this.shipmentSubListArray = this.localStorageUnSyncedArray.splice(0, syncDataLimit);
+        this.shipmentSubListArray = this.copylocalStorageUnSyncedArray.splice(0, syncDataLimit);
 
         this.syncShipmentsJSON = {
           "authToken": this.authToken,
@@ -337,15 +369,19 @@ import * as _ from 'lodash';
           "syncType": "group",
           "data": this.shipmentSubListArray
         }
+        console.log(this.syncShipmentsJSON);
         this.CrudServiceService.postData('shipments/save-form', this.syncShipmentsJSON)
           .then((result) => {
-       
+
+            console.log(result);
             this.resultArray = [];
             this.resultArray.push(result);
             this.resultArray[0].forEach((result, index) => {
-              this.responseRecCount = this.responseRecCount + 1;
+
               if (result.status == "success") {
+                this.subListRespSuccessCount = this.subListRespSuccessCount + 1;
                 this.localStorageUnSyncedArray.forEach((localSubUnSynced, index) => {
+
                   if (localSubUnSynced.mapId == result.data.mapId) {
                     let syncedSubShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
                       mapId: result.data.mapId
@@ -353,13 +389,23 @@ import * as _ from 'lodash';
                     this.localStorageUnSyncedArray.splice(syncedSubShipmentIndex, 1);
                   }
                 })
+              } else {
+                this.subListRespErrorCount = this.subListRespErrorCount + 1;
               }
             })
             this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
             this.storage.set("localShipmentForm", this.localShipmentArray);
-            if (this.responseRecCount == this.totSyncArrayLength) {
+            if ((this.subListRespSuccessCount + this.subListRespErrorCount) == this.totSyncArrayLength) {
               this.getAllShippings();
-              this.ToastService.presentToastWithOptions('All records (' + this.responseRecCount + ') synced successfully');
+              if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount == 0) {
+                this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records synced successfully');
+              }
+              if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount != 0) {
+                this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records synced and ' + this.subListRespErrorCount + ' records unsynced successfully');
+              }
+              if (this.subListRespSuccessCount == 0 && this.subListRespErrorCount != 0) {
+                this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records unsynced');
+              }
             }
           })
       })

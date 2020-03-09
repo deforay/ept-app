@@ -13,17 +13,18 @@ export class ToastService {
     const toast = await this.toastCtrl.create({
       header: message,
      // message: message,
+      duration: 3000,
       position: 'top',
-      buttons: [
-        {
-          handler: () => {}
-        }, {
-          text: 'OK',
-          role: 'cancel',
-          handler: () => {
-          }
-        }
-      ]
+      // buttons: [
+      //   {
+      //     handler: () => {}
+      //   }, {
+      //     text: 'OK',
+      //     role: 'cancel',
+      //     handler: () => {
+      //     }
+      //   }
+      // ]
     });
     toast.present();
   }

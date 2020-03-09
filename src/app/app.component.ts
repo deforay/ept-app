@@ -27,6 +27,7 @@ import {
   Events
 } from '@ionic/angular';
 import { NetworkService} from '../app/service/network.service';
+import { Router } from '@angular/router';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -43,17 +44,17 @@ export class AppComponent {
   {
     title: 'Individual Reports',
     url: '/individual-report',
-    icon: 'shipment' 
+    icon: 'newsPaper' 
   },
   {
     title: 'Summary Reports',
     url: '/summary-report',
-    icon: 'shipment' 
+    icon: 'report' 
   },
   {
     title: 'Change Password',
     url: '/change-password',
-    icon: 'shipment'      
+    icon: 'key'      
   }
   ];
 
@@ -67,7 +68,8 @@ export class AppComponent {
     public NetworkService: NetworkService,
     public network: Network,
     public events: Events,
-    public ToastService: ToastService
+    public ToastService: ToastService,
+    private router: Router
   ) {
     this.initializeApp();
   }
@@ -98,14 +100,22 @@ export class AppComponent {
 
       }
 
+      this.storage.get('participantLogin').then((participantLogin) => {
+        if (participantLogin) {
+          this.router.navigateByUrl('/all-pt-schemes');
+        } else {
+          this.router.navigateByUrl('/login');
+        }
+      })
+
     });
 
 
     //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-    // if (!this.appVersionNumber) {
-    //   this.appVersionNumber = "0.0.1";
-    //   this.storage.set('appVersionNumber', this.appVersionNumber);
-    // }
+    if (!this.appVersionNumber) {
+      this.appVersionNumber = "0.0.1";
+      this.storage.set('appVersionNumber', this.appVersionNumber);
+    }
     //end..... 
 
 

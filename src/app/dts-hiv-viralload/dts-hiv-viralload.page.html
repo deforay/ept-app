@@ -157,7 +157,7 @@
                 placeholder="Choose Test Receipt date" required [disabled]="true">
               <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
               <mat-datepicker #testReceiptPicker disabled={{isView}}></mat-datepicker>
-              <mat-error *ngIf="!testReceiptDate">Please Choose Test Receipt Date. Eg: 28-Feb-2020</mat-error>
+              <small *ngIf="!testReceiptDate">Please Choose Test Receipt Date. Eg: 28-Feb-2020</small>
 
 
             </mat-form-field>
@@ -235,6 +235,7 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label class="matLabel">Assay Lot Number</mat-label>
               <input matInput [(ngModel)]="assayLotNo" placeholder="Enter Assay Lot Number" [disabled]="isView=='true'">
+              <mat-error *ngIf="!assayLotNo">Please enter assay lot number</mat-error>
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -260,7 +261,7 @@
                   {{item.show}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="!receiptmode">Please choose the Mode Of Receipt </mat-error>
+              <!-- <mat-error *ngIf="!receiptmode">Please choose the Mode Of Receipt </mat-error> -->
             </mat-form-field>
           </ion-col>
         </ion-row>

@@ -307,6 +307,15 @@ export class DtsHivViralloadPage implements OnInit {
   nextStep() {
     this.step++;
   }
+  // nextStepShipmentDetails(){
+  //   //this.step++;
+
+  //   debugger;
+  //   if(this.testReceiptDate){
+
+  //   }
+  // }
+
 
   prevStep() {
     this.step--;
