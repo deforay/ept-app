@@ -127,6 +127,9 @@ ion-header ion-toolbar.main-toolbar{
 // }
 .danger-text{
     color:#E31E24;
+    float: left;
+    margin-left: 10px;
+    font-size: 12px;
 }
 .can-go-back app-header ion-back-button {
     display: block!important;

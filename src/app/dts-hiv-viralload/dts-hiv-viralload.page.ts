@@ -116,7 +116,16 @@ export class DtsHivViralloadPage implements OnInit {
   approvalLabel: any;
   updatedStatus: any;
   isView:any;
-
+  invalidVlAssay:any;
+  invalidTestReceiptDate:any;
+  invalidTestDate:any;
+  invalidOthervlassay: string;
+  invalidAssayExpDate: string;
+  invalidVlAssayLotNo: string;
+  invalidResponseDate: string;
+  invalidQcDate: string;
+  invalidQcDoneBy: string;
+  validShipmentDetails: string;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -163,7 +172,7 @@ export class DtsHivViralloadPage implements OnInit {
       this.isView=vlDataObj[0].isView;
       if (vlDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
-       
+      
           if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
 
             this.isView=localStorageSelectedFormArray[0].isView;
@@ -173,9 +182,11 @@ export class DtsHivViralloadPage implements OnInit {
           }
         })
       } else {
+        this.vlDataArray=[];
         this.vlDataArray.push(vlDataObj[0]);
         this.bindVLData();
       }
+      console.log(this.vlDataArray);
     })
   }
 
@@ -228,6 +239,9 @@ export class DtsHivViralloadPage implements OnInit {
             this.isSelectedOther = true;
           }
         }
+        //comment this dhana will solve
+        this.shipmentsDetailsArray['responseDate']="";
+        //comment this
         if (this.shipmentsDetailsArray['responseDate']) {
           this.responseDate = new Date(this.shipmentsDetailsArray['responseDate']);
         }
@@ -304,18 +318,41 @@ export class DtsHivViralloadPage implements OnInit {
     this.step = index;
   }
 
-  nextStep() {
-    this.step++;
+  nextStepShipmentPanel() {
+   //debugger;
+    if(!this.vlassay){
+      this.invalidVlAssay="true";
+    }
+    if(this.testDate=="Invalid Date"){
+      this.invalidTestDate="true";
+    }
+    if(this.assayExpDate==undefined){
+      this.invalidAssayExpDate="true";
+    }
+    if(this.isSelectedOther==true){
+      if(!this.othervlassay){
+        this.invalidOthervlassay="true";
+      }
+    }
+    if(!this.assayLotNo){
+      this.invalidVlAssayLotNo="true";
+    }
+    if(this.responseDate==undefined){
+      this.invalidResponseDate="true";
+    }
+    if(this.qcDone=='yes'){
+      if(this.qcDate==undefined){
+        this.invalidQcDate="true";
+      }
+      if(!this.qcDoneBy){
+        this.invalidQcDoneBy="true";
+      }
+    }
+    if(this.vlassay && this.testDate!="Invalid Date" && (this.isSelectedOther==true&&this.othervlassay) && this.assayExpDate!="Invalid Date" && this.responseDate!=undefined && (this.qcDone=='yes'&&this.qcDate!=undefined) && (this.qcDone=='yes'&& this.qcDoneBy)){
+      this.step++;
+      this.validShipmentDetails="true";
+    }
   }
-  // nextStepShipmentDetails(){
-  //   //this.step++;
-
-  //   debugger;
-  //   if(this.testReceiptDate){
-
-  //   }
-  // }
-
 
   prevStep() {
     this.step--;
