@@ -126,10 +126,13 @@ ion-header ion-toolbar.main-toolbar{
 //     background: #387ef5;
 // }
 .danger-text{
-    color:#E31E24;
+    color: #f44336;
     float: left;
     margin-left: 10px;
-    font-size: 12px;
+    font-size: 75%;
+    margin-top: -5px;
+    text-align: left;
+    display: block;
 }
 .can-go-back app-header ion-back-button {
     display: block!important;
@@ -227,7 +230,7 @@ ion-header ion-toolbar.main-toolbar{
 }
 .vlResultInput.mat-form-field-appearance-outline .mat-form-field-outline-gap{
     width: 150px !important;
-   }
+}
 .mat-error{
     strong {
         font-weight: 500;

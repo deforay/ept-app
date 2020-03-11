@@ -31,7 +31,9 @@ import {
 import {
   Network
 } from '@ionic-native/network/ngx';
-import { LocalShipmentFormService } from '../../app/service/localShipmentForm/local-shipment-form.service';
+import {
+  LocalShipmentFormService
+} from '../../app/service/localShipmentForm/local-shipment-form.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 
@@ -115,10 +117,10 @@ export class DtsHivViralloadPage implements OnInit {
   isPTPerformedRadio: any;
   approvalLabel: any;
   updatedStatus: any;
-  isView:any;
-  invalidVlAssay:any;
-  invalidTestReceiptDate:any;
-  invalidTestDate:any;
+  isView: any;
+  invalidVlAssay: any;
+  invalidTestReceiptDate: any;
+  invalidTestDate: any;
   invalidOthervlassay: string;
   invalidAssayExpDate: string;
   invalidVlAssayLotNo: string;
@@ -126,6 +128,15 @@ export class DtsHivViralloadPage implements OnInit {
   invalidQcDate: string;
   invalidQcDoneBy: string;
   validShipmentDetails: string;
+  validVlAssay: string;
+  validQC: string;
+  invalidSupReview: string;
+  validOtherInfo: string;
+  invalidSupName: string;
+  validSupReview: string;
+  isSelectedSupReviewYes: boolean = false;
+  PTPanelTestForm: any;
+  isViralLoadFormValid: boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -135,7 +146,7 @@ export class DtsHivViralloadPage implements OnInit {
     private sanitizer: DomSanitizer,
     private router: Router,
     public network: Network,
-    public LocalShipmentFormService:LocalShipmentFormService) {
+    public LocalShipmentFormService: LocalShipmentFormService) {
 
   }
 
@@ -169,20 +180,20 @@ export class DtsHivViralloadPage implements OnInit {
 
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
 
-      this.isView=vlDataObj[0].isView;
+      this.isView = vlDataObj[0].isView;
       if (vlDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
-      
+
           if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
 
-            this.isView=localStorageSelectedFormArray[0].isView;
+            this.isView = localStorageSelectedFormArray[0].isView;
             this.vlDataArray.push(localStorageSelectedFormArray[0]);
             this.bindVLData();
-            
+
           }
         })
       } else {
-        this.vlDataArray=[];
+        this.vlDataArray = [];
         this.vlDataArray.push(vlDataObj[0]);
         this.bindVLData();
       }
@@ -240,7 +251,7 @@ export class DtsHivViralloadPage implements OnInit {
           }
         }
         //comment this dhana will solve
-        this.shipmentsDetailsArray['responseDate']="";
+        this.shipmentsDetailsArray['responseDate'] = "";
         //comment this
         if (this.shipmentsDetailsArray['responseDate']) {
           this.responseDate = new Date(this.shipmentsDetailsArray['responseDate']);
@@ -262,20 +273,21 @@ export class DtsHivViralloadPage implements OnInit {
         // this.ptPanelTestData['vlResult'][1] = "0.0";
         // this.ptPanelTestData['vlResult'][2] = "0";
         // this.ptPanelTestData['vlResult'][3] = "5.2";
-        
+
         this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
         this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
         this.ptPanelTestData['vlResultSectionLabel'] = unescape(this.ptPanelTestArray['vlResultSectionLabel']);
+        // this.ptPanelTestData['tndArray'][0]="no";
         //this.ptPanelTestData['vlResult1']="0.0"; 
         this.ptPanelTestData['notes'] = this.ptPanelTestArray.note;
         if (this.ptPanelTestData['notes']) {
-          this.ptPanelTestData['notes'].forEach((note,index )=> {
-         
-          //  note = unescape(note);
-          this.ptPanelTestData['notes'][index] = unescape(note);
-       
-          //  note = this.sanitizer.bypassSecurityTrustHtml(note);
+          this.ptPanelTestData['notes'].forEach((note, index) => {
+
+            //  note = unescape(note);
+            this.ptPanelTestData['notes'][index] = unescape(note);
+
+            //  note = this.sanitizer.bypassSecurityTrustHtml(note);
           })
         }
 
@@ -308,10 +320,9 @@ export class DtsHivViralloadPage implements OnInit {
       this.viewAccessMessage = this.vlDataArray[0].vlData.access.message;
     }
   }
-  ngOnInit() {
 
+  ngOnInit() {}
 
-  }
   step = 0;
 
   setStep(index: number) {
@@ -319,50 +330,93 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   nextStepShipmentPanel() {
-   //debugger;
-    if(!this.vlassay){
-      this.invalidVlAssay="true";
+   
+    if (!this.vlassay) {
+      this.invalidVlAssay = "true";
     }
-    if(this.testDate=="Invalid Date"){
-      this.invalidTestDate="true";
+    if (this.testDate == undefined) {
+      this.invalidTestDate = "true";
     }
-    if(this.assayExpDate==undefined){
-      this.invalidAssayExpDate="true";
+    if (this.assayExpDate == undefined) {
+      this.invalidAssayExpDate = "true";
     }
-    if(this.isSelectedOther==true){
-      if(!this.othervlassay){
-        this.invalidOthervlassay="true";
+    this.validVlAssay = "";
+    if (this.isSelectedOther == true) {
+      if (!this.othervlassay) {
+        this.invalidOthervlassay = "true";
+      } else {
+        this.validVlAssay = "true";
       }
+    } else {
+      this.validVlAssay = "true";
     }
-    if(!this.assayLotNo){
-      this.invalidVlAssayLotNo="true";
+    if (!this.assayLotNo) {
+      this.invalidVlAssayLotNo = "true";
     }
-    if(this.responseDate==undefined){
-      this.invalidResponseDate="true";
+    if (this.responseDate == undefined) {
+      this.invalidResponseDate = "true";
     }
-    if(this.qcDone=='yes'){
-      if(this.qcDate==undefined){
-        this.invalidQcDate="true";
+    this.validQC = "";
+    if (this.qcDone == 'yes') {
+      if (this.qcDate == undefined) {
+        this.invalidQcDate = "true";
       }
-      if(!this.qcDoneBy){
-        this.invalidQcDoneBy="true";
+      if (!this.qcDoneBy) {
+        this.invalidQcDoneBy = "true";
       }
+      if (this.qcDate && this.qcDoneBy) {
+        this.validQC = "true";
+      }
+    } else {
+      this.validQC = "true";
     }
-    if(this.vlassay && this.testDate!="Invalid Date" && (this.isSelectedOther==true&&this.othervlassay) && this.assayExpDate!="Invalid Date" && this.responseDate!=undefined && (this.qcDone=='yes'&&this.qcDate!=undefined) && (this.qcDone=='yes'&& this.qcDoneBy)){
+    if (this.vlassay && this.testDate != undefined && (this.validVlAssay == "true") && this.assayExpDate != "Invalid Date" && this.responseDate != undefined && (this.validQC == "true")) {
       this.step++;
-      this.validShipmentDetails="true";
+      this.validShipmentDetails = "true";
+    } else {
+      this.validShipmentDetails = "false";
+    }
+  }
+
+  nextStepOtherInfoPanel() {
+
+    if (!this.supReview) {
+      this.invalidSupReview = "true";
+    }
+    this.validSupReview = "";
+    if (this.supReview == "yes") {
+      if (!this.supName) {
+        this.invalidSupName = "true";
+      }
+      if (this.supName) {
+        this.validSupReview = "true";
+      }
+    } else {
+      this.validSupReview = "true";
+    }
+    if (this.supReview && this.validSupReview == "true") {
+      this.validOtherInfo = "true";
+    } else {
+      this.validOtherInfo = "false";
+    }
+
+  }
+
+  nextStepPTPanelTest(isPTPanelFormValid) {
+    if (isPTPanelFormValid == true) {
+      this.step++;
     }
   }
 
   prevStep() {
     this.step--;
   }
+
   calcLog() {
     if (this.vlCalc == '') {
       this.vlLog = '';
     } else {
       this.vlLog = (Math.log10(this.vlCalc)).toFixed(1);
-
     }
   }
 
@@ -390,142 +444,161 @@ export class DtsHivViralloadPage implements OnInit {
     if (supReview == "no") {
       this.supName = "";
     }
+    if (supReview == "yes") {
+      this.isSelectedSupReviewYes = true;
+    }
   }
 
-  submitViralLoad() {
+  submitViralLoad(ShipmentPanel, PTPanelTestForm, otherInfoPanelForm) {
 
-    if (this.ptPanelTest == true) {
-      this.isPTPerformedRadio = 'yes';
-    } else {
-      this.isPTPerformedRadio = 'no';
+    if (otherInfoPanelForm == false) {
+      this.step = 3;
     }
-    if (this.qcDone == 'no') {
-      this.qcDate = "";
-      this.qcDoneBy = "";
-      this.formattedQCDate = "";
-    } else {
-      this.formattedQCDate = this.dateFormat(new Date(this.qcDate));
+    if (PTPanelTestForm == false) {
+      this.step = 2;
     }
-    this.updatedStatus = this.vlDataArray[0].updatedStatus;
-    this.viralLoadJSON = {
-      "authToken": this.authToken,
-      "appVersion": this.appVersionNumber,
-      "syncType": "single",
-      "data": {
-        "evaluationStatus": this.vlDataArray[0].evaluationStatus,
-        "participantId": this.vlDataArray[0].participantId,
-        "schemeType": this.vlDataArray[0].schemeType,
-        "shipmentId": this.vlDataArray[0].shipmentId,
-      //  "shipmentCode":
-        "mapId": this.vlDataArray[0].mapId,
-        "isSynced": true,
-        "createdOn": this.vlDataArray[0].createdOn ? this.vlDataArray[0].createdOn : "",
-        "updatedOn": this.vlDataArray[0].updatedOn ? this.vlDataArray[0].updatedOn : "",
-        "updatedStatus": this.updatedStatus,
-        "vlData": {
-          "access": {
-            "status": this.vlDataArray[0].vlData.access.status
-          },
-          "Heading1": {
-            //participant details
-            "status": true,
-            "data": {
-              "participantName": this.partDetailsArray.participantName,
-              "participantCode": this.partDetailsArray.participantCode,
-              "participantAffiliation": this.partDetailsArray.affiliation,
-              "participantPhone": this.partDetailsArray.phone,
-              "participantMobile": this.partDetailsArray.mobile,
-            }
-          },
-          "Heading2": {
-            //shipment details vlResultSectionLabel
-            "status": true,
-            "data": {
-              "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
-              "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
-              "testReceiptDate": this.dateFormat(new Date(this.testReceiptDate)),
-              "sampleRehydrationDate": this.dateFormat(new Date(this.sampleRhdDate)),
-              "testDate": this.dateFormat(new Date(this.testDate)),
-              "vlAssaySelect": this.shipmentsDetailsArray['vlAssaySelect'],
-              "vlAssaySelected": this.vlassay,
-              "otherAssay": this.othervlassay,
-              "specimenVolume": this.specVolTest,
-              "assayExpirationDate": this.dateFormat(new Date(this.assayExpDate)),
-              "assayLotNumber": this.assayLotNo,
-              "responseDate": this.dateFormat(new Date(this.responseDate)),
-              "modeOfReceiptSelect": this.modeOfReceiptArray,
-              "modeOfReceiptSelected": this.receiptmode,
-              "qcData": {
-                "qcRadioSelected": this.qcDone,
-                "qcDate": this.formattedQCDate,
-                "qcDoneBy": this.qcDoneBy,
-                "status": this.isQCDoneShow,
-                "qcRadio": this.qcRadioArray
+    if (ShipmentPanel == false) {
+      this.step = 1;
+    }
+    this.nextStepShipmentPanel();
+    this.nextStepOtherInfoPanel();
+    this.nextStepPTPanelTest(otherInfoPanelForm);
+    if (ShipmentPanel == true && PTPanelTestForm == true && otherInfoPanelForm == true) {
+      this.isViralLoadFormValid = true;
+      console.log(this.isViralLoadFormValid);
+      if (this.ptPanelTest == true) {
+        this.isPTPerformedRadio = 'yes';
+      } else {
+        this.isPTPerformedRadio = 'no';
+      }
+      if (this.qcDone == 'no') {
+        this.qcDate = "";
+        this.qcDoneBy = "";
+        this.formattedQCDate = "";
+      } else {
+        this.formattedQCDate = this.dateFormat(new Date(this.qcDate));
+      }
+      this.updatedStatus = this.vlDataArray[0].updatedStatus;
+      this.viralLoadJSON = {
+        "authToken": this.authToken,
+        "appVersion": this.appVersionNumber,
+        "syncType": "single",
+        "data": {
+          "evaluationStatus": this.vlDataArray[0].evaluationStatus,
+          "participantId": this.vlDataArray[0].participantId,
+          "schemeType": this.vlDataArray[0].schemeType,
+          "shipmentId": this.vlDataArray[0].shipmentId,
+          //  "shipmentCode":
+          "mapId": this.vlDataArray[0].mapId,
+          "isSynced": true,
+          "createdOn": this.vlDataArray[0].createdOn ? this.vlDataArray[0].createdOn : "",
+          "updatedOn": this.vlDataArray[0].updatedOn ? this.vlDataArray[0].updatedOn : "",
+          "updatedStatus": this.updatedStatus,
+          "vlData": {
+            "access": {
+              "status": this.vlDataArray[0].vlData.access.status
+            },
+            "Heading1": {
+              //participant details
+              "status": true,
+              "data": {
+                "participantName": this.partDetailsArray.participantName,
+                "participantCode": this.partDetailsArray.participantCode,
+                "participantAffiliation": this.partDetailsArray.affiliation,
+                "participantPhone": this.partDetailsArray.phone,
+                "participantMobile": this.partDetailsArray.mobile,
               }
-            }
-          },
-          "Heading3": {
-            //PT panel details
-            "status": true,
-            "data": {
-              "isPtTestNotPerformedRadio": this.isPTPerformedRadio,
-              "no": {
-                "note": this.ptPanelTestData['notes'],
-                "tableHeading": this.ptPanelTestData['controlHeads'],
-                "tableRowTxt": {
-                  "id": this.ptPanelTestData['sampleIDArrray'],
-                  "label": this.ptPanelTestData['controlArray'].label,
-                  "mandatory": this.ptPanelTestData['controlArray'].mandatory,
+            },
+            "Heading2": {
+              //shipment details vlResultSectionLabel
+              "status": true,
+              "data": {
+                "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
+                "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
+                "testReceiptDate": this.dateFormat(new Date(this.testReceiptDate)),
+                "sampleRehydrationDate": this.dateFormat(new Date(this.sampleRhdDate)),
+                "testDate": this.dateFormat(new Date(this.testDate)),
+                "vlAssaySelect": this.shipmentsDetailsArray['vlAssaySelect'],
+                "vlAssaySelected": this.vlassay,
+                "otherAssay": this.othervlassay,
+                "specimenVolume": this.specVolTest,
+                "assayExpirationDate": this.dateFormat(new Date(this.assayExpDate)),
+                "assayLotNumber": this.assayLotNo,
+                "responseDate": this.dateFormat(new Date(this.responseDate)),
+                "modeOfReceiptSelect": this.modeOfReceiptArray,
+                "modeOfReceiptSelected": this.receiptmode,
+                "qcData": {
+                  "qcRadioSelected": this.qcDone,
+                  "qcDate": this.formattedQCDate,
+                  "qcDoneBy": this.qcDoneBy,
+                  "status": this.isQCDoneShow,
+                  "qcRadio": this.qcRadioArray
+                }
+              }
+            },
+            "Heading3": {
+              //PT panel details
+              "status": true,
+              "data": {
+                "isPtTestNotPerformedRadio": this.isPTPerformedRadio,
+                "no": {
+                  "note": this.ptPanelTestData['notes'],
+                  "tableHeading": this.ptPanelTestData['controlHeads'],
+                  "tableRowTxt": {
+                    "id": this.ptPanelTestData['sampleIDArrray'],
+                    "label": this.ptPanelTestData['controlArray'].label,
+                    "mandatory": this.ptPanelTestData['controlArray'].mandatory,
+                  },
+                  "tndReferenceRadio": this.ptPanelTestData['tndRadioArray'],
+                  "tndReferenceRadioSelected": this.ptPanelTestData['tndArray'],
+                  "vlResult": this.ptPanelTestData['vlResult'],
+                  "vlResultSectionLabel": this.ptPanelTestData['vlResultSectionLabel']
                 },
-                "tndReferenceRadio": this.ptPanelTestData['tndRadioArray'],
-                "tndReferenceRadioSelected": this.ptPanelTestData['tndArray'],
-                "vlResult": this.ptPanelTestData['vlResult'],
-                "vlResultSectionLabel": this.ptPanelTestData['vlResultSectionLabel']
-              },
-              "yes": {
-                "vlNotTestedReasonSelected": this.ptPanelNotTestData['vlNotTestedReason'],
-                "commentsTextArea": this.ptPanelNotTestData['ptNotTestedComments'],
-                "supportTextArea": this.ptPanelNotTestData['ptSupportComments'],
-                "commentsText": this.ptPanelNotTestData['ptNotTestedCommentsLabel'],
-                "supportText": this.ptPanelNotTestData['ptSupportCommentsLabel'],
-                "vlNotTestedReasonSelect": this.ptPanelNotTestData['ptNotTestedReasonArray'],
-                "vlNotTestedReasonText": this.ptPanelNotTestData['ptNotTestedReasonLabel']
+                "yes": {
+                  "vlNotTestedReasonSelected": this.ptPanelNotTestData['vlNotTestedReason'],
+                  "commentsTextArea": this.ptPanelNotTestData['ptNotTestedComments'],
+                  "supportTextArea": this.ptPanelNotTestData['ptSupportComments'],
+                  "commentsText": this.ptPanelNotTestData['ptNotTestedCommentsLabel'],
+                  "supportText": this.ptPanelNotTestData['ptSupportCommentsLabel'],
+                  "vlNotTestedReasonSelect": this.ptPanelNotTestData['ptNotTestedReasonArray'],
+                  "vlNotTestedReasonText": this.ptPanelNotTestData['ptNotTestedReasonLabel']
+                }
               }
-            }
-          },
-          "Heading4": {
-            //other information
-            "status": true,
-            "data": {
-              "supervisorReview": this.supervisorReviewArray,
-              "approvalLabel": this.approvalLabel,
-              "supervisorReviewSelected": this.supReview,
-              "approvalInputText": this.supName,
-              "comments": this.comments
+            },
+            "Heading4": {
+              //other information
+              "status": true,
+              "data": {
+                "supervisorReview": this.supervisorReviewArray,
+                "approvalLabel": this.approvalLabel,
+                "supervisorReviewSelected": this.supReview,
+                "approvalInputText": this.supName,
+                "comments": this.comments
+              }
             }
           }
         }
       }
-    }
 
-    if (this.network.type == 'none' || this.network.type == null) {
-      this.viralLoadJSON['data']['isSynced'] = 'false';
-      this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
+      if (this.network.type == 'none' || this.network.type == null) {
+        this.viralLoadJSON['data']['isSynced'] = 'false';
+        this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
 
-    } else {
+      } else {
 
-      this.viralLoadJSON['data']['isSynced'] = 'true';
-      this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON)
-        .then((result) => {
+        this.viralLoadJSON['data']['isSynced'] = 'true';
+        this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON)
+          .then((result) => {
 
-          if (result["status"] == 'success') {
-            this.ToastService.presentToastWithOptions(result['message']);
-            this.router.navigate(['/all-pt-schemes']);
-          }
+            if (result["status"] == 'success') {
+              this.ToastService.presentToastWithOptions(result['message']);
+              this.router.navigate(['/all-pt-schemes']);
+            }
 
-        }, (err) => {
-          console.log(err);
-        });
+          }, (err) => {
+            console.log(err);
+          });
+      }
     }
   }
 

@@ -84,7 +84,7 @@ import * as _ from 'lodash';
 
     //comment when take buid start
 
-    this.networkType = "4G";
+  //  this.networkType = "4G";
 
     //end...
 
