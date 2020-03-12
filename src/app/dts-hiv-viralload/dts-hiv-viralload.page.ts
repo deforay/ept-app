@@ -137,6 +137,8 @@ export class DtsHivViralloadPage implements OnInit {
   isSelectedSupReviewYes: boolean = false;
   PTPanelTestForm: any;
   isViralLoadFormValid: boolean = false;
+  isNextStepPanelTest: boolean = false;
+
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -267,19 +269,22 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelNotTestArray = this.vlDataArray[0].vlData.Heading3.data['yes'];
         this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
         this.ptPanelTestData['controlArray'] = this.ptPanelTestArray['tableRowTxt'];
-        this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['vlResult'];
+         this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['vlResult'];
         // this.ptPanelTestData['vlResult'] = [];
         // this.ptPanelTestData['vlResult'][0] = "3.2";
         // this.ptPanelTestData['vlResult'][1] = "0.0";
         // this.ptPanelTestData['vlResult'][2] = "0";
         // this.ptPanelTestData['vlResult'][3] = "5.2";
 
+        //    this.ptPanelTestData['vlResult'][0] = "65";
+        //  this.ptPanelTestData['vlResult'][1] = "";
+        //  this.ptPanelTestData['vlResult'][2] = "";
+        // this.ptPanelTestData['vlResult'][3] = "";
         this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
         this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
         this.ptPanelTestData['vlResultSectionLabel'] = unescape(this.ptPanelTestArray['vlResultSectionLabel']);
         // this.ptPanelTestData['tndArray'][0]="no";
-        //this.ptPanelTestData['vlResult1']="0.0"; 
         this.ptPanelTestData['notes'] = this.ptPanelTestArray.note;
         if (this.ptPanelTestData['notes']) {
           this.ptPanelTestData['notes'].forEach((note, index) => {
@@ -329,8 +334,8 @@ export class DtsHivViralloadPage implements OnInit {
     this.step = index;
   }
 
-  nextStepShipmentPanel() {
-   
+  nextStepShipmentPanel(next) {
+
     if (!this.vlassay) {
       this.invalidVlAssay = "true";
     }
@@ -370,11 +375,30 @@ export class DtsHivViralloadPage implements OnInit {
     } else {
       this.validQC = "true";
     }
-    if (this.vlassay && this.testDate != undefined && (this.validVlAssay == "true") && this.assayExpDate != "Invalid Date" && this.responseDate != undefined && (this.validQC == "true")) {
-      this.step++;
-      this.validShipmentDetails = "true";
-    } else {
-      this.validShipmentDetails = "false";
+    if (next == 'next') {
+      if (this.vlassay && this.testDate != undefined && (this.validVlAssay == "true") && this.assayExpDate != "Invalid Date" && this.responseDate != undefined && (this.validQC == "true")) {
+        this.step = 2;
+        this.validShipmentDetails = "true";
+      } else {
+        this.step = 1;
+        this.validShipmentDetails = "false";
+      }
+    }
+  }
+
+  nextStepPTPanelTest(isPTPanelTestFormValid, next,ptPanelTest) {
+debugger;
+
+    if(ptPanelTest==''){
+      
+    }
+    this.isNextStepPanelTest=true;
+    if (next == 'next') {
+      if (isPTPanelTestFormValid == true) {
+        this.step = 3;
+      } else {
+        this.step = 2;
+      }
     }
   }
 
@@ -400,12 +424,6 @@ export class DtsHivViralloadPage implements OnInit {
       this.validOtherInfo = "false";
     }
 
-  }
-
-  nextStepPTPanelTest(isPTPanelFormValid) {
-    if (isPTPanelFormValid == true) {
-      this.step++;
-    }
   }
 
   prevStep() {
@@ -449,156 +467,159 @@ export class DtsHivViralloadPage implements OnInit {
     }
   }
 
-  submitViralLoad(ShipmentPanel, PTPanelTestForm, otherInfoPanelForm) {
+  submitViralLoad(isShipmentPanelValid, isPTPanelTestFormValid, isOtherInfoPanel) {
 
-    if (otherInfoPanelForm == false) {
+    if (isOtherInfoPanel == false) {
       this.step = 3;
     }
-    if (PTPanelTestForm == false) {
+    if (isPTPanelTestFormValid == false) {
       this.step = 2;
     }
-    if (ShipmentPanel == false) {
+    if (isShipmentPanelValid == false) {
       this.step = 1;
     }
-    this.nextStepShipmentPanel();
     this.nextStepOtherInfoPanel();
-    this.nextStepPTPanelTest(otherInfoPanelForm);
-    if (ShipmentPanel == true && PTPanelTestForm == true && otherInfoPanelForm == true) {
-      this.isViralLoadFormValid = true;
-      console.log(this.isViralLoadFormValid);
-      if (this.ptPanelTest == true) {
-        this.isPTPerformedRadio = 'yes';
-      } else {
-        this.isPTPerformedRadio = 'no';
-      }
-      if (this.qcDone == 'no') {
-        this.qcDate = "";
-        this.qcDoneBy = "";
-        this.formattedQCDate = "";
-      } else {
-        this.formattedQCDate = this.dateFormat(new Date(this.qcDate));
-      }
-      this.updatedStatus = this.vlDataArray[0].updatedStatus;
-      this.viralLoadJSON = {
-        "authToken": this.authToken,
-        "appVersion": this.appVersionNumber,
-        "syncType": "single",
-        "data": {
-          "evaluationStatus": this.vlDataArray[0].evaluationStatus,
-          "participantId": this.vlDataArray[0].participantId,
-          "schemeType": this.vlDataArray[0].schemeType,
-          "shipmentId": this.vlDataArray[0].shipmentId,
-          //  "shipmentCode":
-          "mapId": this.vlDataArray[0].mapId,
-          "isSynced": true,
-          "createdOn": this.vlDataArray[0].createdOn ? this.vlDataArray[0].createdOn : "",
-          "updatedOn": this.vlDataArray[0].updatedOn ? this.vlDataArray[0].updatedOn : "",
-          "updatedStatus": this.updatedStatus,
-          "vlData": {
-            "access": {
-              "status": this.vlDataArray[0].vlData.access.status
-            },
-            "Heading1": {
-              //participant details
-              "status": true,
-              "data": {
-                "participantName": this.partDetailsArray.participantName,
-                "participantCode": this.partDetailsArray.participantCode,
-                "participantAffiliation": this.partDetailsArray.affiliation,
-                "participantPhone": this.partDetailsArray.phone,
-                "participantMobile": this.partDetailsArray.mobile,
-              }
-            },
-            "Heading2": {
-              //shipment details vlResultSectionLabel
-              "status": true,
-              "data": {
-                "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
-                "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
-                "testReceiptDate": this.dateFormat(new Date(this.testReceiptDate)),
-                "sampleRehydrationDate": this.dateFormat(new Date(this.sampleRhdDate)),
-                "testDate": this.dateFormat(new Date(this.testDate)),
-                "vlAssaySelect": this.shipmentsDetailsArray['vlAssaySelect'],
-                "vlAssaySelected": this.vlassay,
-                "otherAssay": this.othervlassay,
-                "specimenVolume": this.specVolTest,
-                "assayExpirationDate": this.dateFormat(new Date(this.assayExpDate)),
-                "assayLotNumber": this.assayLotNo,
-                "responseDate": this.dateFormat(new Date(this.responseDate)),
-                "modeOfReceiptSelect": this.modeOfReceiptArray,
-                "modeOfReceiptSelected": this.receiptmode,
-                "qcData": {
-                  "qcRadioSelected": this.qcDone,
-                  "qcDate": this.formattedQCDate,
-                  "qcDoneBy": this.qcDoneBy,
-                  "status": this.isQCDoneShow,
-                  "qcRadio": this.qcRadioArray
-                }
-              }
-            },
-            "Heading3": {
-              //PT panel details
-              "status": true,
-              "data": {
-                "isPtTestNotPerformedRadio": this.isPTPerformedRadio,
-                "no": {
-                  "note": this.ptPanelTestData['notes'],
-                  "tableHeading": this.ptPanelTestData['controlHeads'],
-                  "tableRowTxt": {
-                    "id": this.ptPanelTestData['sampleIDArrray'],
-                    "label": this.ptPanelTestData['controlArray'].label,
-                    "mandatory": this.ptPanelTestData['controlArray'].mandatory,
-                  },
-                  "tndReferenceRadio": this.ptPanelTestData['tndRadioArray'],
-                  "tndReferenceRadioSelected": this.ptPanelTestData['tndArray'],
-                  "vlResult": this.ptPanelTestData['vlResult'],
-                  "vlResultSectionLabel": this.ptPanelTestData['vlResultSectionLabel']
-                },
-                "yes": {
-                  "vlNotTestedReasonSelected": this.ptPanelNotTestData['vlNotTestedReason'],
-                  "commentsTextArea": this.ptPanelNotTestData['ptNotTestedComments'],
-                  "supportTextArea": this.ptPanelNotTestData['ptSupportComments'],
-                  "commentsText": this.ptPanelNotTestData['ptNotTestedCommentsLabel'],
-                  "supportText": this.ptPanelNotTestData['ptSupportCommentsLabel'],
-                  "vlNotTestedReasonSelect": this.ptPanelNotTestData['ptNotTestedReasonArray'],
-                  "vlNotTestedReasonText": this.ptPanelNotTestData['ptNotTestedReasonLabel']
-                }
-              }
-            },
-            "Heading4": {
-              //other information
-              "status": true,
-              "data": {
-                "supervisorReview": this.supervisorReviewArray,
-                "approvalLabel": this.approvalLabel,
-                "supervisorReviewSelected": this.supReview,
-                "approvalInputText": this.supName,
-                "comments": this.comments
-              }
-            }
-          }
-        }
-      }
+    this.nextStepPTPanelTest(isPTPanelTestFormValid, 'submit',this.ptPanelTest);
+    this.nextStepShipmentPanel('submit');
+    if (isShipmentPanelValid == true && isPTPanelTestFormValid == true && isOtherInfoPanel == true) {
+      this.step = 3;
 
-      if (this.network.type == 'none' || this.network.type == null) {
-        this.viralLoadJSON['data']['isSynced'] = 'false';
-        this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
+      //   this.isViralLoadFormValid = true;
+      //   console.log(this.isViralLoadFormValid);
+      //   if (this.ptPanelTest == true) {
+      //     this.isPTPerformedRadio = 'yes';
+      //   } else {
+      //     this.isPTPerformedRadio = 'no';
+      //   }
+      //   if (this.qcDone == 'no') {
+      //     this.qcDate = "";
+      //     this.qcDoneBy = "";
+      //     this.formattedQCDate = "";
+      //   } else {
+      //     this.formattedQCDate = this.dateFormat(new Date(this.qcDate));
+      //   }
+      //   this.updatedStatus = this.vlDataArray[0].updatedStatus;
+      //   this.viralLoadJSON = {
+      //     "authToken": this.authToken,
+      //     "appVersion": this.appVersionNumber,
+      //     "syncType": "single",
+      //     "data": {
+      //       "evaluationStatus": this.vlDataArray[0].evaluationStatus,
+      //       "participantId": this.vlDataArray[0].participantId,
+      //       "schemeType": this.vlDataArray[0].schemeType,
+      //       "shipmentId": this.vlDataArray[0].shipmentId,
+      //       //  "shipmentCode":
+      //       "mapId": this.vlDataArray[0].mapId,
+      //       "isSynced": true,
+      //       "createdOn": this.vlDataArray[0].createdOn ? this.vlDataArray[0].createdOn : "",
+      //       "updatedOn": this.vlDataArray[0].updatedOn ? this.vlDataArray[0].updatedOn : "",
+      //       "updatedStatus": this.updatedStatus,
+      //       "vlData": {
+      //         "access": {
+      //           "status": this.vlDataArray[0].vlData.access.status
+      //         },
+      //         "Heading1": {
+      //           //participant details
+      //           "status": true,
+      //           "data": {
+      //             "participantName": this.partDetailsArray.participantName,
+      //             "participantCode": this.partDetailsArray.participantCode,
+      //             "participantAffiliation": this.partDetailsArray.affiliation,
+      //             "participantPhone": this.partDetailsArray.phone,
+      //             "participantMobile": this.partDetailsArray.mobile,
+      //           }
+      //         },
+      //         "Heading2": {
+      //           //shipment details vlResultSectionLabel
+      //           "status": true,
+      //           "data": {
+      //             "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
+      //             "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
+      //             "testReceiptDate": this.dateFormat(new Date(this.testReceiptDate)),
+      //             "sampleRehydrationDate": this.dateFormat(new Date(this.sampleRhdDate)),
+      //             "testDate": this.dateFormat(new Date(this.testDate)),
+      //             "vlAssaySelect": this.shipmentsDetailsArray['vlAssaySelect'],
+      //             "vlAssaySelected": this.vlassay,
+      //             "otherAssay": this.othervlassay,
+      //             "specimenVolume": this.specVolTest,
+      //             "assayExpirationDate": this.dateFormat(new Date(this.assayExpDate)),
+      //             "assayLotNumber": this.assayLotNo,
+      //             "responseDate": this.dateFormat(new Date(this.responseDate)),
+      //             "modeOfReceiptSelect": this.modeOfReceiptArray,
+      //             "modeOfReceiptSelected": this.receiptmode,
+      //             "qcData": {
+      //               "qcRadioSelected": this.qcDone,
+      //               "qcDate": this.formattedQCDate,
+      //               "qcDoneBy": this.qcDoneBy,
+      //               "status": this.isQCDoneShow,
+      //               "qcRadio": this.qcRadioArray
+      //             }
+      //           }
+      //         },
+      //         "Heading3": {
+      //           //PT panel details
+      //           "status": true,
+      //           "data": {
+      //             "isPtTestNotPerformedRadio": this.isPTPerformedRadio,
+      //             "no": {
+      //               "note": this.ptPanelTestData['notes'],
+      //               "tableHeading": this.ptPanelTestData['controlHeads'],
+      //               "tableRowTxt": {
+      //                 "id": this.ptPanelTestData['sampleIDArrray'],
+      //                 "label": this.ptPanelTestData['controlArray'].label,
+      //                 "mandatory": this.ptPanelTestData['controlArray'].mandatory,
+      //               },
+      //               "tndReferenceRadio": this.ptPanelTestData['tndRadioArray'],
+      //               "tndReferenceRadioSelected": this.ptPanelTestData['tndArray'],
+      //               "vlResult": this.ptPanelTestData['vlResult'],
+      //               "vlResultSectionLabel": this.ptPanelTestData['vlResultSectionLabel']
+      //             },
+      //             "yes": {
+      //               "vlNotTestedReasonSelected": this.ptPanelNotTestData['vlNotTestedReason'],
+      //               "commentsTextArea": this.ptPanelNotTestData['ptNotTestedComments'],
+      //               "supportTextArea": this.ptPanelNotTestData['ptSupportComments'],
+      //               "commentsText": this.ptPanelNotTestData['ptNotTestedCommentsLabel'],
+      //               "supportText": this.ptPanelNotTestData['ptSupportCommentsLabel'],
+      //               "vlNotTestedReasonSelect": this.ptPanelNotTestData['ptNotTestedReasonArray'],
+      //               "vlNotTestedReasonText": this.ptPanelNotTestData['ptNotTestedReasonLabel']
+      //             }
+      //           }
+      //         },
+      //         "Heading4": {
+      //           //other information
+      //           "status": true,
+      //           "data": {
+      //             "supervisorReview": this.supervisorReviewArray,
+      //             "approvalLabel": this.approvalLabel,
+      //             "supervisorReviewSelected": this.supReview,
+      //             "approvalInputText": this.supName,
+      //             "comments": this.comments
+      //           }
+      //         }
+      //       }
+      //     }
+      //   }
 
-      } else {
+      //   if (this.network.type == 'none' || this.network.type == null) {
+      //     this.viralLoadJSON['data']['isSynced'] = 'false';
+      //     this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
 
-        this.viralLoadJSON['data']['isSynced'] = 'true';
-        this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON)
-          .then((result) => {
+      //   } else {
 
-            if (result["status"] == 'success') {
-              this.ToastService.presentToastWithOptions(result['message']);
-              this.router.navigate(['/all-pt-schemes']);
-            }
+      //     this.viralLoadJSON['data']['isSynced'] =http://localhost:8100/all-pt-schemes 'true';
+      //     this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON)
+      //       .then((result) => {
 
-          }, (err) => {
-            console.log(err);
-          });
-      }
+      //         if (result["status"] == 'success') {
+      //           this.ToastService.presentToastWithOptions(result['message']);
+      //           this.router.navigate(['/all-pt-schemes']);
+      //         }
+
+      //       }, (err) => {
+      //         console.log(err);
+      //       });
+      //   }
+
     }
   }
 

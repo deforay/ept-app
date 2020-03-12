@@ -112,10 +112,10 @@ export class AppComponent {
 
 
     //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-    // if (!this.appVersionNumber) {
-    //   this.appVersionNumber = "0.0.1";
-    //   this.storage.set('appVersionNumber', this.appVersionNumber);
-    // }
+    if (!this.appVersionNumber) {
+      this.appVersionNumber = "0.0.1";
+      this.storage.set('appVersionNumber', this.appVersionNumber);
+    }
     //end..... 
 
 
