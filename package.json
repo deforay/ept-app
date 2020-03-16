@@ -28,6 +28,7 @@
     "@ionic-native/core": "^5.22.0",
     "@ionic-native/diagnostic": "^5.22.0",
     "@ionic-native/geolocation": "^5.22.0",
+    "@ionic-native/keyboard": "^5.22.0",
     "@ionic-native/location-accuracy": "^5.22.0",
     "@ionic-native/market": "^5.22.0",
     "@ionic-native/network": "^5.22.0",

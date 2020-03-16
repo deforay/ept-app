@@ -4,6 +4,7 @@ import {
   Router
 } from '@angular/router';
 import { Market } from '@ionic-native/market/ngx';
+
 @Injectable({
   providedIn: 'root'
 })
@@ -31,6 +32,9 @@ export class AlertService {
             }
             if(alertName=='playStoreAlert'){
               this.market.open('ept.deforay');
+            }
+            if(alertName=='appExitAlert'){
+            navigator['app'].exitApp();
             }
           }
         }

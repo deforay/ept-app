@@ -126,6 +126,9 @@ ion-header ion-toolbar.main-toolbar{
 //     background: #387ef5;
 // }
 .danger-text{
+    color:#E31E24;
+}
+.errorMsg{
     color: #f44336;
     float: left;
     margin-left: 10px;
@@ -133,7 +136,9 @@ ion-header ion-toolbar.main-toolbar{
     margin-top: -5px;
     text-align: left;
     display: block;
-}
+ }
+
+
 .can-go-back app-header ion-back-button {
     display: block!important;
 }
