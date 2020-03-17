@@ -419,7 +419,7 @@
 
               <div *ngIf="ptPanelTestArray.vlResult">
 
-                <div *ngFor="let vlresult of vlResultArray;let k = index">
+                <div *ngFor="let vlresult of ptPanelTestArray.vlResult;let k = index">
                   <ion-row>
                     <ion-col size="12" class="grid-input-col" *ngIf="k==i">
                       <p class="no-padding" style="margin-top: 0;">
@@ -431,8 +431,10 @@
                         <mat-label>
                           <div [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]"></div>
                         </mat-label>
-                        <input matInput [(ngModel)]="vlresult" type="tel" name="vlresultdata" #myInput
-                          [ngModelOptions]="{standalone: true}" placeholder="Viral Load (log10 copies/ml)"
+                        <input matInput [(ngModel)]="vlresult"  
+                          [ngModelOptions]="{standalone: true}" 
+                          (keyup)="checkVlData(vlresult,k)"
+                          placeholder="Viral Load (log10 copies/ml)"
                           [disabled]="ptPanelTestData.tndArray[i]=='yes'||isView=='true'"
                           [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest)">
                        
@@ -532,7 +534,7 @@
       </section>
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" type="submit" (click)="nextStepPTPanelTest('next',ptPanelTest)">Next</button>
+        <button mat-button color="primary" type="submit" (click)="nextStepPTPanelTest('next',ptPanelTest);checkVlArray()">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
     </form>

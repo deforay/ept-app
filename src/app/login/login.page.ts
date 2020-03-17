@@ -145,6 +145,8 @@ export class LoginPage implements OnInit {
                 //  this.LoaderService.disMissLoading();
               });
           }
+        } else {
+          console.log(appVersionNumber)
         }
       })
     }

@@ -97,12 +97,15 @@ export class AppComponent {
       //  this.statusBar.styleDefault();
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
-      this.appVersion.getVersionNumber().then(value => {
-        this.appVersionNumber = value;
-        this.storage.set('appVersionNumber', this.appVersionNumber);
-      }).catch(err => {
-        //   console.log(err);
-      });
+      var appVersionNum =  this.appVersion.getVersionNumber();
+      if(appVersionNum){
+        this.appVersionNumber = appVersionNum;
+        this.storage.set('appVersionNumber', appVersionNum);
+      }
+      
+
+
+     
       this.NetworkService.initializeNetworkEvents();
       if (this.network.type == 'none') {
         console.log("None");
@@ -145,13 +148,13 @@ export class AppComponent {
       });
     });
 
+    if(!this.appVersionNumber){
+      //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
+      this.appVersionNumber = "0.0.1";
+      this.storage.set('appVersionNumber', this.appVersionNumber);
+      //end
+    }
 
-    //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-    // if (!this.appVersionNumber) {
-    //   this.appVersionNumber = "0.0.1";
-    //   this.storage.set('appVersionNumber', this.appVersionNumber);
-    // }
-    //end..... 
 
 
   }

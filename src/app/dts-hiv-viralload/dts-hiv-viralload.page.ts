@@ -282,15 +282,17 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelNotTestArray = this.vlDataArray[0].vlData.Heading3.data['yes'];
         this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
         this.ptPanelTestData['controlArray'] = this.ptPanelTestArray['tableRowTxt'];
-        this.ptPanelTestData['vlResult'] = this.ptPanelTestArray['vlResult'];
-        this.vlResultArray = this.ptPanelTestArray['vlResult'];
+        this.ptPanelTestData['vlResult'] = [...this.ptPanelTestArray['vlResult']];
+        this.vlResultArray = [...this.ptPanelTestArray['vlResult']];
         this.vlResultForm = [];
+        
        // this.
         // this.ptPanelTestData['vlResult'] = [];
         // this.ptPanelTestData['vlResult'][0] = "5.60";
         // this.ptPanelTestData['vlResult'][1] = "6.80";
         // this.ptPanelTestData['vlResult'][2] = "3.90";
         // this.ptPanelTestData['vlResult'][3] = "0.00";
+
         this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
         this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
@@ -541,7 +543,17 @@ export class DtsHivViralloadPage implements OnInit {
       this.isSelectedSupReviewYes = true;
     }
   }
-  
+
+  checkVlData(vldata,index){
+  this.vlResultArray[index] = vldata;
+  }
+  checkVlArray(){
+    this.vlResultArray.forEach((vlElement,index) => {
+      this.ptPanelTestData['vlResult'][index]= vlElement;
+    });
+    console.log( this.ptPanelTestData['vlResult'])
+
+  }
   submitViralLoad() {
 
     this.nextStepOtherInfoPanel('submit');
