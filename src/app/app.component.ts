@@ -1,12 +1,8 @@
 import {
-  Component
+  Component,ViewChild
 } from '@angular/core';
-// import {
-//   ViewChildren,
-//   QueryList
-// } from '@angular/core';
 import {
-  Platform
+  Platform,IonRouterOutlet
 } from '@ionic/angular';
 import {
   SplashScreen
@@ -37,11 +33,6 @@ import {
   Router
 } from '@angular/router';
 
-// import {
-//   IonRouterOutlet
-// } from '@ionic/angular';
-//@ViewChildren(IonRouterOutlet) routerOutlet: IonRouterOutlet;
-
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -50,13 +41,16 @@ import {
 
 export class AppComponent {
 
-  //  @ViewChild(IonRouterOutlet)  routerOutlet: IonRouterOutlet;
- // @ViewChildren(IonRouterOutlet) routerOutlets: QueryList < IonRouterOutlet > ;
+  @ViewChild(IonRouterOutlet, {
+    static: true
+  }) routerOutlet: IonRouterOutlet;
+
   appVersionNumber: any;
+
   public appPages = [{
       title: 'All Shipments',
       url: '/all-pt-schemes',
-      icon: 'shipment'
+      icon: 'cargo-truck'
     },
     {
       title: 'Individual Reports',
@@ -87,7 +81,6 @@ export class AppComponent {
     public events: Events,
     public ToastService: ToastService,
     private router: Router,
-   // private routerOutlet: IonRouterOutlet
   ) {
     this.initializeApp();
   }
@@ -126,23 +119,17 @@ export class AppComponent {
           this.router.navigateByUrl('/login');
         }
       })
-      // this.platform.backButton.subscribe(() => {
-
-
-      //   this.alertService.presentAlertConfirm('e-PT',"Are you sure want to exit?", 'appExitAlert');
-
-      // });
+    
       this.platform.backButton.subscribeWithPriority(0, () => {
-        if (this.router.url === '/login') {
-          //  this.platform.exitApp(); 
+        if (this.router.url === '/login' || this.router.url==='/change-password' || this.router.url==='/all-pt-schemes' || this.router.url === '/individual-report' || this.router.url === '/summary-report') {
 
-          // or if that doesn't work, try
           this.alertService.presentAlertConfirm('e-PT', "Are you sure want to exit?", 'appExitAlert');
-        } 
-        // else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
-        //   this.routerOutlet.pop();
-        // } 
-        else {
+
+        } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
+
+          this.routerOutlet.pop();
+
+        } else {
 
         }
       });
