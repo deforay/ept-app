@@ -44,6 +44,12 @@
 .text-bold{
     font-weight: 700;
 }
+.margin-bottom-20{
+    margin-bottom: 20px;;
+}
+.margin-top-15{
+    margin-top: 15px;;
+}
 .no-padding{
     padding:0 !important;
 }
@@ -75,7 +81,7 @@
 //     font-size:17px;
 // }
 .div-section{
-margin:10px;
+    margin:10px;
 }
 ion-header ion-toolbar ion-title{
     font-size:15px;
@@ -100,7 +106,9 @@ ion-header ion-toolbar.main-toolbar{
     height: 100px!important;
 
 }
-
+input.mat-input-element{
+    font-size: 13px;
+}
 .toolbar-background{
     background: #387ef5 !important;
 }
@@ -165,7 +173,11 @@ ion-header ion-toolbar.main-toolbar{
 .mat-focused .mat-form-field-required-marker{
     color: #F44336;
 }
-.mat-form-field-appearance-outline.grid-col-form.mat-form-field-hide-placeholder .mat-form-field-outline-thick ,
+// .mat-form-field-appearance-outline.grid-col-form.mat-form-field-hide-placeholder .mat-form-field-outline-thick ,
+// .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick,
+// .mat-form-field.mat-focused .mat-form-field-label{
+//     color: #3c8dbc ;
+// }
 .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick,
 .mat-form-field.mat-focused .mat-form-field-label{
     color: #3c8dbc ;
@@ -219,6 +231,10 @@ ion-header ion-toolbar.main-toolbar{
 .mat-form-field-appearance-outline .mat-form-field-wrapper {
     margin: .07em 0 !important;
 }
+.mat-form-field-label mat-label{
+    float:left !important;
+    padding-right:5px;
+}
 .mat-form-field-appearance-outline .mat-form-field-flex
 {
   .mat-form-field-infix {
@@ -226,6 +242,7 @@ ion-header ion-toolbar.main-toolbar{
         .mat-form-field-label-wrapper {
         top: -1em;
         padding-top: 1em;
+        
         }
     }
 }
@@ -237,9 +254,16 @@ ion-header ion-toolbar.main-toolbar{
     width: 150px !important;
 }
 .mat-error{
+    margin-left: -6px;
     strong {
         font-weight: 500;
     }
+}
+.mat-hint {
+    color: rgba(0, 0, 0, 0.71);
+    margin-top: 15px;
+    padding: 10px 0 !important;
+    background: transparent;
 }
 .mat-accordion .mat-expansion-panel {
     width: calc(100% - 20px) !important;

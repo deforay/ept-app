@@ -315,7 +315,11 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelNotTestData['ptNotTestedReasonArray'] = this.ptPanelNotTestArray.vlNotTestedReasonSelect;
         this.ptPanelNotTestData['ptSupportComments'] = this.ptPanelNotTestArray.supportTextArea;
         this.ptPanelNotTestData['ptNotTestedComments'] = this.ptPanelNotTestArray.commentsTextArea;
-        this.ptPanelNotTestData['vlNotTestedReason'] = this.ptPanelNotTestArray.vlNotTestedReasonSelected;
+        if(this.ptPanelNotTestArray.vlNotTestedReasonSelected=="0" || this.ptPanelNotTestArray.vlNotTestedReasonSelected==""){
+          this.ptPanelNotTestData['vlNotTestedReason'] = "";
+        }else{
+          this.ptPanelNotTestData['vlNotTestedReason'] = this.ptPanelNotTestArray.vlNotTestedReasonSelected;
+        }
 
         if (this.vlDataArray[0].vlData.Heading3.data['isPtTestNotPerformedRadio'] == 'no') {
           this.ptPanelTest = false;
@@ -427,7 +431,9 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   nextStepPTPanelTest(next, ptPanelTest) {
-
+    this.vlResultArray.forEach((vlElement,index) => {
+      this.ptPanelTestData['vlResult'][index]= vlElement;
+    });
     this.mandatoryArray = this.ptPanelTestData['controlArray'].mandatory;
     this.mandatoryTrueArray = this.mandatoryArray.filter(i => i == true);
     this.validVLResultCount = 0;
