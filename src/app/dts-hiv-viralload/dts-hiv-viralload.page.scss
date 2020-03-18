@@ -82,9 +82,13 @@
    mat-radio-group{
        font-size:13px !important;
    }
-   .login-full-width.grid-col-form.inputBox{
-       height: 60px!important;
+   .login-full-width.grid-col-form.mat-form-field-invalid{
+        height: 65px!important;
    }
+   .login-full-width.grid-col-form.mat-text-area-field.mat-form-field-invalid{
+    height: 75px!important;
+}
+   
    .checkMarkIcon{
     color: green;
     font-size: 19px;
