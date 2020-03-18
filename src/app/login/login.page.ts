@@ -131,13 +131,12 @@ export class LoginPage implements OnInit {
                 if (result["status"] == 'success') {
 
                   this.storage.set('participantLogin', result['data']);
-                  this.storage.get('participantLogin').then((partiLoginResult) => {
-                    if (partiLoginResult) {
-                      this.router.navigate(['/all-pt-schemes']);
-                    }
-                  })
+                  this.router.navigate(['/all-pt-schemes']);
+      
                 } else if (result["status"] == 'version-failed') {
+
                   this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+                  
                 } else {
                   this.ToastService.presentToastWithOptions(result["message"]);
                 }

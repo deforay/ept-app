@@ -63,6 +63,7 @@ import * as _ from 'lodash';
   subListRespSuccessCount: number;
   subListRespErrorCount: number;
   dupLocalStorageUnSyncedArray = [];
+  skeltonArray: any = [];
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -72,7 +73,6 @@ import * as _ from 'lodash';
     public network: Network,
     public events: Events) {
 
-
   }
 
   dateFormat(dateObj) {
@@ -80,11 +80,12 @@ import * as _ from 'lodash';
   }
 
   ionViewWillEnter() {
+  
     this.networkType = this.network.type;
 
     //comment when take buid start
 
-      this.networkType = "4G";
+    this.networkType = "4G";
 
     //end...
 
@@ -122,21 +123,21 @@ import * as _ from 'lodash';
     })
 
     if (this.networkType == 'none' || this.networkType == null) {
-    this.callOfflineFunctions();
+      this.callOfflineFunctions();
 
     } else {
-     this.callOnlineFunctions();
+      this.callOnlineFunctions();
     }
   }
 
 
-  callOnlineFunctions(){
+  callOnlineFunctions() {
 
     this.getAllShipmentForms();
     this.getAllShippings();
   }
 
-  callOfflineFunctions(){
+  callOfflineFunctions() {
     this.storage.get('shipmentArray').then((shipmentArray) => {
       if (shipmentArray.length != 0) {
         this.shippingsArray = shipmentArray;
@@ -184,12 +185,16 @@ import * as _ from 'lodash';
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
         this.CrudServiceService.getData('shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result1 => {
-
+    
           if (result1["status"] == 'success') {
-
-            this.shipmentFormArray = result1['data'];
-
+            this.skeltonArray = [{}, {}, {}, {}];
+            this.shipmentFormArray = result1['data'];         
             this.storage.set("shipmentFormArray", this.shipmentFormArray);
+          }
+          if (result1["status"] == "fail") {
+            this.ToastService.presentToastWithOptions("Something went wrong. Please log in again");      
+            this.storage.set("isLogOut",true);
+            this.router.navigate(['/login']);
           }
         }, (err) => {
 
