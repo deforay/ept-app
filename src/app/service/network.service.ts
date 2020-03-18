@@ -30,10 +30,9 @@ export class NetworkService {
     public eventCtrl: Events,
     public ToastService: ToastService
   ) {
-    console.log('Hello NetworkProvider Provider');
-
+    
  //   this.previousStatus = ConnectionStatusEnum.Online;
-    console.log(this.previousStatus);
+   
     // this.initializeNetworkEvents();
 
   }

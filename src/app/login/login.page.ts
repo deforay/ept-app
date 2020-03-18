@@ -95,14 +95,7 @@ export class LoginPage implements OnInit {
     // enable the root left menu when leaving this page
     this.menu.enable(true);
   }
-  // async presentLoading(){
-  //   const loading =  this.loadingController.create({
-  //     spinner: 'dots',
-  //     message: 'Please wait',
-  //   });
-
-  // }
-
+ 
   login() {
 
 
@@ -129,7 +122,7 @@ export class LoginPage implements OnInit {
             this.CrudServiceService.postData('login', loginJSON)
               .then((result) => {
                 if (result["status"] == 'success') {
-
+                  this.storage.set("isLogOut", false);
                   this.storage.set('participantLogin', result['data']);
                   this.router.navigate(['/all-pt-schemes']);
       
