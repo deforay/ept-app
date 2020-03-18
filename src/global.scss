@@ -211,9 +211,9 @@ input.mat-input-element{
 .datepicker-input.mat-input-element::placeholder{
    color: #000000 !important;
 }
-// .mat-form-field.mat-focused .mat-form-field-label{
-
-// }
+.mat-form-field-appearance-outline .mat-form-field-outline-thick {
+    color: #3c8dbc;
+}
 .mat-form-field.grid-col-form {
 //    width:calc(100% - 10px) !important;
    width:100% !important;
@@ -234,6 +234,11 @@ input.mat-input-element{
 .mat-form-field-label mat-label{
     float:left !important;
     padding-right:5px;
+    font-size: 13px;
+}
+.mat-form-field.mat-form-field.mat-focused.mat-form-field-invalid .mat-form-field-label-wrapper .mat-form-field-label{
+    font-size: 14px;
+
 }
 .mat-form-field-appearance-outline .mat-form-field-flex
 {
