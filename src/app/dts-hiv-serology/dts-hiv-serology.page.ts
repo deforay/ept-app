@@ -1,46 +1,9 @@
-import {
-  Component,
-  OnInit
-}
-
-from '@angular/core';
-
-import {
-  FormControl,
-  FormGroupDirective,
-  NgForm,
-  Validators,
-  DefaultValueAccessor
-}
-
-from '@angular/forms';
-
-import {
-  Router
-}
-
-from '@angular/router';
-
-import {
-  ErrorStateMatcher
-}
-
-from '@angular/material/core';
-
-import {
-  CrudServiceService,
-  ToastService,
-  LoaderService,
-}
-
-from '../../app/service/providers';
-
-import {
-  Storage
-}
-
-from '@ionic/storage';
-
+import {  Component,   OnInit } from '@angular/core';
+import {  FormControl,   FormGroupDirective,  NgForm,  Validators } from '@angular/forms';
+import {  ErrorStateMatcher } from '@angular/material/core';
+import {  CrudServiceService, ToastService, LoaderService } from '../../app/service/providers';
+import {  Storage } from '@ionic/storage';
+import {  Router } from '@angular/router';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 
@@ -50,31 +13,21 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
     return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
   }
 }
-
 /** Error when invalid control is dirty, touched, or submitted. */
-
-
-interface selectArray {
-  id: any;
-  name: string;
-}
 
 @Component({
     selector: 'app-dts-hiv-serology',
     templateUrl: './dts-hiv-serology.page.html',
     styleUrls: ['./dts-hiv-serology.page.scss'],
+  })
 
-  }
-
-) export class DTSHIVSerologyPage implements OnInit {
+export class DTSHIVSerologyPage implements OnInit {
 
   panelOpenState = false;
   selectedTestFormArray = [];
   partiDetailsArray: any = [];
 
-  shipmentsDetailsArray: any = {}
-
-  ;
+  shipmentsDetailsArray: any = {};
   algorithmUsedSelectArray = [];
   modeOfReceiptArray = [];
   qcRadioArray = [];
@@ -108,28 +61,17 @@ interface selectArray {
   testKitArray: any;
   expDateFormat = [];
 
-  testKitXerologyForm: any = {}
+  testKitXerologyForm: any = {};
 
-  ;
+  sampleResult: any = {};
 
-  sampleResult: any = {}
+  sampleDetailsJSON: any = {};
 
-  ;
-
-  sampleDetailsJSON: any = {}
-
-  ;
-
-  sampleResultObj = {}
-
-  ;
+  sampleResultObj = {};
   sampleResultArray = [];
 
-  newSampObj = {}
-
-  newSampArray = {}
-
-  ;
+  newSampObj = {};
+  newSampArray = {};
   appVersionNumber: any;
   authToken: any;
   participantID: any;
@@ -209,18 +151,18 @@ interface selectArray {
             this.testingDate = new Date(this.shipmentsDetailsArray.testingDate);
             this.respDate = new Date(this.shipmentsDetailsArray.responseDate);
             this.algorithmUsedSelectArray = this.shipmentsDetailsArray.algorithmUsedSelect;
-
-            if (this.algorithmUsedSelectArray) {
-              this.selectedAlgUsed = this.algorithmUsedSelectArray.filter(alg => alg.selected == "selected");
-              this.algorithmused = this.selectedAlgUsed[0].value;
-            }
+            this.algorithmused =  this.shipmentsDetailsArray.algorithmUsedSelected;
+            // if (this.algorithmUsedSelectArray) {
+            //   this.selectedAlgUsed = this.algorithmUsedSelectArray.filter(alg => alg.selected == "selected");
+            //   this.algorithmused = this.selectedAlgUsed[0].value;
+            // }
 
             this.modeOfReceiptArray = this.shipmentsDetailsArray.modeOfReceiptSelect;
-
-            if (this.modeOfReceiptArray) {
-              this.selectedModeOfRec = this.modeOfReceiptArray.filter(modeOfRec => modeOfRec.selected == "selected");
-              this.receiptmode = this.selectedModeOfRec[0].value;
-            }
+            this.receiptmode = this.shipmentsDetailsArray.modeOfReceiptSelected;
+            // if (this.modeOfReceiptArray) {
+            //   this.selectedModeOfRec = this.modeOfReceiptArray.filter(modeOfRec => modeOfRec.selected == "selected");
+            //   this.receiptmode = this.selectedModeOfRec[0].value;
+            // }
 
             this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
 
@@ -241,9 +183,9 @@ interface selectArray {
             this.testKitTextArray = this.testKitDetailsArray.kitText;
             this.testKitNameArray = (this.testKitDetailsArray.kitName);
 
-            this.testKitDetailsArray.kitSelected.forEach((element, index) => {
-              this.kitName[index] = element.kitValue
-            })
+            // this.testKitDetailsArray.kitSelected.forEach((element, index) => {
+            //   this.kitName[index] = element.kitValue
+            // })
 
             for (let lotvalue of Object.values(this.testKitDetailsArray['lotNo'])) {
               this.lot.push(lotvalue);
@@ -286,36 +228,33 @@ interface selectArray {
             this.resultsTextPushArray.push(this.sampleDetailsArray.resultsText);
 
 
-            for (let [index, key] of this.resultsTextArray.entries()) {
-              //  key = key + '_'+(index+1);
-              this.sampleResult[key] = '';
+            // for (let [index, key] of this.resultsTextArray.entries()) {
+            //   this.sampleResult[key] = '';
 
-            }
+            // }
 
-            for (let keycheck of this.samplesTextArray) {
+            // for (let keycheck of this.samplesTextArray) {
 
-              this.sampleResultObj[keycheck] = this.sampleResult;
-              // this.sampleResultArr[keycheck][index] = this.sampleResult;
-            }
+            //   this.sampleResultObj[keycheck] = this.sampleResult;
+            // }
 
-            for (let [keycheck] of this.samplesTextArray) {
+            // for (let [keycheck] of this.samplesTextArray) {
 
-              this.sampleResultObj[keycheck] = this.sampleResult;
-            }
+            //   this.sampleResultObj[keycheck] = this.sampleResult;
+            // }
 
-            this.sampleResultArray.push(this.sampleResultObj);
-            console.log(this.sampleResultArray);
+            // this.sampleResultArray.push(this.sampleResultObj);
 
 
-            console.log(this.sampleResultArray);
+            // console.log(this.sampleResultArray);
             console.log(this.sampleDetailsArray);
-            this.sampleDetailsArray['INDHU203']['Result-1']['0'] = "1";
-            this.sampleDetailsArray['INDHU203']['Result-2']['1'] = "2";
-            this.sampleDetailsArray['INDHU203']['Result-3']['2'] = "2";
-            this.sampleDetailsArray['INDHU203']['Final-Result']['3'] = "4";
-            this.sampleDetailsArray['INDHU204']['Result-1']['0'] = "3";
-            this.sampleDetailsArray['INDHU204']['Result-2']['1'] = "3";
-            this.sampleDetailsArray['INDHU204']['Result-3']['2'] = "3";
+            // this.sampleDetailsArray['INDHU203']['Result-1']['0'] = "1";
+            // this.sampleDetailsArray['INDHU203']['Result-2']['1'] = "2";
+            // this.sampleDetailsArray['INDHU203']['Result-3']['2'] = "2";
+            // this.sampleDetailsArray['INDHU203']['Final-Result']['3'] = "4";
+            // this.sampleDetailsArray['INDHU204']['Result-1']['0'] = "3";
+            // this.sampleDetailsArray['INDHU204']['Result-2']['1'] = "3";
+            // this.sampleDetailsArray['INDHU204']['Result-3']['2'] = "3";
 
 
           }
@@ -324,11 +263,11 @@ interface selectArray {
 
             this.otherInfoArray = dtsDataObj[0].dtsData.Heading5.data;
             this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
-
-            if (this.supervisorReviewArray) {
-              this.selectedSupReviewArray = this.supervisorReviewArray.filter(supReviewItem => supReviewItem.selected == "selected");
-              this.supReview = this.selectedSupReviewArray[0].value;
-            }
+            this.supReview =  this.otherInfoArray.supervisorReviewSelected;
+            // if (this.supervisorReviewArray) {
+            //   this.selectedSupReviewArray = this.supervisorReviewArray.filter(supReviewItem => supReviewItem.selected == "selected");
+            //   this.supReview = this.selectedSupReviewArray[0].value;
+            // }
 
             this.selectedSupReviewArray = this.supervisorName = this.otherInfoArray.approvalInputText;
 
@@ -363,26 +302,22 @@ interface selectArray {
   }
 
   pushSampleDetails(sample, result, r) {
-    console.log(this.sampleResultArray)
-    this.sampleResultArray.forEach((sampleElement, index) => {
-    
-      this.currentObj=Object.keys(sampleElement)[r];
-      let x=this.currentObj;
-      if (x == sample) {
-      
-        if(x==Object.keys(sampleElement)[r]){
-          sampleElement[x][result] = "8"
-     
-          console.log(sampleElement[sample][result]);
-        }  
-      }     
-    });
-    //this.selectedAlgUsed =  this.sampleResultArray.filter(i =>
-   // console.log(Object.keys(i)[0])
-   //  (Object.keys(i)[i])==sample
 
+     console.log(this.sampleDetailsArray)
+    // this.sampleResultArray.forEach((sampleElement, index) => {
     
-   // );
+    //   this.currentObj=Object.keys(sampleElement)[r];
+    //   let x=this.currentObj;
+    //   if (x == sample) {
+      
+    //     if(x==Object.keys(sampleElement)[r]){
+    //       sampleElement[x][result] = "8"
+     
+    //       console.log(sampleElement[sample][result]);
+    //     }  
+    //   }     
+    // });
+   
   }
 
   submitXerologyForm() {

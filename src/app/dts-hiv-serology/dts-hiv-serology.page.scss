@@ -21,3 +21,8 @@ ion-grid ion-row ion-col:nth-child(3n){
 .partiValues{
     font-size: 13px;
 }
+
+.mat-radio-group .mat-radio-button{
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+   }
