@@ -11,30 +11,57 @@
         </ion-toolbar>
       </ion-header>
       <ion-content>
-        <ion-list class="no-padding">
+
+        <ion-list id="inbox-list">
+          <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages; let i = index">
+
+            <div *ngIf="p.title!='Logout'">
+              <ion-item class="sidemenu-item" (click)="selectedIndex = i" routerDirection="root" [routerLink]="[p.url]"
+                lines="none" detail="false" [class.selected]="selectedIndex == i">
+                <div class="sidemenu-img-icon">
+                  <img src="assets/img/{{p.icon}}.png">
+                </div>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </div>
+            <div *ngIf="p.title=='Logout'">
+              <ion-item class="sidemenu-item" (click)="selectedIndex = i;logout();" routerDirection="root" lines="none"
+                detail="false" [class.selected]="selectedIndex == i">
+                <!-- <ion-icon slot="start" [ios]="p.icon + '-outline'" [md]="p.icon + '-sharp'"></ion-icon> -->
+                <div class="sidemenu-img-icon">
+                  <img src="assets/img/{{p.icon}}.png">
+                </div>
+                <ion-label>{{ p.title }}</ion-label>
+              </ion-item>
+            </div>
+
+          </ion-menu-toggle>
+        </ion-list>
+
+        <!-- <ion-list class="no-padding">
           <ion-menu-toggle auto-hide="false" *ngFor="let p of appPages">
             <ion-item [routerDirection]="'root'" [routerLink]="[p.url]">
-              <img src="assets/img/{{p.icon}}.png">
-                <!-- <mat-icon aria-hidden="false" aria-label="Example home icon">home</mat-icon> -->
-              <!-- <ion-icon slot="start" [name]="p.icon"></ion-icon> -->
+              <img src="assets/img/{{p.icon}}.png">            
               <ion-label>
                 {{p.title}}
               </ion-label>
-            </ion-item>
-           
+            </ion-item>           
           </ion-menu-toggle>
           <ion-menu-toggle>
             <ion-item (click)="logout()">            
               <img src="assets/img/logout.png">
             <ion-label >
              Logout
-            </ion-label> 
-            
-           
+            </ion-label>          
           </ion-item>
           </ion-menu-toggle>
-        </ion-list>
+        </ion-list> -->
       </ion-content>
+      <ion-footer class="ion-no-border">
+        <ion-toolbar>
+          <ion-title >Version : {{appVersionNumber}}</ion-title>
+        </ion-toolbar>
+      </ion-footer>
     </ion-menu>
     <ion-router-outlet id="main-content"></ion-router-outlet>
   </ion-split-pane>

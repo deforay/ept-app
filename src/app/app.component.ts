@@ -46,27 +46,33 @@ export class AppComponent {
   }) routerOutlet: IonRouterOutlet;
 
   appVersionNumber: any;
+  public selectedIndex = 0;
 
   public appPages = [{
       title: 'All Shipments',
       url: '/all-pt-schemes',
-      icon: 'cargo-truck'
+      icon: 'shipment'
     },
     {
       title: 'Individual Reports',
       url: '/individual-report',
-      icon: 'newsPaper'
+      icon: 'singlereport'
     },
     {
       title: 'Summary Reports',
       url: '/summary-report',
-      icon: 'report'
+      icon: 'summaryreport'
     },
     {
       title: 'Change Password',
       url: '/change-password',
-      icon: 'key'
-    }
+      icon: 'password'
+    },
+    {
+      title: 'Logout',
+      url: '/login',
+      icon: 'logout'
+    },
   ];
 
   constructor(
@@ -91,7 +97,8 @@ export class AppComponent {
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
       var appVersionNum =  this.appVersion.getVersionNumber();
-      if(appVersionNum){
+
+      if(Object.keys(this.appVersion).length>0){
         this.appVersionNumber = appVersionNum;
         this.storage.set('appVersionNumber', appVersionNum);
       }
@@ -135,7 +142,7 @@ export class AppComponent {
       });
     });
 
-    if(!this.appVersionNumber){
+    if(!this.appVersionNumber) {
       //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
       this.appVersionNumber = "0.0.1";
       this.storage.set('appVersionNumber', this.appVersionNumber);
