@@ -13,6 +13,7 @@
 }
 .cardContent{
     padding-bottom: 5px;
+    padding-top: 5px;
 }
 .eptCardRow{
     padding: 5px;
@@ -24,6 +25,7 @@ ion-grid ion-row ion-col{
     padding:0 ;
         p{
             margin:3px;
+            font-size: 13px !important;
         }
     } 
     ion-grid ion-row ion-col:nth-child(3n){
@@ -55,7 +57,22 @@ height: 50px!important;
 ion-button.text-center.native-btn{
     --background:#3c8dbc !important;
     background:#3c8dbc !important;
+    border-radius: 6px;
 }
 .skeltonRow{
     padding: 6px;
+}
+ion-footer{
+    ion-toolbar {
+        height: 35px;
+        --min-height:25px !important;
+        --background:#fff !important;
+        ion-title{
+            color: #616161 !important;
+            padding: 10px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 100;
+        }
+    }
 }

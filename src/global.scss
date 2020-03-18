@@ -92,6 +92,20 @@ ion-header ion-toolbar ion-buttons{
 
     margin-top: -8px;;
 }
+ion-footer{
+    ion-toolbar {
+        height: 35px;
+        --min-height:25px !important;
+        --background:#fff !important;
+        ion-title{
+            color: #616161 !important;
+            padding: 10px;
+            text-align: center;
+            font-size: 13px;
+            font-weight: 100;
+        }
+    }
+}
 ion-header ion-toolbar .toolbar-container{
     background: #387ef5 !important;
     color: #fff !important;
