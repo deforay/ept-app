@@ -41,8 +41,14 @@ export class IndividualReportPage implements OnInit {
             if (result["status"] == 'success') {
               this.individualReports = result['data'];
               console.log(this.individualReports);
-            }else{
-              console.log(result);
+            } 
+            else if(result["status"] == "auth-fail") {
+              this.ToastService.presentToastWithOptions(result["message"]);      
+              this.storage.set("isLogOut",true);
+              this.router.navigate(['/login']);
+            }
+            else{
+              this.ToastService.presentToastWithOptions(result["message"]);   
             }
           }, (err) => {
             //    this.LoaderService.disMissLoading();

@@ -103,9 +103,6 @@ export class AppComponent {
         this.storage.set('appVersionNumber', appVersionNum);
       }
       
-
-
-     
       this.NetworkService.initializeNetworkEvents();
       if (this.network.type == 'none') {
         console.log("None");
@@ -119,8 +116,8 @@ export class AppComponent {
 
       }
 
-      this.storage.get('participantLogin').then((participantLogin) => {
-        if (participantLogin) {
+      this.storage.get('isLogOut').then((isLogOut) => {
+        if (isLogOut==false) {
           this.router.navigateByUrl('/all-pt-schemes');
         } else {
           this.router.navigateByUrl('/login');
@@ -148,7 +145,6 @@ export class AppComponent {
       this.storage.set('appVersionNumber', this.appVersionNumber);
       //end
     }
-
 
 
   }

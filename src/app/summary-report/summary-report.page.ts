@@ -41,8 +41,14 @@ export class SummaryReportPage implements OnInit {
             if (result["status"] == 'success') {
               this.summaryReports = result['data'];
               console.log(this.summaryReports);
-            }else{
-              console.log(result);
+            }
+             else if(result["status"] == "auth-fail") {
+              this.ToastService.presentToastWithOptions(result["message"]);      
+              this.storage.set("isLogOut",true);
+              this.router.navigate(['/login']);
+            }
+            else{
+              this.ToastService.presentToastWithOptions(result["message"]);   
             }
           }, (err) => {
             //    this.LoaderService.disMissLoading();

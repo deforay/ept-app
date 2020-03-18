@@ -23,6 +23,7 @@ import {
   syncDataLimit
 } from '../service/constant';
 import * as _ from 'lodash';
+
 @Component({
     selector: 'app-all-pt-schemes',
     templateUrl: './all-pt-schemes.page.html',
@@ -80,7 +81,8 @@ import * as _ from 'lodash';
   }
 
   ionViewWillEnter() {
-  
+
+
     this.networkType = this.network.type;
 
     //comment when take buid start
@@ -155,25 +157,33 @@ import * as _ from 'lodash';
 
   getAllShippings() {
 
+    this.skeltonArray = [{}, {}, {}, {}];
+    
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
 
-        //   this.LoaderService.presentLoading();
         this.CrudServiceService.getData('shipments/get/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
-
-          //   this.LoaderService.disMissLoading();
+          this.skeltonArray = [];
           if (result["status"] == 'success') {
-
+            
             this.shippingsArray = result['data'];
 
             this.storage.set("shipmentArray", this.shippingsArray);
 
             this.checkIsSynced();
 
+          } else if (result["status"] == "auth-fail") {
+
+            this.ToastService.presentToastWithOptions(result["message"]);
+            this.storage.set("isLogOut", true);
+            this.router.navigate(['/login']);
+
+          } else {
+            
+            this.ToastService.presentToastWithOptions(result["message"]);
           }
         }, (err) => {
-          //    this.LoaderService.disMissLoading();
         });
       }
     });
@@ -181,23 +191,17 @@ import * as _ from 'lodash';
 
 
   getAllShipmentForms() {
-
+ 
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
         this.CrudServiceService.getData('shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result1 => {
-    
+
           if (result1["status"] == 'success') {
-            this.skeltonArray = [{}, {}, {}, {}];
-            this.shipmentFormArray = result1['data'];         
+            this.shipmentFormArray = result1['data'];
             this.storage.set("shipmentFormArray", this.shipmentFormArray);
           }
-          if (result1["status"] == "fail") {
-            this.ToastService.presentToastWithOptions("Something went wrong. Please log in again");      
-            this.storage.set("isLogOut",true);
-            this.router.navigate(['/login']);
-          }
-        }, (err) => {
 
+        }, (err) => {
           console.log(err);
         });
       }
