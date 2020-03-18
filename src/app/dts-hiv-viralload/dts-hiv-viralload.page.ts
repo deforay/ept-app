@@ -148,9 +148,6 @@ export class DtsHivViralloadPage implements OnInit {
   vlResultForm = [];
   vlresultdata: any;
 
-
-
-
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public ToastService: ToastService,

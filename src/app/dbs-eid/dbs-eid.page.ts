@@ -61,8 +61,12 @@ export class DbsEidPage implements OnInit {
   EIDJSON = {};
   updatedStatus: any;
   partiQcAccess:any;
+  qcRadioArray = [];
   isQCDoneShow:boolean=false;
-
+  qcDoneBy;
+  qcDone;
+  qcDate;
+  formattedQCDate: any;
 
   constructor(private activatedRoute: ActivatedRoute, private storage: Storage, public ToastService: ToastService,
     public LoaderService: LoaderService, public CrudServiceService: CrudServiceService, private sanitizer: DomSanitizer) {
@@ -140,6 +144,7 @@ export class DbsEidPage implements OnInit {
           this.shipmentData['extractionAssay'] = parseInt(this.eidArray[0].eidData.Heading2.data.extractionAssaySelected);
           this.shipmentData['detectionAssay'] = parseInt(this.eidArray[0].eidData.Heading2.data.detectionAssaySelected);
           this.shipmentData['modeOfReceipt'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected;
+          this.qcRadioArray= this.eidArray[0].eidData.Heading2.data.qcData.qcRadio;
           if(this.partiQcAccess=="yes"){
             this.isQCDoneShow=true;
           }
@@ -201,6 +206,13 @@ export class DbsEidPage implements OnInit {
 
   submitEID() {
 
+    if (this.qcDone == 'no') {
+      this.qcDate = "";
+      this.qcDoneBy = "";
+      this.formattedQCDate = "";
+    } else {
+      this.formattedQCDate = this.dateFormat(new Date(this.qcDate));
+    }
     this.updatedStatus = this.eidArray[0].updatedStatus;
     this.EIDJSON = {
       "authToken": this.authToken,
@@ -244,12 +256,37 @@ export class DbsEidPage implements OnInit {
                   "detectionAssaySelect":this.shipmentData['detectionAssay'],
                   "detectionAssaySelected":this.shipmentData['detectionAssayDropdown'],
                   "extractionLotNumber":this.shipmentData['extractionLotNumber'],
-                  "detectionLotNumber":this.shipmentData['detectionLotNumber'] ,
-                  "extractionExpirationDate":this.shipmentData['extractionExpirationDate'],
-                  "detectionExpirationDate":this.shipmentData['detectionExpirationDate'],
-                  "responseDate":this.shipmentData['responseDate'],
+                  "detectionLotNumber":this.shipmentData['detectionLotNumber'],
+                  "extractionExpirationDate":this.dateFormat(this.shipmentData['extractionExpirationDate']),
+                  "detectionExpirationDate":this.dateFormat(this.shipmentData['detectionExpirationDate']),
+                  "responseDate":this.dateFormat(this.shipmentData['responseDate']),
                   "modeOfReceiptSelected":this.shipmentData['modeOfReceiptDropdown'],
                   "modeOfReceiptSelect":this.shipmentData['modeOfReceipt'],
+                  "qcData": {
+                    "qcRadioSelected": this.qcDone,
+                    "qcDate": this.formattedQCDate,
+                    "qcDoneBy": this.qcDoneBy,
+                    "status": this.isQCDoneShow,
+                    "qcRadio": this.qcRadioArray
+                  }
+                }
+              },
+              "Heading3": {
+                //PT panel details
+                "status": this.showPTPanelData,
+                "data": {
+                  "isPtTestNotPerformedRadio":this.ptPanelNotTested
+                }
+              },
+              "Heading4": {
+                //other information
+                "status": this.showOtherInfoData,
+                "data": {
+                  "supervisorReview": this.otherInfoData['supervisorReviewDropdown'],
+                  "approvalLabel": this.otherInfoData['approvalLabel'],
+                  "supervisorReviewSelected": this.otherInfoData['supervisorReview'],
+                  "approvalInputText": this.otherInfoData['supervisorName'],
+                  "comments": this.otherInfoData['comments']
                 }
               }
             }
