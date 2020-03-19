@@ -195,6 +195,7 @@
             </ion-col>
           </ion-row>
           <ion-row>
+            {{!testDate && vlTestDate.touched || (invalidTestDate && testDate==undefined)}}
             <ion-col size="12"  class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form"
                 [ngClass]="{ 'mat-form-field-invalid': !testDate && vlTestDate.touched || (invalidTestDate && testDate==undefined) }"
