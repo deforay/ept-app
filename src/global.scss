@@ -159,10 +159,13 @@ input.mat-input-element{
     text-align: left;
     display: block;
  }
-
-
 .can-go-back app-header ion-back-button {
     display: block!important;
+}
+.accessMsg{
+    color: #f44336;
+    text-align: center;
+    font-size: 14.5px;
 }
 /* Global CSS Changes Ends */
 

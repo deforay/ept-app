@@ -121,8 +121,33 @@ export class LoginPage implements OnInit {
             }
             this.CrudServiceService.postData('login', loginJSON)
               .then((result) => {
+          
                 if (result["status"] == 'success') {
                   this.storage.set("isLogOut", false);
+                  if(result['data'].enableAddingTestResponseDate=="yes"){
+                    result['data'].enableAddingTestResponseDate=true;
+                  }
+                  else{
+                    result['data'].enableAddingTestResponseDate=false; 
+                  }
+                  if(result['data'].enableChoosingModeOfReceipt=="yes"){
+                    result['data'].enableChoosingModeOfReceipt=true;
+                  }
+                  else{
+                    result['data'].enableChoosingModeOfReceipt=false; 
+                  }
+                  if(result['data'].qcAccess=="yes"){
+                    result['data'].qcAccess=true;
+                  }
+                  else{
+                    result['data'].qcAccess=false; 
+                  }
+                  if(result['data'].viewOnlyAccess=="yes"){
+                    result['data'].viewOnlyAccess=true;
+                  }
+                  else{
+                    result['data'].viewOnlyAccess=false; 
+                  }
                   this.storage.set('participantLogin', result['data']);
                   this.router.navigate(['/all-pt-schemes']);
       

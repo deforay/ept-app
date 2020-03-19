@@ -130,22 +130,21 @@
         </ion-row>
 
         <ion-row>
-          <ion-col size="6">
-
+          <ion-col size="6" *ngIf="isViewOnlyAccess==false">
             <ion-button *ngIf="item.updatedOn=='' && responseSwitch==on" size="small" class="text-center native-btn"
               (click)="goToTestForm(item)">Enter Response
             </ion-button>
 
             <ion-button *ngIf="item.updatedOn!='' && responseSwitch==on" size="small" class="text-center native-btn"
               (click)="goToTestForm(item)">Edit Response</ion-button>
-
           </ion-col>
 
           <ion-col size="6">
-            <ion-button *ngIf="item.updatedOn!=''" size="small" class="text-center native-btn viewResponse"
-              (click)="goToTestForm(item,'true')">View Response
+            <ion-button size="small" [ngStyle]="{'float':isViewOnlyAccess === false ? 'right' : 'left' }"
+              class="text-center native-btn" (click)="goToTestForm(item,'true')">View Response
             </ion-button>
           </ion-col>
+          
         </ion-row>
 
       </ion-grid>
@@ -156,7 +155,7 @@
   <!-- ion-skeleton-text code start -->
   <ion-card *ngFor="let item of skeltonArray" class="eptCard">
     <ion-card-header class="CardHeader">
-        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
     </ion-card-header>
 
     <ion-card-content class="cardContent">
@@ -206,7 +205,7 @@
       </ion-grid>
     </ion-card-content>
   </ion-card>
- <!-- ion-skeleton-text code end -->
+  <!-- ion-skeleton-text code end -->
 
 </ion-content>
 

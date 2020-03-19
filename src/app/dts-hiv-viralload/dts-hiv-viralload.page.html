@@ -2,8 +2,8 @@
 
 
 <ion-content>
-  <p *ngIf="viewAccessMessage">{{viewAccessMessage}}</p>
-  <mat-accordion class="example-headers-align" [multi]="true">
+  <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
+  <mat-accordion class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
       <mat-expansion-panel-header>
         <mat-panel-title>
@@ -298,7 +298,7 @@
           </ion-row>
 
           <ion-row>
-            <ion-col size="6" size-xs class="grid-input-col">
+            <ion-col size="6" size-xs class="grid-input-col" *ngIf="isPartiEditRespDate">
               <mat-form-field class="login-full-width grid-col-form" 
               [ngClass]="{ 'mat-form-field-invalid':!responseDate && vlResponseDate.touched || (invalidResponseDate && responseDate==undefined) }"
               appearance="outline">
@@ -316,7 +316,7 @@
               Date is required</span> -->
 
 
-            <ion-col size="6" size-xs class="grid-input-col">
+            <ion-col size="6" size-xs class="grid-input-col" *ngIf="isPartiEditModeRec">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label class="matLabel">Mode of Receipt</mat-label>
                 <mat-select [(ngModel)]="receiptmode" name="receiptmode" [disabled]="isView=='true'">
