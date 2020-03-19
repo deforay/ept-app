@@ -84,12 +84,11 @@ import * as _ from 'lodash';
 
   ionViewWillEnter() {
 
-
     this.networkType = this.network.type;
 
     //comment when take buid start
 
-    this.networkType = "4G";
+    //  this.networkType = "4G";
 
     //end...
 
@@ -112,15 +111,13 @@ import * as _ from 'lodash';
     })
 
     this.storage.get('participantLogin').then((partiLoginResult) => {
-  
+
       if (partiLoginResult.authToken) {
         this.authToken = partiLoginResult.authToken;
       }
       if (partiLoginResult.id) {
         this.loginID = partiLoginResult.id;
       }
-      this.isViewOnlyAccess = partiLoginResult.viewOnlyAccess;
-
     })
 
     this.storage.get('localShipmentForm').then((localShipmentForm) => {
@@ -145,7 +142,10 @@ import * as _ from 'lodash';
   }
 
   callOfflineFunctions() {
+
+    this.skeltonArray = [{}, {}, {}, {}];
     this.storage.get('shipmentArray').then((shipmentArray) => {
+      this.skeltonArray = [];
       if (shipmentArray.length != 0) {
         this.shippingsArray = shipmentArray;
       }
@@ -161,23 +161,43 @@ import * as _ from 'lodash';
   ngOnInit() {}
 
   getAllShippings() {
-    
-    this.skeltonArray = [{}, {}, {}, {}];
 
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
-        this.authToken=partiLoginResult.authToken;
-
+        this.authToken = partiLoginResult.authToken;
+        this.skeltonArray = [{}, {}, {}, {}];
         this.CrudServiceService.getData('login/login-details/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
+          this.skeltonArray = [];
           if (result["status"] == 'success') {
-        
+
             this.partiDetailsArray = result['data'];
+
+            if (result['data'].enableAddingTestResponseDate == "yes") {
+              result['data'].enableAddingTestResponseDate = true;
+            } else {
+              result['data'].enableAddingTestResponseDate = false;
+            }
+            if (result['data'].enableChoosingModeOfReceipt == "yes") {
+              result['data'].enableChoosingModeOfReceipt = true;
+            } else {
+              result['data'].enableChoosingModeOfReceipt = false;
+            }
+            if (result['data'].qcAccess == "yes") {
+              result['data'].qcAccess = true;
+            } else {
+              result['data'].qcAccess = false;
+            }
+            if (result['data'].viewOnlyAccess == "yes") {
+              result['data'].viewOnlyAccess = true;
+            } else {
+              result['data'].viewOnlyAccess = false;
+            }
+            this.isViewOnlyAccess = result['data'].viewOnlyAccess;
             this.storage.set('participantLogin', this.partiDetailsArray);
 
             this.CrudServiceService.getData('shipments/get/?authToken=' + result['data'].authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
-              this.skeltonArray = [];
               if (result["status"] == 'success') {
 
                 this.shippingsArray = result['data'];
@@ -186,19 +206,18 @@ import * as _ from 'lodash';
 
                 this.checkIsSynced();
 
-              } else if (result["status"] == "auth-fail") {
-
-                this.ToastService.presentToastWithOptions(result["message"]);
-                this.storage.set("isLogOut", true);
-                this.router.navigate(['/login']);
-
-              } else {
-
-                this.ToastService.presentToastWithOptions(result["message"]);
               }
             }, (err) => {});
-          }
+          } else if (result["status"] == "auth-fail") {
 
+            this.ToastService.presentToastWithOptions(result["message"]);
+            this.storage.set("isLogOut", true);
+            this.router.navigate(['/login']);
+
+          } else {
+
+            this.ToastService.presentToastWithOptions(result["message"]);
+          }
         }, (err) => {});
       }
     })
