@@ -147,6 +147,10 @@ export class DtsHivViralloadPage implements OnInit {
   vlresult: any;
   vlResultForm = [];
   vlresultdata: any;
+  isPartiQCAccess: boolean;
+  isPartiEditRespDate: boolean;
+  isPartiEditModeRec: boolean;
+
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -179,6 +183,9 @@ export class DtsHivViralloadPage implements OnInit {
       if (participantLogin) {
         this.authToken = participantLogin.authToken;
         this.loginID = participantLogin.id;
+        this.isPartiQCAccess = participantLogin.qcAccess;
+        this.isPartiEditRespDate = participantLogin.enableAddingTestResponseDate;
+        this.isPartiEditModeRec = participantLogin.enableChoosingModeOfReceipt;
         this.getVLFormDetails();
       }
     })
@@ -217,7 +224,7 @@ export class DtsHivViralloadPage implements OnInit {
 
   bindVLData() {
 
-    if (this.vlDataArray[0].vlData.access.status == 'success') {
+    if (this.vlDataArray[0].vlData) {
       this.selectedParticipantID = this.vlDataArray[0].participantId;
       this.selectedShipmentID = this.vlDataArray[0].shipmentId;
       if (this.vlDataArray[0].vlData.Heading1.status == true) {
@@ -241,8 +248,9 @@ export class DtsHivViralloadPage implements OnInit {
         if (this.shipmentsDetailsArray['specimenVolume']) {
           this.specVolTest = this.shipmentsDetailsArray['specimenVolume'];
         }
-        if (this.shipmentsDetailsArray['qcData'].status == true) {
-          this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
+      
+        this.isQCDoneShow = this.isPartiQCAccess;
+        if (this.isPartiQCAccess == true) {
           if (this.isQCDoneShow == true) {
             this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
             this.qcDone = this.shipmentsDetailsArray.qcData['qcRadioSelected'] ? this.shipmentsDetailsArray.qcData['qcRadioSelected'] : '';
@@ -252,9 +260,11 @@ export class DtsHivViralloadPage implements OnInit {
             this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
           }
         }
-        if (this.shipmentsDetailsArray['modeOfReceiptSelect']) {
-          this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'];
-          this.receiptmode = this.shipmentsDetailsArray['modeOfReceiptSelected'] ? this.shipmentsDetailsArray['modeOfReceiptSelected'] : '';
+        if (this.isPartiEditModeRec == true) {
+          if (this.shipmentsDetailsArray['modeOfReceiptSelect']) {
+            this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'];
+            this.receiptmode = this.shipmentsDetailsArray['modeOfReceiptSelected'] ? this.shipmentsDetailsArray['modeOfReceiptSelected'] : '';
+          }
         }
         if (this.shipmentsDetailsArray['vlAssaySelect']) {
           this.isSelectedOther = false;
@@ -264,9 +274,10 @@ export class DtsHivViralloadPage implements OnInit {
             this.isSelectedOther = true;
           }
         }
-
-        if (this.shipmentsDetailsArray['responseDate']) {
-          this.responseDate = new Date(this.shipmentsDetailsArray['responseDate']);
+        if (this.isPartiEditRespDate == true) {
+          if (this.shipmentsDetailsArray['responseDate']) {
+            this.responseDate = new Date(this.shipmentsDetailsArray['responseDate']);
+          }
         }
         if (this.shipmentsDetailsArray['assayLotNumber']) {
           this.assayLotNo = this.shipmentsDetailsArray['assayLotNumber'];
@@ -282,8 +293,8 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelTestData['vlResult'] = [...this.ptPanelTestArray['vlResult']];
         this.vlResultArray = [...this.ptPanelTestArray['vlResult']];
         this.vlResultForm = [];
-        
-       // this.
+
+        // this.
         // this.ptPanelTestData['vlResult'] = [];
         // this.ptPanelTestData['vlResult'][0] = "5.60";
         // this.ptPanelTestData['vlResult'][1] = "6.80";
@@ -312,9 +323,9 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelNotTestData['ptNotTestedReasonArray'] = this.ptPanelNotTestArray.vlNotTestedReasonSelect;
         this.ptPanelNotTestData['ptSupportComments'] = this.ptPanelNotTestArray.supportTextArea;
         this.ptPanelNotTestData['ptNotTestedComments'] = this.ptPanelNotTestArray.commentsTextArea;
-        if(this.ptPanelNotTestArray.vlNotTestedReasonSelected=="0" || this.ptPanelNotTestArray.vlNotTestedReasonSelected==""){
+        if (this.ptPanelNotTestArray.vlNotTestedReasonSelected == "0" || this.ptPanelNotTestArray.vlNotTestedReasonSelected == "") {
           this.ptPanelNotTestData['vlNotTestedReason'] = "";
-        }else{
+        } else {
           this.ptPanelNotTestData['vlNotTestedReason'] = this.ptPanelNotTestArray.vlNotTestedReasonSelected;
         }
 
@@ -336,9 +347,10 @@ export class DtsHivViralloadPage implements OnInit {
         }
       }
       this.nextStepShipmentPanel('onload');
-      this.nextStepOtherInfoPanel('onload');
       this.nextStepPTPanelTest('onload', this.ptPanelTest);
-    } else {
+      this.nextStepOtherInfoPanel('onload');
+    }
+    if(this.vlDataArray[0].vlData.access.status=="fail"){
       this.viewAccessMessage = this.vlDataArray[0].vlData.access.message;
     }
   }
@@ -428,8 +440,8 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   nextStepPTPanelTest(next, ptPanelTest) {
-    this.vlResultArray.forEach((vlElement,index) => {
-      this.ptPanelTestData['vlResult'][index]= vlElement;
+    this.vlResultArray.forEach((vlElement, index) => {
+      this.ptPanelTestData['vlResult'][index] = vlElement;
     });
     this.mandatoryArray = this.ptPanelTestData['controlArray'].mandatory;
     this.mandatoryTrueArray = this.mandatoryArray.filter(i => i == true);
@@ -497,6 +509,7 @@ export class DtsHivViralloadPage implements OnInit {
         this.validOtherInfo = false;
       }
     } else {
+      this.step=0;
       if (this.supReview && ((this.supReview == "no") || (this.supReview == 'yes' && this.supName))) {
         this.validOtherInfo = true;
       } else {
@@ -547,14 +560,14 @@ export class DtsHivViralloadPage implements OnInit {
     }
   }
 
-  checkVlData(vldata,index){
-  this.vlResultArray[index] = vldata;
+  checkVlData(vldata, index) {
+    this.vlResultArray[index] = vldata;
   }
-  checkVlArray(){
-    this.vlResultArray.forEach((vlElement,index) => {
-      this.ptPanelTestData['vlResult'][index]= vlElement;
+  checkVlArray() {
+    this.vlResultArray.forEach((vlElement, index) => {
+      this.ptPanelTestData['vlResult'][index] = vlElement;
     });
-    console.log( this.ptPanelTestData['vlResult'])
+    console.log(this.ptPanelTestData['vlResult'])
 
   }
   submitViralLoad() {

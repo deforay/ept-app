@@ -65,6 +65,8 @@ import * as _ from 'lodash';
   subListRespErrorCount: number;
   dupLocalStorageUnSyncedArray = [];
   skeltonArray: any = [];
+  isViewOnlyAccess: boolean;
+  partiDetailsArray: any = [];
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -110,12 +112,15 @@ import * as _ from 'lodash';
     })
 
     this.storage.get('participantLogin').then((partiLoginResult) => {
+  
       if (partiLoginResult.authToken) {
         this.authToken = partiLoginResult.authToken;
       }
       if (partiLoginResult.id) {
         this.loginID = partiLoginResult.id;
       }
+      this.isViewOnlyAccess = partiLoginResult.viewOnlyAccess;
+
     })
 
     this.storage.get('localShipmentForm').then((localShipmentForm) => {
@@ -156,42 +161,52 @@ import * as _ from 'lodash';
   ngOnInit() {}
 
   getAllShippings() {
-
-    this.skeltonArray = [{}, {}, {}, {}];
     
+    this.skeltonArray = [{}, {}, {}, {}];
+
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
+        this.authToken=partiLoginResult.authToken;
 
-        this.CrudServiceService.getData('shipments/get/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
+        this.CrudServiceService.getData('login/login-details/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
-          this.skeltonArray = [];
           if (result["status"] == 'success') {
-            
-            this.shippingsArray = result['data'];
+        
+            this.partiDetailsArray = result['data'];
+            this.storage.set('participantLogin', this.partiDetailsArray);
 
-            this.storage.set("shipmentArray", this.shippingsArray);
+            this.CrudServiceService.getData('shipments/get/?authToken=' + result['data'].authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
-            this.checkIsSynced();
+              this.skeltonArray = [];
+              if (result["status"] == 'success') {
 
-          } else if (result["status"] == "auth-fail") {
+                this.shippingsArray = result['data'];
 
-            this.ToastService.presentToastWithOptions(result["message"]);
-            this.storage.set("isLogOut", true);
-            this.router.navigate(['/login']);
+                this.storage.set("shipmentArray", this.shippingsArray);
 
-          } else {
-            
-            this.ToastService.presentToastWithOptions(result["message"]);
+                this.checkIsSynced();
+
+              } else if (result["status"] == "auth-fail") {
+
+                this.ToastService.presentToastWithOptions(result["message"]);
+                this.storage.set("isLogOut", true);
+                this.router.navigate(['/login']);
+
+              } else {
+
+                this.ToastService.presentToastWithOptions(result["message"]);
+              }
+            }, (err) => {});
           }
-        }, (err) => {
-        });
+
+        }, (err) => {});
       }
-    });
+    })
   }
 
 
   getAllShipmentForms() {
- 
+
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
         this.CrudServiceService.getData('shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result1 => {
