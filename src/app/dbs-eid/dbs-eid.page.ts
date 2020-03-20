@@ -73,6 +73,7 @@ export class DbsEidPage implements OnInit {
   shipTestDateInValid:any;
   validShipmentDetails: boolean = false;
   isValidPTPanel:boolean = false;
+  otherInfoValid:boolean = false;
   yourResultArray = [];
   icQsValuesArray = [];
   hivCTODArray = [];
@@ -114,7 +115,7 @@ export class DbsEidPage implements OnInit {
     this.step++;
   }
 
-  prevStep() {
+  prevStep() {0
     this.step--;
   }
   ngOnInit() {}
@@ -221,8 +222,15 @@ export class DbsEidPage implements OnInit {
       } else {
         this.showOtherInfoData = false;
       }
-      this.nextPTPanelStep('onload');
-      this.nextOtherInfoStep('onload');
+  this.nextPTPanelStep('onload');
+      if(this.validShipmentDetails==true){
+        this.nextOtherInfoStep('onload');
+        if(this.isValidPTPanel==true){
+          this.checkOtherInfoPanel();
+        }else{}
+      }else{}
+
+
     } else {
       this.viewAccessMessage = this.eidArray[0].eidData.access.message;
     }
@@ -269,7 +277,8 @@ export class DbsEidPage implements OnInit {
 
   }
   nextPTPanelStep(param){
-   if(!this.shipmentData['testReceiptDate']||
+   
+   if(!this.shipmentData['shipmentTestingDate']||
       !this.shipmentData['extractionLotNumber'] || 
       !this.shipmentData['detectionLotNumber'] ||
       !this.shipmentData['extractionExpirationDate'] ||
@@ -280,7 +289,7 @@ export class DbsEidPage implements OnInit {
           this.validShipmentDetails = false;
           //do nothing
         }
-        if(param=='onload'){
+        if(param=='onload' || param=='submit'){
           this.validShipmentDetails = false;
           this.setStep(1);
         }
@@ -289,7 +298,7 @@ export class DbsEidPage implements OnInit {
           this.validShipmentDetails = true;
           this.step++;
         }
-        if(param=='onload'){
+        if(param=='onload' || param =='submit'){
           this.validShipmentDetails = true;
            //do nothing
         }
@@ -344,7 +353,7 @@ this.resultArrayCheck =this.yourResultCheckArray.filter(i=>i=='invalid')
               }
         }
   }
-  if(params=='onload'){
+  if(params=='onload' || params=='submit'){
     if(this.isValidPTPanel==false){
       this.setStep(2);
     }else{}
@@ -356,10 +365,27 @@ this.resultArrayCheck =this.yourResultCheckArray.filter(i=>i=='invalid')
   }
 }
 
+checkOtherInfoPanel(){
+if(this.otherInfoData['supervisorReview']=='yes' && !this.otherInfoData['supervisorName']|| !this.otherInfoData['supervisorReview'])
+{
+  this.setStep(3);
+  this.otherInfoValid = false;
 
+}else{
+  this.otherInfoValid = true;
+}
+
+}
   submitEID() {
+    this.nextPTPanelStep('submit');
+    if(this.validShipmentDetails==true){
+      this.nextOtherInfoStep('submit');
+      if(this.isValidPTPanel==true){
+        this.checkOtherInfoPanel();
+      }else{}
+    }else{}
 
-    if (this.qcDone == 'no') {
+    if (this.qcDone == 'no' || this.qcDone=='') {
       this.qcDate = "";
       this.qcDoneBy = "";
     } 

@@ -543,9 +543,17 @@
     <mat-expansion-panel *ngIf="showOtherInfoData" [expanded]="step === 3" (opened)="setStep(3)">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Other Informations
+          <ion-grid class="panelHeading">
+            <ion-row>
+              <ion-col size="10" class="grid-readonly-col">
+                <span class="text-title-color">Other Informations</span>
+              </ion-col>
+              <ion-col size="2" class="grid-readonly-col" *ngIf="otherInfoValid==true">
+                <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </mat-panel-title>
-
       </mat-expansion-panel-header>
 
       <ion-grid>
@@ -554,19 +562,26 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Supervisor Review </mat-label>
               <mat-select [(ngModel)]="otherInfoData.supervisorReview"
-               name="eidFormSupReview" #eidFormSupReview="ngModel">
+               name="eidFormSupReview" #eidFormSupReview="ngModel"  required>
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let sr of otherInfoData.supervisorReviewDropdown" [value]="sr.value">
                   {{sr.show}}
                 </mat-option>
               </mat-select>
+              <mat-error
+              *ngIf="!otherInfoData.supervisorReview">Supervisor Review is
+              required</mat-error>
             </mat-form-field>
           </ion-col>
           <ion-col *ngIf="otherInfoData.supervisorReview=='yes'" class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>{{otherInfoData.supervisorLabel}} </mat-label>
               <input matInput [(ngModel)]="otherInfoData.supervisorName" 
-              name="eidFormSupName" #eidFormSupName="ngModel" placeholder="Enter Supervisor Name">
+              name="eidFormSupName" #eidFormSupName="ngModel" 
+              placeholder="Enter Supervisor Name" [required]="otherInfoData.supervisorReview=='yes'">
+              <mat-error
+              *ngIf="otherInfoData.supervisorReview=='yes' && !otherInfoData.supervisorName">Supervisor Name is
+              required</mat-error>
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -585,8 +600,7 @@
       <mat-action-row>
         <button mat-button color="primary" (click)="prevStep()">Previous</button>
         <button mat-button color="warn" 
-        type='submit' (click)="submitEID(shipmentPanelForm.valid,PTPanelTestForm.valid,otherInfoPanelForm.valid)"
-       >Submit</button>
+        type='submit' (click)="submitEID()">Submit</button>
       </mat-action-row>
     </mat-expansion-panel>
     </form>
