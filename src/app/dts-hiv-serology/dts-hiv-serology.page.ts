@@ -146,10 +146,10 @@ export class DTSHIVSerologyPage implements OnInit {
 
             this.shipmentsDetailsArray = dtsDataObj[0].dtsData.Heading2.data;
             console.log(this.shipmentsDetailsArray);
-            this.testReceiptDate = new Date(this.shipmentsDetailsArray.testReceiptDate);
-            this.sampleRhdDate = new Date(this.shipmentsDetailsArray.sampleRehydrationDate);
-            this.testingDate = new Date(this.shipmentsDetailsArray.testingDate);
-            this.respDate = new Date(this.shipmentsDetailsArray.responseDate);
+            this.testReceiptDate = this.shipmentsDetailsArray.testReceiptDate? new Date(this.shipmentsDetailsArray.testReceiptDate):'';
+            this.sampleRhdDate = this.shipmentsDetailsArray.sampleRehydrationDate ? new Date(this.shipmentsDetailsArray.sampleRehydrationDate):'';
+            this.testingDate = this.shipmentsDetailsArray.testingDate?new Date(this.shipmentsDetailsArray.testingDate):'';
+            this.respDate =this.shipmentsDetailsArray.responseDate? new Date(this.shipmentsDetailsArray.responseDate):'';
             this.algorithmUsedSelectArray = this.shipmentsDetailsArray.algorithmUsedSelect;
             this.algorithmused =  this.shipmentsDetailsArray.algorithmUsedSelected;
             // if (this.algorithmUsedSelectArray) {
