@@ -165,10 +165,11 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Shipment Receipt Date</mat-label>
               <input matInput [matDatepicker]="testReceiptPicker" class="datepicker-input"
-              [(ngModel)]="shipmentData.testReceiptDate" #eidTestRecieptDate="ngModel" name="eidTestRecieptDate"
+              [(ngModel)]="shipmentData.testReceiptDate" [disabled]="isView=='true'"
+               #eidTestRecieptDate="ngModel" name="eidTestRecieptDate"
                 placeholder="Choose Shipment Receipt date"  >
               <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
-              <mat-datepicker #testReceiptPicker disabled="false"></mat-datepicker>
+              <mat-datepicker #testReceiptPicker [disabled]="isView=='true'"></mat-datepicker>
               <!-- <mat-error *ngIf="!shipmentData.testReceiptDate">Shipment Receipt Date is required
               </mat-error> -->
             </mat-form-field>
@@ -176,10 +177,12 @@
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Sample Rehydration Date</mat-label>
-              <input matInput [matDatepicker]="sampleRhdPicker"  #eidSampleRehydrationDate="ngModel" name="eidSampleRehydrationDate"
-              [(ngModel)]="shipmentData.sampleRehydrationDate" placeholder="Choose Sample Rehydration Date">
+              <input matInput [matDatepicker]="sampleRhdPicker"
+                #eidSampleRehydrationDate="ngModel" name="eidSampleRehydrationDate" 
+              [(ngModel)]="shipmentData.sampleRehydrationDate"
+               placeholder="Choose Sample Rehydration Date" [disabled]="isView=='true'">
               <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
-              <mat-datepicker #sampleRhdPicker disabled="false"></mat-datepicker>
+              <mat-datepicker #sampleRhdPicker [disabled]="isView=='true'"></mat-datepicker>
               <!-- <mat-error *ngIf="!shipmentData.sampleRehydrationDate">
                 Sample Rehydration Date is required
               </mat-error> -->
@@ -193,9 +196,9 @@
               <input matInput [matDatepicker]="testDatePicker"               
               [(ngModel)]="shipmentData.shipmentTestingDate"
               placeholder="Choose Shipment Testing Date"
-              #eidTestingDate="ngModel" name="eidTestingDate"  required >
+              #eidTestingDate="ngModel" name="eidTestingDate"  required [disabled]="isView=='true'">
               <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
-              <mat-datepicker #testDatePicker disabled="false"></mat-datepicker>
+              <mat-datepicker #testDatePicker [disabled]="isView=='true'"></mat-datepicker>
               <mat-error *ngIf="!shipmentData.shipmentTestingDate">
                 Shipment Testing Date is required
               </mat-error>
@@ -205,7 +208,8 @@
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Extraction Assay </mat-label>
-              <mat-select [(ngModel)]="shipmentData.extractionAssay"  #extractionAssay="ngModel" name="extractionAssay">
+              <mat-select [(ngModel)]="shipmentData.extractionAssay"  #extractionAssay="ngModel" 
+              name="extractionAssay" [disabled]="isView=='true'">
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let vl of shipmentData.extractionAssayDropdown" [value]="vl.value">
                   {{vl.show}}
@@ -219,7 +223,7 @@
           <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Detection Assay </mat-label>
-              <mat-select [(ngModel)]="shipmentData.detectionAssay" #detAssay="ngModel" name="detAssay" >
+              <mat-select [(ngModel)]="shipmentData.detectionAssay" #detAssay="ngModel" name="detAssay" [disabled]="isView=='true'">
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let vl of shipmentData.detectionAssayDropdown" [value]="vl.value">
                   {{vl.show}}
@@ -239,7 +243,8 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Extraction Assay Lot No.</mat-label>
               <input matInput [(ngModel)]="shipmentData.extractionLotNumber" 
-              placeholder="Enter Extraction Assay Lot No." #extLotNo="ngModel" name="extLotNo"  required>
+              placeholder="Enter Extraction Assay Lot No." #extLotNo="ngModel"
+               name="extLotNo"  required [disabled]="isView=='true'">
               <mat-error *ngIf="!shipmentData.extractionLotNumber">
                 Extraction Assay Lot No is required
               </mat-error>
@@ -251,7 +256,8 @@
             appearance="outline">
               <mat-label>Detection Assay Lot No.</mat-label>
               <input matInput [(ngModel)]="shipmentData.detectionLotNumber" 
-              placeholder="Enter Detection Assay Lot No." #detLotNo="ngModel" name="detLotNo" required>
+              placeholder="Enter Detection Assay Lot No." #detLotNo="ngModel" 
+              name="detLotNo" required [disabled]="isView=='true'">
               <mat-error *ngIf="!shipmentData.detectionLotNumber || (!shipmentData.detectionLotNumber  && isSubmitted)">
                 Detection Assay Lot No is required
               </mat-error>
@@ -264,9 +270,9 @@
               <mat-label>Extraction Assay Expiration Date</mat-label>
               <input matInput [matDatepicker]="extAssayExpiryDate"
                [(ngModel)]="shipmentData.extractionExpirationDate"
-                placeholder="Choose a Date"  #extExpDate="ngModel" name="extExpDate"  required >               
+                placeholder="Choose a Date"  #extExpDate="ngModel" name="extExpDate"  required [disabled]="isView=='true'">               
               <mat-datepicker-toggle matSuffix [for]="extAssayExpiryDate"></mat-datepicker-toggle>
-              <mat-datepicker #extAssayExpiryDate disabled="false"></mat-datepicker>
+              <mat-datepicker #extAssayExpiryDate [disabled]="isView=='true'"></mat-datepicker>
               <mat-error *ngIf="!shipmentData.extractionExpirationDate">
                 Extraction Assay Expiration Date is required
               </mat-error>
@@ -279,9 +285,9 @@
               <input matInput [matDatepicker]="detAssayExpiryDate"
               #detExpDate="ngModel" name="detExpDate" 
               [(ngModel)]="shipmentData.detectionExpirationDate"
-               placeholder="Choose a date"  required >              
+               placeholder="Choose a date"  required [disabled]="isView=='true'">              
               <mat-datepicker-toggle matSuffix [for]="detAssayExpiryDate"></mat-datepicker-toggle>
-              <mat-datepicker #detAssayExpiryDate disabled="false"></mat-datepicker>
+              <mat-datepicker #detAssayExpiryDate [disabled]="isView=='true'"></mat-datepicker>
               <mat-error *ngIf="!shipmentData.detectionExpirationDate">
                 Detection Assay Expiration Date is required
               </mat-error>
@@ -294,9 +300,9 @@
               <mat-label>Response Date</mat-label>
               <input matInput [matDatepicker]="respDate" 
                placeholder="Choose a date"   #eidrespDate="ngModel" name="eidrespDate" 
-              [(ngModel)]="shipmentData.responseDate" required>
+              [(ngModel)]="shipmentData.responseDate" required [disabled]="isView=='true'">
               <mat-datepicker-toggle matSuffix [for]="respDate"></mat-datepicker-toggle>
-              <mat-datepicker #respDate disabled="false"></mat-datepicker>
+              <mat-datepicker #respDate [disabled]="isView=='true'"></mat-datepicker>
               <mat-error *ngIf="!shipmentData.responseDate"> Response Date is required</mat-error>
             </mat-form-field>
           </ion-col>
@@ -304,7 +310,7 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Mode of Receipt</mat-label>
               <mat-select [(ngModel)]="shipmentData.modeOfReceipt" #receiptmode="ngModel" 
-              name="receiptmode" required>
+              name="receiptmode" required [disabled]="isView=='true'">
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let item of shipmentData.modeOfReceiptDropdown" [value]="item.value">
                   {{item.show}}
@@ -332,9 +338,9 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>QC Date</mat-label>
               <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" placeholder="Choose QC Date" 
-              [required]="isQCDoneShow && qcDone=='yes'" name="eidQcDate" #eidQcDate="ngModel">
+              [required]="isQCDoneShow && qcDone=='yes'" name="eidQcDate" #eidQcDate="ngModel" [disabled]="isView=='true'">
               <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
-              <mat-datepicker #qcDatePicker disabled="false"></mat-datepicker>
+              <mat-datepicker #qcDatePicker [disabled]="isView=='true'"></mat-datepicker>
               <mat-error *ngIf="!qcDate">QC Date is required</mat-error>
 
             </mat-form-field>
@@ -343,7 +349,7 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>QC Done By </mat-label>
               <input matInput [(ngModel)]="qcDoneBy" name="eidqcDoneBy" #eidqcDoneBy="ngModel"
-               placeholder="Enter QC Done by" [required]="isQCDoneShow && qcDone=='yes'">
+               placeholder="Enter QC Done by" [required]="isQCDoneShow && qcDone=='yes'" [disabled]="isView=='true'">
               <mat-error *ngIf="!qcDoneBy">Please enter QC done by name</mat-error>
             </mat-form-field>
           </ion-col>
@@ -352,7 +358,7 @@
 
       <mat-action-row>
         <button mat-button color="primary" (click)="prevStep()">Previous</button>
-        <button mat-button color="warn"  type="submit"  (ngSubmit)="nextPTPanelStep('next')">Next</button>
+        <button mat-button color="warn"  type="submit"  (click)="nextPTPanelStep('next')">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
 </form>
@@ -376,7 +382,8 @@
       <ion-row>
         <ion-col class="grid-input-col">
           <section class="div-section">
-            <mat-checkbox [(ngModel)]="ptPanelNotTested"  name="eidPtPanelTest" #eidPtPanelTest="ngModel">PT panel not tested</mat-checkbox>
+            <mat-checkbox [(ngModel)]="ptPanelNotTested"  name="eidPtPanelTest" 
+            #eidPtPanelTest="ngModel" [disabled]="isView=='true'">PT panel not tested</mat-checkbox>
           </section>
         </ion-col>
       </ion-row>
@@ -403,7 +410,8 @@
                   *ngIf="ptPanelData.samplesList">
                     <mat-label>{{ptPanelData.resultsTextData[1]}}</mat-label>
                     <mat-select [(ngModel)]="yourResultArray[i]"
-                    name="yourResult[{{i}}]" #yourResult="ngModel" [required]="ptPanelData.sampleTextData.mandatory[i]==true">
+                    name="yourResult[{{i}}]" #yourResult="ngModel" [disabled]="isView=='true'"
+                    [required]="ptPanelData.sampleTextData.mandatory[i]==true">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let item of ptPanelData.samplesList[sampleName]['Your-Results']" [value]="item.value">
                         {{item.show}}
@@ -422,7 +430,7 @@
                   [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !hivCTODArray[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
                   appearance="outline">
                     <mat-label>{{ptPanelData.resultsTextData[2]}}</mat-label>
-                    <input matInput [(ngModel)]="hivCTODArray[i]"
+                    <input matInput [(ngModel)]="hivCTODArray[i]" [disabled]="isView=='true'"
                      placeholder="Enter HIV CT/OD" name="hivCTOD[{{i}}]"#hivCTOD="ngModel" [required]="ptPanelData.sampleTextData.mandatory[i]==true">
                      <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !hivCTODArray[i]">Please Enter {{ptPanelData.resultsTextData[2]}}</mat-error>
                
@@ -437,7 +445,7 @@
                 [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !icQsValuesArray[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
                 appearance="outline">
                   <mat-label>{{ptPanelData.resultsTextData[3]}}</mat-label>
-                  <input matInput [(ngModel)]="icQsValuesArray[i]" 
+                  <input matInput [(ngModel)]="icQsValuesArray[i]" [disabled]="isView=='true'"
                   placeholder="Enter IC/QS Values"  name="icQsValues[{{i}}]"#icQsValues="ngModel" [required]="ptPanelData.sampleTextData.mandatory[i]==true">
                   <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !icQsValuesArray[i]">Please Enter {{ptPanelData.resultsTextData[3]}}</mat-error>
                
@@ -458,7 +466,7 @@
                 {{ptPanelData.vlNotTestedReasonText}} 
               </mat-label>
               <mat-select [(ngModel)]="ptPanelData.vlNotTestedReason" name="vlNotTested" #vlNotTested="ngModel"
-              [required]="ptPanelNotTested">
+              [required]="ptPanelNotTested" [disabled]="isView=='true'">
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let item of ptPanelData.vlNotTestedReasonDropdown" [value]="item.value">
                   {{item.show}}
@@ -474,7 +482,7 @@
               </mat-label>
               <textarea matInput placeholder="Enter Your Comments here" 
               name="eidPtNotTestedComments" #eidPtNotTestedComments="ngModel"
-              [(ngModel)]="ptPanelData.ptNotTestedComments"
+              [(ngModel)]="ptPanelData.ptNotTestedComments" [disabled]="isView=='true'"
               [required]="ptPanelNotTested"></textarea>
               <mat-error *ngIf="ptPanelNotTested && !ptPanelData.ptNotTestedComments">Please Enter Your Comments</mat-error>
             </mat-form-field>
@@ -486,7 +494,7 @@
 
               </mat-label>
               <textarea matInput placeholder="Enter Your Support Comments here" 
-              name="eidPtNotSupportComments" #eidPtNotSupportComments="ngModel"
+              name="eidPtNotSupportComments" #eidPtNotSupportComments="ngModel" [disabled]="isView=='true'"
               [(ngModel)]="ptPanelData.ptSupportComments"
               [required]="ptPanelNotTested"></textarea>
               <mat-error *ngIf="ptPanelNotTested && !ptPanelData.ptSupportComments">Please Enter Your Comments</mat-error>
@@ -500,6 +508,75 @@
       </mat-action-row>
     </mat-expansion-panel>
 </form>
+
+<!-- <form>
+
+  <mat-expansion-panel *ngIf="showOtherInfoData" [expanded]="step === 3" (opened)="setStep(3)">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <ion-grid class="panelHeading">
+          <ion-row>
+            <ion-col size="10" class="grid-readonly-col">
+              <span class="text-title-color">Custom Fields</span>
+            </ion-col>
+            <ion-col size="2" class="grid-readonly-col" *ngIf="otherInfoValid==true">
+              <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+
+    <ion-grid>
+      <ion-row>
+        <ion-col class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+            <mat-label>Supervisor Review </mat-label>
+            <mat-select [(ngModel)]="otherInfoData.supervisorReview"
+             name="eidFormSupReview" #eidFormSupReview="ngModel"  required [disabled]="isView=='true'">
+              <mat-option>--Select--</mat-option>
+              <mat-option *ngFor="let sr of otherInfoData.supervisorReviewDropdown" [value]="sr.value">
+                {{sr.show}}
+              </mat-option>
+            </mat-select>
+            <mat-error
+            *ngIf="!otherInfoData.supervisorReview">Supervisor Review is
+            required</mat-error>
+          </mat-form-field>
+        </ion-col>
+        <ion-col *ngIf="otherInfoData.supervisorReview=='yes'" class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+            <mat-label>{{otherInfoData.supervisorLabel}} </mat-label>
+            <input matInput [(ngModel)]="otherInfoData.supervisorName" 
+            name="eidFormSupName" #eidFormSupName="ngModel" 
+            placeholder="Enter Supervisor Name" [required]="otherInfoData.supervisorReview=='yes'" [disabled]="isView=='true'">
+            <mat-error
+            *ngIf="otherInfoData.supervisorReview=='yes' && !otherInfoData.supervisorName">Supervisor Name is
+            required</mat-error>
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+            <mat-label>Comments</mat-label>
+            <textarea matInput placeholder="Enter Comments here" 
+            name="eidComments" #eidComments="ngModel"  [(ngModel)]="otherInfoData.comments" [disabled]="isView=='true'"></textarea>
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+
+    </ion-grid>
+
+    <mat-action-row>
+      <button mat-button color="primary" (click)="prevStep()">Previous</button>
+      <button mat-button color="warn" *ngIf="isView=='false'"
+      type='submit' (click)="submitEID(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</form> -->
+
+
 <form #otherInfoPanelForm="ngForm" novalidate>
 
     <mat-expansion-panel *ngIf="showOtherInfoData" [expanded]="step === 3" (opened)="setStep(3)">
@@ -524,7 +601,7 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Supervisor Review </mat-label>
               <mat-select [(ngModel)]="otherInfoData.supervisorReview"
-               name="eidFormSupReview" #eidFormSupReview="ngModel"  required>
+               name="eidFormSupReview" #eidFormSupReview="ngModel"  required [disabled]="isView=='true'">
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let sr of otherInfoData.supervisorReviewDropdown" [value]="sr.value">
                   {{sr.show}}
@@ -540,7 +617,7 @@
               <mat-label>{{otherInfoData.supervisorLabel}} </mat-label>
               <input matInput [(ngModel)]="otherInfoData.supervisorName" 
               name="eidFormSupName" #eidFormSupName="ngModel" 
-              placeholder="Enter Supervisor Name" [required]="otherInfoData.supervisorReview=='yes'">
+              placeholder="Enter Supervisor Name" [required]="otherInfoData.supervisorReview=='yes'" [disabled]="isView=='true'">
               <mat-error
               *ngIf="otherInfoData.supervisorReview=='yes' && !otherInfoData.supervisorName">Supervisor Name is
               required</mat-error>
@@ -552,7 +629,7 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Comments</mat-label>
               <textarea matInput placeholder="Enter Comments here" 
-              name="eidComments" #eidComments="ngModel"  [(ngModel)]="otherInfoData.comments"></textarea>
+              name="eidComments" #eidComments="ngModel"  [(ngModel)]="otherInfoData.comments" [disabled]="isView=='true'"></textarea>
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -561,7 +638,7 @@
 
       <mat-action-row>
         <button mat-button color="primary" (click)="prevStep()">Previous</button>
-        <button mat-button color="warn" 
+        <button mat-button color="warn" *ngIf="isView=='false'"
         type='submit' (click)="submitEID(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>
       </mat-action-row>
     </mat-expansion-panel>
