@@ -88,7 +88,7 @@ import * as _ from 'lodash';
 
     //comment when take buid start
 
-    //  this.networkType = "4G";
+     this.networkType = "4G";
 
     //end...
 
@@ -161,14 +161,15 @@ import * as _ from 'lodash';
   ngOnInit() {}
 
   getAllShippings() {
-
+    this.skeltonArray = [{}, {}, {}, {}];
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
+       
         this.authToken = partiLoginResult.authToken;
-        this.skeltonArray = [{}, {}, {}, {}];
+      
         this.CrudServiceService.getData('login/login-details/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
-          this.skeltonArray = [];
+       
           if (result["status"] == 'success') {
 
             this.partiDetailsArray = result['data'];
@@ -197,7 +198,7 @@ import * as _ from 'lodash';
             this.storage.set('participantLogin', this.partiDetailsArray);
 
             this.CrudServiceService.getData('shipments/get/?authToken=' + result['data'].authToken + '&appVersion=' + this.appVersionNumber).then(result => {
-
+              this.skeltonArray = [];
               if (result["status"] == 'success') {
 
                 this.shippingsArray = result['data'];

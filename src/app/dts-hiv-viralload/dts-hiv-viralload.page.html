@@ -194,11 +194,11 @@
               </mat-form-field>
             </ion-col>
           </ion-row>
+
           <ion-row>
-            {{!testDate && vlTestDate.touched || (invalidTestDate && testDate==undefined)}}
             <ion-col size="12"  class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form"
-                [ngClass]="{ 'mat-form-field-invalid': !testDate && vlTestDate.touched || (invalidTestDate && testDate==undefined) }"
+                [ngClass]="{ 'mat-form-field-invalid': !testDate && vlTestDate.touched || (invalidTestDate && testDate==undefined) && isView==false }"
                 appearance="outline">
                 <mat-label class="matLabel">Testing Date </mat-label>
                 <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="testDate" name="vlTestDate"
@@ -219,15 +219,12 @@
                   placeholder="Enter Specimen Volume" [disabled]="isView=='true'">
               </mat-form-field>
             </ion-col>
-
-       
-
           </ion-row>
 
           <ion-row>
             <ion-col size="6" size-xs class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form inputBox"
-                [ngClass]="{ 'mat-form-field-invalid': !vlassay && vlFormassay.touched || (invalidVlAssay && !vlassay) }"
+                [ngClass]="{ 'mat-form-field-invalid': !vlassay && vlFormassay.touched || (invalidVlAssay && !vlassay) && isView==false}"
                 appearance="outline">
                 <mat-label class="matLabel">Viral Load Assay </mat-label>
                 <mat-select [(ngModel)]="vlassay" name="vlFormassay" #vlFormassay="ngModel"
@@ -260,7 +257,7 @@
           <ion-row>
             <ion-col size="6" size-xs class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form"
-                [ngClass]="{ 'mat-form-field-invalid': !assayExpDate && vlAssayExpDate.touched || (invalidAssayExpDate && assayExpDate==undefined) }"
+                [ngClass]="{ 'mat-form-field-invalid': !assayExpDate && vlAssayExpDate.touched || (invalidAssayExpDate && assayExpDate==undefined) && isView==false }"
                 appearance="outline">
                 <mat-label class="matLabel">Assay Expiration Date</mat-label>
                 <input matInput [matDatepicker]="assayExpiryDate" [(ngModel)]="assayExpDate" name="vlAssayExpDate"
@@ -279,7 +276,7 @@
 
             <ion-col size="6" size-xs class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form inputBox"
-                [ngClass]="{ 'mat-form-field-invalid':!assayLotNo && vlAssayLotNo.touched || (invalidVlAssayLotNo && !assayLotNo) }"
+                [ngClass]="{ 'mat-form-field-invalid':!assayLotNo && vlAssayLotNo.touched || (invalidVlAssayLotNo && !assayLotNo) && isView==false}"
                 appearance="outline">
                 <mat-label class="matLabel">Assay Lot Number</mat-label>
                 <input matInput [(ngModel)]="assayLotNo" name="vlAssayLotNo" #vlAssayLotNo="ngModel"
@@ -300,7 +297,7 @@
           <ion-row>
             <ion-col size="6" size-xs class="grid-input-col" *ngIf="isPartiEditRespDate">
               <mat-form-field class="login-full-width grid-col-form" 
-              [ngClass]="{ 'mat-form-field-invalid':!responseDate && vlResponseDate.touched || (invalidResponseDate && responseDate==undefined) }"
+              [ngClass]="{ 'mat-form-field-invalid':!responseDate && vlResponseDate.touched || (invalidResponseDate && responseDate==undefined) && isView==false }"
               appearance="outline">
                 <mat-label class="matLabel">Response Date</mat-label>
                 <input matInput [matDatepicker]="respDate" placeholder="Choose a date Eg: 28-Feb-2020" [(ngModel)]="responseDate"
@@ -346,7 +343,7 @@
           <ion-row *ngIf="isQCDoneShow && qcDone=='yes'">
             <ion-col size="12">
               <mat-form-field class="login-full-width grid-col-form" 
-              [ngClass]="{ 'mat-form-field-invalid':!qcDate && vlQcDate.touched || (invalidQcDate && qcDate==undefined) }"
+              [ngClass]="{ 'mat-form-field-invalid':!qcDate && vlQcDate.touched || (invalidQcDate && qcDate==undefined) && isView==false }"
               appearance="outline">
                 <mat-label class="matLabel">QC Date</mat-label>
                 <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" name="vlQcDate" #vlQcDate="ngModel"
@@ -362,7 +359,7 @@
 
             <ion-col size="12">
               <mat-form-field class="login-full-width grid-col-form inputBox" 
-              [ngClass]="{ 'mat-form-field-invalid':!qcDoneBy && vlQcDoneBy.touched || (invalidQcDoneBy && !qcDoneBy) }"
+              [ngClass]="{ 'mat-form-field-invalid':!qcDoneBy && vlQcDoneBy.touched || (invalidQcDoneBy && !qcDoneBy) && isView==false }"
               appearance="outline">
                 <mat-label class="matLabel">QC Done By </mat-label>
                 <input matInput [(ngModel)]="qcDoneBy" placeholder="" name="vlQcDoneBy" #vlQcDoneBy="ngModel"
@@ -596,7 +593,7 @@
           <ion-row>
             <ion-col class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form inputBox"
-              [ngClass]="{ 'mat-form-field-invalid':!supReview && vlFormSupReview.touched || (invalidSupReview && !supReview)}"
+              [ngClass]="{ 'mat-form-field-invalid':!supReview && vlFormSupReview.touched || (invalidSupReview && !supReview) && isView==false}"
               appearance="outline">
                 <mat-label class="matLabel">Supervisor Review </mat-label>
                 <mat-select [(ngModel)]="supReview" name="vlFormSupReview" #vlFormSupReview="ngModel"
@@ -615,7 +612,7 @@
 
             <ion-col *ngIf="supReview=='yes'" class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form inputBox" 
-              [ngClass]="{ 'mat-form-field-invalid':!supName &&  vlSupName.touched  && supReview=='yes'  || (invalidSupName && !supName) }"
+              [ngClass]="{ 'mat-form-field-invalid':!supName &&  vlSupName.touched  && supReview=='yes'  || (invalidSupName && !supName) && isView==false }"
               appearance="outline">
                 <mat-label class="matLabel">{{approvalLabel }}</mat-label>
                 <input matInput [(ngModel)]="supName" placeholder="Enter Supervisor Name" [disabled]="isView=='true'"
@@ -641,7 +638,7 @@
         <mat-action-row>
           <button mat-button color="primary" (click)="prevStep()">Previous</button>
           <button mat-button color="warn" type="submit" *ngIf="isView!='true'"
-            (click)="submitViralLoad(shipmentPanelForm.valid,PTPanelTestForm.valid,otherInfoPanelForm.valid)">Submit</button>
+            (click)="submitViralLoad()">Submit</button>
         </mat-action-row>
       </mat-expansion-panel>
     </form>
