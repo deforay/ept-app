@@ -98,6 +98,8 @@ export class DTSHIVSerologyPage implements OnInit {
   myElements = [];
   sampleResultArr = [];
   currentObj: string;
+  shipmentPanelForm:NgForm;
+
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -143,13 +145,12 @@ export class DTSHIVSerologyPage implements OnInit {
           }
 
           if (dtsDataObj[0].dtsData.Heading2.status == true) {
-
             this.shipmentsDetailsArray = dtsDataObj[0].dtsData.Heading2.data;
             console.log(this.shipmentsDetailsArray);
-            this.testReceiptDate = new Date(this.shipmentsDetailsArray.testReceiptDate);
-            this.sampleRhdDate = new Date(this.shipmentsDetailsArray.sampleRehydrationDate);
-            this.testingDate = new Date(this.shipmentsDetailsArray.testingDate);
-            this.respDate = new Date(this.shipmentsDetailsArray.responseDate);
+            this.testReceiptDate = this.shipmentsDetailsArray.testReceiptDate? new Date(this.shipmentsDetailsArray.testReceiptDate):'';
+            this.sampleRhdDate = this.shipmentsDetailsArray.sampleRehydrationDate ? new Date(this.shipmentsDetailsArray.sampleRehydrationDate):'';
+            this.testingDate = this.shipmentsDetailsArray.testingDate?new Date(this.shipmentsDetailsArray.testingDate):'';
+            this.respDate =this.shipmentsDetailsArray.responseDate? new Date(this.shipmentsDetailsArray.responseDate):'';
             this.algorithmUsedSelectArray = this.shipmentsDetailsArray.algorithmUsedSelect;
             this.algorithmused =  this.shipmentsDetailsArray.algorithmUsedSelected;
             // if (this.algorithmUsedSelectArray) {
@@ -170,7 +171,7 @@ export class DTSHIVSerologyPage implements OnInit {
               this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
               this.selectedQCRadio = this.qcRadioArray.filter(qcRadio => qcRadio.selected == "selected");
               this.qcDone = this.selectedQCRadio[0].value;
-              this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
+              this.qcDate = this.shipmentsDetailsArray.qcData.qcDate?new Date(this.shipmentsDetailsArray.qcData.qcDate):'';
               this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
             }
           }
@@ -291,6 +292,16 @@ export class DTSHIVSerologyPage implements OnInit {
 
   nextStep() {
     this.step++;
+  }
+
+  nextStepTestPanel(){
+    debugger;
+    if(this.shipmentPanelForm.valid==true){
+    this.step=2;
+    }
+    else{
+      this.step=1;
+    }
   }
 
   prevStep() {
