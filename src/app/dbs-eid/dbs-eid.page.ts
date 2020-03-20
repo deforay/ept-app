@@ -83,6 +83,7 @@ export class DbsEidPage implements OnInit {
   resultArrayCheck=[];
   isQsArrayCheck=[];
   hivCTODArrayCheck=[];
+  isSubmitted:any;
   constructor(private activatedRoute: ActivatedRoute, private storage: Storage, public ToastService: ToastService,
     public LoaderService: LoaderService, public CrudServiceService: CrudServiceService, private sanitizer: DomSanitizer) {
 
@@ -238,7 +239,7 @@ export class DbsEidPage implements OnInit {
  
 
  }
-  dateFormat(dateObj) { 
+  dateFormat(dateObj) {
     if(dateObj!=''){
       return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
     }else{
@@ -303,56 +304,69 @@ export class DbsEidPage implements OnInit {
            //do nothing
         }
       } 
- 
   }
   nextOtherInfoStep(params){   
-    this.ptPanelData['sampleTextData'].mandatory.forEach((mandCheck,index)=> {
-      if(mandCheck==true){
-        if(this.yourResultArray[index]=='' || !this.yourResultArray[index]){
-          this.yourResultCheckArray[index] = 'invalid';
-        }
-        else{
+    if(this.ptPanelNotTested==false || !this.ptPanelNotTested){
+      this.ptPanelData['sampleTextData'].mandatory.forEach((mandCheck,index)=> {
+        if(mandCheck==true){
+          if(this.yourResultArray[index]=='' || !this.yourResultArray[index]){
+            this.yourResultCheckArray[index] = 'invalid';
+          }
+          else{
+            this.yourResultCheckArray[index] = 'valid';
+          }
+          if(this.icQsValuesArray[index]=='' || !this.icQsValuesArray[index]){
+            this.icQsValuesCheckArray[index] = 'invalid';          
+          }
+          else{
+            this.icQsValuesCheckArray[index] = 'valid';
+          }
+          if(this.hivCTODArray[index]=='' || !this.hivCTODArray[index]){
+            this.hivCTODCheckArray[index] = 'invalid';         
+          }
+          else{
+            this.hivCTODCheckArray[index] = 'valid';
+          }
+        }else{
           this.yourResultCheckArray[index] = 'valid';
-        }
-        if(this.icQsValuesArray[index]=='' || !this.icQsValuesArray[index]){
-          this.icQsValuesCheckArray[index] = 'invalid';          
-        }
-        else{
+          this.hivCTODCheckArray[index] = 'valid';
           this.icQsValuesCheckArray[index] = 'valid';
         }
-        if(this.hivCTODArray[index]=='' || !this.hivCTODArray[index]){
-          this.hivCTODCheckArray[index] = 'invalid';         
-        }
-        else{
-          this.hivCTODCheckArray[index] = 'valid';
-        }
-      }else{
-        this.yourResultCheckArray[index] = 'valid';
-        this.hivCTODCheckArray[index] = 'valid';
-        this.icQsValuesCheckArray[index] = 'valid';
-      }
-    });
+      });
+  
+  this.resultArrayCheck =this.yourResultCheckArray.filter(i=>i=='invalid')
+    if(this.resultArrayCheck.length>0){
+      this.isValidPTPanel = false;
+    } else {
+       this.isValidPTPanel = true;
+        this.isQsArrayCheck = this.icQsValuesCheckArray.filter(i=>i=='invalid')
+          if(this.isQsArrayCheck.length>0){
+          this.isValidPTPanel = false;      
+          }
+          else{
+            this.isValidPTPanel = true;
+             this.hivCTODArrayCheck =this.hivCTODCheckArray.filter(i=>i=='invalid')
+                if(this.hivCTODArrayCheck.length>0){
+                   this.isValidPTPanel = false;
+                }
+                else{
+                  this.isValidPTPanel = true;
+                }
+          }
+    }
 
-this.resultArrayCheck =this.yourResultCheckArray.filter(i=>i=='invalid')
-  if(this.resultArrayCheck.length>0){
-    this.isValidPTPanel = false;
-  } else {
-     this.isValidPTPanel = true;
-      this.isQsArrayCheck = this.icQsValuesCheckArray.filter(i=>i=='invalid')
-        if(this.isQsArrayCheck.length>0){
-        this.isValidPTPanel = false;      
-        }
-        else{
-          this.isValidPTPanel = true;
-           this.hivCTODArrayCheck =this.hivCTODCheckArray.filter(i=>i=='invalid')
-              if(this.hivCTODArrayCheck.length>0){
-                 this.isValidPTPanel = false;
-              }
-              else{
-                this.isValidPTPanel = true;
-              }
-        }
-  }
+}else{
+  if(!this.ptPanelData['vlNotTestedReason'] ||
+     !this.ptPanelData['ptNotTestedComments'] ||
+     !this.ptPanelData['ptSupportComments'] ){
+      this.isValidPTPanel = false;
+
+     }else{
+      this.isValidPTPanel = true;
+     }
+
+}
+  
   if(params=='onload' || params=='submit'){
     if(this.isValidPTPanel==false){
       this.setStep(2);
@@ -376,7 +390,10 @@ if(this.otherInfoData['supervisorReview']=='yes' && !this.otherInfoData['supervi
 }
 
 }
-  submitEID() {
+  submitEID(shipmentPanelForm:NgForm,PTPanelTestForm:NgForm,otherInfoPanelForm:NgForm) {
+    shipmentPanelForm.control.markAllAsTouched();
+    PTPanelTestForm.control.markAllAsTouched();
+    otherInfoPanelForm.control.markAllAsTouched();
     this.nextPTPanelStep('submit');
     if(this.validShipmentDetails==true){
       this.nextOtherInfoStep('submit');
@@ -389,6 +406,9 @@ if(this.otherInfoData['supervisorReview']=='yes' && !this.otherInfoData['supervi
       this.qcDate = "";
       this.qcDoneBy = "";
     } 
+    this.isSubmitted  = "true";
+    console.log(this.shipmentData['testReceiptDate'])
+    console.log(this.dateFormat(new Date(this.shipmentData['testReceiptDate'])? new Date(this.shipmentData['testReceiptDate']) : this.shipmentData['testReceiptDate']))
     this.updatedStatus = this.eidArray[0].updatedStatus;
     this.EIDJSON = {
       "authToken": this.authToken,
