@@ -295,28 +295,28 @@
           </ion-col>
         </ion-row>
         <ion-row>
-          <ion-col size="6" size-xs class="grid-input-col">
+          <ion-col size="6" size-xs class="grid-input-col" *ngIf="isPartiEditRespDate">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Response Date</mat-label>
               <input matInput [matDatepicker]="respDate" 
                placeholder="Choose a date"   #eidrespDate="ngModel" name="eidrespDate" 
-              [(ngModel)]="shipmentData.responseDate" required [disabled]="isView=='true'">
+              [(ngModel)]="shipmentData.responseDate" [required]="isPartiEditRespDate" [disabled]="isView=='true'">
               <mat-datepicker-toggle matSuffix [for]="respDate"></mat-datepicker-toggle>
-              <mat-datepicker #respDate [disabled]="isView=='true'"></mat-datepicker>
-              <mat-error *ngIf="!shipmentData.responseDate"> Response Date is required</mat-error>
+              <mat-datepicker #respDate  [disabled]="isView=='true'"></mat-datepicker>
+              <mat-error *ngIf="!shipmentData.responseDate && isPartiEditRespDate"> Response Date is required</mat-error>
             </mat-form-field>
           </ion-col>
-          <ion-col size="6" size-xs class="grid-input-col">
+          <ion-col size="6" size-xs class="grid-input-col" *ngIf="isPartiEditModeRec">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Mode of Receipt</mat-label>
               <mat-select [(ngModel)]="shipmentData.modeOfReceipt" #receiptmode="ngModel" 
-              name="receiptmode" required [disabled]="isView=='true'">
+              name="receiptmode" [required]="isPartiEditModeRec" [disabled]="isView=='true'">
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let item of shipmentData.modeOfReceiptDropdown" [value]="item.value">
                   {{item.show}}
                 </mat-option>
               </mat-select>
-              <mat-error *ngIf="!shipmentData.modeOfReceipt">Please choose the Mode Of Receipt </mat-error>
+              <mat-error *ngIf="!shipmentData.modeOfReceipt && isPartiEditModeRec">Please choose the Mode Of Receipt </mat-error>
             </mat-form-field>
           </ion-col>
         </ion-row>
