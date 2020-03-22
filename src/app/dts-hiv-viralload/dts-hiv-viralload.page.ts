@@ -57,9 +57,8 @@ from '@ionic-native/network/ngx';
 
 import {
   LocalShipmentFormService
-}
+} from '../../app/service/localShipmentForm/local-shipment-form.service';
 
-from '../../app/service/localShipmentForm/local-shipment-form.service';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -138,18 +137,9 @@ interface selectArray {
   shipmentArray = [];
   selectedShipmentID: any;
   participantArray = [];
-
   ptPanelTestData = {}
-
-  ;
-
   ptPanelNotTestData = {}
-
-  ;
-
   viralLoadJSON = {}
-
-  ;
   vlResult = [];
   tndArray = [];
   controlArray: any = [];
@@ -157,18 +147,7 @@ interface selectArray {
   approvalLabel: any;
   updatedStatus: any;
   isView: any;
-  invalidVlAssay: any;
-  invalidTestReceiptDate: any;
-  invalidTestDate: any;
-  invalidOthervlassay: string;
-  invalidAssayExpDate: string;
-  invalidVlAssayLotNo: string;
-  invalidResponseDate: string;
-  invalidQcDate: string;
-  invalidQcDoneBy: string;
   validShipmentDetails: boolean = false;
-  validVlAssay: string;
-  validQC: string;
   invalidSupReview: string;
   validOtherInfo: boolean = false;
   invalidSupName: string;
@@ -188,7 +167,7 @@ interface selectArray {
   isPartiQCAccess: boolean;
   isPartiEditRespDate: boolean;
   isPartiEditModeRec: boolean;
-
+  shipmentPanelForm:NgForm;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -245,16 +224,14 @@ interface selectArray {
         if (vlDataObj[0].isSynced == 'false') {
           this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
 
-              if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
+            if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
 
-                this.isView = localStorageSelectedFormArray[0].isView;
-                this.vlDataArray.push(localStorageSelectedFormArray[0]);
-                this.bindVLData();
+              this.isView = localStorageSelectedFormArray[0].isView;
+              this.vlDataArray.push(localStorageSelectedFormArray[0]);
+              this.bindVLData();
 
-              }
             }
-
-          )
+          })
         } else {
           this.vlDataArray = [];
           this.vlDataArray.push(vlDataObj[0]);
@@ -308,11 +285,9 @@ interface selectArray {
           if (this.isQCDoneShow == true) {
             this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
             this.qcDone = this.shipmentsDetailsArray.qcData['qcRadioSelected'] ? this.shipmentsDetailsArray.qcData['qcRadioSelected'] : '';
-
             if (this.shipmentsDetailsArray.qcData.qcDate) {
               this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
             }
-
             this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
           }
         }
@@ -422,7 +397,7 @@ interface selectArray {
 
       // }
 
-      this.nextStepShipmentPanel('onload');
+      this.nextStepShipmentPanel(this.shipmentPanelForm.valid,'onload');
       this.nextStepPTPanelTest('onload', this.ptPanelTest);
       this.nextStepOtherInfoPanel('onload');
     }
@@ -440,77 +415,15 @@ interface selectArray {
     this.step = index;
   }
 
-  nextStepShipmentPanel(next) {
+  nextStepShipmentPanel(isValidShipmentPanel, next) {
 
     if (this.isView == "true") {
       this.step = 2;
     }
-
     if (next != 'onload' && this.isView == "false") {
-      if (!this.vlassay) {
-        this.invalidVlAssay = "true";
-      }
-
-      if (this.testDate == undefined) {
-        this.invalidTestDate = "true";
-      }
-
-      if (this.assayExpDate == undefined) {
-        this.invalidAssayExpDate = "true";
-      }
-
-      this.validVlAssay = "";
-
-      if (this.isSelectedOther == true) {
-        if (!this.othervlassay) {
-          this.invalidOthervlassay = "true";
-        } else {
-          this.validVlAssay = "true";
-        }
-      } else {
-        this.validVlAssay = "true";
-      }
-
-      if (!this.assayLotNo) {
-        this.invalidVlAssayLotNo = "true";
-      }
-
-      if (this.responseDate == undefined) {
-        this.invalidResponseDate = "true";
-      }
-
-      this.validQC = "";
-
-      if (this.qcDone == 'yes') {
-        if (this.qcDate == undefined) {
-          this.invalidQcDate = "true";
-        }
-
-        if (!this.qcDoneBy) {
-          this.invalidQcDoneBy = "true";
-        }
-
-        if (this.qcDate && this.qcDoneBy) {
-          this.validQC = "true";
-        }
-      } else {
-        this.validQC = "true";
-      }
-
+      this.validShipmentDetails = isValidShipmentPanel;
     } else {
-      if (this.vlassay && ((this.isSelectedOther == false) || (this.isSelectedOther == true && this.othervlassay))) {
-        this.validVlAssay = "true";
-      }
-
-      if (this.qcDone && ((this.qcDone == 'no') || (this.qcDone == 'yes' && this.qcDate && this.qcDoneBy))) {
-        this.validQC = "true";
-      }
-    }
-
-    if (this.vlassay && this.testDate != undefined && (this.validVlAssay == "true") && this.assayExpDate != "Invalid Date" && this.assayLotNo && this.responseDate != undefined && (this.validQC == "true")) {
-      this.validShipmentDetails = true;
-    } else {
-      this.validShipmentDetails = false;
+      this.validShipmentDetails = isValidShipmentPanel;
     }
 
     if (next == 'next' && this.isView == "false") {
@@ -685,15 +598,18 @@ interface selectArray {
 
   checkVlArray() {
     this.vlResultArray.forEach((vlElement, index) => {
-        this.ptPanelTestData['vlResult'][index] = vlElement;
-      });
+      this.ptPanelTestData['vlResult'][index] = vlElement;
+    });
   }
 
-  submitViralLoad() {
+  submitViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
 
+    shipmentPanelForm.control.markAllAsTouched();
+    PTPanelTestForm.control.markAllAsTouched();
+    otherInfoPanelForm.control.markAllAsTouched();
     this.nextStepOtherInfoPanel('submit');
     this.nextStepPTPanelTest('submit', this.ptPanelTest);
-    this.nextStepShipmentPanel('submit');
+    this.nextStepShipmentPanel(shipmentPanelForm.valid,'submit');
 
     if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.validOtherInfo == true) {
 
@@ -724,7 +640,6 @@ interface selectArray {
         "appVersion": this.appVersionNumber,
         "syncType": "single",
         "data": {
-
           "evaluationStatus": this.vlDataArray[0].evaluationStatus,
           "participantId": this.vlDataArray[0].participantId,
           "schemeType": this.vlDataArray[0].schemeType,
@@ -738,13 +653,10 @@ interface selectArray {
           "vlData": {
             "access": {
               "status": this.vlDataArray[0].vlData.access.status
-            }
-
-            ,
+            },
             "Heading1": {
-
               //participant details
-              "status": true,
+              "status": this.vlDataArray[0].vlData.Heading1.status,
               "data": {
                 "participantName": this.partDetailsArray.participantName,
                 "participantCode": this.partDetailsArray.participantCode,
@@ -752,15 +664,11 @@ interface selectArray {
                 "participantPhone": this.partDetailsArray.phone,
                 "participantMobile": this.partDetailsArray.mobile,
               }
-            }
-
-            ,
+            },
             "Heading2": {
-
               //shipment details vlResultSectionLabel
-              "status": true,
+              "status": this.vlDataArray[0].vlData.Headin2.status,
               "data": {
-
                 "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
                 "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
                 "testReceiptDate": this.dateFormat(new Date(this.testReceiptDate)),
@@ -783,34 +691,25 @@ interface selectArray {
                   "qcRadio": this.qcRadioArray
                 }
               }
-            }
-
-            ,
+            },
             "Heading3": {
-
               //PT panel details
-              "status": true,
+              "status": this.vlDataArray[0].vlData.Heading3.status,
               "data": {
-
                 "isPtTestNotPerformedRadio": this.isPTPerformedRadio,
                 "no": {
-
                   "note": this.ptPanelTestData['notes'],
                   "tableHeading": this.ptPanelTestData['controlHeads'],
                   "tableRowTxt": {
                     "id": this.ptPanelTestData['sampleIDArrray'],
                     "label": this.ptPanelTestData['controlArray'].label,
                     "mandatory": this.ptPanelTestData['controlArray'].mandatory,
-                  }
-
-                  ,
+                  },
                   "tndReferenceRadio": this.ptPanelTestData['tndRadioArray'],
                   "tndReferenceRadioSelected": this.ptPanelTestData['tndArray'],
                   "vlResult": this.ptPanelTestData['vlResult'],
                   "vlResultSectionLabel": this.ptPanelTestData['vlResultSectionLabel']
-                }
-
-                ,
+                },
                 "yes": {
                   "vlNotTestedReasonSelected": this.ptPanelNotTestData['vlNotTestedReason'],
                   "commentsTextArea": this.ptPanelNotTestData['ptNotTestedComments'],
@@ -821,13 +720,10 @@ interface selectArray {
                   "vlNotTestedReasonText": this.ptPanelNotTestData['ptNotTestedReasonLabel']
                 }
               }
-            }
-
-            ,
+            },
             "Heading4": {
-
               //other information
-              "status": true,
+              "status": this.vlDataArray[0].vlData.Heading4.status,
               "data": {
                 "supervisorReview": this.supervisorReviewArray,
                 "approvalLabel": this.approvalLabel,

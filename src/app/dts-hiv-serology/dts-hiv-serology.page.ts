@@ -1,10 +1,33 @@
-import {  Component,   OnInit } from '@angular/core';
-import {  FormControl,   FormGroupDirective,  NgForm,  Validators } from '@angular/forms';
-import {  ErrorStateMatcher } from '@angular/material/core';
-import {  CrudServiceService, ToastService, LoaderService } from '../../app/service/providers';
-import {  Storage } from '@ionic/storage';
-import {  Router } from '@angular/router';
-
+import {
+  Component,
+  OnInit
+} from '@angular/core';
+import {
+  FormControl,
+  FormGroupDirective,
+  NgForm,
+  Validators
+} from '@angular/forms';
+import {
+  ErrorStateMatcher
+} from '@angular/material/core';
+import {
+  CrudServiceService,
+  ToastService,
+  LoaderService
+} from '../../app/service/providers';
+import {
+  Storage
+} from '@ionic/storage';
+import {
+  Network
+} from '@ionic-native/network/ngx';
+import {
+  Router
+} from '@angular/router';
+import {
+  LocalShipmentFormService
+} from '../../app/service/localShipmentForm/local-shipment-form.service';
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -16,23 +39,22 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 /** Error when invalid control is dirty, touched, or submitted. */
 
 @Component({
-    selector: 'app-dts-hiv-serology',
-    templateUrl: './dts-hiv-serology.page.html',
-    styleUrls: ['./dts-hiv-serology.page.scss'],
-  })
+  selector: 'app-dts-hiv-serology',
+  templateUrl: './dts-hiv-serology.page.html',
+  styleUrls: ['./dts-hiv-serology.page.scss'],
+})
 
 export class DTSHIVSerologyPage implements OnInit {
 
   panelOpenState = false;
   selectedTestFormArray = [];
   partiDetailsArray: any = [];
-
   shipmentsDetailsArray: any = {};
   algorithmUsedSelectArray = [];
   modeOfReceiptArray = [];
   qcRadioArray = [];
   isQCDoneShow: boolean;
-  testKitDetailsArray: any;
+  testKitDetailsArray: any = [];
   sampleDetailsArray: any = [];
   otherInfoArray: any;
   supervisorReviewArray = [];
@@ -60,24 +82,13 @@ export class DTSHIVSerologyPage implements OnInit {
   supervisorName: any;
   testKitArray: any;
   expDateFormat = [];
-
+  serologyJSON = {};
   testKitXerologyForm: any = {};
-
-  sampleResult: any = {};
-
-  sampleDetailsJSON: any = {};
-
-  sampleResultObj = {};
-  sampleResultArray = [];
-
-  newSampObj = {};
-  newSampArray = {};
   appVersionNumber: any;
   authToken: any;
   participantID: any;
   participantName: any;
   algorithmused: any;
-  selected;
   dtsDataObj: any;
   formattedDate;
   selectedAlgUsed: any[];
@@ -86,25 +97,19 @@ export class DTSHIVSerologyPage implements OnInit {
   selectedSupReviewArray: any[];
   selectedKitNameArray: any;
   kitArray;
-  sampleArray = [];
-  sampleDetailsPushArray: any = [];
   samplesTextPushArray: any = [];
   resultsTextPushArray: any = [];
-  myArray = [];
-  myArray1 = [];
-  sampleSelectedArray = [];
-  sampleSelected = [];
-  sampleNameSelectedArray = [];
-  myElements = [];
-  sampleResultArr = [];
-  currentObj: string;
-  shipmentPanelForm:NgForm;
+  shipmentPanelForm: NgForm;
+  approvalLabel: any;
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
-   ) {
+    private router: Router,
+    public network: Network,
+    public LocalShipmentFormService: LocalShipmentFormService
+  ) {
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
@@ -121,9 +126,10 @@ export class DTSHIVSerologyPage implements OnInit {
   }
 
   dateFormat(dateObj) {
-    return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
-  }
 
+    return this.formattedDate = (dateObj.getFullYear()) + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + (dateObj.getDate())).slice(-2);
+
+  }
 
   ngOnInit() {}
 
@@ -147,31 +153,19 @@ export class DTSHIVSerologyPage implements OnInit {
           if (dtsDataObj[0].dtsData.Heading2.status == true) {
             this.shipmentsDetailsArray = dtsDataObj[0].dtsData.Heading2.data;
             console.log(this.shipmentsDetailsArray);
-            this.testReceiptDate = this.shipmentsDetailsArray.testReceiptDate? new Date(this.shipmentsDetailsArray.testReceiptDate):'';
-            this.sampleRhdDate = this.shipmentsDetailsArray.sampleRehydrationDate ? new Date(this.shipmentsDetailsArray.sampleRehydrationDate):'';
-            this.testingDate = this.shipmentsDetailsArray.testingDate?new Date(this.shipmentsDetailsArray.testingDate):'';
-            this.respDate =this.shipmentsDetailsArray.responseDate? new Date(this.shipmentsDetailsArray.responseDate):'';
+            this.testReceiptDate = this.shipmentsDetailsArray.testReceiptDate ? new Date(this.shipmentsDetailsArray.testReceiptDate) : '';
+            this.sampleRhdDate = this.shipmentsDetailsArray.sampleRehydrationDate ? new Date(this.shipmentsDetailsArray.sampleRehydrationDate) : '';
+            this.testingDate = this.shipmentsDetailsArray.testingDate ? new Date(this.shipmentsDetailsArray.testingDate) : '';
+            this.respDate = this.shipmentsDetailsArray.responseDate ? new Date(this.shipmentsDetailsArray.responseDate) : '';
             this.algorithmUsedSelectArray = this.shipmentsDetailsArray.algorithmUsedSelect;
-            this.algorithmused =  this.shipmentsDetailsArray.algorithmUsedSelected;
-            // if (this.algorithmUsedSelectArray) {
-            //   this.selectedAlgUsed = this.algorithmUsedSelectArray.filter(alg => alg.selected == "selected");
-            //   this.algorithmused = this.selectedAlgUsed[0].value;
-            // }
-
+            this.algorithmused = this.shipmentsDetailsArray.algorithmUsedSelected;
             this.modeOfReceiptArray = this.shipmentsDetailsArray.modeOfReceiptSelect;
             this.receiptmode = this.shipmentsDetailsArray.modeOfReceiptSelected;
-            // if (this.modeOfReceiptArray) {
-            //   this.selectedModeOfRec = this.modeOfReceiptArray.filter(modeOfRec => modeOfRec.selected == "selected");
-            //   this.receiptmode = this.selectedModeOfRec[0].value;
-            // }
-
             this.isQCDoneShow = this.shipmentsDetailsArray.qcData.status;
-
             if (this.isQCDoneShow == true) {
               this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
-              this.selectedQCRadio = this.qcRadioArray.filter(qcRadio => qcRadio.selected == "selected");
-              this.qcDone = this.selectedQCRadio[0].value;
-              this.qcDate = this.shipmentsDetailsArray.qcData.qcDate?new Date(this.shipmentsDetailsArray.qcData.qcDate):'';
+              this.qcDone = this.shipmentsDetailsArray.qcData.qcRadioSelected;
+              this.qcDate = this.shipmentsDetailsArray.qcData.qcDate ? new Date(this.shipmentsDetailsArray.qcData.qcDate) : '';
               this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
             }
           }
@@ -183,11 +177,6 @@ export class DTSHIVSerologyPage implements OnInit {
             this.testKitIndex = this.testKitDetailsArray.kitText.length;
             this.testKitTextArray = this.testKitDetailsArray.kitText;
             this.testKitNameArray = (this.testKitDetailsArray.kitName);
-
-            // this.testKitDetailsArray.kitSelected.forEach((element, index) => {
-            //   this.kitName[index] = element.kitValue
-            // })
-
             for (let lotvalue of Object.values(this.testKitDetailsArray['lotNo'])) {
               this.lot.push(lotvalue);
             }
@@ -199,64 +188,20 @@ export class DTSHIVSerologyPage implements OnInit {
             for (let expItem of this.exp) {
               this.expDate.push(new Date(expItem));
             }
-
-            //  console.log(this.testKitDetailsArray.lotNo)
-            //   console.log(this.testKitNameArray[this.testKitTextArray[0]])
           }
 
           if (dtsDataObj[0].dtsData.Heading4.status == true) {
 
             this.sampleDetailsArray = dtsDataObj[0].dtsData.Heading4.data;
-            // this.sampleSelectedArray.push(this.sampleDetailsArray.sampleSelect);
-            //this.sampleNameSelectedArray.push(this.sampleDetailsArray.sampleName);
-            // this.sampleDetailsPushArray.push(dtsDataObj[0].dtsData.Heading4.data);
-            console.log(this.sampleDetailsArray);
-            // this.sampleDetailsArray.sampleName.forEach((element,index) => {
-            //   this.sampleResultObj.=element.kitValue
-            // })
-
-            // for (let [key, value] of Object.entries(this.sampleDetailsArray)) {
-            //   if (key != 'resultsText' && key != 'samples') {
-            //     this.newSampArray[key] = value;
-            //   }
-            // }
-            // console.log(this.newSampArray)
-
             this.sampleIndex = this.sampleDetailsArray.samples.length;
             this.samplesTextPushArray.push(this.sampleDetailsArray.samples.label);
             this.samplesTextArray = this.sampleDetailsArray.samples.label;
             this.resultsTextArray = this.sampleDetailsArray.resultsText;
             this.resultsTextPushArray.push(this.sampleDetailsArray.resultsText);
 
-
-            // for (let [index, key] of this.resultsTextArray.entries()) {
-            //   this.sampleResult[key] = '';
-
-            // }
-
-            // for (let keycheck of this.samplesTextArray) {
-
-            //   this.sampleResultObj[keycheck] = this.sampleResult;
-            // }
-
-            // for (let [keycheck] of this.samplesTextArray) {
-
-            //   this.sampleResultObj[keycheck] = this.sampleResult;
-            // }
-
-            // this.sampleResultArray.push(this.sampleResultObj);
-
-
-            // console.log(this.sampleResultArray);
-            console.log(this.sampleDetailsArray);
-            // this.sampleDetailsArray['INDHU203']['Result-1']['0'] = "1";
-            // this.sampleDetailsArray['INDHU203']['Result-2']['1'] = "2";
-            // this.sampleDetailsArray['INDHU203']['Result-3']['2'] = "2";
-            // this.sampleDetailsArray['INDHU203']['Final-Result']['3'] = "4";
-            // this.sampleDetailsArray['INDHU204']['Result-1']['0'] = "3";
-            // this.sampleDetailsArray['INDHU204']['Result-2']['1'] = "3";
-            // this.sampleDetailsArray['INDHU204']['Result-3']['2'] = "3";
-
+            // this.sampleDetailsArray["DTSS01"]['Result-1']['value'] = "1";
+            // this.sampleDetailsArray["DTSS02"]['Result-1']['value'] = "1";
+            // this.sampleDetailsArray["DTSS02"]['Result-2']['value'] = "2";
 
           }
 
@@ -264,17 +209,9 @@ export class DTSHIVSerologyPage implements OnInit {
 
             this.otherInfoArray = dtsDataObj[0].dtsData.Heading5.data;
             this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
-            this.supReview =  this.otherInfoArray.supervisorReviewSelected;
-            // if (this.supervisorReviewArray) {
-            //   this.selectedSupReviewArray = this.supervisorReviewArray.filter(supReviewItem => supReviewItem.selected == "selected");
-            //   this.supReview = this.selectedSupReviewArray[0].value;
-            // }
-
-            this.selectedSupReviewArray = this.supervisorName = this.otherInfoArray.approvalInputText;
-
-            if (this.otherInfoArray.comments) {
-              this.comments = this.otherInfoArray.comments;
-            }
+            this.supReview = this.otherInfoArray.supervisorReviewSelected;
+            this.comments = this.otherInfoArray.comments;
+            this.approvalLabel = this.otherInfoArray.approvalLabel;
           }
         } else {
           this.viewAccessMessage = dtsDataObj[0].dtsData.access.message;
@@ -294,13 +231,17 @@ export class DTSHIVSerologyPage implements OnInit {
     this.step++;
   }
 
-  nextStepTestPanel(){
-    debugger;
-    if(this.shipmentPanelForm.valid==true){
-    this.step=2;
-    }
-    else{
-      this.step=1;
+  nextStepTestPanel(isShipmentPanelValid, param) {
+    if (param == 'next') {
+      if (isShipmentPanelValid == true) {
+        this.step = 2;
+      } else {
+        this.step = 1;
+      }
+    } else {
+      if (isShipmentPanelValid == false) {
+        this.step = 1;
+      }
     }
   }
 
@@ -312,101 +253,125 @@ export class DTSHIVSerologyPage implements OnInit {
     console.log(event)
   }
 
-  pushSampleDetails(sample, result, r) {
+  submitXerologyForm(shipmentPanelForm: NgForm, otherInfoPanelForm: NgForm) {
 
-     console.log(this.sampleDetailsArray)
-    // this.sampleResultArray.forEach((sampleElement, index) => {
-    
-    //   this.currentObj=Object.keys(sampleElement)[r];
-    //   let x=this.currentObj;
-    //   if (x == sample) {
-      
-    //     if(x==Object.keys(sampleElement)[r]){
-    //       sampleElement[x][result] = "8"
-     
-    //       console.log(sampleElement[sample][result]);
-    //     }  
-    //   }     
-    // });
-   
-  }
-
-  submitXerologyForm() {
-
+    shipmentPanelForm.control.markAllAsTouched();
+    otherInfoPanelForm.control.markAllAsTouched();
+    this.nextStepTestPanel(shipmentPanelForm.valid, 'submit');
     this.expDate.forEach(expDateItem => this.expDateFormat.push(new Date(expDateItem)));
 
     this.testKitXerologyForm = ({
-        'testKitTextArray': this.testKitTextArray,
-        'kitName': this.kitName,
-        'lot': this.lot,
-        'expDate': this.expDateFormat
-      }
+      'testKitTextArray': this.testKitTextArray,
+      'kitName': this.kitName,
+      'lot': this.lot,
+      'expDate': this.expDateFormat
+    });
 
-    );
+    if (this.qcDone == 'no' || this.qcDone=='') {
+      this.qcDate = "";
+      this.qcDoneBy = "";
+    } 
 
-    this.sampleDetailsJSON = ({
-      "samples": this.sampleResultObj,
-    })
-
-    let xerologyJSON = {
+    this.serologyJSON = {
 
       "authToken": this.authToken,
       "appVersion": this.appVersionNumber,
-      "evaluationStatus": this.dtsDataObj.evaluationStatus,
-      "participantId": this.dtsDataObj.participantId,
-      "schemeType": this.dtsDataObj.schemeType,
-      "shipmentId": this.dtsDataObj.shipmentId,
-      "mapId": this.dtsDataObj.mapId,
-      "createdOn":"",
-      "dtsData": {
-        "Heading1": {
-          //participant details
-          "participantName": this.partiDetailsArray.participantName,
-          "participantCode": this.partiDetailsArray.participantCode,
-          "participantAffiliation": this.partiDetailsArray.affiliation,
-          "participantPhone": this.partiDetailsArray.phone,
-          "participantMobile": this.partiDetailsArray.mobile,
-        }
-
-        ,
-        "Heading2": {
-          //shipment details
-          "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
-          "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
-          "testReceiptDate": this.testReceiptDate,
-          "sampleRehydrationDate": this.sampleRhdDate,
-          "testingDate": this.testingDate,
-          "algorithmused": this.algorithmused,
-          "respDate": this.respDate,
-          "receiptmode": this.receiptmode,
-          "qcDone": this.qcDone,
-          "qcDate": this.qcDate,
-          "qcDoneBy": this.qcDoneBy,
-        }
-
-        ,
-        "Heading3": {
-          //test details
-          "testKitArray": this.testKitXerologyForm,
-        }
-
-        ,
-        "Heading4": {
-          //sample details
-          "sampleDetailArray": this.sampleDetailsJSON,
-        }
-
-        ,
-        "Heading5": {
-          //other information
-          "supReview": this.supReview,
-          "supervisorName": this.supervisorName,
-          "comments": this.comments,
+      "syncType": "single",
+      "data": {
+        "evaluationStatus": this.dtsDataObj.evaluationStatus,
+        "participantId": this.dtsDataObj.participantId,
+        "schemeType": this.dtsDataObj.schemeType,
+        "shipmentId": this.dtsDataObj.shipmentId,
+        "mapId": this.dtsDataObj.mapId,
+        "isSynced": true,
+        "createdOn": this.dtsDataObj.createdOn ? this.dtsDataObj.createdOn : "",
+        "updatedOn": this.dtsDataObj.updatedOn ? this.dtsDataObj.updatedOn : "",
+        "updatedStatus": this.dtsDataObj.updatedStatus,
+        "dtsData": {
+          "access": {
+            "status": this.dtsDataObj.dtsData.access.status
+          },
+          "Heading1": {
+            //participant details
+            "status": this.dtsDataObj.dtsData.Heading1.status,   
+            "data": {
+            "participantName": this.partiDetailsArray.participantName,
+            "participantCode": this.partiDetailsArray.participantCode,
+            "participantAffiliation": this.partiDetailsArray.affiliation,
+            "participantPhone": this.partiDetailsArray.phone,
+            "participantMobile": this.partiDetailsArray.mobile,
+            }
+          },
+          "Heading2": {
+            //shipment details
+            "status": this.dtsDataObj.dtsData.Heading2.status,   
+            "data": {
+            "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
+            "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
+            "testReceiptDate": this.testReceiptDate?this.dateFormat(new Date(this.testReceiptDate)):"",
+            "sampleRehydrationDate": this.sampleRhdDate?this.dateFormat(new Date(this.sampleRhdDate)):'',
+            "testingDate": this.testingDate?this.dateFormat(new Date(this.testingDate)):"",
+            "algorithmUsedSelected": this.algorithmused,
+            "algorithmUsedSelect":this.algorithmUsedSelectArray,
+            "responseDate": this.respDate?this.dateFormat(new Date(this.respDate)):'',
+            "modeOfReceiptSelected": this.receiptmode,
+            "modeOfReceiptSelect":this.modeOfReceiptArray,
+            "qcData": {
+                    "qcRadioSelected": this.qcDone,
+                    "qcDate":this.qcDate ?this.dateFormat(new Date(this.qcDate)): this.qcDate,
+                    "qcDoneBy": this.qcDoneBy,
+                    "status": this.isQCDoneShow,
+                    "qcRadio": this.qcRadioArray
+                  }
+                }
+          },
+          "Heading3": {
+            //test details
+            "status": this.dtsDataObj.dtsData.Heading3.status,   
+            "data": {
+            "testKitSelected": this.testKitXerologyForm,
+            }
+          },
+          "Heading4": {
+            //sample details
+            "status": this.dtsDataObj.dtsData.Heading4.status,   
+            "data": {
+            "sampleDetailSelected": this.sampleDetailsArray,
+            }
+          },
+          "Heading5": {
+              //other information
+            "status": this.dtsDataObj.dtsData.Heading5.status,   
+            "data": {
+              "supervisorReview": this.supervisorReviewArray,
+              "approvalLabel": this.approvalLabel,
+              "supervisorReviewSelected": this.supReview,
+              "approvalInputText": this.supervisorName,
+              "comments": this.comments
+            }
         }
       }
     }
+  }
+  console.log(this.serologyJSON);
+    // if (this.network.type == 'none') {
+    //   this.serologyJSON['data']['isSynced'] = 'false';
+    //   this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
 
-    console.log(xerologyJSON);
+    // } else {
+
+    //   this.serologyJSON['data']['isSynced'] = 'true';
+    //   this.CrudServiceService.postData('shipments/save-form', this.serologyJSON).then((result) => {
+    //       if (result["status"] == 'success') {
+    //         this.ToastService.presentToastWithOptions(result['message']);
+    //         this.router.navigate(['/all-pt-schemes']);
+    //       }
+    //     },
+    //     (err) => {
+    //       console.log(err);
+    //     }
+    //   );
+    // }
   }
 
 }
