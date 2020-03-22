@@ -95,6 +95,8 @@ export class DbsEidPage implements OnInit {
   isQsArrayCheck=[];
   hivCTODArrayCheck=[];
   isSubmitted:any;
+  isPartiEditRespDate: boolean;
+  isPartiEditModeRec: boolean;
   constructor(private activatedRoute: ActivatedRoute,
      private storage: Storage,
       public ToastService: ToastService,
@@ -119,6 +121,9 @@ export class DbsEidPage implements OnInit {
         this.participantID = participantLogin.id;
         this.participantName = participantLogin.name;
         this.participantQcAccess=participantLogin.qcAccess;
+        this.isPartiEditRespDate = participantLogin.enableAddingTestResponseDate;
+        this.isPartiEditModeRec = participantLogin.enableChoosingModeOfReceipt;
+
         this.getEIDFormDetails();
       }
     })
@@ -222,12 +227,12 @@ export class DbsEidPage implements OnInit {
         this.hivCTODArray = [];
         this.ptPanelData['sampleTextData'].label.forEach(sampleName=> {
           this.yourResultArray.push(this.ptPanelData['sampleData'][sampleName]['Your-Results']);
-          this.icQsValuesArray.push(this.ptPanelData['sampleData'][sampleName]['HIV-CT/OD']);
-          this.hivCTODArray.push(this.ptPanelData['sampleData'][sampleName]['IC/QS-Values']);
+          this.hivCTODArray.push(this.ptPanelData['sampleData'][sampleName]['HIV-CT/OD']);
+          this.icQsValuesArray.push(this.ptPanelData['sampleData'][sampleName]['IC/QS-Values']);
         });
-        this.ptPanelData['samples']['yourResults'] = this.yourResultArray;
-        this.ptPanelData['samples']['hivCtOd'] = this.hivCTODArray;
-        this.ptPanelData['samples']['IcQsValues'] = this.icQsValuesArray;
+        this.ptPanelData['samples']['yourResults'] = [...this.yourResultArray];
+        this.ptPanelData['samples']['hivCtOd'] = [...this.hivCTODArray];
+        this.ptPanelData['samples']['IcQsValues'] = [...this.icQsValuesArray];
       } else {
         this.showPTPanelData = false;
 
@@ -247,6 +252,7 @@ export class DbsEidPage implements OnInit {
   this.nextPTPanelStep('onload');
       if(this.validShipmentDetails==true){
         this.nextOtherInfoStep('onload');
+        console.log(this.isValidPTPanel)
         if(this.isValidPTPanel==true){
           this.checkOtherInfoPanel();
         }else{}
@@ -308,7 +314,7 @@ console.log(this.eidArray)
       !this.shipmentData['extractionExpirationDate'] ||
       !this.shipmentData['detectionExpirationDate'] ||
       !this.shipmentData['responseDate'] ||
-      !this.shipmentData['modeOfReceipt'] ){
+      (!this.shipmentData['modeOfReceipt'] && this. isPartiEditModeRec ==true)){
         if(param=='next'){
             this.validShipmentDetails = false;
             //do nothing
@@ -329,9 +335,7 @@ console.log(this.eidArray)
       } 
   }
   nextOtherInfoStep(params){   
-    if(this.isView=="true"){
-      this.setStep(3);
-     }else{
+  
     if(this.ptPanelNotTested==false || !this.ptPanelNotTested){
       this.ptPanelData['sampleTextData'].mandatory.forEach((mandCheck,index)=> {
         if(mandCheck==true){
@@ -392,7 +396,10 @@ console.log(this.eidArray)
      }
 
 }
+if(this.isView=="true"){
   
+  this.setStep(3);
+ }else{ 
   if(params=='onload' || params=='submit'){
     if(this.isValidPTPanel==false){
       this.setStep(2);
