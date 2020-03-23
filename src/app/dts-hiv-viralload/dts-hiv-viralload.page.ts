@@ -215,9 +215,7 @@ interface selectArray {
           this.getVLFormDetails();
         }
       }
-  
     )
-    this.isNextStepPanelTest = false;
   }
 
   dateFormat(dateObj) {
