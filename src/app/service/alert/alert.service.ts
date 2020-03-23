@@ -28,6 +28,8 @@ export class AlertService {
           }
         }, {
           text: 'Yes',
+          cssClass: 'primary',
+          
           handler: () => {
             if(alertName=='logoutAlert'){
               this.router.navigate(['/login']);

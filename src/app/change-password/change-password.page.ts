@@ -18,9 +18,7 @@ import {
   PasswordValidator
 } from '../../validators/password.validator';
 
-import {
-  Router
-} from '@angular/router';
+import { Router} from '@angular/router';
 import {
   CrudServiceService,
   ToastService,
@@ -96,7 +94,6 @@ export class ChangePasswordPage implements OnInit {
     console.log( this.confirmPswdFormControl.errors)
   }
   changePassword(){
-    console.log(this.oldPswdFormControl)
     if (this.oldPswdFormControl.invalid || this.newPswdFormControl.invalid || this.confirmPswdFormControl.invalid) {
     } else {
       this.storage.get('participantLogin').then((partiLoginResult) => {
@@ -108,17 +105,17 @@ export class ChangePasswordPage implements OnInit {
         "appVersion": this.appVersionNumber
       }
 
-      // this.CrudServiceService.postData('login/change-password',changePswdJson)
-      // .then(result => {
-      //   //   this.LoaderService.disMissLoading();
-      //   if (result["status"] == 'success') {
-        
-      //   }else{
-      //     console.log(result);
-      //   }
-      // }, (err) => {
-      //   //    this.LoaderService.disMissLoading();
-      // }); 
+      this.CrudServiceService.postData('login/change-password',changePswdJson)
+      .then(result => {
+        //   this.LoaderService.disMissLoading();
+        if (result["status"] == 'success') {
+             console.log(result);
+        }else{
+             console.log(result);
+        }
+      }, (err) => {
+        //    this.LoaderService.disMissLoading();
+      }); 
 
     }
     })
