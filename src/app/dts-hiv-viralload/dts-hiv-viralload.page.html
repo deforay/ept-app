@@ -414,7 +414,7 @@
           <div *ngIf="ptPanelTestData.controlArray">
             <mat-card class="dynamic-card" *ngFor="let controls of ptPanelTestData.controlArray.label ;let i = index">
               <mat-card-title>
-                {{controls}} <span class="danger-text" *ngIf="ptPanelTestData.controlArray.mandatory[i]==true">*</span>
+                {{controls}}<span class="danger-text" *ngIf="ptPanelTestData.controlArray.mandatory[i]==true">*</span>
               </mat-card-title>
               <mat-card-content>
 

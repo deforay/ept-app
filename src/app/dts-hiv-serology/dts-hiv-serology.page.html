@@ -3,9 +3,15 @@
 <ion-content>
   <mat-accordion>
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
-      <mat-expansion-panel-header>
+      <mat-expansion-panel-header class="formMatExpPanel" >
         <mat-panel-title>
-          Participant Details
+          <ion-grid class="panelHeading">
+            <ion-row>
+              <ion-col size="12" class="grid-readonly-col">
+                <span class="text-title-color">Participant Details</span>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
@@ -115,9 +121,18 @@
 
     <form #shipmentPanelForm="ngForm" novalidate>
       <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
-        <mat-expansion-panel-header>
+        <mat-expansion-panel-header class="formMatExpPanel">
           <mat-panel-title>
-            Shipment Details
+            <ion-grid class="panelHeading">
+              <ion-row>
+                <ion-col size="10" class="grid-readonly-col">
+                  <span class="text-title-color">Shipment Details</span>
+                </ion-col>
+                <ion-col size="2" class="grid-readonly-col" *ngIf="isValidShipmentDetails==true">
+                  <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
           </mat-panel-title>
         </mat-expansion-panel-header>
 
@@ -299,11 +314,18 @@
       </mat-expansion-panel>
     </form>
 
+    <!-- <form #testKitPanelForm="ngForm" novalidate> -->
     <div *ngFor="let kitTextItem of testKitTextArray;let i = index;">
       <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="testKitNameArray[kitTextItem].status==true">
-        <mat-expansion-panel-header>
+        <mat-expansion-panel-header class="formMatExpPanel">
           <mat-panel-title >
-            {{kitTextItem}}
+            <ion-grid class="panelHeading">
+              <ion-row>
+                <ion-col size="12" class="grid-readonly-col">
+                  <span class="text-title-color">  {{kitTextItem}}</span>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <ion-row>
@@ -313,7 +335,7 @@
               <mat-select [(ngModel)]="kitName[i]" name="kit">
                 <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let kitNameItem of testKitNameArray[kitTextItem].data" selected="selected"
-                  [value]="kitNameItem.value">
+                  [value]="kitNameItem.value" required>
                   {{kitNameItem.show}}
                 </mat-option>
               </mat-select>
@@ -346,7 +368,7 @@
         </mat-action-row>
       </mat-expansion-panel>
     </div>
-
+    <!-- </form> -->
 
     <!-- sample details start -->
     <!-- <div *ngFor="let sampleTextItem of samplesTextArray;let i = index;" >
@@ -383,16 +405,19 @@
     <div *ngFor="let sampleTextItem of samplesTextArray ;let i = index;">
 
       <mat-expansion-panel [expanded]="step === i+testKitIndex+2" (opened)="setStep(i+testKitIndex+2)">
-        <mat-expansion-panel-header>
+        <mat-expansion-panel-header class="formMatExpPanel">
           <mat-panel-title>
-            {{sampleTextItem}}
+            <ion-grid class="panelHeading">
+              <ion-row>
+                <ion-col size="12" class="grid-readonly-col">
+                  <span class="text-title-color">{{sampleTextItem}} <span class="danger-text" *ngIf="sampleDetailsArray.samples.mandatory[i]==true">*</span></span>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
           </mat-panel-title>
         </mat-expansion-panel-header>
         <div *ngFor="let resultName of resultsTextArray;let r=index">
-
           <ion-row>
-
-
             <ion-col size="12" *ngIf="sampleDetailsArray[sampleTextItem][resultName].status==true">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>{{resultName}} </mat-label>
@@ -407,7 +432,6 @@
                 </mat-select>
               </mat-form-field>
             </ion-col>
-
           </ion-row>
         </div>
 
@@ -423,9 +447,18 @@
     <form #otherInfoPanelForm="ngForm" novalidate>
     <mat-expansion-panel [expanded]="step === testKitIndex+sampleIndex+2"
       (opened)="setStep(testKitIndex+sampleIndex+2)">
-      <mat-expansion-panel-header>
+      <mat-expansion-panel-header class="formMatExpPanel">
         <mat-panel-title>
-          Other Informations
+          <ion-grid class="panelHeading">
+            <ion-row>
+              <ion-col size="10" class="grid-readonly-col">
+                <span class="text-title-color">Other Informations</span>
+              </ion-col>
+              <ion-col size="2" class="grid-readonly-col" *ngIf="isValidOtherInfoPanel==true">
+                <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </mat-panel-title>
       </mat-expansion-panel-header>
       <ion-grid>
