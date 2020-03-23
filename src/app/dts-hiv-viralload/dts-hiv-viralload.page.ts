@@ -167,7 +167,7 @@ interface selectArray {
   isPartiQCAccess: boolean;
   isPartiEditRespDate: boolean;
   isPartiEditModeRec: boolean;
-  shipmentPanelForm:NgForm;
+  shipmentPanelForm:NgForm
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -397,7 +397,7 @@ interface selectArray {
 
       // }
 
-      this.nextStepShipmentPanel(this.shipmentPanelForm.valid,'onload');
+      this.nextStepShipmentPanel('','onload');
       this.nextStepPTPanelTest('onload', this.ptPanelTest);
       this.nextStepOtherInfoPanel('onload');
     }

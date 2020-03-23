@@ -21,7 +21,8 @@ import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { NetworkService} from '../app/service/network.service';
 import { LocalShipmentFormService } from '../app/service/localShipmentForm/local-shipment-form.service';
-
+import { NgForm} from '@angular/forms';
+ 
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -50,6 +51,7 @@ import { LocalShipmentFormService } from '../app/service/localShipmentForm/local
     Network,
     LocalShipmentFormService,
     Platform,
+    NgForm,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]
