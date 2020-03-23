@@ -120,6 +120,54 @@ ion-header ion-toolbar.main-toolbar{
     height: 100px!important;
 
 }
+ion-toast .toast-wrapper{
+    width: calc(100% - 40px) !important;
+}
+ion-toast .toast-bottom{
+    bottom: calc(25px + var(--ion-safe-area-bottom, 0px)) !important;
+}
+ion-toast {
+    .toast-container{
+        .toast-content{
+            padding: 7px 7px;
+            text-align: center;
+            /* width: calc(100% - 20px); */
+            font-size: 13px;
+        }
+    }
+   
+}
+.alert-head.sc-ion-alert-md{
+    text-align: center;
+    background: (var(--ion-color-primary)) !important;
+    padding-top: 10px !important;
+    padding-bottom: 10px !important;
+}
+.alert-title.sc-ion-alert-md {
+    font-size: 18px;
+    font-weight: 500;
+}
+.alert-sub-title.sc-ion-alert-md, .alert-title.sc-ion-alert-md {
+    color: #fff !important;
+    color: var(--ion-text-color,#fff) !important;
+}
+.alert-head.sc-ion-alert-md + .alert-message.sc-ion-alert-md{
+    padding-top: 14px;
+    padding-bottom: 7px;
+    font-size: 14px;
+    color: var(--ion-color-step-550,#424242) !important;
+}
+
+.alert-button.sc-ion-alert-md.primary{
+    color: green;
+    font-size: 15px;
+    font-weight: 700;
+}
+.alert-button.sc-ion-alert-md.secondary{
+    color: red;
+    font-size: 15px;
+    font-weight: 700;
+}
 input.mat-input-element{
     font-size: 13px;
 }

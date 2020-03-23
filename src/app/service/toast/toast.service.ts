@@ -8,13 +8,13 @@ export class ToastService {
 
   constructor(private toastCtrl: ToastController) {}
 
-   async presentToastWithOptions(message: string)  {
+   async presentToastWith1Options(message: string)  {
      
     const toast = await this.toastCtrl.create({
       header: message,
      // message: message,
-      duration: 3000,
-      position: 'top',
+      duration: 10000,
+      position: 'bottom',
       // buttons: [
       //   {
       //     handler: () => {}
@@ -27,5 +27,25 @@ export class ToastService {
       // ]
     });
     toast.present();
+  }
+
+  async presentToastWithOptions(message: string){
+    const toast = await this.toastCtrl.create({
+
+    header: message,
+    // duration: 10000,
+     position: 'bottom',
+    //  buttons: [
+    //    {
+    //      handler: () => {}
+    //    }, {
+    //      text: 'OK',
+    //      role: 'cancel',
+    //      handler: () => {
+    //      }
+    //    }
+    //  ]
+   });
+   toast.present();
   }
 }

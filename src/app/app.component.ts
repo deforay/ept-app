@@ -150,6 +150,8 @@ export class AppComponent {
   }
   logout() {
     this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
+    this.selectedIndex = 0;
+ 
   }
   openPage(page) {
     // Reset the content nav to have just this page
