@@ -71,41 +71,42 @@ export class DbsEidPage implements OnInit {
   otherInfoData = {};
   EIDJSON = {};
   updatedStatus: any;
-  participantQcAccess:any;
+  participantQcAccess: any;
   qcRadioArray = [];
-  isQCDoneShow:boolean=false;
+  isQCDoneShow: boolean = false;
   qcDoneBy;
   qcDone;
   qcDate;
   formattedQCDate: any;
   isView: any;
-  shipmentSubmitted:boolean =false;
+  shipmentSubmitted: boolean = false;
   // shipTestDateInValid:boolean=false;
-  shipTestDateInValid:any;
+  shipTestDateInValid: any;
   validShipmentDetails: boolean = false;
-  isValidPTPanel:boolean = false;
-  otherInfoValid:boolean = false;
+  isValidPTPanel: boolean = false;
+  otherInfoValid: boolean = false;
   yourResultArray = [];
   icQsValuesArray = [];
   hivCTODArray = [];
   yourResultCheckArray = [];
   icQsValuesCheckArray = [];
   hivCTODCheckArray = [];
-  resultArrayCheck=[];
-  isQsArrayCheck=[];
-  hivCTODArrayCheck=[];
-  isSubmitted:any;
+  resultArrayCheck = [];
+  isQsArrayCheck = [];
+  hivCTODArrayCheck = [];
+  isSubmitted: any;
   isPartiEditRespDate: boolean;
   isPartiEditModeRec: boolean;
+  isPtPanelNotTestedRadio;
   constructor(private activatedRoute: ActivatedRoute,
-     private storage: Storage,
-      public ToastService: ToastService,
-    public LoaderService: LoaderService, 
+    private storage: Storage,
+    public ToastService: ToastService,
+    public LoaderService: LoaderService,
     public CrudServiceService: CrudServiceService,
-     private sanitizer: DomSanitizer,
-     private router: Router,
-     public network: Network,
-     public LocalShipmentFormService: LocalShipmentFormService) {
+    private sanitizer: DomSanitizer,
+    private router: Router,
+    public network: Network,
+    public LocalShipmentFormService: LocalShipmentFormService) {
 
   }
 
@@ -120,7 +121,7 @@ export class DbsEidPage implements OnInit {
         this.authToken = participantLogin.authToken;
         this.participantID = participantLogin.id;
         this.participantName = participantLogin.name;
-        this.participantQcAccess=participantLogin.qcAccess;
+        this.participantQcAccess = participantLogin.qcAccess;
         this.isPartiEditRespDate = participantLogin.enableAddingTestResponseDate;
         this.isPartiEditModeRec = participantLogin.enableChoosingModeOfReceipt;
 
@@ -144,7 +145,7 @@ export class DbsEidPage implements OnInit {
   }
   ngOnInit() {}
 
- bindEIDData(){
+  bindEIDData() {
 
     if (this.eidArray[0].eidData.access.status == "success") {
       if (this.eidArray[0].eidData.Heading1.status == true) {
@@ -176,25 +177,24 @@ export class DbsEidPage implements OnInit {
         this.shipmentData['extractionAssay'] = this.eidArray[0].eidData.Heading2.data.extractionAssaySelected;
         this.shipmentData['detectionAssay'] = this.eidArray[0].eidData.Heading2.data.detectionAssaySelected;
         this.shipmentData['modeOfReceipt'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected;
-        if(this.participantQcAccess=="yes"){
-          if(this.eidArray[0].eidData.Heading2.data.qcData.status == true){
-            this.isQCDoneShow=true;
-            this.qcRadioArray= this.eidArray[0].eidData.Heading2.data.qcData.qcRadio;
-            this.qcDone = this.eidArray[0].eidData.Heading2.data.qcData.qcRadioSelected ? this.eidArray[0].eidData.Heading2.data.qcData.qcRadioSelected  : '';
+        if (this.participantQcAccess == "yes") {
+          if (this.eidArray[0].eidData.Heading2.data.qcData.status == true) {
+            this.isQCDoneShow = true;
+            this.qcRadioArray = this.eidArray[0].eidData.Heading2.data.qcData.qcRadio;
+            this.qcDone = this.eidArray[0].eidData.Heading2.data.qcData.qcRadioSelected ? this.eidArray[0].eidData.Heading2.data.qcData.qcRadioSelected : '';
             this.qcDate = this.eidArray[0].eidData.Heading2.data.qcData.qcDate ? new Date(this.eidArray[0].eidData.Heading2.data.qcData.qcDate) : '';
-            this.qcDoneBy = this.eidArray[0].eidData.Heading2.data.qcData.qcDoneBy ? this.eidArray[0].eidData.Heading2.data.qcData.qcDoneBy : '';            
+            this.qcDoneBy = this.eidArray[0].eidData.Heading2.data.qcData.qcDoneBy ? this.eidArray[0].eidData.Heading2.data.qcData.qcDoneBy : '';
           } else {
-            this.isQCDoneShow=false;
+            this.isQCDoneShow = false;
             this.qcDone = '';
             this.qcDate = '';
             this.qcDoneBy = '';
           }
-        }
-        else{
-          this.isQCDoneShow=false;
+        } else {
+          this.isQCDoneShow = false;
           this.qcDone = '';
-            this.qcDate = '';
-            this.qcDoneBy = '';
+          this.qcDate = '';
+          this.qcDoneBy = '';
         }
       } else {
         this.shipmentData = {};
@@ -217,7 +217,7 @@ export class DbsEidPage implements OnInit {
         this.ptPanelData['vlNotTestedReasonText'] = this.eidArray[0].eidData.Heading3.data.vlNotTestedReasonText;
         this.ptPanelData['sampleData'] = this.eidArray[0].eidData.Heading3.data.sampleSelected;
         this.ptPanelData['samplesList'] = this.eidArray[0].eidData.Heading3.data.samplesList;
-  
+
         this.ptPanelData['sampleTextData'] = this.eidArray[0].eidData.Heading3.data.samples;
         this.ptPanelData['resultsTextData'] = this.eidArray[0].eidData.Heading3.data.resultsText;
         this.ptPanelData['samples'] = this.ptPanelData['sampleTextData'];
@@ -225,7 +225,7 @@ export class DbsEidPage implements OnInit {
         this.yourResultArray = [];
         this.icQsValuesArray = [];
         this.hivCTODArray = [];
-        this.ptPanelData['sampleTextData'].label.forEach(sampleName=> {
+        this.ptPanelData['sampleTextData'].label.forEach(sampleName => {
           this.yourResultArray.push(this.ptPanelData['sampleData'][sampleName]['Your-Results']);
           this.hivCTODArray.push(this.ptPanelData['sampleData'][sampleName]['HIV-CT/OD']);
           this.icQsValuesArray.push(this.ptPanelData['sampleData'][sampleName]['IC/QS-Values']);
@@ -246,30 +246,31 @@ export class DbsEidPage implements OnInit {
         this.otherInfoData['supervisorReview'] = this.eidArray[0].eidData.Heading4.data.supervisorReviewSelected;
         this.otherInfoData['supervisorName'] = this.eidArray[0].eidData.Heading4.data.approvalInputText;
         this.otherInfoData['supervisorLabel'] = this.eidArray[0].eidData.Heading4.data.approvalLabel;
+        console.log(this.otherInfoData['supervisorReview'])
       } else {
         this.showOtherInfoData = false;
       }
-  this.nextPTPanelStep('onload');
-      if(this.validShipmentDetails==true){
+      this.nextPTPanelStep('onload');
+      if (this.validShipmentDetails == true) {
         this.nextOtherInfoStep('onload');
         console.log(this.isValidPTPanel)
-        if(this.isValidPTPanel==true){
+        if (this.isValidPTPanel == true) {
           this.checkOtherInfoPanel();
-        }else{}
-      }else{}
+        } else {}
+      } else {}
 
 
     } else {
       this.viewAccessMessage = this.eidArray[0].eidData.access.message;
     }
 
- 
 
- }
+
+  }
   dateFormat(dateObj) {
-    if(dateObj!=''){
+    if (dateObj != '') {
       return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
-    }else{
+    } else {
       return dateObj;
     }
   }
@@ -280,19 +281,18 @@ export class DbsEidPage implements OnInit {
       this.isView = eidDataObj[0].isView;
       if (eidDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
-  
-          if ((localStorageSelectedFormArray[0].isSynced == eidDataObj[0].isSynced) && 
-          (localStorageSelectedFormArray[0].evaluationStatus == eidDataObj[0].evaluationStatus) && 
-          (localStorageSelectedFormArray[0].mapId == eidDataObj[0].mapId) && 
-          (localStorageSelectedFormArray[0].participantId == eidDataObj[0].participantId) && 
-          (localStorageSelectedFormArray[0].shipmentId == eidDataObj[0].shipmentId) &&
-          (localStorageSelectedFormArray[0].schemeType == eidDataObj[0].schemeType))
-           {
-  
+
+          if ((localStorageSelectedFormArray[0].isSynced == eidDataObj[0].isSynced) &&
+            (localStorageSelectedFormArray[0].evaluationStatus == eidDataObj[0].evaluationStatus) &&
+            (localStorageSelectedFormArray[0].mapId == eidDataObj[0].mapId) &&
+            (localStorageSelectedFormArray[0].participantId == eidDataObj[0].participantId) &&
+            (localStorageSelectedFormArray[0].shipmentId == eidDataObj[0].shipmentId) &&
+            (localStorageSelectedFormArray[0].schemeType == eidDataObj[0].schemeType)) {
+
             this.isView = localStorageSelectedFormArray[0].isView;
             this.eidArray.push(localStorageSelectedFormArray[0]);
             this.bindEIDData();
-  
+
           }
         })
       } else {
@@ -300,260 +300,263 @@ export class DbsEidPage implements OnInit {
         this.eidArray.push(eidDataObj[0]);
         this.bindEIDData();
       }
-console.log(this.eidArray)
+      console.log(this.eidArray)
 
     })
   }
-  nextPTPanelStep(param){
-   if(this.isView=="true"){
-    this.setStep(2);
-   }
-   if(!this.shipmentData['shipmentTestingDate']||
-      !this.shipmentData['extractionLotNumber'] || 
+  nextPTPanelStep(param) {
+    if (this.isView == "true") {
+      this.setStep(2);
+    }
+    if (!this.shipmentData['shipmentTestingDate'] ||
+      !this.shipmentData['extractionLotNumber'] ||
       !this.shipmentData['detectionLotNumber'] ||
       !this.shipmentData['extractionExpirationDate'] ||
       !this.shipmentData['detectionExpirationDate'] ||
       !this.shipmentData['responseDate'] ||
-      (!this.shipmentData['modeOfReceipt'] && this. isPartiEditModeRec ==true)){
-        if(param=='next'){
-            this.validShipmentDetails = false;
-            //do nothing
-        }
-        if(param=='onload' || param=='submit'){
-          this.validShipmentDetails = false;
-          this.setStep(1);
-        }
-      }else{
-        if(param=='next'){         
-          this.validShipmentDetails = true;
-          this.nextStep();
-        }
-        if(param=='onload' || param =='submit'){
-          this.validShipmentDetails = true;
-           //do nothing
-        }
-      } 
+      (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
+      if (param == 'next') {
+        this.validShipmentDetails = false;
+        //do nothing
+      }
+      if (param == 'onload' || param == 'submit') {
+        this.validShipmentDetails = false;
+        this.setStep(1);
+      }
+    } else {
+      if (param == 'next') {
+        this.validShipmentDetails = true;
+        this.nextStep();
+      }
+      if (param == 'onload' || param == 'submit') {
+        this.validShipmentDetails = true;
+        //do nothing
+      }
+    }
   }
-  nextOtherInfoStep(params){   
-  
-    if(this.ptPanelNotTested==false || !this.ptPanelNotTested){
-      this.ptPanelData['sampleTextData'].mandatory.forEach((mandCheck,index)=> {
-        if(mandCheck==true){
-          if(this.yourResultArray[index]=='' || !this.yourResultArray[index]){
+  nextOtherInfoStep(params) {
+
+    if (this.ptPanelNotTested == false || !this.ptPanelNotTested) {
+      this.ptPanelData['sampleTextData'].mandatory.forEach((mandCheck, index) => {
+        if (mandCheck == true) {
+          if (this.yourResultArray[index] == '' || !this.yourResultArray[index]) {
             this.yourResultCheckArray[index] = 'invalid';
-          }
-          else{
+          } else {
             this.yourResultCheckArray[index] = 'valid';
           }
-          if(this.icQsValuesArray[index]=='' || !this.icQsValuesArray[index]){
-            this.icQsValuesCheckArray[index] = 'invalid';          
-          }
-          else{
+          if (this.icQsValuesArray[index] == '' || !this.icQsValuesArray[index]) {
+            this.icQsValuesCheckArray[index] = 'invalid';
+          } else {
             this.icQsValuesCheckArray[index] = 'valid';
           }
-          if(this.hivCTODArray[index]=='' || !this.hivCTODArray[index]){
-            this.hivCTODCheckArray[index] = 'invalid';         
-          }
-          else{
+          if (this.hivCTODArray[index] == '' || !this.hivCTODArray[index]) {
+            this.hivCTODCheckArray[index] = 'invalid';
+          } else {
             this.hivCTODCheckArray[index] = 'valid';
           }
-        }else{
+        } else {
           this.yourResultCheckArray[index] = 'valid';
           this.hivCTODCheckArray[index] = 'valid';
           this.icQsValuesCheckArray[index] = 'valid';
         }
       });
-  
-  this.resultArrayCheck =this.yourResultCheckArray.filter(i=>i=='invalid')
-    if(this.resultArrayCheck.length>0){
-      this.isValidPTPanel = false;
-    } else {
-       this.isValidPTPanel = true;
-        this.isQsArrayCheck = this.icQsValuesCheckArray.filter(i=>i=='invalid')
-          if(this.isQsArrayCheck.length>0){
-          this.isValidPTPanel = false;      
-          }
-          else{
+
+      this.resultArrayCheck = this.yourResultCheckArray.filter(i => i == 'invalid')
+      if (this.resultArrayCheck.length > 0) {
+        this.isValidPTPanel = false;
+      } else {
+        this.isValidPTPanel = true;
+        this.isQsArrayCheck = this.icQsValuesCheckArray.filter(i => i == 'invalid')
+        if (this.isQsArrayCheck.length > 0) {
+          this.isValidPTPanel = false;
+        } else {
+          this.isValidPTPanel = true;
+          this.hivCTODArrayCheck = this.hivCTODCheckArray.filter(i => i == 'invalid')
+          if (this.hivCTODArrayCheck.length > 0) {
+            this.isValidPTPanel = false;
+          } else {
             this.isValidPTPanel = true;
-             this.hivCTODArrayCheck =this.hivCTODCheckArray.filter(i=>i=='invalid')
-                if(this.hivCTODArrayCheck.length>0){
-                   this.isValidPTPanel = false;
-                }
-                else{
-                  this.isValidPTPanel = true;
-                }
           }
+        }
+      }
+
+    } else {
+      if (!this.ptPanelData['vlNotTestedReason'] ||
+        !this.ptPanelData['ptNotTestedComments'] ||
+        !this.ptPanelData['ptSupportComments']) {
+        this.isValidPTPanel = false;
+
+      } else {
+        this.isValidPTPanel = true;
+      }
+
+    }
+    if (this.isView == "true") {
+
+      this.setStep(3);
+    } else {
+      if (params == 'onload' || params == 'submit') {
+        if (this.isValidPTPanel == false) {
+          this.setStep(2);
+        } else {}
+      }
+      if (params == 'next') {
+        if (this.isValidPTPanel == false) {
+          //do  nothing
+        } else {
+          this.nextStep();
+        }
+      }
+    }
+  }
+
+  checkOtherInfoPanel() {
+    if (this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName'] || !this.otherInfoData['supervisorReview']) {
+      this.setStep(3);
+      this.otherInfoValid = false;
+
+    } else {
+      this.otherInfoValid = true;
     }
 
-}else{
-  if(!this.ptPanelData['vlNotTestedReason'] ||
-     !this.ptPanelData['ptNotTestedComments'] ||
-     !this.ptPanelData['ptSupportComments'] ){
-      this.isValidPTPanel = false;
-
-     }else{
-      this.isValidPTPanel = true;
-     }
-
-}
-if(this.isView=="true"){
-  
-  this.setStep(3);
- }else{ 
-  if(params=='onload' || params=='submit'){
-    if(this.isValidPTPanel==false){
-      this.setStep(2);
-    }else{}
   }
-  if(params=='next'){
-    if(this.isValidPTPanel==false){
-      //do  nothing
-    }else{  this.nextStep(); }
-  }
-}
-}
-
-checkOtherInfoPanel(){
-if(this.otherInfoData['supervisorReview']=='yes' && !this.otherInfoData['supervisorName']|| !this.otherInfoData['supervisorReview'])
-{
-  this.setStep(3);
-  this.otherInfoValid = false;
-
-}else{
-  this.otherInfoValid = true;
-}
-
-}
-  submitEID(shipmentPanelForm:NgForm,PTPanelTestForm:NgForm,otherInfoPanelForm:NgForm) {
+  submitEID(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
     shipmentPanelForm.control.markAllAsTouched();
     PTPanelTestForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
     this.nextPTPanelStep('submit');
-    if(this.validShipmentDetails==true){+
+    if (this.validShipmentDetails == true) {
+      +
       this.nextOtherInfoStep('submit');
-      if(this.isValidPTPanel==true){
+      if (this.isValidPTPanel == true) {
         this.checkOtherInfoPanel();
-      }else{}
-    }else{}
+      } else {}
+    } else {}
 
-    if (this.qcDone == 'no' || this.qcDone=='') {
+    if (this.qcDone == 'no' || this.qcDone == '') {
       this.qcDate = "";
       this.qcDoneBy = "";
-    } 
-    this.isSubmitted  = "true";
-   
+    }
+    this.isSubmitted = "true";
+    if(this.ptPanelNotTested== true) {
+      this.isPtPanelNotTestedRadio = "yes";
+    }else{
+      this.isPtPanelNotTestedRadio = "no";
+    }
     this.updatedStatus = this.eidArray[0].updatedStatus;
-    if(this.validShipmentDetails==true && this.isValidPTPanel==true && this.otherInfoValid==true){
+    if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.otherInfoValid == true) {
 
-    this.EIDJSON = {
-      "authToken": this.authToken,
-      "appVersion": this.appVersionNumber,
-      "syncType": "single",
-      "data": {
-        "evaluationStatus": this.eidArray[0].evaluationStatus,
-        "participantId": this.eidArray[0].participantId,
-        "schemeType": this.eidArray[0].schemeType,
-        "shipmentId": this.eidArray[0].shipmentId,
-        //  "shipmentCode":
-        "mapId": this.eidArray[0].mapId,
-        "isSynced": true,
-        "createdOn": this.eidArray[0].createdOn ? this.eidArray[0].createdOn : "",
-        "updatedOn": this.eidArray[0].updatedOn ? this.eidArray[0].updatedOn : "",
-        "updatedStatus": this.updatedStatus,
-            "eidData": {
-              "access": {
-                "status": this.eidArray[0].eidData.access.status
+      this.EIDJSON = {
+        "authToken": this.authToken,
+        "appVersion": this.appVersionNumber,
+        "syncType": "single",
+        "data": {
+          "evaluationStatus": this.eidArray[0].evaluationStatus,
+          "participantId": this.eidArray[0].participantId,
+          "schemeType": this.eidArray[0].schemeType,
+          "shipmentId": this.eidArray[0].shipmentId,
+          //  "shipmentCode":
+          "mapId": this.eidArray[0].mapId,
+          "isSynced": true,
+          "createdOn": this.eidArray[0].createdOn ? this.eidArray[0].createdOn : "",
+          "updatedOn": this.eidArray[0].updatedOn ? this.eidArray[0].updatedOn : "",
+          "updatedStatus": this.updatedStatus,
+          "eidData": {
+            "access": {
+              "status": this.eidArray[0].eidData.access.status
               },
-              "Heading1": {
-                "status": this.showParticipantData,
-                "data": {
-                  "participantName": this.participantData['participantName'],
-                  "participantCode": this.participantData['participantCode'],
-                  "participantAffiliation": this.participantData['affiliation'],
-                  "participantPhone":this.participantData['phone'],
-                  "participantMobile": this.participantData['mobile'],
-                }
-              },
-              "Heading2": {
-                "status": this.showShipmentData,
-                "data":{
-            "shipmentDate":this.shipmentData['shipmentDate'],
-            "resultDueDate":this.shipmentData['resultDueDate'],
-            "testReceiptDate":this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
-            "sampleRehydrationDate":this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
-                  "testDate":this.shipmentData['shipmentTestingDate']? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])): this.shipmentData['shipmentTestingDate'],
-                  "extractionAssaySelected":this.shipmentData['extractionAssay'],
-                  "extractionAssaySelect":this.shipmentData['extractionAssayDropdown'],
-                  "detectionAssaySelect":this.shipmentData['detectionAssay'],
-                  "detectionAssaySelected":this.shipmentData['detectionAssayDropdown'],
-                  "extractionLotNumber":this.shipmentData['extractionLotNumber'],
-                  "detectionLotNumber":this.shipmentData['detectionLotNumber'],
-                  "extractionExpirationDate":this.shipmentData['extractionExpirationDate']? this.dateFormat(new Date(this.shipmentData['extractionExpirationDate'])): this.shipmentData['extractionExpirationDate'],
-                  "detectionExpirationDate":this.shipmentData['detectionExpirationDate']? this.dateFormat(new Date(this.shipmentData['detectionExpirationDate'])): this.shipmentData['detectionExpirationDate'],
-                  "responseDate":this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])): this.shipmentData['responseDate'],
-                  "modeOfReceiptSelected":this.shipmentData['modeOfReceiptDropdown'],
-                  "modeOfReceiptSelect":this.shipmentData['modeOfReceipt'],
-                  "qcData": {
-                    "qcRadioSelected": this.qcDone,
-                    "qcDate":this.qcDate ?this.dateFormat(new Date(this.qcDate)): this.qcDate,
-                    "qcDoneBy": this.qcDoneBy,
-                    "status": this.isQCDoneShow,
-                    "qcRadio": this.qcRadioArray
-                  }
-                }
-              },
-              "Heading3": {
-                //PT panel details
-                "status": this.showPTPanelData,
-                "data": {
-                  "isPtTestNotPerformedRadio":this.ptPanelNotTested,
-                  "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
-	                "ptSupportComments":this.ptPanelData['ptSupportComments'],
-                  "resultsText":this.ptPanelData['resultsTextData'],
-                  "vlNotTestedReasonSelected": !this.ptPanelData['vlNotTestedReason'],
-                  "vlNotTestedReason":this.ptPanelData['vlNotTestedReasonDropdown'],
-                  "samples": this.ptPanelData['samples'],
-                  "sampleSelected":this.ptPanelData['sampleData']
-                }
-              },
-              "Heading4": {
-                //other information
-                "status": this.showOtherInfoData,
-                "data": {
-                  "supervisorReview": this.otherInfoData['supervisorReviewDropdown'],
-                  "approvalLabel": this.otherInfoData['approvalLabel'],
-                  "supervisorReviewSelected": this.otherInfoData['supervisorReview'],
-                  "approvalInputText": this.otherInfoData['supervisorName'],
-                  "comments": this.otherInfoData['comments']
+            "Heading1": {
+              "status": this.showParticipantData,
+              "data": {
+                "participantName": this.participantData['participantName'],
+                "participantCode": this.participantData['participantCode'],
+                "participantAffiliation": this.participantData['affiliation'],
+                "participantPhone": this.participantData['phone'],
+                "participantMobile": this.participantData['mobile'],
+              }
+            },
+            "Heading2": {
+              "status": this.showShipmentData,
+              "data": {
+                "shipmentDate": this.shipmentData['shipmentDate'],
+                "resultDueDate": this.shipmentData['resultDueDate'],
+                "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
+                "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
+                "testDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
+                "extractionAssaySelected": this.shipmentData['extractionAssay'],
+                "extractionAssaySelect": this.shipmentData['extractionAssayDropdown'],
+                "detectionAssaySelect": this.shipmentData['detectionAssayDropdown'],
+                "detectionAssaySelected": this.shipmentData['detectionAssay'],
+                "extractionLotNumber": this.shipmentData['extractionLotNumber'],
+                "detectionLotNumber": this.shipmentData['detectionLotNumber'],
+                "extractionExpirationDate": this.shipmentData['extractionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['extractionExpirationDate'])) : this.shipmentData['extractionExpirationDate'],
+                "detectionExpirationDate": this.shipmentData['detectionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['detectionExpirationDate'])) : this.shipmentData['detectionExpirationDate'],
+                "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
+                "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'],
+                "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
+                "qcData": {
+                  "qcRadioSelected": this.qcDone,
+                  "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
+                  "qcDoneBy": this.qcDoneBy,
+                  "status": this.isQCDoneShow,
+                  "qcRadio": this.qcRadioArray
                 }
               }
+            },
+            "Heading3": {
+              //PT panel details
+              "status": this.showPTPanelData,
+              "data": {
+             //   "isPtPanelTested":this.isPtPanelTested,
+                 "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
+                "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
+                "ptSupportComments": this.ptPanelData['ptSupportComments'],
+                "resultsText": this.ptPanelData['resultsTextData'],
+                "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
+                "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
+                "samples": this.ptPanelData['samples'],
+                "sampleSelected": this.ptPanelData['sampleData']
+              }
+            },
+            "Heading4": {
+              //other information
+              "status": this.showOtherInfoData,
+              "data": {
+                "supervisorReview": this.otherInfoData['supervisorReviewDropdown'],
+                "approvalLabel": this.otherInfoData['approvalLabel'],
+                "supervisorReviewSelected": this.otherInfoData['supervisorReview'],
+                "approvalInputText": this.otherInfoData['supervisorName'],
+                "comments": this.otherInfoData['comments']
+              }
             }
+          }
+        }
       }
-    }
-    console.log(this.EIDJSON);
-    if (this.network.type == 'none') {
-      this.EIDJSON['data']['isSynced'] = 'false';
-      this.LocalShipmentFormService.offlineStoreShipmentForm(this.EIDJSON);
+      console.log(this.EIDJSON);
+      if (this.network.type == 'none') {
+        this.EIDJSON['data']['isSynced'] = 'false';
+        this.LocalShipmentFormService.offlineStoreShipmentForm(this.EIDJSON);
 
-    } else {
+      } else {
 
-      this.EIDJSON['data']['isSynced'] = 'true';
+        this.EIDJSON['data']['isSynced'] = 'true';
 
-      this.CrudServiceService.postData('shipments/save-form', this.EIDJSON).then((result) => {
+        this.CrudServiceService.postData('shipments/save-form', this.EIDJSON).then((result) => {
 
-          if (result["status"] == 'success') {
-            this.ToastService.presentToastWithOptions(result['message']);
-            this.router.navigate(['/all-pt-schemes']);
+            if (result["status"] == 'success') {
+              this.ToastService.presentToastWithOptions(result['message']);
+              this.router.navigate(['/all-pt-schemes']);
+            }
+
           }
 
-        }
+          , (err) => {
+            console.log(err);
+          }
 
-        , (err) => {
-          console.log(err);
-        }
-
-      );
+        );
+      }
     }
   }
-  }
 }
+

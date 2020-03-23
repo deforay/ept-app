@@ -2,7 +2,7 @@
 
 
 <ion-content>
-  <p *ngIf="viewAccessMessage">{{viewAccessMessage}}</p>
+  <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
   <mat-accordion class="example-headers-align">
     <mat-expansion-panel *ngIf="showParticipantData" [expanded]="step === 0" (opened)="setStep(0)">
       <mat-expansion-panel-header>
