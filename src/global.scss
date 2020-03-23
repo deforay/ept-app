@@ -155,7 +155,6 @@ input.mat-input-element{
     float: left;
     margin-left: 10px;
     font-size: 75%;
-    margin-top: -5px;
     text-align: left;
     display: block;
  }
@@ -175,14 +174,14 @@ input.mat-input-element{
 .panelHeading{
        padding: 0px;
 }
-.formMatExpPanel{
-    padding-left: 8px!important;
-}
 /* Global CSS Changes Ends */
 
 
 
 /* Materialize Global CSS Changes Starts*/
+// .mat-checkbox-background{
+//     background-color: #3c8dbc!important;
+// }
 .mat-fab.mat-primary, .mat-flat-button.mat-primary, .mat-mini-fab.mat-primary, .mat-raised-button.mat-primary{
     background: #3c8dbc;
 }
