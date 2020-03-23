@@ -2,7 +2,9 @@
 
 
 <ion-content>
-  <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
+  <ion-row>
+    <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
+  </ion-row>
   <mat-accordion class="example-headers-align">
     <mat-expansion-panel *ngIf="showParticipantData" [expanded]="step === 0" (opened)="setStep(0)">
       <mat-expansion-panel-header>
@@ -358,7 +360,7 @@
 
       <mat-action-row>
         <button mat-button color="primary" (click)="prevStep()">Previous</button>
-        <button mat-button color="warn"  type="submit"  (click)="nextPTPanelStep('next')">Next</button>
+        <button mat-button color="warn"  type="submit"  (click)="checkShipmentPanel('next')">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
 </form>
@@ -504,14 +506,14 @@
       </section>
       <mat-action-row>
         <button mat-button color="warn" (click)="prevStep()">Previous</button>
-        <button mat-button color="primary" type='submit' (click)="nextOtherInfoStep('next')">Next</button>
+        <button mat-button color="primary" type='submit' (click)="checkPtPanel('next')">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
 </form>
 
-<!-- <form>
+<form #customFieldsForm="ngForm" novalidate>
 
-  <mat-expansion-panel *ngIf="showOtherInfoData" [expanded]="step === 3" (opened)="setStep(3)">
+  <mat-expansion-panel *ngIf="showCustomFieldData" [expanded]="step === 3" (opened)="setStep(3)">
     <mat-expansion-panel-header>
       <mat-panel-title>
         <ion-grid class="panelHeading">
@@ -519,67 +521,64 @@
             <ion-col size="10" class="grid-readonly-col">
               <span class="text-title-color">Custom Fields</span>
             </ion-col>
-            <ion-col size="2" class="grid-readonly-col" *ngIf="otherInfoValid==true">
+            <ion-col size="2" class="grid-readonly-col" *ngIf="isValidCustField==true">
               <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
             </ion-col>
           </ion-row>
         </ion-grid>
       </mat-panel-title>
     </mat-expansion-panel-header>
-
     <ion-grid>
-      <ion-row>
-        <ion-col class="grid-input-col">
+      <ion-row *ngIf="customFieldData.customField1Text">
+        <ion-col size="12"class="grid-input-col">
           <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-            <mat-label>Supervisor Review </mat-label>
-            <mat-select [(ngModel)]="otherInfoData.supervisorReview"
-             name="eidFormSupReview" #eidFormSupReview="ngModel"  required [disabled]="isView=='true'">
-              <mat-option>--Select--</mat-option>
-              <mat-option *ngFor="let sr of otherInfoData.supervisorReviewDropdown" [value]="sr.value">
-                {{sr.show}}
-              </mat-option>
-            </mat-select>
-            <mat-error
-            *ngIf="!otherInfoData.supervisorReview">Supervisor Review is
-            required</mat-error>
-          </mat-form-field>
-        </ion-col>
-        <ion-col *ngIf="otherInfoData.supervisorReview=='yes'" class="grid-input-col">
-          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-            <mat-label>{{otherInfoData.supervisorLabel}} </mat-label>
-            <input matInput [(ngModel)]="otherInfoData.supervisorName" 
-            name="eidFormSupName" #eidFormSupName="ngModel" 
-            placeholder="Enter Supervisor Name" [required]="otherInfoData.supervisorReview=='yes'" [disabled]="isView=='true'">
-            <mat-error
-            *ngIf="otherInfoData.supervisorReview=='yes' && !otherInfoData.supervisorName">Supervisor Name is
-            required</mat-error>
+            <mat-label>{{customFieldData.customField1Text}}</mat-label>
+            <input matInput [(ngModel)]="customFieldData.customField1Val" 
+            placeholder="Enter {{customFieldData.customField1Text}}" #custField1="ngModel"
+             name="custField1" [disabled]="isView=='true'">
+            <mat-error *ngIf="!customFieldData.customField1Val">
+              {{customFieldData.customField1Text}} is required
+            </mat-error>
           </mat-form-field>
         </ion-col>
       </ion-row>
-      <ion-row>
-        <ion-col class="grid-input-col">
+      <ion-row *ngIf="customFieldData.customField2Text">
+        <ion-col size="12"class="grid-input-col">
           <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-            <mat-label>Comments</mat-label>
-            <textarea matInput placeholder="Enter Comments here" 
-            name="eidComments" #eidComments="ngModel"  [(ngModel)]="otherInfoData.comments" [disabled]="isView=='true'"></textarea>
+            <mat-label>{{customFieldData.customField2Text}}</mat-label>
+            <input matInput [(ngModel)]="customFieldData.customField2Val" 
+            placeholder="Enter {{customFieldData.customField2Text}}" #custField2="ngModel"
+             name="custField2" [disabled]="isView=='true'">
+            <mat-error *ngIf="!customFieldData.customField2Val">
+              {{customFieldData.customField2Text}} is required
+            </mat-error>
           </mat-form-field>
         </ion-col>
       </ion-row>
-
+      <!-- <ion-row *ngIf="customFieldData.customField3Text">
+        <ion-col size="12"class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+            <mat-label>{{customFieldData.customField3Text}}</mat-label>
+            <input matInput [(ngModel)]="customFieldData.customField3Val" 
+            placeholder="Enter {{customFieldData.customField3Text}}" #custField3="ngModel"
+             name="custField3"   [required]="customFieldData.customField3Text" [disabled]="isView=='true'">
+            <mat-error *ngIf="!customFieldData.customField3Val">
+              {{customFieldData.customField3Text}} is required
+            </mat-error>
+          </mat-form-field>
+        </ion-col>
+      </ion-row> -->
     </ion-grid>
-
     <mat-action-row>
       <button mat-button color="primary" (click)="prevStep()">Previous</button>
       <button mat-button color="warn" *ngIf="isView=='false'"
-      type='submit' (click)="submitEID(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>
+      type='submit' (click)="checkCustFieldPanel('next')">Next</button>
     </mat-action-row>
   </mat-expansion-panel>
-</form> -->
-
-
+  </form>
 <form #otherInfoPanelForm="ngForm" novalidate>
 
-    <mat-expansion-panel *ngIf="showOtherInfoData" [expanded]="step === 3" (opened)="setStep(3)">
+    <mat-expansion-panel *ngIf="showOtherInfoData" [expanded]="step === 3+dynamicStep" (opened)="setStep(3+dynamicStep)">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <ion-grid class="panelHeading">
@@ -643,6 +642,8 @@
       </mat-action-row>
     </mat-expansion-panel>
     </form>
+
+
   </mat-accordion>
 
 
