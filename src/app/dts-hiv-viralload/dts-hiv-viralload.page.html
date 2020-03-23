@@ -430,7 +430,7 @@
                             <div [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]">
                             </div>
                           </mat-label>
-                          <input matInput [(ngModel)]="vlresult" name="vl{{k}}" #vl="ngModel"
+                          <input matInput type="tel" [(ngModel)]="vlresult" name="vl{{k}}" #vl="ngModel"
                             [ngModelOptions]="{standalone: true}" (keyup)="checkVlData(vlresult,k)"
                             placeholder="Viral Load (log10 copies/ml)"
                             [ngClass]="{ 'mat-form-field-invalid': isNextStepPanelTest==true && ptPanelTestData.controlArray.mandatory[i]==true && (!vlResultArray[k] || vlResultArray[k]=='') && (ptPanelTest==false || !ptPanelTest) }"
