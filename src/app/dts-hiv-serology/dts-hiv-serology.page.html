@@ -3,7 +3,7 @@
 <ion-content>
   <mat-accordion>
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
-      <mat-expansion-panel-header class="formMatExpPanel" >
+      <mat-expansion-panel-header  >
         <mat-panel-title>
           <ion-grid class="panelHeading">
             <ion-row>
@@ -121,7 +121,7 @@
 
     <form #shipmentPanelForm="ngForm" novalidate>
       <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
-        <mat-expansion-panel-header class="formMatExpPanel">
+        <mat-expansion-panel-header >
           <mat-panel-title>
             <ion-grid class="panelHeading">
               <ion-row>
@@ -317,7 +317,7 @@
     <!-- <form #testKitPanelForm="ngForm" novalidate> -->
     <div *ngFor="let kitTextItem of testKitTextArray;let i = index;">
       <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="testKitNameArray[kitTextItem].status==true">
-        <mat-expansion-panel-header class="formMatExpPanel">
+        <mat-expansion-panel-header>
           <mat-panel-title >
             <ion-grid class="panelHeading">
               <ion-row>
@@ -405,7 +405,7 @@
     <div *ngFor="let sampleTextItem of samplesTextArray ;let i = index;">
 
       <mat-expansion-panel [expanded]="step === i+testKitIndex+2" (opened)="setStep(i+testKitIndex+2)">
-        <mat-expansion-panel-header class="formMatExpPanel">
+        <mat-expansion-panel-header >
           <mat-panel-title>
             <ion-grid class="panelHeading">
               <ion-row>
@@ -447,7 +447,7 @@
     <form #otherInfoPanelForm="ngForm" novalidate>
     <mat-expansion-panel [expanded]="step === testKitIndex+sampleIndex+2"
       (opened)="setStep(testKitIndex+sampleIndex+2)">
-      <mat-expansion-panel-header class="formMatExpPanel">
+      <mat-expansion-panel-header >
         <mat-panel-title>
           <ion-grid class="panelHeading">
             <ion-row>

@@ -168,6 +168,17 @@ interface selectArray {
   isPartiEditRespDate: boolean;
   isPartiEditModeRec: boolean;
   shipmentPanelForm:NgForm
+  invalidVlAssay: any;
+  invalidTestReceiptDate: any;
+  invalidTestDate: any;
+  invalidOthervlassay: string;
+  invalidAssayExpDate: string;
+  invalidVlAssayLotNo: string;
+  invalidResponseDate: string;
+  validVlAssay: string;
+  validQC: string;
+  invalidQcDate: string;
+  invalidQcDoneBy: string;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -204,7 +215,6 @@ interface selectArray {
           this.getVLFormDetails();
         }
       }
-
     )
   }
 
@@ -397,9 +407,10 @@ interface selectArray {
 
       // }
 
-      this.nextStepShipmentPanel('','onload');
+      this.nextStepShipmentPanel('onload');
       this.nextStepPTPanelTest('onload', this.ptPanelTest);
       this.nextStepOtherInfoPanel('onload');
+    
     }
 
     if (this.vlDataArray[0].vlData.access.status == "fail") {
@@ -415,15 +426,76 @@ interface selectArray {
     this.step = index;
   }
 
-  nextStepShipmentPanel(isValidShipmentPanel, next) {
+  nextStepShipmentPanel(next) {
 
     if (this.isView == "true") {
       this.step = 2;
     }
     if (next != 'onload' && this.isView == "false") {
-      this.validShipmentDetails = isValidShipmentPanel;
+      if (!this.vlassay) {
+        this.invalidVlAssay = "true";
+      }
+
+      if (this.testDate == undefined) {
+        this.invalidTestDate = "true";
+      }
+
+      if (this.assayExpDate == undefined) {
+        this.invalidAssayExpDate = "true";
+      }
+
+      this.validVlAssay = "";
+
+      if (this.isSelectedOther == true) {
+        if (!this.othervlassay) {
+          this.invalidOthervlassay = "true";
+        } else {
+          this.validVlAssay = "true";
+        }
+      } else {
+        this.validVlAssay = "true";
+      }
+
+      if (!this.assayLotNo) {
+        this.invalidVlAssayLotNo = "true";
+      }
+
+      if (this.responseDate == undefined) {
+        this.invalidResponseDate = "true";
+      }
+
+      this.validQC = "";
+
+      if (this.qcDone == 'yes') {
+        if (this.qcDate == undefined) {
+          this.invalidQcDate = "true";
+        }
+
+        if (!this.qcDoneBy) {
+          this.invalidQcDoneBy = "true";
+        }
+
+        if (this.qcDate && this.qcDoneBy) {
+          this.validQC = "true";
+        }
+      } else {
+        this.validQC = "true";
+      }
+
     } else {
-      this.validShipmentDetails = isValidShipmentPanel;
+      if (this.vlassay && ((this.isSelectedOther == false) || (this.isSelectedOther == true && this.othervlassay))) {
+        this.validVlAssay = "true";
+      }
+
+      if (this.qcDone && ((this.qcDone == 'no') || (this.qcDone == 'yes' && this.qcDate && this.qcDoneBy))) {
+        this.validQC = "true";
+      }
+    }
+
+    if (this.vlassay && this.testDate != undefined && (this.validVlAssay == "true") && this.assayExpDate != "Invalid Date" && this.assayLotNo && this.responseDate != undefined && (this.validQC == "true")) {
+      this.validShipmentDetails = true;
+    } else {
+      this.validShipmentDetails = false;
     }
 
     if (next == 'next' && this.isView == "false") {
@@ -451,7 +523,7 @@ interface selectArray {
   }
 
   nextStepPTPanelTest(next, ptPanelTest) {
-
+  
     if (this.isView == "true") {
       this.step = 3;
     }
@@ -471,10 +543,7 @@ interface selectArray {
           if (element && this.mandatoryArray[index] == true) {
             this.validVLResultCount = this.validVLResultCount + 1;
           }
-        }
-
-      );
-
+        });
       if (this.mandatoryTrueArray.length == this.validVLResultCount) {
         this.isValidPTPanel = true;
       } else {
@@ -487,9 +556,8 @@ interface selectArray {
       }
     }
 
-    this.isNextStepPanelTest = true;
-
     if (next == 'next' && this.isView == "false") {
+      this.isNextStepPanelTest = true;
       if (this.isValidPTPanel == true) {
         this.step = 3;
       } else {
@@ -603,13 +671,14 @@ interface selectArray {
   }
 
   submitViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
-
+  
+    this.isNextStepPanelTest = true;
     shipmentPanelForm.control.markAllAsTouched();
     PTPanelTestForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
     this.nextStepOtherInfoPanel('submit');
     this.nextStepPTPanelTest('submit', this.ptPanelTest);
-    this.nextStepShipmentPanel(shipmentPanelForm.valid,'submit');
+    this.nextStepShipmentPanel('submit');
 
     if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.validOtherInfo == true) {
 
