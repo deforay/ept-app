@@ -101,6 +101,10 @@ export class AppComponent {
       if(Object.keys(this.appVersion).length>0){
         this.appVersionNumber = appVersionNum;
         this.storage.set('appVersionNumber', appVersionNum);
+      }else{
+        this.appVersionNumber = "0.0.1";
+        this.appVersionNumber = appVersionNum;
+        
       }
       
       this.NetworkService.initializeNetworkEvents();

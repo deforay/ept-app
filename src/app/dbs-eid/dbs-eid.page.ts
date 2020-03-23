@@ -152,7 +152,7 @@ export class DbsEidPage implements OnInit {
 
   bindEIDData() {
 
-    if (this.eidArray[0].eidData.access.status == "success") {
+    if (this.eidArray[0].eidData) {
       if(this.eidArray[0].eidData.access.message){
       this.viewAccessMessage = this.eidArray[0].eidData.access.message;
       }
@@ -440,8 +440,9 @@ export class DbsEidPage implements OnInit {
           //do  nothing
         } else {
           if(this.showCustomFieldData== true){
+            this.dynamicStep = 1;            
             this.setStep(3);
-          } else{ this.setStep(4); }
+          } else{ this.setStep(3); }
         }
       }
     }
