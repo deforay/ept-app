@@ -24,7 +24,7 @@
     "@angular/platform-browser-dynamic": "~8.1.2",
     "@angular/router": "~8.1.2",
     "@ionic-native/android-permissions": "^5.22.0",
-    "@ionic-native/app-version": "^5.22.0",
+    "@ionic-native/app-version": "^5.23.0",
     "@ionic-native/core": "^5.22.0",
     "@ionic-native/diagnostic": "^5.22.0",
     "@ionic-native/geolocation": "^5.22.0",
@@ -75,7 +75,7 @@
     "cordova-plugin-whitelist": "^1.3.4",
     "jasmine-core": "~3.4.0",
     "jasmine-spec-reporter": "~4.2.1",
-    "karma": "~4.1.0",
+    "karma": "^4.4.1",
     "karma-chrome-launcher": "~2.2.0",
     "karma-coverage-istanbul-reporter": "~2.0.1",
     "karma-jasmine": "~2.0.1",
@@ -96,7 +96,6 @@
         "ANDROID_SUPPORT_ANNOTATIONS_VERSION": "27.+"
       },
       "cordova-plugin-ionic-keyboard": {},
-      "cordova-plugin-app-version": {},
       "cordova-plugin-geolocation": {},
       "cordova.plugins.diagnostic": {
         "ANDROID_SUPPORT_VERSION": "28.+"
@@ -105,7 +104,8 @@
       "cordova-plugin-request-location-accuracy": {
         "PLAY_SERVICES_LOCATION_VERSION": "16.+"
       },
-      "cordova-plugin-network-information": {}
+      "cordova-plugin-network-information": {},
+      "cordova-plugin-app-version": {}
     },
     "platforms": [
       "android"

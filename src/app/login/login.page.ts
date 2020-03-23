@@ -32,6 +32,9 @@ import {
   AlertService
 } from '../../app/service/providers';
 import {
+  AppVersion
+} from '@ionic-native/app-version/ngx';
+import {
   Storage
 } from '@ionic/storage';
 import {
@@ -79,9 +82,20 @@ export class LoginPage implements OnInit {
     public ToastService: ToastService,
     public LoaderService: LoaderService,
     public alertService: AlertService,
-    public loadingController: LoadingController) {
+    private appVersion: AppVersion,
 
-    // this.statusBar.backgroundColorByHexString("#000000");
+    public loadingController: LoadingController) {
+      this.appVersion.getVersionNumber().then((version) => {
+        if (version) {
+          this.appVersionNumber = version;
+          this.storage.set('appVersionNumber', this.appVersionNumber);
+
+        }
+
+      }, (err) => {
+        this.appVersionNumber = "0.0.1";
+        this.storage.set('appVersionNumber', this.appVersionNumber);
+      });
   }
   ngOnInit() {
 

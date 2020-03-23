@@ -1,8 +1,10 @@
 import {
-  Component,ViewChild
+  Component,
+  ViewChild
 } from '@angular/core';
 import {
-  Platform,IonRouterOutlet
+  Platform,
+  IonRouterOutlet
 } from '@ionic/angular';
 import {
   SplashScreen
@@ -96,17 +98,19 @@ export class AppComponent {
       //  this.statusBar.styleDefault();
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
-      var appVersionNum =  this.appVersion.getVersionNumber();
 
-      if(Object.keys(this.appVersion).length>0){
-        this.appVersionNumber = appVersionNum;
-        this.storage.set('appVersionNumber', appVersionNum);
-      }else{
+      this.appVersion.getVersionNumber().then((version) => {
+        if (version) {
+          this.appVersionNumber = version;
+          this.storage.set('appVersionNumber', this.appVersionNumber);
+
+        }
+
+      }, (err) => {
         this.appVersionNumber = "0.0.1";
-        this.appVersionNumber = appVersionNum;
-        
-      }
-      
+        this.storage.set('appVersionNumber', this.appVersionNumber);
+      });
+
       this.NetworkService.initializeNetworkEvents();
       if (this.network.type == 'none') {
         console.log("None");
@@ -121,15 +125,15 @@ export class AppComponent {
       }
 
       this.storage.get('isLogOut').then((isLogOut) => {
-        if (isLogOut==false) {
+        if (isLogOut == false) {
           this.router.navigateByUrl('/all-pt-schemes');
         } else {
           this.router.navigateByUrl('/login');
         }
       })
-    
+
       this.platform.backButton.subscribeWithPriority(0, () => {
-        if (this.router.url === '/login' || this.router.url==='/change-password' || this.router.url==='/all-pt-schemes' || this.router.url === '/individual-report' || this.router.url === '/summary-report') {
+        if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes' || this.router.url === '/individual-report' || this.router.url === '/summary-report') {
 
           this.alertService.presentAlertConfirm('e-PT', "Are you sure want to exit?", 'appExitAlert');
 
@@ -155,7 +159,7 @@ export class AppComponent {
   logout() {
     this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
     this.selectedIndex = 0;
- 
+
   }
   openPage(page) {
     // Reset the content nav to have just this page
