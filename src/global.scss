@@ -122,26 +122,37 @@ ion-header ion-toolbar.main-toolbar{
 }
 ion-toast .toast-wrapper{
     width: calc(100% - 40px) !important;
+    --width: calc(100% - 40px) !important;
 }
 ion-toast .toast-bottom{
     bottom: calc(25px + var(--ion-safe-area-bottom, 0px)) !important;
 }
 ion-toast {
+    text-align: center !important;
+    font-size: 13px !important;
+    --width: calc(100% - 40px) !important;
     .toast-container{
-        .toast-content{
-            padding: 7px 7px;
-            text-align: center;
-            /* width: calc(100% - 20px); */
-            font-size: 13px;
-        }
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;  
+        
     }
    
+}
+
+.toastMessage{
+    .toast-content{
+        padding-inline-start: 7px !important;
+        padding-inline-end: 7px !important;
+        padding-top: 8px !important;
+        padding-bottom: 8px !important;
+    
+    }
 }
 .alert-head.sc-ion-alert-md{
     text-align: center;
     background: (var(--ion-color-primary)) !important;
-    padding-top: 10px !important;
-    padding-bottom: 10px !important;
+    padding-top: 13px !important;
+    padding-bottom: 13px !important;
 }
 .alert-title.sc-ion-alert-md {
     font-size: 18px;

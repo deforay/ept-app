@@ -258,6 +258,9 @@ interface selectArray {
   bindVLData() {
 
     if (this.vlDataArray[0].vlData) {
+      if(this.vlDataArray[0].vlData.access.message){
+        this.viewAccessMessage = this.vlDataArray[0].vlData.access.message;
+        }
       this.selectedParticipantID = this.vlDataArray[0].participantId;
       this.selectedShipmentID = this.vlDataArray[0].shipmentId;
 

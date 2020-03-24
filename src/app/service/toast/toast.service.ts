@@ -8,12 +8,13 @@ export class ToastService {
 
   constructor(private toastCtrl: ToastController) {}
 
-   async presentToastWith1Options(message: string)  {
+   async presentToastWithOptions(message: string)  {
      
     const toast = await this.toastCtrl.create({
       header: message,
+      cssClass:'toastMessage',
      // message: message,
-      duration: 10000,
+      duration: 2000,
       position: 'bottom',
       // buttons: [
       //   {
@@ -29,10 +30,12 @@ export class ToastService {
     toast.present();
   }
 
-  async presentToastWithOptions(message: string){
+  async presentToastWith1Options(message: string){
     const toast = await this.toastCtrl.create({
 
     header: message,
+    cssClass:'toastMessage',
+
     // duration: 10000,
      position: 'bottom',
     //  buttons: [
