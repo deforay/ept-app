@@ -526,7 +526,7 @@ interface selectArray {
   }
 
   nextStepPTPanelTest(next, ptPanelTest) {
-  
+  debugger;
     if (this.isView == "true") {
       this.step = 3;
     }
