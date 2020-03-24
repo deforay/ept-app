@@ -88,7 +88,7 @@ import * as _ from 'lodash';
 
     //comment when take buid start
 
-   //  this.networkType = "4G";
+     this.networkType = "4G";
 
     //end...
 
@@ -194,6 +194,8 @@ import * as _ from 'lodash';
             } else {
               result['data'].viewOnlyAccess = false;
             }
+            debugger;
+
             this.isViewOnlyAccess = result['data'].viewOnlyAccess;
             this.storage.set('participantLogin', this.partiDetailsArray);
 

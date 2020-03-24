@@ -523,7 +523,7 @@ interface selectArray {
   }
 
   nextStepPTPanelTest(next, ptPanelTest) {
-  
+  debugger;
     if (this.isView == "true") {
       this.step = 3;
     }
@@ -736,7 +736,7 @@ interface selectArray {
             },
             "Heading2": {
               //shipment details vlResultSectionLabel
-              "status": this.vlDataArray[0].vlData.Headin2.status,
+              "status": this.vlDataArray[0].vlData.Heading2.status,
               "data": {
                 "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
                 "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
