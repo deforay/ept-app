@@ -180,6 +180,7 @@ interface selectArray {
   invalidQcDate: string;
   invalidQcDoneBy: string;
 
+
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public ToastService: ToastService,
@@ -340,17 +341,21 @@ interface selectArray {
         this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
         this.ptPanelTestData['controlArray'] = this.ptPanelTestArray['tableRowTxt'];
         this.ptPanelTestData['vlResult'] = [...this.ptPanelTestArray['vlResult']];
-        this.vlResultArray = [...this.ptPanelTestArray['vlResult']];
+        //   this.ptPanelTestData['vlResult']= this.ptPanelTestArray['vlResult'];
+        //   this.vlResultArray=[];
+        //   this.vlResultArray = [...this.ptPanelTestArray['vlResult']];
+        //    this.vlResultArray = this.ptPanelTestArray['vlResult'];
         this.vlResultForm = [];
 
-        // this.
+
         // this.ptPanelTestData['vlResult'] = [];
         // this.ptPanelTestData['vlResult'][0] = "5.60";
         // this.ptPanelTestData['vlResult'][1] = "6.80";
         // this.ptPanelTestData['vlResult'][2] = "3.90";
         // this.ptPanelTestData['vlResult'][3] = "0.00";
 
-        this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
+        // this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
+        this.ptPanelTestData['tndArray'] = [...this.ptPanelTestArray['tndReferenceRadioSelected']];
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
         this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
         this.ptPanelTestData['vlResultSectionLabel'] = unescape(this.ptPanelTestArray['vlResultSectionLabel']);
@@ -409,7 +414,7 @@ interface selectArray {
 
       // }
 
-      this.nextStepShipmentPanel('','onload');
+      this.nextStepShipmentPanel('', 'onload');
       this.nextStepPTPanelTest('onload', this.ptPanelTest);
       this.nextStepOtherInfoPanel('onload');
 
@@ -428,7 +433,7 @@ interface selectArray {
     this.step = index;
   }
 
-  nextStepShipmentPanel(isShipmentValid,next) {
+  nextStepShipmentPanel(isShipmentValid, next) {
     if (this.isView == "true") {
       this.step = 2;
     }
@@ -497,14 +502,13 @@ interface selectArray {
     }
 
     if (next == 'next' && this.isView == "false") {
-      if(isShipmentValid==true){
-        this.validShipmentDetails=true;
+      if (isShipmentValid == true) {
+        this.validShipmentDetails = true;
         this.step = 2;
+      } else {
+        this.validShipmentDetails = false;
+        this.step = 1;
       }
-       else {
-        this.validShipmentDetails=false;
-          this.step = 1;
-        }
     } else {
       if (this.isView == "false") {
         if (this.validOtherInfo == false) {
@@ -522,7 +526,7 @@ interface selectArray {
     }
 
   }
-  nextStepPartiPanel(){
+  nextStepPartiPanel() {
     this.step = 1;
   }
   nextStepPTPanelTest(next, ptPanelTest) {
@@ -531,9 +535,9 @@ interface selectArray {
       this.step = 3;
     }
 
-    this.vlResultArray.forEach((vlElement, index) => {
-      this.ptPanelTestData['vlResult'][index] = vlElement;
-    });
+    // this.vlResultArray.forEach((vlElement, index) => {
+    //   this.ptPanelTestData['vlResult'][index] = vlElement;
+    // });
 
     this.mandatoryArray = this.ptPanelTestData['controlArray'].mandatory;
     this.mandatoryTrueArray = this.mandatoryArray.filter(i => i == true);
@@ -543,7 +547,13 @@ interface selectArray {
     if (ptPanelTest == false) {
 
       this.ptPanelTestData['vlResult'].forEach((element, index) => {
-        if ((element || element == '0') && (this.mandatoryArray[index] == true)) {
+
+        let VlFloat=parseFloat(element);
+        if (VlFloat > 7) {
+          this.ToastService.presentToastWithOptions("VL Result has to be between 1 and 7");
+          return false;
+        }
+        if ((element || element == '0') && (this.mandatoryArray[index] == true) && VlFloat <= 7) {
           this.validVLResultCount = this.validVLResultCount + 1;
         }
       });
@@ -649,7 +659,7 @@ interface selectArray {
 
   changeTND(index, tndData) {
     if (tndData == 'yes') {
-      this.ptPanelTestData['vlResult'][index] = "0.0";
+      this.ptPanelTestData['vlResult'][index] = "0.00";
     }
   }
 
@@ -663,16 +673,17 @@ interface selectArray {
     }
   }
 
-  checkVlData(vldata, index) {
-    this.isNextStepPanelTest = true;
-    this.vlResultArray[index] = vldata;
-  }
+  //  checkVlData(vldata, index) {
+  //  this.isNextStepPanelTest = true;
+  //  this.vlResultArray[index] = vldata;
+  //}
 
-  checkVlArray() {
-    this.vlResultArray.forEach((vlElement, index) => {
-      this.ptPanelTestData['vlResult'][index] = vlElement;
-    });
-  }
+  // checkVlArray() {
+
+  //  this.vlResultArray.forEach((vlElement, index) => {
+  //   this.ptPanelTestData['vlResult'][index] = vlElement;
+  // });
+  //}
 
   submitViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
 
@@ -682,7 +693,7 @@ interface selectArray {
     otherInfoPanelForm.control.markAllAsTouched();
     this.nextStepOtherInfoPanel('submit');
     this.nextStepPTPanelTest('submit', this.ptPanelTest);
-    this.nextStepShipmentPanel(shipmentPanelForm.valid,'submit');
+    this.nextStepShipmentPanel(shipmentPanelForm.valid, 'submit');
 
     if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.validOtherInfo == true) {
 
@@ -809,7 +820,7 @@ interface selectArray {
         }
       }
       console.log(this.viralLoadJSON);
-      if (this.network.type == 'none'||this.network.type == null) {
+      if (this.network.type == 'none') {
         this.viralLoadJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
 
