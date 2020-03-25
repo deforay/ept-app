@@ -27,6 +27,9 @@ import {
 import {
   LocalShipmentFormService
 } from '../../app/service/localShipmentForm/local-shipment-form.service';
+
+
+
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -60,12 +63,10 @@ export class DTSHIVSerologyPage implements OnInit {
   testKitNameArray = [];
   testKitTextArray = [];
   resultsTextArray: any;
-  kitName = [];
-  kitValue = [];
-  kitOther = [];
-  lot = [];
+
   exp = [];
-  expDate: any = [];
+  expDateObj: any = [];
+  testKitModel = {};
   viewAccessMessage: string = '';
   testKitIndex: any;
   sampleIndex: any;
@@ -104,6 +105,7 @@ export class DTSHIVSerologyPage implements OnInit {
   otherInfoPanelForm: NgForm;
   approvalLabel: any;
   isValidShipmentDetails: boolean = false;
+  isValidCustField: boolean = false;
   isValidOtherInfoPanel: boolean = false;
   isValidQCDone: boolean = false;
   isValidSupervisorName: boolean = false;
@@ -126,7 +128,9 @@ export class DTSHIVSerologyPage implements OnInit {
   showResult3: boolean = false;
   isValidSampleDetails = [];
   isValidTestKitDetails = [];
+  customFieldData = {};
   samplesObj = {};
+  dynamicStep = 0;
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -159,6 +163,7 @@ export class DTSHIVSerologyPage implements OnInit {
 
   setStep(index: number) {
     this.step = index;
+    console.log(this.step)
   }
 
   nextStep() {
@@ -238,29 +243,43 @@ export class DTSHIVSerologyPage implements OnInit {
 
         this.showTestkitPanel = true;
         this.testKitDetailsArray = this.dtsArray[0].dtsData.Heading3.data;
-        console.log(this.testKitDetailsArray);
-        this.testKitIndex = this.testKitDetailsArray.kitText.length;
+        this.testKitModel['kitName'] = [];
+        this.testKitModel['kitValue'] = [];
+        this.testKitModel['kitOther'] = [];
+        this.testKitModel['testKitTextArray'] = [];
+        this.testKitModel['lot'] = [];
+        this.testKitModel['expDate'] = [];
+
+        this.testKitIndex = 0;
+
         this.testKitTextArray = this.testKitDetailsArray.kitText;
         this.testKitNameArray = (this.testKitDetailsArray.kitName);
+        this.testKitModel['testKitTextArray'] = [...this.testKitTextArray];
+
+        console.log(this.testKitDetailsArray)
         this.testKitTextArray.forEach((element) => {
-          this.kitName.push(this.testKitDetailsArray.kitSelected[element].kitName);
-          this.kitValue.push(this.testKitDetailsArray.kitSelected[element].kitValue);
-          this.kitOther.push("");
+          this.testKitModel['kitName'].push(this.testKitDetailsArray.kitSelected[element].kitName);
+          this.testKitModel['kitValue'].push(this.testKitDetailsArray.kitSelected[element].kitValue);
+          this.testKitModel['kitOther'].push("");
+          if (this.testKitNameArray[element].status == true) {
+            this.testKitIndex = this.testKitIndex + 1;
+          }
         });
-
-
-        for (let lotvalue of Object.values(this.testKitDetailsArray['lotNo'])) {
-          this.lot.push(lotvalue);
-        }
-        for (let expDatevalue of Object.values(this.testKitDetailsArray['expDate'])) {
-          this.exp.push(expDatevalue);
-        }
-        for (let expItem of this.exp) {
-          this.expDate.push(new Date(expItem));
-        }
+        console.log(this.testKitIndex)
+        Object.values(this.testKitDetailsArray['lotNo']).forEach((lotvalue) => {
+          this.testKitModel['lot'].push(lotvalue);
+        });
+        Object.values(this.testKitDetailsArray['expDate']).forEach((expdate) => {
+          this.exp.push(expdate)
+        });
+        this.exp.forEach(expDateValue => {
+          this.testKitModel['expDate'].push(expDateValue ? new Date(expDateValue) : '');
+          this.expDateObj.push(expDateValue ? new Date(expDateValue) : '');
+        });
         this.testKitTextArray.forEach((element) => {
           this.isValidTestKitDetails.push(false);
         });
+        console.log(this.testKitModel);
 
       } else {
         this.showTestkitPanel = false;
@@ -270,7 +289,7 @@ export class DTSHIVSerologyPage implements OnInit {
         this.showSampleData = true;
         this.sampleDetailsArray = this.dtsArray[0].dtsData.Heading4.data;
 
-        this.sampleIndex = this.sampleDetailsArray.samples.length;
+        this.sampleIndex = this.sampleDetailsArray.samples.label.length;
         this.samplesArray = this.sampleDetailsArray.samples;
         this.samplesNameArr = this.sampleDetailsArray.samples.label;
 
@@ -286,14 +305,10 @@ export class DTSHIVSerologyPage implements OnInit {
         this.sampleDetailsArray.samples.label.forEach((element, index) => {
           this.isValidSampleDetails.push(false);
         });
-        console.log(this.isValidSampleDetails)
 
         this.resultsTextArray = this.sampleDetailsArray.resultsText;
         this.resultsTextPushArray.push(this.sampleDetailsArray.resultsText);
 
-        // this.sampleDetailsArray["DTSS01"]['Result-1']['value'] = "1";
-        // this.sampleDetailsArray["DTSS02"]['Result-1']['value'] = "1";
-        // this.sampleDetailsArray["DTSS02"]['Result-2']['value'] = "2";
 
       } else {
         this.showSampleData = false;
@@ -308,17 +323,43 @@ export class DTSHIVSerologyPage implements OnInit {
         this.supervisorName = this.otherInfoArray.approvalInputText;
         this.approvalLabel = this.otherInfoArray.approvalLabel;
       } else {
+        this.showOtherInfoData = false;
+      }
+
+      if (this.dtsArray[0].dtsData.customFields.status == true) {
+        this.showCustomFieldData = true;
+        this.customFieldData['customField1Text'] = this.dtsArray[0].dtsData.customFields.data.customField1Text ? this.dtsArray[0].dtsData.customFields.data.customField1Text : '';
+        this.customFieldData['customField1Val'] = this.dtsArray[0].dtsData.customFields.data.customField1Val ? this.dtsArray[0].dtsData.customFields.data.customField1Val : '';
+        this.customFieldData['customField2Text'] = this.dtsArray[0].dtsData.customFields.data.customField2Text ? this.dtsArray[0].dtsData.customFields.data.customField2Text : '';
+        this.customFieldData['customField2Val'] = this.dtsArray[0].dtsData.customFields.data.customField2Val ? this.dtsArray[0].dtsData.customFields.data.customField2Val : '';
+      } else {
         this.showCustomFieldData = false;
       }
-      this.nextStepTestPanel('', 'onload');
-      this.nextStepTestPanel('', 'onload');
+      // this.nextStepTestPanel('', 'onload');
+      // this.nextStepTestPanel('', 'onload');
+      this.checkShipmentPanel('onload');
+      if (this.isValidShipmentDetails == false) {
+        this.setStep(1);
+      }
       this.testKitTextArray.forEach((element, index) => {
         this.checkTestKitPanel('onload', index)
       });
       this.sampleDetailsArray.samples.label.forEach((element, index) => {
         this.checkSampleDetailPanel('onload', index)
       });
-      this.checkOtherInfoPanel('onload')
+      
+      if (this.showCustomFieldData == true) {
+        this.checkCustFieldPanel('onload');
+        this.dynamicStep = 1;
+        if(this.isValidCustField == false){
+          this.setStep(this.testKitIndex + this.sampleIndex +2);
+        }else{
+          this.checkOtherInfoPanel('onload');
+        }
+      } else {
+        this.checkOtherInfoPanel('onload');
+      }
+      
     }
 
     if (this.dtsArray[0].dtsData.access.status == "fail") {
@@ -326,6 +367,20 @@ export class DTSHIVSerologyPage implements OnInit {
     }
   }
 
+  checkTestKitValidOnload(){
+    this.testKitTextArray.forEach((element, index) => {
+      if (this.isValidTestKitDetails[index] == false) {
+        this.setStep(index + 2);
+      }
+    });
+  }
+  checkSampleDetailsOnload(){
+    this.samplesNameArr.forEach((element, index) => {
+      if (this.isValidSampleDetails[index] == false) {
+        this.setStep(this.testKitIndex + index + 2)
+      }
+    })
+  }
   dateFormat(dateObj) {
     if (dateObj != '') {
       return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
@@ -359,26 +414,24 @@ export class DTSHIVSerologyPage implements OnInit {
       console.log(this.dtsArray);
     })
   }
-  onChangeObj(newObj) {
-    console.log(newObj);
-    // ... do other stuff here ...
-  }
-  getSelectedTestKitName(event, index) {
-    // console.log(this.kitValue);
-    console.log(event);
-    this.kitName[index] = event.show;
-    this.kitValue[index] = event.value;
-    if(this.kitValue[index]!="other"){
-    this.kitOther[index] = "";
 
+  getSelectedTestKitName(event, index, testkitDropdownArr) {
+    let testkitDropName = testkitDropdownArr.filter(element => element.value == event);
+    console.log(testkitDropName);
+    this.testKitModel['kitName'][index] = testkitDropName[0];
+    //this.testKitModel['kitValue'][index] = event.value;
+    if (this.testKitModel['kitValue'][index] != "other") {
+      this.testKitModel['kitOther'][index] = "";
     }
-    console.log(this.kitName)
-    console.log(this.kitValue)
+
   }
+
+
   checkShipmentPanel(param) {
     if (!this.shipmentData['testReceiptDate'] ||
       !this.shipmentData['sampleRehydrationDate'] ||
       !this.shipmentData['shipmentTestingDate'] ||
+      !this.shipmentData['algorithmUsed'] ||
       (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) ||
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
       this.isValidShipmentDetails = false;
@@ -399,22 +452,29 @@ export class DTSHIVSerologyPage implements OnInit {
       }
       if (param == 'submit') {
         //do nothing
+       
       }
     }
   }
   checkTestKitPanel(params, index) {
-    //  console.log(this.kitName);
-    //  console.log(this.lot);
-    //  console.log(this.expDate);
-    if (!this.kitName[index] || !this.lot[index] || !this.expDate[index]) {
+
+    if (!this.testKitModel['kitName'][index] ||
+      !this.testKitModel['lot'][index] ||
+      !this.expDateObj[index] ||
+      (this.testKitModel['kitValue'][index] == 'other' && !this.testKitModel['kitOther'][index])) {
       this.isValidTestKitDetails[index] = false;
     } else {
       this.isValidTestKitDetails[index] = true;
     }
-
-    // console.log(this.isValidTestKitDetails)
     if (params == 'next') {
+
       this.nextStep();
+
+    }
+    if(params == 'submit' || params=='onload'){
+      if(this.isValidTestKitDetails[index]==false){
+        this.setStep(index+2);
+      }
     }
   }
   checkSampleDetailPanel(params, index) {
@@ -425,10 +485,41 @@ export class DTSHIVSerologyPage implements OnInit {
       this.isValidSampleDetails[index] = true;
     }
 
-    console.log(this.isValidSampleDetails)
     if (params == 'next') {
       this.nextStep();
     }
+    if(params == 'submit'|| params=='onload'){
+      if(this.isValidSampleDetails[index]==false){
+        this.setStep(this.testKitIndex+ index+2);
+      }
+    }
+  }
+  checkCustFieldPanel(params) {
+   // this.dynamicStep = 1;
+
+    console.log( this.dynamicStep);
+    if (this.customFieldData['customField1Text']) {
+      if (!this.customFieldData['customField1Val']) {
+        this.isValidCustField = false;
+      } else {
+        if (this.customFieldData['customField2Text']) {
+          if (!this.customFieldData['customField2Val']) {
+            this.isValidCustField = false;
+          } else {
+            this.isValidCustField = true;
+          }
+        } else {
+          this.isValidCustField = true;
+        }
+      }
+    }
+
+    if (params == 'next') {
+      this.nextStep();
+      console.log(this.step);  
+      
+    }
+
   }
   nextStepTestPanel(isShipmentPanelValid, param) {
 
@@ -464,20 +555,14 @@ export class DTSHIVSerologyPage implements OnInit {
   }
 
   checkOtherInfoPanel(param) {
-    if (param == 'onload') {
-      this.step = 0;
-
-      if (this.supReview == 'yes') {
-        if (this.supervisorName) {
-          this.isValidSupervisorName = true
-        }
-      } else {
-        this.isValidSupervisorName = true
-      }
-      if (this.supReview && this.isValidSupervisorName) {
-        this.isValidOtherInfoPanel = true;
-      } else {
+      if((this.supReview =='yes' && !this.supervisorName)|| this.supReview ==''){
         this.isValidOtherInfoPanel = false;
+      }else{
+        this.isValidOtherInfoPanel = true;
+      }
+    if(param=='submit'|| param=='onload'){
+      if(this.isValidOtherInfoPanel==false){
+        this.setStep(this.testKitIndex+this.sampleIndex+this.dynamicStep+2);
       }
     }
   }
@@ -485,43 +570,46 @@ export class DTSHIVSerologyPage implements OnInit {
     this.step--;
   }
 
-  checksample(event) {
-    console.log(event)
-  }
+
 
   submitSerologyForm(shipmentPanelForm: NgForm, otherInfoPanelForm: NgForm) {
 
-
     shipmentPanelForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
+
+    this.checkShipmentPanel('submit');
+    this.testKitTextArray.forEach((element, index) => {
+      this.checkTestKitPanel('submit', index)
+    });
     this.sampleDetailsArray.samples.label.forEach((element, index) => {
       this.checkSampleDetailPanel('submit', index)
     });
+    this.checkCustFieldPanel('submit');
     this.checkOtherInfoPanel('submit');
+
+
+
     if (otherInfoPanelForm.valid == true) {
       this.isValidOtherInfoPanel = true;
     } else {
       this.isValidOtherInfoPanel = false;
     }
 
-    this.nextStepTestPanel(shipmentPanelForm.valid, 'submit');
-    this.expDate.forEach(expDateItem => this.expDateFormat.push(new Date(expDateItem)));
 
-    this.testKitXerologyForm = ({
-      'testKitTextArray': this.testKitTextArray,
-      'kitName': this.kitName,
-      'lot': this.lot,
-      'expDate': this.expDateFormat
+    this.expDateObj.forEach((element, index) => {
+      this.testKitModel['expDate'][index] = element ? this.dateFormat(new Date(element)) : element
     });
+    console.log(this.testKitModel['expDate'])
     //Samples Obj
-    this.samplesObj['result1Arr'] = [...this.result1Arr];
-    this.samplesObj['result2Arr'] = [...this.result2Arr];
-    if (this.showResult3 == true) {
-      this.samplesObj['result3Arr'] = [...this.result3Arr];
-    }
+    this.samplesObj['result1'] = [...this.result1Arr];
+    this.samplesObj['result2'] = [...this.result2Arr];
+    //  if (this.showResult3 == true) {
+    this.samplesObj['result3'] = [...this.result3Arr];
+    //}
     this.samplesObj['id'] = [...this.sampleDetailsArray.samples.id];
     this.samplesObj['label'] = [...this.sampleDetailsArray.samples.label];
     this.samplesObj['mandatory'] = [...this.sampleDetailsArray.samples.mandatory];
+    this.samplesObj['finalResult'] = [...this.finalResultArr]
     // Samples Obj
 
 
@@ -536,22 +624,22 @@ export class DTSHIVSerologyPage implements OnInit {
       "appVersion": this.appVersionNumber,
       "syncType": "single",
       "data": {
-        "evaluationStatus": this.dtsDataObj.evaluationStatus,
-        "participantId": this.dtsDataObj.participantId,
-        "schemeType": this.dtsDataObj.schemeType,
-        "shipmentId": this.dtsDataObj.shipmentId,
-        "mapId": this.dtsDataObj.mapId,
+        "evaluationStatus": this.dtsArray[0].evaluationStatus,
+        "participantId": this.dtsArray[0].participantId,
+        "schemeType": this.dtsArray[0].schemeType,
+        "shipmentId": this.dtsArray[0].shipmentId,
+        "mapId": this.dtsArray[0].mapId,
         "isSynced": true,
-        "createdOn": this.dtsDataObj.createdOn ? this.dtsDataObj.createdOn : "",
-        "updatedOn": this.dtsDataObj.updatedOn ? this.dtsDataObj.updatedOn : "",
-        "updatedStatus": this.dtsDataObj.updatedStatus,
+        "createdOn": this.dtsArray[0].createdOn ? this.dtsArray[0].createdOn : "",
+        "updatedOn": this.dtsArray[0].updatedOn ? this.dtsArray[0].updatedOn : "",
+        "updatedStatus": this.dtsArray[0].updatedStatus,
         "dtsData": {
           "access": {
-            "status": this.dtsDataObj.dtsData.access.status
+            "status": this.dtsArray[0].dtsData.access.status
           },
           "Heading1": {
             //participant details
-            "status": this.dtsDataObj.dtsData.Heading1.status,
+            "status": this.dtsArray[0].dtsData.Heading1.status,
             "data": {
               "participantName": this.partiDetailsArray.participantName,
               "participantCode": this.partiDetailsArray.participantCode,
@@ -562,18 +650,18 @@ export class DTSHIVSerologyPage implements OnInit {
           },
           "Heading2": {
             //shipment details
-            "status": this.dtsDataObj.dtsData.Heading2.status,
+            "status": this.dtsArray[0].dtsData.Heading2.status,
             "data": {
-              "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
-              "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
-              "testReceiptDate": this.testReceiptDate ? this.dateFormat(new Date(this.testReceiptDate)) : "",
-              "sampleRehydrationDate": this.sampleRhdDate ? this.dateFormat(new Date(this.sampleRhdDate)) : '',
-              "testingDate": this.testingDate ? this.dateFormat(new Date(this.testingDate)) : "",
-              "algorithmUsedSelected": this.algorithmused,
-              "algorithmUsedSelect": this.algorithmUsedSelectArray,
-              "responseDate": this.respDate ? this.dateFormat(new Date(this.respDate)) : '',
-              "modeOfReceiptSelected": this.receiptmode,
-              "modeOfReceiptSelect": this.modeOfReceiptArray,
+              "shipmentDate": this.shipmentData['shipmentDate'],
+              "resultDueDate": this.shipmentData['resultDueDate'],
+              "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
+              "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
+              "testingDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
+              "algorithmUsedSelected": this.shipmentData['algorithmUsed'],
+              "algorithmUsedSelect": this.shipmentData['algorithmUsedDropdown'],
+              "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
+              "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'],
+              "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
               "qcData": {
                 "qcRadioSelected": this.qcDone,
                 "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
@@ -585,53 +673,62 @@ export class DTSHIVSerologyPage implements OnInit {
           },
           "Heading3": {
             //test details
-            "status": this.dtsDataObj.dtsData.Heading3.status,
-            "data": {
-              "testKitSelected": this.testKitXerologyForm,
-            }
+            "status": this.dtsArray[0].dtsData.Heading3.status,
+            "data": this.testKitModel
           },
           "Heading4": {
             //sample details
-            "status": this.dtsDataObj.dtsData.Heading4.status,
+            "status": this.dtsArray[0].dtsData.Heading4.status,
             "data": {
               "samples": this.samplesObj,
               "resultText": this.resultsTextArray,
               // "sampleDetailSelected": this.sampleDetailsArray,
             }
           },
+
           "Heading5": {
             //other information
-            "status": this.dtsDataObj.dtsData.Heading5.status,
+            "status": this.dtsArray[0].dtsData.Heading5.status,
             "data": {
               "supervisorReview": this.supervisorReviewArray,
               "approvalLabel": this.approvalLabel,
               "supervisorReviewSelected": this.supReview,
-              "approvalapprovalInputTextInputText": this.supervisorName,
+              "approvalInputText": this.supervisorName,
               "comments": this.comments
             }
+          },
+          "customFields": {
+            "status": this.showCustomFieldData,
+            "data": {
+                "customField1Text":this.customFieldData['customField1Text'],
+                "customField1Val": this.customFieldData['customField1Val'],
+                "customField2Text": this.customFieldData['customField2Text'],
+                "customField2Val": this.customFieldData['customField2Val']
+            }
           }
+
         }
       }
     }
     console.log(this.serologyJSON);
-    // if (this.network.type == 'none') {
-    //   this.serologyJSON['data']['isSynced'] = 'false';
-    //   this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
+    if (this.network.type == 'none') {
+      this.serologyJSON['data']['isSynced'] = 'false';
+      this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
 
-    // } else {
+    } else {
 
-    //   this.serologyJSON['data']['isSynced'] = 'true';
-    //   this.CrudServiceService.postData('shipments/save-form', this.serologyJSON).then((result) => {
-    //       if (result["status"] == 'success') {
-    //         this.ToastService.presentToastWithOptions(result['message']);
-    //         this.router.navigate(['/all-pt-schemes']);
-    //       }
-    //     },
-    //     (err) => {
-    //       console.log(err);
-    //     }
-    //   );
-    // }
+      this.serologyJSON['data']['isSynced'] = 'true';
+      this.CrudServiceService.postData('shipments/save-form', this.serologyJSON).then((result) => {
+          if (result["status"] == 'success') {
+            this.ToastService.presentToastWithOptions(result['message']);
+            this.router.navigate(['/all-pt-schemes']);
+          }
+        },
+        (err) => {
+          console.log(err);
+        }
+      );
+    }
   }
 
 }

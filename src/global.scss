@@ -385,6 +385,7 @@ input.mat-input-element{
 // }
 .mat-expansion-panel mat-expansion-panel-header{
     height: 37px !important;   
+    padding: 0 15px 0 10px !important;
 
 }
 // .mat-expansion-panel:nth-child(2n) mat-expansion-panel-header.mat-expanded.mat-expansion-panel-header{
@@ -402,5 +403,20 @@ input.mat-input-element{
 //     height: 45px !important;
 // }
 
+.mat-card.main-card-panel{
+    padding: 0;
+    width: calc(100% - 20px) !important;
+    padding-bottom: 15px;
+    margin: 15px auto !important;    .mat-card-title{
+        height: 31px !important;
+        background-color: #53c2f5ba !important;
+        font-size: 15px !important;
+        color: #28378d;
+        font-weight: 400 !important;
+        border-top-left-radius: inherit;
+        border-top-right-radius: inherit;
+        padding: 7px 15px !important;
+    }
+}
 
 /* Materialize Global CSS Changes Ends*/

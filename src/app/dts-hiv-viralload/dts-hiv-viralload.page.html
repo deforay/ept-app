@@ -430,8 +430,8 @@
                             <div [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]">
                             </div>
                           </mat-label>
-                          <input matInput [(ngModel)]="vlresult" name="vl[{{k}}]" #vl="ngModel"
-                             (keyup)="checkVlData(vlresult,k)"
+                          <input matInput [(ngModel)]="ptPanelTestData.vlResult[k]" name="vl[{{k}}]" #vl="ngModel"
+                            
                             placeholder="Viral Load (log10 copies/ml)"
                             [ngClass]="{ 'mat-form-field-invalid': isNextStepPanelTest==true && ptPanelTestData.controlArray.mandatory[i]==true && (!vlResultArray[k] || vlResultArray[k]=='') && (ptPanelTest==false || !ptPanelTest) }"
                             [disabled]="ptPanelTestData.tndArray[i]=='yes'||isView=='true'"
@@ -533,7 +533,7 @@
         <mat-action-row>
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
           <button mat-button color="primary" type="submit"
-            (click)="nextStepPTPanelTest('next',ptPanelTest);checkVlArray()">Next</button>
+            (click)="checkVlArray()">Next</button>
         </mat-action-row>
       </mat-expansion-panel>
     </form>

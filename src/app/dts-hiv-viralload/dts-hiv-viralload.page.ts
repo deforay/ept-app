@@ -340,7 +340,7 @@ interface selectArray {
         this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
         this.ptPanelTestData['controlArray'] = this.ptPanelTestArray['tableRowTxt'];
         this.ptPanelTestData['vlResult'] = [...this.ptPanelTestArray['vlResult']];
-        this.vlResultArray = [...this.ptPanelTestArray['vlResult']];
+   //     this.vlResultArray = [...this.ptPanelTestArray['vlResult']];
         this.vlResultForm = [];
 
         // this.
@@ -354,6 +354,8 @@ interface selectArray {
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
         this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
         this.ptPanelTestData['vlResultSectionLabel'] = unescape(this.ptPanelTestArray['vlResultSectionLabel']);
+       
+       
         // this.ptPanelTestData['tndArray'][0]="no";
         this.ptPanelTestData['notes'] = this.ptPanelTestArray.note;
 
@@ -669,9 +671,10 @@ interface selectArray {
   }
 
   checkVlArray() {
-    this.vlResultArray.forEach((vlElement, index) => {
-      this.ptPanelTestData['vlResult'][index] = vlElement;
-    });
+    console.log(this.ptPanelTestData['vlResult'])
+    // this.vlResultArray.forEach((vlElement, index) => {
+    //   this.ptPanelTestData['vlResult'][index] = vlElement;
+    // });
   }
 
   submitViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {

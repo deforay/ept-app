@@ -482,7 +482,7 @@ export class DbsEidPage implements OnInit {
    
   }
   checkOtherInfoPanel(params) {
-    if (this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName']
+    if ((this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName'])
      ||this.otherInfoData['supervisorReview']=='') {
       this.otherInfoValid = false;
       if(this.showCustomFieldData==true){
