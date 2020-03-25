@@ -23,7 +23,8 @@ export class HeaderComponent implements OnInit {
 
   goBack(titleHeader) {
     if (titleHeader == "DTS- HIV Viral Load"||titleHeader == "DTS - HIV Serology"||titleHeader=="DBS - Early Infant Diagnosis") {
-      this.router.navigate(['/all-pt-schemes']);
+  //    this.router.navigate(['/all-pt-schemes']);
+      this.router.navigate(['/all-pt-schemes'], {replaceUrl: true});
     }
   }
 

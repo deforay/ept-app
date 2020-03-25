@@ -36,9 +36,6 @@ ion-grid ion-row ion-col{
         color: black;
         font-size: 13.75px
     }
-.ion-no-border.syncButton{
-height: 45px;
-}
 .shipmentGrid{
     padding:0px!important;
 }
@@ -46,7 +43,7 @@ height: 45px;
 font-size: 11.8px!important;
 }
 .text-center.native-btn.syncAll{
-height: 50px!important;
+height: 45px!important;
 }
 .text-title-color.unSynced{
     color: red!important;
@@ -61,7 +58,7 @@ ion-button.text-center.native-btn{
 }
 ion-footer{
     ion-toolbar {
-        height: 35px;
+        height: 54px;
         --min-height:25px !important;
         --background:#fff !important;
         ion-title{
