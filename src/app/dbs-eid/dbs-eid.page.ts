@@ -243,7 +243,6 @@ export class DbsEidPage implements OnInit {
         this.ptPanelData['samples']['IcQsValues'] = [...this.icQsValuesArray];
       } else {
         this.showPTPanelData = false;
-
       }
       if (this.eidArray[0].eidData.Heading4.status == true) {
         this.showOtherInfoData = true;
@@ -338,9 +337,9 @@ export class DbsEidPage implements OnInit {
     })
   }
   checkShipmentPanel(param) {
-    if (this.isView == "true") {
-      this.setStep(2);
-    }
+    // if (this.isView == "true") {
+    //   this.setStep(2);
+    // }
     if (!this.shipmentData['shipmentTestingDate'] ||
       !this.shipmentData['extractionLotNumber'] ||
       !this.shipmentData['detectionLotNumber'] ||
@@ -352,6 +351,9 @@ export class DbsEidPage implements OnInit {
 
       if (param == 'next') {
         //do nothing
+        if (this.isView == "true") {
+          this.setStep(2);
+        }
       }
       if (param == 'submit') {
         this.setStep(1);
@@ -427,8 +429,12 @@ export class DbsEidPage implements OnInit {
     }
     if (this.isView == "true") {
       if(this.showCustomFieldData== true){
+        this.dynamicStep = 1;
         this.setStep(3);
-      } else{ this.setStep(4); }
+      } else{ 
+        this.dynamicStep = 0;
+        this.setStep(3); 
+      }
     } else {
       // if (params == 'submit') {
       //   if (this.isValidPTPanel == false) {

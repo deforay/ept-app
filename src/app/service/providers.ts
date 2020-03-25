@@ -15,5 +15,5 @@ export {
     CrudServiceService,
     ToastService,
     LoaderService,
-    AlertService,
+    AlertService
 }

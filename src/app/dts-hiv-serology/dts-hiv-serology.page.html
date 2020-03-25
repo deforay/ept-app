@@ -137,7 +137,7 @@
         </mat-expansion-panel-header>
 
         <ion-grid>
-          <ion-row *ngIf="shipmentsDetailsArray.shipmentDate">
+          <ion-row *ngIf="shipmentData.shipmentDate">
             <ion-col size="5">
               <p class="ion-text-wrap">
                 <span class="text-title-color">Shipment Date </span>
@@ -150,11 +150,11 @@
             </ion-col>
             <ion-col>
               <p class="ion-text-wrap">
-                <span>{{shipmentsDetailsArray.shipmentDate}} </span>
+                <span>{{shipmentData.shipmentDate}} </span>
               </p>
             </ion-col>
           </ion-row>
-          <ion-row *ngIf="shipmentsDetailsArray.resultDueDate">
+          <ion-row *ngIf="shipmentData.resultDueDate">
             <ion-col size="5">
               <p class="ion-text-wrap">
                 <span class="text-title-color">Result Due Date </span>
@@ -167,7 +167,7 @@
             </ion-col>
             <ion-col>
               <p class="ion-text-wrap">
-                <span>{{shipmentsDetailsArray.resultDueDate}}
+                <span>{{shipmentData.resultDueDate}}
                 </span>
               </p>
             </ion-col>
@@ -176,81 +176,80 @@
         <ion-grid>
 
           <ion-row>
-            <ion-col size="12">
+            <ion-col size="12"  class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Test Receipt Date</mat-label>
-                <input matInput [matDatepicker]="testReceiptPicker" [(ngModel)]="testReceiptDate"
-                  placeholder="Choose a date" required disabled="false" name="seroTestReceiptDate"
+                <input matInput [matDatepicker]="testReceiptPicker" [(ngModel)]="shipmentData.testReceiptDate"
+                  placeholder="Choose Test Receipt Date" required  [disabled]="isView=='true'" name="seroTestReceiptDate"
                   #seroTestReceiptDate="ngModel">
                 <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
-                <mat-datepicker #testReceiptPicker disabled="false"></mat-datepicker>
-                <mat-error *ngIf="!testReceiptDate">
+                <mat-datepicker #testReceiptPicker  [disabled]="isView=='true'"></mat-datepicker>
+                <mat-error *ngIf="!shipmentData.testReceiptDate">
                   Test Receipt Date is required</mat-error>
               </mat-form-field>
             </ion-col>
-            <ion-col size="12">
+            <ion-col size="12"  class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Sample Rehydration Date</mat-label>
                 <input matInput [matDatepicker]="sampleRhdPicker" name="seroSampleRhdDate" #seroSampleRhdDate="ngModel"
-                  [(ngModel)]="sampleRhdDate" placeholder="Choose a date" required disabled="false">
+                  [(ngModel)]="shipmentData.sampleRehydrationDate" placeholder="Choose Sample Rehydration Date" 
+                  required  [disabled]="isView=='true'">
                 <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
-                <mat-datepicker #sampleRhdPicker disabled="false"></mat-datepicker>
-                <mat-error *ngIf="!sampleRhdDate">
+                <mat-datepicker #sampleRhdPicker  [disabled]="isView=='true'"></mat-datepicker>
+                <mat-error *ngIf="!shipmentData.sampleRehydrationDate">
                   Sample Rehydration Date is required</mat-error>
               </mat-form-field>
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="12">
+            <ion-col size="12"  class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Testing Date</mat-label>
-                <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="testingDate" name="seroTestingDate"
-                  #seroTestingDate="ngModel" placeholder="Choose a date" required disabled="false">
+                <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="shipmentData.shipmentTestingDate" name="seroTestingDate"
+                  #seroTestingDate="ngModel" placeholder="Choose Testing Date" required [disabled]="isView=='true'">
                 <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #testDatePicker disabled="false"></mat-datepicker>
-                <mat-error *ngIf="!testingDate">
+                <mat-datepicker #testDatePicker [disabled]="isView=='true'"></mat-datepicker>
+                <mat-error *ngIf="!shipmentData.shipmentTestingDate">
                   Testing Date is required</mat-error>
               </mat-form-field>
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="12">
+            <ion-col size="12" *ngIf="isPartiEditRespDate"  class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Response Date</mat-label>
-                <input matInput [matDatepicker]="respDatePicker" [(ngModel)]="respDate" name="seroRespDate"
-                  placeholder="Choose a date" #seroRespDate="ngModel" required disabled="false">
+                <input matInput [matDatepicker]="respDatePicker" [(ngModel)]="shipmentData.responseDate" name="seroRespDate"
+                  placeholder="Choose a date" #seroRespDate="ngModel" [required]="isPartiEditRespDate" [disabled]="isView=='true'">
                 <mat-datepicker-toggle matSuffix [for]="respDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #respDatePicker disabled="false"></mat-datepicker>
-                <mat-error *ngIf="!respDate">
-                  Response Date is required</mat-error>
+                <mat-datepicker #respDatePicker [disabled]="isView=='true'"></mat-datepicker>
+                <mat-error *ngIf="!shipmentData.responseDate && isPartiEditRespDate"> Response Date is required</mat-error>
               </mat-form-field>
             </ion-col>
           </ion-row>
           <ion-row>
-            <ion-col size="12">
+            <ion-col size="12"  class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Algorithm Used </mat-label>
-                <mat-select [(ngModel)]="algorithmused" name="alg" #alg="ngModel" required>
+                <mat-select [(ngModel)]="shipmentData.algorithmUsed" name="alg" #alg="ngModel" required>
                   <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let alg of algorithmUsedSelectArray" [value]="alg.value">
+                  <mat-option *ngFor="let alg of shipmentData.algorithmUsedDropdown" [value]="alg.value">
                     {{alg.show}}
                   </mat-option>
                 </mat-select>
-
                 <mat-error *ngIf="!algorithmused">Please choose the Algorithm Used </mat-error>
               </mat-form-field>
             </ion-col>
-            <ion-col size="12">
+            <ion-col size="12" class="grid-input-col" *ngIf="isPartiEditModeRec">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Mode of Receipt</mat-label>
-                <mat-select [(ngModel)]="receiptmode" name="rmode" #rmode="ngModel" required>
+                <mat-select [(ngModel)]="shipmentData.modeOfReceipt" name="rmode" #rmode="ngModel" 
+                [required]="isPartiEditModeRec" [disabled]="isView=='true'">
                   <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let modeRec of modeOfReceiptArray" [value]="modeRec.value">
+                  <mat-option *ngFor="let modeRec of shipmentData.modeOfReceiptDropdown" [value]="modeRec.value">
                     {{modeRec.show}}
                   </mat-option>
                 </mat-select>
-
-                <mat-error *ngIf="!receiptmode">Please choose the Mode Of Receipt </mat-error>
+                <mat-error *ngIf="!shipmentData.modeOfReceipt && isPartiEditModeRec">Please choose the Mode Of Receipt </mat-error>
               </mat-form-field>
             </ion-col>
           </ion-row>
@@ -287,9 +286,9 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>QC Date</mat-label>
                 <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" name="seroqcDate" #seroqcDate="ngModel" placeholder="Choose a date" [required]="isQCDoneShow"
-                  disabled="false">
+                   [disabled]="isView=='true'">
                 <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
-                <mat-datepicker #qcDatePicker disabled="false"></mat-datepicker>
+                <mat-datepicker #qcDatePicker  [disabled]="isView=='true'"></mat-datepicker>
                    <mat-error *ngIf="!qcDate">QC Date is required</mat-error>
               </mat-form-field>
            
@@ -309,13 +308,13 @@
 
         <mat-action-row>
           <button mat-button color="primary" (click)="prevStep()">Previous</button>
-          <button mat-button color="warn" type="submit" (click)="nextStepTestPanel(shipmentPanelForm.valid,'next')">Next</button>
+          <button mat-button color="warn" type="submit" (click)="checkShipmentPanel('next')">Next</button>
         </mat-action-row>
       </mat-expansion-panel>
     </form>
 
     <!-- <form #testKitPanelForm="ngForm" novalidate> -->
-    <div *ngFor="let kitTextItem of testKitTextArray;let i = index;">
+    <!-- <div *ngFor="let kitTextItem of testKitTextArray;let i = index;">
       <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="testKitNameArray[kitTextItem].status==true">
         <mat-expansion-panel-header>
           <mat-panel-title >
@@ -356,9 +355,9 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Exp Date</mat-label>
               <input matInput [matDatepicker]="expDatePicker" [(ngModel)]="expDate[i]" placeholder="Choose a date"
-                required disabled="false">
+                required  [disabled]="isView=='true'">
               <mat-datepicker-toggle matSuffix [for]="expDatePicker"></mat-datepicker-toggle>
-              <mat-datepicker #expDatePicker disabled="false"></mat-datepicker>
+              <mat-datepicker #expDatePicker  [disabled]="isView=='true'"></mat-datepicker>
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -367,10 +366,82 @@
           <button mat-button color="warn" (click)="nextStep()">Next</button>
         </mat-action-row>
       </mat-expansion-panel>
-    </div>
+    </div> -->
     <!-- </form> -->
+    
+    <form #testKitPanelForm="ngForm" novalidate> 
+      <div *ngFor="let kitTextItem of testKitTextArray;let i = index;">
+        <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="testKitNameArray[kitTextItem].status==true">
+             <mat-expansion-panel-header>
+            <mat-panel-title>
+              <ion-grid class="panelHeading">
+                <ion-row>
+                  <ion-col size="10" class="grid-readonly-col">
+                    <span class="text-title-color">{{kitTextItem}} </span>
+                  </ion-col>
+                  <ion-col size="2" class="grid-readonly-col" *ngIf="isValidTestKitDetails[i]">
+                    <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ion-row>
+            <ion-col size="12"  class="grid-readonly-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>Kit Name </mat-label>
+                <mat-select [(ngModel)]="kitName[i]" name="kitName_{{i}}" #kitName="ngModel"                 
+                (ngModelChange)="getSelectedTestKitName($event,i)">
+                  <mat-option>--Select--</mat-option>
+                  <mat-option *ngFor="let kitNameItem of testKitNameArray[kitTextItem].data" selected="selected"
+                    [value]="kitNameItem"   >
+                    {{kitNameItem.show}}
+                  </mat-option>
+                </mat-select>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="kitValue[i]=='other'">
+            <ion-col size="12"  class="grid-readonly-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>Enter Kit Name </mat-label>
+                <input matInput [(ngModel)]="kitOther[i]" name="kitOther_{{1}}" #kitOther="ngModel" 
+                placeholder="Enter Kit Name" >
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="12"  class="grid-readonly-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>Lot Number</mat-label>
+                <input matInput [(ngModel)]="lot[i]" placeholder="Enter Lot Number" name="lot_{{i}}" #lot="ngModel">
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+  
+            <ion-col size="12"  class="grid-readonly-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>Exp Date</mat-label>
+                <input matInput [matDatepicker]="expDatePicker" [(ngModel)]="expDate[i]" placeholder="Choose Exp date"
+                name="expDate_{{i}}" #expDate="ngModel"   [disabled]="isView=='true'">
+                <mat-datepicker-toggle matSuffix [for]="expDatePicker"></mat-datepicker-toggle>
+                <mat-datepicker #expDatePicker  [disabled]="isView=='true'"></mat-datepicker>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+          <mat-action-row>
+            <button mat-button color="primary" (click)="prevStep()">Previous</button>
+            <button mat-button color="warn" (click)="checkTestKitPanel('next',i)">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+      </div>
+       </form>
 
-    <!-- sample details start -->
+
+
+
+    <!--sample details start -->
     <!-- <div *ngFor="let sampleTextItem of samplesTextArray;let i = index;" >
 
   <mat-expansion-panel [expanded]="step === i+testKitIndex+2" (opened)="setStep(i+testKitIndex+2)" >
@@ -401,10 +472,10 @@
   </mat-expansion-panel>
 </div> -->
 
-
+<!-- 
     <div *ngFor="let sampleTextItem of samplesTextArray ;let i = index;">
 
-      <mat-expansion-panel [expanded]="step === i+testKitIndex+2" (opened)="setStep(i+testKitIndex+2)">
+      <mat-expansion-panel *ngIf="showSampleData" [expanded]="step === i+testKitIndex+2" (opened)="setStep(i+testKitIndex+2)">
         <mat-expansion-panel-header >
           <mat-panel-title>
             <ion-grid class="panelHeading">
@@ -440,7 +511,138 @@
           <button mat-button color="warn" (click)="nextStep()">Next</button>
         </mat-action-row>
       </mat-expansion-panel>
-    </div>
+    </div> -->
+
+    <form #SampleDetailsForm="ngForm" novalidate> 
+      <div *ngFor="let sampleName of samplesNameArr;let i = index;">
+        <mat-expansion-panel *ngIf="showSampleData" [expanded]="step === i+testKitIndex+2" (opened)="setStep(i+testKitIndex+2)">        
+          <mat-expansion-panel-header>
+            <mat-panel-title>
+              <ion-grid class="panelHeading">
+                <ion-row>
+                  <ion-col size="10" class="grid-readonly-col">
+                    <span class="text-title-color">{{sampleName}} <span class="danger-text" *ngIf="samplesArray.mandatory[i]==true">*</span></span>
+                  </ion-col>
+                  <ion-col size="2" class="grid-readonly-col" *ngIf="isValidSampleDetails[i]">
+                    <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+                  </ion-col>
+                </ion-row>
+              </ion-grid>
+            </mat-panel-title>
+          </mat-expansion-panel-header>
+          <ion-row *ngIf="sampleDetailsArray.resultsText[0]">
+           <!-- [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true && 
+            !result1Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
+
+            <ion-col  size="12" class="grid-readonly-col">
+
+              <mat-form-field  class="login-full-width grid-col-form"  appearance="outline" 
+              *ngIf="sampleDetailsArray.resultsText[0]">
+                <mat-label>{{sampleDetailsArray.resultsText[0]}}</mat-label>
+                <mat-select [(ngModel)]="result1Arr[i]"
+                name="result1_[{{i}}]" #result1="ngModel" [disabled]="isView=='true'">               
+                  <mat-option>--Select--</mat-option>
+                  <mat-option *ngFor="let item of sampleDetailsArray[sampleName]['Result-1'].data" [value]="item.value">
+                    {{item.show}}
+                  </mat-option>
+                </mat-select>                      
+               <!-- <mat-error *ngIf="samplesArray.mandatory[i]==true && !result1Arr[i]">Please Enter {{sampleDetailsArray.resultsText[1]}}</mat-error> -->
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+      
+          <ion-row *ngIf="sampleDetailsArray.resultsText[1]">
+                <!-- [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
+          !result2Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
+            <ion-col  size="12" class="grid-readonly-col">
+              <mat-form-field  class="login-full-width grid-col-form"  appearance="outline"               
+              *ngIf="sampleDetailsArray.resultsText[1]">
+                <mat-label>{{sampleDetailsArray.resultsText[1]}}</mat-label>
+                <mat-select [(ngModel)]="result2Arr[i]"
+                name="result2_[{{i}}]" #result2="ngModel" [disabled]="isView=='true'">               
+                  <mat-option>--Select--</mat-option>
+                  <mat-option *ngFor="let item of sampleDetailsArray[sampleName]['Result-2'].data" [value]="item.value">
+                    {{item.show}}
+                  </mat-option>
+                </mat-select>                      
+               <!-- <mat-error *ngIf="samplesArray.mandatory[i]==true && !result2Arr[i]">Please Enter{{sampleDetailsArray.resultsText[1]}}</mat-error> -->
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+      
+          <div *ngIf="sampleDetailsArray.samples.result3">
+            <ion-row *ngIf="sampleDetailsArray.resultsText[2]">
+                    <!--  [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
+                 !result3Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
+              <ion-col  size="12" class="grid-readonly-col">
+                <mat-form-field  class="login-full-width grid-col-form"  appearance="outline"                
+                *ngIf="sampleDetailsArray.resultsText[2]">
+                  <mat-label>{{sampleDetailsArray.resultsText[2]}}</mat-label>
+                  <mat-select [(ngModel)]="result3Arr[i]"
+                  name="result3_[{{i}}]" #result3="ngModel" [disabled]="isView=='true'">               
+                    <mat-option>--Select--</mat-option>
+                    <mat-option *ngFor="let item of sampleDetailsArray[sampleName]['Result-3'].data" [value]="item.value">
+                      {{item.show}}
+                    </mat-option>
+                  </mat-select>                      
+                 <!-- <mat-error *ngIf="samplesArray.mandatory[i]==true && !result3Arr[i]">Please Enter {{sampleDetailsArray.resultsText[2]}}</mat-error> -->
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+         
+            <ion-row *ngIf="sampleDetailsArray.resultsText[3]">
+                 <!--  [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
+                 !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
+              <ion-col  size="12" class="grid-readonly-col">
+                <mat-form-field  class="login-full-width grid-col-form"  appearance="outline" 
+               
+                *ngIf="sampleDetailsArray.resultsText[3]">
+                  <mat-label>{{sampleDetailsArray.resultsText[3]}}</mat-label>
+                  <mat-select [(ngModel)]="finalResultArr[i]"
+                  name="finalResult_[{{i}}]" #finalResult="ngModel" [disabled]="isView=='true'">               
+                    <mat-option>--Select--</mat-option>
+                    <mat-option *ngFor="let item of sampleDetailsArray[sampleName]['Final-Result'].data" [value]="item.value">
+                      {{item.show}}
+                    </mat-option>
+                  </mat-select>                      
+                 <!-- <mat-error *ngIf="samplesArray.mandatory[i]==true && !finalResultArr[i]">Please Enter {{sampleDetailsArray.resultsText[3]}}</mat-error> -->
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+          </div>
+          <div *ngIf="!sampleDetailsArray.samples.result3">
+            <ion-row *ngIf="sampleDetailsArray.resultsText[2]">
+              <!--    [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
+                 !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
+              <ion-col  size="12" class="grid-readonly-col">
+                <mat-form-field  class="login-full-width grid-col-form"  appearance="outline"              
+                *ngIf="sampleDetailsArray.resultsText[2]">
+                  <mat-label>{{sampleDetailsArray.resultsText[2]}}</mat-label>
+                  <mat-select [(ngModel)]="finalResultArr[i]"
+                  name="finalResult_[{{i}}]" #finalResult="ngModel" [disabled]="isView=='true'">               
+                    <mat-option>--Select--</mat-option>
+                    <mat-option *ngFor="let item of sampleDetailsArray[sampleName]['Final-Result'].data" [value]="item.value">
+                      {{item.show}}
+                    </mat-option>
+                  </mat-select>                      
+                 <!-- <mat-error *ngIf="samplesArray.mandatory[i]==true && !finalResultArr[i]">Please Enter {{sampleDetailsArray.resultsText[3]}}</mat-error> -->
+                </mat-form-field>
+              </ion-col>
+            </ion-row>
+          </div>
+
+          <mat-action-row>
+            <button mat-button color="primary" (click)="prevStep()">Previous</button>
+            <button mat-button color="warn" (click)="checkSampleDetailPanel('next',i)">Next</button>
+          </mat-action-row>
+        </mat-expansion-panel>
+
+
+     </div> 
+    </form>
+
+
+
     <!-- sample details end -->
 
 
@@ -504,7 +706,7 @@
 
       <mat-action-row>
         <button mat-button color="primary" (click)="prevStep()">Previous</button>
-        <button mat-button color="warn" (click)="submitXerologyForm(shipmentPanelForm,otherInfoPanelForm)">Submit</button>
+        <button mat-button color="warn" (click)="submitSerologyForm(shipmentPanelForm,otherInfoPanelForm)">Submit</button>
       </mat-action-row>
     </mat-expansion-panel>
     </form>

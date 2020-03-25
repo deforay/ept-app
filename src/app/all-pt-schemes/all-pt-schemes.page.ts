@@ -194,7 +194,7 @@ import * as _ from 'lodash';
             } else {
               result['data'].viewOnlyAccess = false;
             }
-            debugger;
+           // debugger;
 
             this.isViewOnlyAccess = result['data'].viewOnlyAccess;
             this.storage.set('participantLogin', this.partiDetailsArray);

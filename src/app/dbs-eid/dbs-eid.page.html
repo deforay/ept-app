@@ -366,7 +366,7 @@
 </form>
 <form #PTPanelTestForm="ngForm" novalidate>
 
-    <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+    <mat-expansion-panel *ngIf="showPTPanelData" [expanded]="step === 2" (opened)="setStep(2)">
       <mat-expansion-panel-header>
         <mat-panel-title>
           <ion-grid class="panelHeading">
@@ -571,7 +571,7 @@
     </ion-grid>
     <mat-action-row>
       <button mat-button color="primary" (click)="prevStep()">Previous</button>
-      <button mat-button color="warn" *ngIf="isView=='false'"
+      <button mat-button color="warn"
       type='submit' (click)="checkCustFieldPanel('next')">Next</button>
     </mat-action-row>
   </mat-expansion-panel>
