@@ -1,5 +1,13 @@
 /* CSS Changes in DTS - HIV Serology Page */
-
+ion-row {
+    p.accessMsg{
+        color: #f44336;
+    text-align: center;
+    font-size: 14.5px;
+    width: 100%;
+    margin-bottom: 0px;
+    }
+}
 ion-grid ion-row ion-col{
         p{
         margin:5px;
