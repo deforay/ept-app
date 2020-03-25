@@ -59,7 +59,7 @@
           </ion-col>
           <ion-col>
             <p text-wrap class="shipmentValues">
-              <span>{{item.participantId}}</span>
+              <span>{{item.uniqueIdentifier}}</span>
             </p>
           </ion-col>
         </ion-row>
@@ -210,7 +210,7 @@
 </ion-content>
 
 
-<ion-footer class="ion-no-border syncButton" *ngIf="localStorageUnSyncedArray.length!=0&& networkType!='none'">
+<ion-footer *ngIf="localStorageUnSyncedArray.length!=0&& networkType!='none'">
   <ion-toolbar>
     <ion-button expand="full" class="text-center native-btn syncAll" (click)="syncShipments()">
       <ion-icon ios="ios-sync" md="md-sync"></ion-icon>

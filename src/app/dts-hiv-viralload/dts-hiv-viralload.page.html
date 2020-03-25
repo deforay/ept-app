@@ -105,7 +105,7 @@
         </ion-row>
       </ion-grid>
       <mat-action-row>
-        <button mat-button color="primary" (click)="nextStep()">Next</button>
+        <button mat-button color="primary" (click)="nextStepPartiPanel()">Next</button>
       </mat-action-row>
     </mat-expansion-panel>
 
@@ -430,8 +430,8 @@
                             <div [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]">
                             </div>
                           </mat-label>
-                          <input matInput type="tel" [(ngModel)]="vlresult" name="vl{{k}}" #vl="ngModel"
-                            [ngModelOptions]="{standalone: true}" (keyup)="checkVlData(vlresult,k)"
+                          <input matInput [(ngModel)]="vlresult" name="vl[{{k}}]" #vl="ngModel"
+                             (keyup)="checkVlData(vlresult,k)"
                             placeholder="Viral Load (log10 copies/ml)"
                             [ngClass]="{ 'mat-form-field-invalid': isNextStepPanelTest==true && ptPanelTestData.controlArray.mandatory[i]==true && (!vlResultArray[k] || vlResultArray[k]=='') && (ptPanelTest==false || !ptPanelTest) }"
                             [disabled]="ptPanelTestData.tndArray[i]=='yes'||isView=='true'"
@@ -441,18 +441,18 @@
                           
                             [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest) || ptPanelTestData.tndArray[i].disabled"-->
 
-
-                          <!-- <mat-error
-                          *ngIf="ptPanelTestData.controlArray.mandatory[i]==true && !ptPanelTestData.vlResult[k] && (ptPanelTest==false || !ptPanelTest)">
+                            <!-- && !ptPanelTestData.vlResult[k]  -->
+                          <mat-error
+                          *ngIf="ptPanelTestData.controlArray.mandatory[i]==true && !vlresult && (ptPanelTest==false || !ptPanelTest)">
                           Please Enter <span
                             [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]"></span>
-                        </mat-error>  -->
+                        </mat-error> 
                         </mat-form-field>
-                        <div class="errorMsg"
+                        <!-- <div class="errorMsg"
                           *ngIf="isNextStepPanelTest==true && ptPanelTestData.controlArray.mandatory[i]==true && (!vlResultArray[k] || vlResultArray[k]=='') && (ptPanelTest==false || !ptPanelTest)">
                           Please Enter <span
                             [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]"></span>
-                        </div>
+                        </div> -->
           
                       </ion-col>
                     </ion-row>

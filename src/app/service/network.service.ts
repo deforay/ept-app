@@ -48,25 +48,24 @@ export class NetworkService {
 
       console.log("Offline");
       this.storage.set('networkConnectivity', false);
-      //this.eventCtrl.publish('network:offline');
+      this.eventCtrl.publish('network:offline');
       this.ToastService.presentToastWithOptions("You are in offline");
     //  this.previousStatus = ConnectionStatusEnum.Offline;
       this.storage.get('networkConnectivity').then((data) => {
-        // console.log(data);
+    
       })
-      // }
+
     });
     this.network.onConnect().subscribe(() => {
       console.log("online")
       // if (this.previousStatus === ConnectionStatusEnum.Offline) {
       this.storage.set('networkConnectivity', true);
-   //   this.eventCtrl.publish('network:online');
+      this.eventCtrl.publish('network:online');
       this.ToastService.presentToastWithOptions("You are in online");
    //   this.previousStatus = ConnectionStatusEnum.Online;
       this.storage.get('networkConnectivity').then((data) => {
-        // console.log(data);
+  
       })
-      //  }
     });
   }
 

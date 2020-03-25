@@ -88,7 +88,7 @@ import * as _ from 'lodash';
 
     //comment when take buid start
 
-     this.networkType = "4G";
+    this.networkType = "4G";
 
     //end...
 
@@ -169,7 +169,6 @@ import * as _ from 'lodash';
       
         this.CrudServiceService.getData('login/login-details/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
-       
           if (result["status"] == 'success') {
 
             this.partiDetailsArray = result['data'];
@@ -194,8 +193,7 @@ import * as _ from 'lodash';
             } else {
               result['data'].viewOnlyAccess = false;
             }
-           // debugger;
-
+        
             this.isViewOnlyAccess = result['data'].viewOnlyAccess;
             this.storage.set('participantLogin', this.partiDetailsArray);
 
@@ -247,7 +245,6 @@ import * as _ from 'lodash';
 
   checkIsSynced() {
     this.storage.get('localShipmentForm').then((localShipmentForm) => {
-
       if (localShipmentForm.length != 0) {
         this.localShipmentArray = localShipmentForm;
         this.existingLabIndex = _.findIndex(localShipmentForm, {
@@ -255,7 +252,6 @@ import * as _ from 'lodash';
         });
 
         if (this.existingLabIndex != 1) {
-
           this.localStorageUnSyncedArray = localShipmentForm[this.existingLabIndex].shipmentArray;
           localShipmentForm[this.existingLabIndex].shipmentArray.forEach((localShipment, index) => {
             this.shippingsArray.forEach((shipmentAPI, index) => {
@@ -266,6 +262,7 @@ import * as _ from 'lodash';
 
             })
           })
+          console.log(this.localStorageUnSyncedArray);
         }
       }
     })

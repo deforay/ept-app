@@ -167,7 +167,7 @@ interface selectArray {
   isPartiQCAccess: boolean;
   isPartiEditRespDate: boolean;
   isPartiEditModeRec: boolean;
-  shipmentPanelForm:NgForm
+  shipmentPanelForm: NgForm
   invalidVlAssay: any;
   invalidTestReceiptDate: any;
   invalidTestDate: any;
@@ -206,16 +206,15 @@ interface selectArray {
       }
     })
     this.storage.get('participantLogin').then((participantLogin) => {
-        if (participantLogin) {
-          this.authToken = participantLogin.authToken;
-          this.loginID = participantLogin.id;
-          this.isPartiQCAccess = participantLogin.qcAccess;
-          this.isPartiEditRespDate = participantLogin.enableAddingTestResponseDate;
-          this.isPartiEditModeRec = participantLogin.enableChoosingModeOfReceipt;
-          this.getVLFormDetails();
-        }
+      if (participantLogin) {
+        this.authToken = participantLogin.authToken;
+        this.loginID = participantLogin.id;
+        this.isPartiQCAccess = participantLogin.qcAccess;
+        this.isPartiEditRespDate = participantLogin.enableAddingTestResponseDate;
+        this.isPartiEditModeRec = participantLogin.enableChoosingModeOfReceipt;
+        this.getVLFormDetails();
       }
-    )
+    })
   }
 
   dateFormat(dateObj) {
@@ -258,9 +257,9 @@ interface selectArray {
   bindVLData() {
 
     if (this.vlDataArray[0].vlData) {
-      if(this.vlDataArray[0].vlData.access.message){
+      if (this.vlDataArray[0].vlData.access.message) {
         this.viewAccessMessage = this.vlDataArray[0].vlData.access.message;
-        }
+      }
       this.selectedParticipantID = this.vlDataArray[0].participantId;
       this.selectedShipmentID = this.vlDataArray[0].shipmentId;
 
@@ -410,10 +409,10 @@ interface selectArray {
 
       // }
 
-      this.nextStepShipmentPanel('onload');
+      this.nextStepShipmentPanel('','onload');
       this.nextStepPTPanelTest('onload', this.ptPanelTest);
       this.nextStepOtherInfoPanel('onload');
-    
+
     }
 
     if (this.vlDataArray[0].vlData.access.status == "fail") {
@@ -429,12 +428,11 @@ interface selectArray {
     this.step = index;
   }
 
-  nextStepShipmentPanel(next) {
-
+  nextStepShipmentPanel(isShipmentValid,next) {
     if (this.isView == "true") {
       this.step = 2;
     }
-    if (next != 'onload' && this.isView == "false") {
+    if (next == 'onload' && this.isView == "false") {
       if (!this.vlassay) {
         this.invalidVlAssay = "true";
       }
@@ -484,8 +482,6 @@ interface selectArray {
       } else {
         this.validQC = "true";
       }
-
-    } else {
       if (this.vlassay && ((this.isSelectedOther == false) || (this.isSelectedOther == true && this.othervlassay))) {
         this.validVlAssay = "true";
       }
@@ -493,20 +489,22 @@ interface selectArray {
       if (this.qcDone && ((this.qcDone == 'no') || (this.qcDone == 'yes' && this.qcDate && this.qcDoneBy))) {
         this.validQC = "true";
       }
-    }
-
-    if (this.vlassay && this.testDate != undefined && (this.validVlAssay == "true") && this.assayExpDate != "Invalid Date" && this.assayLotNo && this.responseDate != undefined && (this.validQC == "true")) {
-      this.validShipmentDetails = true;
-    } else {
-      this.validShipmentDetails = false;
+      if (this.vlassay && this.testDate != undefined && (this.validVlAssay == "true") && this.assayExpDate != "Invalid Date" && this.assayLotNo && this.responseDate != undefined && (this.validQC == "true")) {
+        this.validShipmentDetails = true;
+      } else {
+        this.validShipmentDetails = false;
+      }
     }
 
     if (next == 'next' && this.isView == "false") {
-      if (this.validShipmentDetails == true) {
+      if(isShipmentValid==true){
+        this.validShipmentDetails=true;
         this.step = 2;
-      } else {
-        this.step = 1;
       }
+       else {
+        this.validShipmentDetails=false;
+          this.step = 1;
+        }
     } else {
       if (this.isView == "false") {
         if (this.validOtherInfo == false) {
@@ -524,9 +522,11 @@ interface selectArray {
     }
 
   }
-
+  nextStepPartiPanel(){
+    this.step = 1;
+  }
   nextStepPTPanelTest(next, ptPanelTest) {
-  debugger;
+
     if (this.isView == "true") {
       this.step = 3;
     }
@@ -543,11 +543,11 @@ interface selectArray {
     if (ptPanelTest == false) {
 
       this.ptPanelTestData['vlResult'].forEach((element, index) => {
-          if (element && this.mandatoryArray[index] == true) {
-            this.validVLResultCount = this.validVLResultCount + 1;
-          }
-        });
-      if (this.mandatoryTrueArray.length == this.validVLResultCount) {
+        if ((element || element == '0') && (this.mandatoryArray[index] == true)) {
+          this.validVLResultCount = this.validVLResultCount + 1;
+        }
+      });
+      if (this.mandatoryTrueArray.length <= this.validVLResultCount) {
         this.isValidPTPanel = true;
       } else {
         this.isValidPTPanel = false;
@@ -664,6 +664,7 @@ interface selectArray {
   }
 
   checkVlData(vldata, index) {
+    this.isNextStepPanelTest = true;
     this.vlResultArray[index] = vldata;
   }
 
@@ -674,14 +675,14 @@ interface selectArray {
   }
 
   submitViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
-  
+
     this.isNextStepPanelTest = true;
     shipmentPanelForm.control.markAllAsTouched();
     PTPanelTestForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
     this.nextStepOtherInfoPanel('submit');
     this.nextStepPTPanelTest('submit', this.ptPanelTest);
-    this.nextStepShipmentPanel('submit');
+    this.nextStepShipmentPanel(shipmentPanelForm.valid,'submit');
 
     if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.validOtherInfo == true) {
 
@@ -807,8 +808,8 @@ interface selectArray {
           }
         }
       }
-
-      if (this.network.type == 'none') {
+      console.log(this.viralLoadJSON);
+      if (this.network.type == 'none'||this.network.type == null) {
         this.viralLoadJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
 
