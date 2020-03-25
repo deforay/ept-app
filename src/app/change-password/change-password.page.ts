@@ -43,8 +43,8 @@ export class ChangePasswordPage implements OnInit {
   appVersionNumber: any;
   oldPswdFormControl = new FormControl('', [
     Validators.required,
-    PasswordValidator.pswdPatternValidation,
-    trimmedCharsValidator.checkTrimmedEightChars
+    //PasswordValidator.pswdPatternValidation,
+   // trimmedCharsValidator.checkTrimmedEightChars
   ]);
   newPswdFormControl = new FormControl('', [
     Validators.required,
@@ -67,7 +67,8 @@ export class ChangePasswordPage implements OnInit {
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
-    public alertService: AlertService) {
+    public alertService: AlertService,
+    private router: Router) {
       this.storage.get('appVersionNumber').then((appVersionNumber) => {
         if (appVersionNumber) {
           this.appVersionNumber = appVersionNumber;
@@ -107,14 +108,15 @@ export class ChangePasswordPage implements OnInit {
 
       this.CrudServiceService.postData('login/change-password',changePswdJson)
       .then(result => {
-        //   this.LoaderService.disMissLoading();
         if (result["status"] == 'success') {
-             console.log(result);
+          this.ToastService.presentToastWithOptions(result["message"]);
+          this.storage.set("isLogOut", true);
+          this.router.navigate(['/login']);
         }else{
-             console.log(result);
+          this.ToastService.presentToastWithOptions(result["message"]);
         }
       }, (err) => {
-        //    this.LoaderService.disMissLoading();
+       
       }); 
 
     }

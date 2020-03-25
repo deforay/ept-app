@@ -430,23 +430,24 @@
                             <div [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]">
                             </div>
                           </mat-label>
-                          <input matInput [(ngModel)]="ptPanelTestData.vlResult[k]" name="vl[{{k}}]" #vl="ngModel"
-                            
+                          <input matInput [(ngModel)]="ptPanelTestData.vlResult[k]" name="vl[{{k}}]" #vl="ngModel" 
+                         type="tel" 
                             placeholder="Viral Load (log10 copies/ml)"
                             [ngClass]="{ 'mat-form-field-invalid': isNextStepPanelTest==true && ptPanelTestData.controlArray.mandatory[i]==true && (!vlResultArray[k] || vlResultArray[k]=='') && (ptPanelTest==false || !ptPanelTest) }"
                             [disabled]="ptPanelTestData.tndArray[i]=='yes'||isView=='true'"
-                            [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest)">
+                            [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest)" class="vlResultInput">
 
                           <!-- [disabled]="ptPanelTestData.tndArray[i]=='yes'||isView=='true'"
                           
                             [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest) || ptPanelTestData.tndArray[i].disabled"-->
 
                             <!-- && !ptPanelTestData.vlResult[k]  -->
-                          <mat-error
-                          *ngIf="ptPanelTestData.controlArray.mandatory[i]==true && !vlresult && (ptPanelTest==false || !ptPanelTest)">
-                          Please Enter <span
-                            [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]"></span>
-                        </mat-error> 
+
+                        <mat-error
+                        *ngIf="ptPanelTestData.controlArray.mandatory[i]==true && !ptPanelTestData.vlResult[k] && (ptPanelTest==false || !ptPanelTest)">
+                        Please Enter <span
+                          [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]"></span>
+                      </mat-error> 
                         </mat-form-field>
                         <!-- <div class="errorMsg"
                           *ngIf="isNextStepPanelTest==true && ptPanelTestData.controlArray.mandatory[i]==true && (!vlResultArray[k] || vlResultArray[k]=='') && (ptPanelTest==false || !ptPanelTest)">
@@ -467,7 +468,7 @@
                       </p>
                       <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
                         [(ngModel)]="ptPanelTestData.tndArray[j]" [ngModelOptions]="{standalone: true}"
-                        (ngModelChange)="changeTND(j,ptPanelTestData.tndArray[j])"
+                        (ngModelChange)="changeTND(j,ptPanelTestData.tndArray[j])" name="tnd[{{j}}]" #tnd="ngModel"
                         [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest)"
                         [disabled]="isView=='true'">
 
@@ -533,7 +534,7 @@
         <mat-action-row>
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
           <button mat-button color="primary" type="submit"
-            (click)="checkVlArray()">Next</button>
+            (click)="nextStepPTPanelTest('next',ptPanelTest)">Next</button>
         </mat-action-row>
       </mat-expansion-panel>
     </form>

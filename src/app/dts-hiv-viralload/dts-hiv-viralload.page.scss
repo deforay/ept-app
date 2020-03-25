@@ -107,5 +107,7 @@ mat-radio-group {
 .login-full-width.grid-col-form.mat-text-area-field.mat-form-field-invalid {
     height: 75px !important;
 }
-
+.vlResultInput.mat-input-element:disabled{
+color: grey !important;
+}
 
