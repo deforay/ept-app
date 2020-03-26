@@ -6,12 +6,16 @@ import {  CrudServiceService,ToastService,LoaderService } from '../../app/servic
 import {
   Storage
 } from '@ionic/storage';
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { File } from '@ionic-native/file/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+
 @Component({
   selector: 'app-individual-report',
   templateUrl: './individual-report.page.html',
   styleUrls: ['./individual-report.page.scss'],
 })
-export class IndividualReportPage implements OnInit {
+export class IndividualReportPage {
   authToken: any;
   appVersionNumber:any;
   individualReports = [];
@@ -19,8 +23,11 @@ export class IndividualReportPage implements OnInit {
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
+    private iab: InAppBrowser,
     public LoaderService: LoaderService,
+    private ft: FileTransfer, private file: File,
     private router: Router) { 
+
       this.storage.get('appVersionNumber').then((appVersionNumber) => {
         if (appVersionNumber) {
          this.appVersionNumber=appVersionNumber;   
@@ -35,9 +42,34 @@ export class IndividualReportPage implements OnInit {
       })
     }
 
+    downloadReport(downloadLink) {
+   const fileTransfer: FileTransferObject = this.ft.create();
+      //let url = this.apiUrl+downloadLink;
+      let url = "https://www.w3.org/WAI/ER/tests/xhtml/testfiles/resources/pdf/dummy.pdf";
 
-  ngOnInit() {
-  }
+      // const browser = this.iab.create(url);
+
+      // browser.executeScript(...);
+      
+      // browser.insertCSS(...);
+      // browser.on('loadstop').subscribe(event => {
+      //    browser.insertCSS({ code: "body{color: red;" });
+      // });
+      
+      // browser.close();
+
+
+
+
+
+
+      let path = this.file.externalDataDirectory;
+      fileTransfer.download(url, path + 'file.pdf').then((entry) => {
+        console.log('download complete: ' + entry.toURL());
+      }, (error) => {
+        // handle error
+      });
+    }
   getIndividualReports(){
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
