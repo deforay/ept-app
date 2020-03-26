@@ -394,8 +394,6 @@ interface selectArray {
         } else {
           this.ptPanelTest = true;
         }
-
-        ;
       }
 
       if (this.vlDataArray[0].vlData.Heading4.status == true) {
@@ -822,7 +820,7 @@ interface selectArray {
         }
       }
       console.log(this.viralLoadJSON);
-      if (this.network.type == 'none') {
+      if (this.network.type == 'none'||this.network.type==null) {
         this.viralLoadJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
 

@@ -111,8 +111,16 @@ export class ChangePasswordPage implements OnInit {
         if (result["status"] == 'success') {
           this.ToastService.presentToastWithOptions(result["message"]);
           this.storage.set("isLogOut", true);
-          this.router.navigate(['/login']);
-        }else{
+          this.router.navigate(['/login'], {replaceUrl: true});
+        }
+        else if (result["status"] == "auth-fail") {
+
+          this.ToastService.presentToastWithOptions(result["message"]);
+          this.storage.set("isLogOut", true);
+          this.router.navigate(['/login'], {replaceUrl: true});
+
+        } else {
+
           this.ToastService.presentToastWithOptions(result["message"]);
         }
       }, (err) => {

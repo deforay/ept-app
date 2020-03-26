@@ -83,12 +83,12 @@ import * as _ from 'lodash';
   }
 
   ionViewWillEnter() {
-
+    
     this.networkType = this.network.type;
 
     //comment when take buid start
 
-    this.networkType = "4G";
+  // this.networkType = "4G";
 
     //end...
 
@@ -154,6 +154,9 @@ import * as _ from 'lodash';
       if (shipmentFormArray.length != 0) {
         this.shipmentFormArray = shipmentFormArray;
       }
+    })
+    this.storage.get('participantLogin').then((participantLogin) => {
+      this.isViewOnlyAccess = participantLogin.viewOnlyAccess;
     })
     this.checkIsSynced();
   }
