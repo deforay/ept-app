@@ -103,6 +103,7 @@ export class ChangePasswordPage implements OnInit {
       let changePswdJson = {
         "password": this.newPswdFormControl.value,
         "authToken": partiLoginResult.authToken,
+        "oldPassword":this.oldPswdFormControl.value,
         "appVersion": this.appVersionNumber
       }
 
