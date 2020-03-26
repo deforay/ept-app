@@ -22,7 +22,8 @@ import { Network } from '@ionic-native/network/ngx';
 import { NetworkService} from '../app/service/network.service';
 import { LocalShipmentFormService } from '../app/service/localShipmentForm/local-shipment-form.service';
 import { NgForm} from '@angular/forms';
- 
+import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
+import { File } from '@ionic-native/file/ngx';
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -51,6 +52,8 @@ import { NgForm} from '@angular/forms';
     Network,
     LocalShipmentFormService,
     Platform,
+    File,
+    FileTransfer,
     NgForm,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
