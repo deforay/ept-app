@@ -106,7 +106,7 @@ export class ChangePasswordPage implements OnInit {
         "appVersion": this.appVersionNumber
       }
 
-      this.CrudServiceService.postData('login/change-password',changePswdJson)
+      this.CrudServiceService.postData('/api/login/change-password',changePswdJson)
       .then(result => {
         if (result["status"] == 'success') {
           this.ToastService.presentToastWithOptions(result["message"]);

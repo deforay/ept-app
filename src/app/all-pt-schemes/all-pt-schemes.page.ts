@@ -167,7 +167,7 @@ import * as _ from 'lodash';
        
         this.authToken = partiLoginResult.authToken;
       
-        this.CrudServiceService.getData('login/login-details/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
+        this.CrudServiceService.getData('/api/login/login-details/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
           if (result["status"] == 'success') {
 
@@ -197,7 +197,7 @@ import * as _ from 'lodash';
             this.isViewOnlyAccess = result['data'].viewOnlyAccess;
             this.storage.set('participantLogin', this.partiDetailsArray);
 
-            this.CrudServiceService.getData('shipments/get/?authToken=' + result['data'].authToken + '&appVersion=' + this.appVersionNumber).then(result => {
+            this.CrudServiceService.getData('/api/shipments/get/?authToken=' + result['data'].authToken + '&appVersion=' + this.appVersionNumber).then(result => {
               this.skeltonArray = [];
               if (result["status"] == 'success') {
 
@@ -229,7 +229,7 @@ import * as _ from 'lodash';
 
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
-        this.CrudServiceService.getData('shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result1 => {
+        this.CrudServiceService.getData('/api/shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result1 => {
 
           if (result1["status"] == 'success') {
             this.shipmentFormArray = result1['data'];
@@ -360,7 +360,7 @@ import * as _ from 'lodash';
         "syncType": "group",
         "data": this.localStorageUnSyncedArray
       }
-      this.CrudServiceService.postData('shipments/save-form', this.syncShipmentsJSON)
+      this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON)
         .then((result) => {
 
           console.log(result);
@@ -411,7 +411,7 @@ import * as _ from 'lodash';
           "data": this.shipmentSubListArray
         }
         console.log(this.syncShipmentsJSON);
-        this.CrudServiceService.postData('shipments/save-form', this.syncShipmentsJSON)
+        this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON)
           .then((result) => {
 
             console.log(result);

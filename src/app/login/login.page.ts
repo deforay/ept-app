@@ -116,11 +116,11 @@ export class LoginPage implements OnInit {
     if (this.emailFormControl.invalid || this.pswdFormControl.invalid || this.serverHostFormControl.invalid) {} else {
       var apiUrl = '';
       if (this.serverHostFormControl.value.indexOf("https://") == 0 || this.serverHostFormControl.value.indexOf("Https://") == 0) {
-        apiUrl = this.serverHostFormControl.value + '/api/'
+        apiUrl = this.serverHostFormControl.value 
       } else if (this.serverHostFormControl.value.indexOf("http://") == 0 || this.serverHostFormControl.value.indexOf("Http://") == 0) {
-        apiUrl = this.serverHostFormControl.value + '/api/'
+        apiUrl = this.serverHostFormControl.value
       } else {
-        apiUrl = "https://" + this.serverHostFormControl.value + '/api/'
+        apiUrl = "https://" + this.serverHostFormControl.value
       }
 
       this.storage.set('apiUrl', apiUrl);
@@ -133,7 +133,7 @@ export class LoginPage implements OnInit {
               "key": this.pswdFormControl.value,
               "appVersion": this.appVersionNumber
             }
-            this.CrudServiceService.postData('login', loginJSON)
+            this.CrudServiceService.postData('/api/login', loginJSON)
               .then((result) => {
           
                 if (result["status"] == 'success') {
