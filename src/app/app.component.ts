@@ -137,6 +137,13 @@ export class AppComponent {
 
           this.alertService.presentAlertConfirm('e-PT', "Are you sure want to exit?", 'appExitAlert');
 
+        } else if (this.router.url === '/dts-hiv-serology' || this.router.url === '/dts-hiv-viralload' ||
+          this.router.url === '/dbs-eid') {
+
+          this.router.navigate(['/all-pt-schemes'], {
+            replaceUrl: true
+          });
+
         } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
 
           this.routerOutlet.pop();
