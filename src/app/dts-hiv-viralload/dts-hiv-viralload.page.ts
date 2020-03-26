@@ -830,7 +830,7 @@ interface selectArray {
 
         this.viralLoadJSON['data']['isSynced'] = 'true';
 
-        this.CrudServiceService.postData('shipments/save-form', this.viralLoadJSON).then((result) => {
+        this.CrudServiceService.postData('/api/shipments/save-form', this.viralLoadJSON).then((result) => {
 
             if (result["status"] == 'success') {
               this.ToastService.presentToastWithOptions(result['message']);

@@ -690,7 +690,7 @@ export class DTSHIVSerologyPage implements OnInit {
     } else {
 
       this.serologyJSON['data']['isSynced'] = 'true';
-      this.CrudServiceService.postData('shipments/save-form', this.serologyJSON).then((result) => {
+      this.CrudServiceService.postData('/api/shipments/save-form', this.serologyJSON).then((result) => {
           if (result["status"] == 'success') {
             this.ToastService.presentToastWithOptions(result['message']);
             this.router.navigate(['/all-pt-schemes']);

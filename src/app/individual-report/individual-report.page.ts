@@ -15,6 +15,7 @@ export class IndividualReportPage implements OnInit {
   authToken: any;
   appVersionNumber:any;
   individualReports = [];
+  apiUrl:string;
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -27,7 +28,13 @@ export class IndividualReportPage implements OnInit {
 
         }
       })
+      this.storage.get('apiUrl').then((url) => {
+        if (url) {
+         this.apiUrl = url;
+        }
+      })
     }
+
 
   ngOnInit() {
   }
@@ -35,7 +42,7 @@ export class IndividualReportPage implements OnInit {
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
         //   this.LoaderService.presentLoading();
-        this.CrudServiceService.getData('participant/get/?authToken=' + partiLoginResult.authToken+'&appVersion='+this.appVersionNumber)
+        this.CrudServiceService.getData('/api/participant/get/?authToken=' + partiLoginResult.authToken+'&appVersion='+this.appVersionNumber)
           .then(result => {
             //   this.LoaderService.disMissLoading();
             if (result["status"] == 'success') {
@@ -51,14 +58,12 @@ export class IndividualReportPage implements OnInit {
               this.ToastService.presentToastWithOptions(result["message"]);   
             }
           }, (err) => {
-            //    this.LoaderService.disMissLoading();
+            console.log(err)
           });
       }
     });
   }
-  download(item){
-console.log(item)
-  }
+ 
   ionViewWillEnter(){
  //   this.getIndividualReports();   
 

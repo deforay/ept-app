@@ -1,7 +1,7 @@
 .CardHeader{
-    padding: 3px;
-    background-color:#b4c0ff;
-    padding-left: 3%;
+    padding: 1px;
+    background-color: #53c2f5ba;
+    padding-left: 3px;
 }
 .schemeName{
     font-weight: 500;
@@ -10,6 +10,7 @@
     color: #000;
     margin: 5px;
 }
+
 .cardContent{
     padding-bottom: 5px;
 }
@@ -19,11 +20,21 @@
 .text-normal{
     color:black;
 }
+.text-center.native-btn{
+    font-size: 11.8px!important;
+    }
+ion-button.text-center.native-btn{
+    --background:#3c8dbc !important;
+    background:#3c8dbc !important;
+    border-radius: 6px;
+}
 ion-grid ion-row ion-col{
     padding:0 ;
-        p{
-            margin:3px;
-        }
+    p{
+        padding:0 ;
+        margin: 3px;
+        font-size: 13px !important;
+    }
     } 
     ion-grid ion-row ion-col:nth-child(3n){
         text-align: right;
