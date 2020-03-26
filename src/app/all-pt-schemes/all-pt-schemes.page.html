@@ -1,7 +1,9 @@
 <app-header [titleHeader]="'All Shipments'" [isMenuOrBackButton]="'menu'"></app-header>
 
 <ion-content>
-
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
   <ion-card *ngFor="let item of shippingsArray" class="eptCard">
     <ion-card-header class="CardHeader">
       <p text-wrap class="schemeName"> {{item.schemeName}}</p>
@@ -121,8 +123,8 @@
           </ion-col>
         </ion-row>
 
-        <ion-row>
-          <ion-col *ngIf="item.isSynced=='false'" size="12">
+        <ion-row  *ngIf="item.isSynced=='false'">
+          <ion-col size="12">
             <p text-wrap>
               <span class="text-title-color unSynced"> Unsynced shipment </span>
             </p>

@@ -158,7 +158,8 @@ interface selectArray {
   isNextStepPanelTest: boolean = false;
   isValidPTPanel: boolean = false;
   mandatoryArray = [];
-  validVLResultCount: number = 0;
+  validMandVLResultCount: number = 0;
+  validFloatVLResultCount: number = 0;
   mandatoryTrueArray = [];
   vlResultArray = [];
   vlresult: any;
@@ -179,7 +180,8 @@ interface selectArray {
   validQC: string;
   invalidQcDate: string;
   invalidQcDoneBy: string;
-
+  VlFloat: any;
+  validVlCount: any;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -359,8 +361,8 @@ interface selectArray {
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
         this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
         this.ptPanelTestData['vlResultSectionLabel'] = unescape(this.ptPanelTestArray['vlResultSectionLabel']);
-       
-       
+
+
         // this.ptPanelTestData['tndArray'][0]="no";
         this.ptPanelTestData['notes'] = this.ptPanelTestArray.note;
 
@@ -394,6 +396,8 @@ interface selectArray {
         } else {
           this.ptPanelTest = true;
         }
+
+        ;
       }
 
       if (this.vlDataArray[0].vlData.Heading4.status == true) {
@@ -541,23 +545,30 @@ interface selectArray {
 
     this.mandatoryArray = this.ptPanelTestData['controlArray'].mandatory;
     this.mandatoryTrueArray = this.mandatoryArray.filter(i => i == true);
-    this.validVLResultCount = 0;
+    this.validMandVLResultCount = 0;
+    this.validFloatVLResultCount = 0;
     this.isValidPTPanel = false;
 
     if (ptPanelTest == false) {
 
       this.ptPanelTestData['vlResult'].forEach((element, index) => {
 
-        let VlFloat=parseFloat(element);
-        if (VlFloat > 7) {
+        this.VlFloat = parseFloat(element);
+        if (this.VlFloat > 7) {
           this.ToastService.presentToastWithOptions("VL Result has to be between 1 and 7");
           return false;
         }
-        if ((element || element == '0') && (this.mandatoryArray[index] == true) && VlFloat <= 7) {
-          this.validVLResultCount = this.validVLResultCount + 1;
+        if ((element|| element=='0') && (this.mandatoryArray[index] == true) && this.VlFloat <= 7) {
+          this.validMandVLResultCount = this.validMandVLResultCount + 1;
+        }
+        if ((element || element=='0')&& this.VlFloat <= 7) {
+          this.validFloatVLResultCount = this.validFloatVLResultCount + 1;
         }
       });
-      if (this.mandatoryTrueArray.length <= this.validVLResultCount) {
+
+      this.validVlCount = this.ptPanelTestData['vlResult'].filter(vl => vl != "" || vl=='0');
+
+      if (this.mandatoryTrueArray.length <= this.validMandVLResultCount && this.validFloatVLResultCount == this.validVlCount.length) {
         this.isValidPTPanel = true;
       } else {
         this.isValidPTPanel = false;
@@ -820,7 +831,7 @@ interface selectArray {
         }
       }
       console.log(this.viralLoadJSON);
-      if (this.network.type == 'none'||this.network.type==null) {
+      if (this.network.type == 'none' || this.network.type == null) {
         this.viralLoadJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
 

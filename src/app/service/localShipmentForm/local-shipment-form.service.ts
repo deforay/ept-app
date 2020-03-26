@@ -12,6 +12,9 @@ import {
   Router,
 } from '@angular/router';
 import _ from "lodash";
+import {
+  LoadingController
+} from '@ionic/angular';
 @Injectable({
   providedIn: 'root'
 })
@@ -29,7 +32,10 @@ export class LocalShipmentFormService {
 
   constructor(private storage: Storage,
     public ToastService: ToastService,
-    private router: Router) {
+    private router: Router,
+    public LoaderService: LoaderService,
+    public loadingCtrl: LoadingController,
+    ) {
 
       this.storage.get('localShipmentForm').then((localShipmentForm) => {
         if (localShipmentForm== null) {
@@ -53,8 +59,13 @@ export class LocalShipmentFormService {
 
   }
 
-  offlineStoreShipmentForm(formJSON) {
+   async offlineStoreShipmentForm(formJSON) {
 
+    const loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      message: 'Please wait',
+    });
+    await loading.present();
 
     this.storage.get('localShipmentForm').then((localShipmentForm) => {
       if (localShipmentForm) {
@@ -110,5 +121,7 @@ export class LocalShipmentFormService {
         })
       }
     })
+    loading.dismiss();
+    
   }
 }

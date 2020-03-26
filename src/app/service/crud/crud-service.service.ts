@@ -15,6 +15,7 @@ import {
   map
 } from 'rxjs/operators';
 
+
 ///import 'rxjs/add/operator/map';
 
 @Injectable()
@@ -26,7 +27,7 @@ export class CrudServiceService {
     private storage: Storage,
       public loadingCtrl: LoadingController,
     //   public events: Events,
-    // public LoaderService: LoaderService
+   //  public LoaderService: LoaderService
   ) {
 
   }
@@ -42,7 +43,6 @@ export class CrudServiceService {
       message: 'Please wait',
     });
     await loading.present();
-
     return new Promise((resolve, reject) => {
 
       this.storage.get('apiUrl').then((url) => {

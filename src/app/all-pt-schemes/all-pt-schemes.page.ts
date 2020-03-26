@@ -83,12 +83,12 @@ import * as _ from 'lodash';
   }
 
   ionViewWillEnter() {
-    
+
     this.networkType = this.network.type;
 
     //comment when take buid start
 
-  // this.networkType = "4G";
+    // this.networkType = "4G";
 
     //end...
 
@@ -173,7 +173,6 @@ import * as _ from 'lodash';
         this.CrudServiceService.getData('/api/login/login-details/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
           if (result["status"] == 'success') {
-
             this.partiDetailsArray = result['data'];
 
             if (result['data'].enableAddingTestResponseDate == "yes") {
@@ -233,7 +232,7 @@ import * as _ from 'lodash';
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
         this.CrudServiceService.getData('/api/shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result1 => {
-
+        
           if (result1["status"] == 'success') {
             this.shipmentFormArray = result1['data'];
             this.storage.set("shipmentFormArray", this.shipmentFormArray);
@@ -248,6 +247,7 @@ import * as _ from 'lodash';
 
   checkIsSynced() {
     this.storage.get('localShipmentForm').then((localShipmentForm) => {
+    
       if (localShipmentForm.length != 0) {
         this.localShipmentArray = localShipmentForm;
         this.existingLabIndex = _.findIndex(localShipmentForm, {
@@ -455,4 +455,12 @@ import * as _ from 'lodash';
       })
     }
   }
+
+  doRefresh(event){
+    setTimeout(() => {
+      this.ionViewWillEnter();
+      event.target.complete();
+    }, 2000);
+  }
+
 }
