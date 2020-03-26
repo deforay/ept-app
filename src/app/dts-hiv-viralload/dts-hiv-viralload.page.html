@@ -540,8 +540,68 @@
     </form>
 
 
+     <!-- Custom Field panel starts-->
+
+     <form #customFieldsForm="ngForm" novalidate>
+
+      <mat-expansion-panel *ngIf="showCustomFieldData" [expanded]="step === 3"
+       (opened)="setStep(3)">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <ion-grid class="panelHeading">
+              <ion-row>
+                <ion-col size="10" class="grid-readonly-col">
+                  <span class="text-title-color">Custom Fields</span>
+                </ion-col>
+                <ion-col size="2" class="grid-readonly-col" *ngIf="isValidCustField==true">
+                  <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ion-grid>
+          <ion-row *ngIf="customFieldData.customField1Text">
+            <ion-col size="12"class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>{{customFieldData.customField1Text}}</mat-label>
+                <input matInput [(ngModel)]="customFieldData.customField1Val" 
+                placeholder="Enter {{customFieldData.customField1Text}}" #custField1="ngModel"
+                 name="custField1" [disabled]="isView=='true'">
+                <mat-error *ngIf="!customFieldData.customField1Val">
+                  {{customFieldData.customField1Text}} is required
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="customFieldData.customField2Text">
+            <ion-col size="12"class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>{{customFieldData.customField2Text}}</mat-label>
+                <input matInput [(ngModel)]="customFieldData.customField2Val" 
+                placeholder="Enter {{customFieldData.customField2Text}}" #custField2="ngModel"
+                 name="custField2" [disabled]="isView=='true'">
+                <mat-error *ngIf="!customFieldData.customField2Val">
+                  {{customFieldData.customField2Text}} is required
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+     
+        </ion-grid>
+        <mat-action-row>
+          <button mat-button color="primary" (click)="prevStep()">Previous</button>
+          <button mat-button color="warn"
+          type='submit' (click)="checkCustFieldPanel('next')">Next</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+      </form>
+
+      <!-- Custom Panel Ends-->
+ 
+
     <form #otherInfoPanelForm="ngForm" novalidate>
-      <mat-expansion-panel [expanded]="step === 3" (opened)="setStep(3)">
+      <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <ion-grid class="panelHeading">

@@ -281,22 +281,23 @@ input.mat-input-element{
 .matLabel{
     color: #000000 !important;
 }
-.mat-input-element:disabled{
-    color: #000000 !important;
-}
-.mat-select-disabled .mat-select-value{
-    color: #000000 !important;
-}
+// .mat-input-element:disabled{
+//     color: #000000 !important;
+// }
+// .mat-select-disabled .mat-select-value{
+//     color: #000000 !important;
+// }
 .mat-checkbox-disabled .mat-checkbox-label{
     color: #000000 !important;
 }
-.mat-radio-button.mat-radio-disabled .mat-radio-label-content{
-    color: #000000 !important;
-}
-.datepicker-input.mat-input-element:disabled,
-.datepicker-input.mat-input-element::placeholder{
-   color: #000000 !important;
-}
+// .mat-radio-button.mat-radio-disabled .mat-radio-label-content{
+//     color: #000000 !important;
+// }
+// .datepicker-input.mat-input-element:disabled,
+// .datepicker-input.mat-input-element::placeholder{
+//    color: #000000 !important;
+// }
+
 .mat-form-field-appearance-outline .mat-form-field-outline-thick {
     color: #3c8dbc;
 }

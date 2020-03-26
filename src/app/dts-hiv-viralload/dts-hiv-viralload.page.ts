@@ -163,7 +163,6 @@ interface selectArray {
   mandatoryTrueArray = [];
   vlResultArray = [];
   vlresult: any;
-  vlResultForm = [];
   vlresultdata: any;
   isPartiQCAccess: boolean;
   isPartiEditRespDate: boolean;
@@ -182,6 +181,10 @@ interface selectArray {
   invalidQcDoneBy: string;
   VlFloat: any;
   validVlCount: any;
+  showCustomFieldData: boolean;
+  isValidCustField: boolean = false;
+  customFieldData = {};
+
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -274,13 +277,10 @@ interface selectArray {
 
         this.shipmentsDetailsArray = this.vlDataArray[0].vlData.Heading2.data;
 
-        if (this.shipmentsDetailsArray['testReceiptDate']) {
-          this.testReceiptDate = new Date(this.shipmentsDetailsArray['testReceiptDate']);
-        }
+        this.testReceiptDate = this.shipmentsDetailsArray['testReceiptDate'] ? new Date(this.shipmentsDetailsArray['testReceiptDate']) : '';
 
-        if (this.shipmentsDetailsArray['sampleRehydrationDate']) {
-          this.sampleRhdDate = new Date(this.shipmentsDetailsArray['sampleRehydrationDate']);
-        }
+
+        this.sampleRhdDate = this.shipmentsDetailsArray['sampleRehydrationDate'] ? new Date(this.shipmentsDetailsArray['sampleRehydrationDate']) : '';
 
         if (this.shipmentsDetailsArray['testDate']) {
           this.testDate = new Date(this.shipmentsDetailsArray['testDate']);
@@ -347,14 +347,6 @@ interface selectArray {
         //   this.vlResultArray=[];
         //   this.vlResultArray = [...this.ptPanelTestArray['vlResult']];
         //    this.vlResultArray = this.ptPanelTestArray['vlResult'];
-        this.vlResultForm = [];
-
-
-        // this.ptPanelTestData['vlResult'] = [];
-        // this.ptPanelTestData['vlResult'][0] = "5.60";
-        // this.ptPanelTestData['vlResult'][1] = "6.80";
-        // this.ptPanelTestData['vlResult'][2] = "3.90";
-        // this.ptPanelTestData['vlResult'][3] = "0.00";
 
         // this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
         this.ptPanelTestData['tndArray'] = [...this.ptPanelTestArray['tndReferenceRadioSelected']];
@@ -413,13 +405,21 @@ interface selectArray {
         }
       }
 
-      // if (this.vlDataArray[0].vlData.customFields.status == true) {
-
-
-      // }
+      if (this.vlDataArray[0].vlData.customFields) {
+        if (this.vlDataArray[0].vlData.customFields.status == true) {
+          this.showCustomFieldData = true;
+          this.customFieldData['customField1Text'] = this.vlDataArray[0].vlData.customFields.data.customField1Text ? this.vlDataArray[0].vlData.customFields.data.customField1Text : '';
+          this.customFieldData['customField1Val'] = this.vlDataArray[0].vlData.customFields.data.customField1Val ? this.vlDataArray[0].vlData.customFields.data.customField1Val : '';
+          this.customFieldData['customField2Text'] = this.vlDataArray[0].vlData.customFields.data.customField2Text ? this.vlDataArray[0].vlData.customFields.data.customField2Text : '';
+          this.customFieldData['customField2Val'] = this.vlDataArray[0].vlData.customFields.data.customField2Val ? this.vlDataArray[0].vlData.customFields.data.customField2Val : '';
+        } else {
+          this.showCustomFieldData = false;
+        }
+      }
 
       this.nextStepShipmentPanel('', 'onload');
       this.nextStepPTPanelTest('onload', this.ptPanelTest);
+      this.checkCustFieldPanel('onload');
       this.nextStepOtherInfoPanel('onload');
 
     }
@@ -438,64 +438,18 @@ interface selectArray {
   }
 
   nextStepShipmentPanel(isShipmentValid, next) {
+ 
     if (this.isView == "true") {
       this.step = 2;
     }
-    if (next == 'onload' && this.isView == "false") {
-      if (!this.vlassay) {
-        this.invalidVlAssay = "true";
-      }
-
-      if (this.testDate == undefined) {
-        this.invalidTestDate = "true";
-      }
-
-      if (this.assayExpDate == undefined) {
-        this.invalidAssayExpDate = "true";
-      }
+    if (next == 'onload' && this.isView == "false" || this.isView == "true") {
 
       this.validVlAssay = "";
-
-      if (this.isSelectedOther == true) {
-        if (!this.othervlassay) {
-          this.invalidOthervlassay = "true";
-        } else {
-          this.validVlAssay = "true";
-        }
-      } else {
-        this.validVlAssay = "true";
-      }
-
-      if (!this.assayLotNo) {
-        this.invalidVlAssayLotNo = "true";
-      }
-
-      if (this.responseDate == undefined) {
-        this.invalidResponseDate = "true";
-      }
-
       this.validQC = "";
-
-      if (this.qcDone == 'yes') {
-        if (this.qcDate == undefined) {
-          this.invalidQcDate = "true";
-        }
-
-        if (!this.qcDoneBy) {
-          this.invalidQcDoneBy = "true";
-        }
-
-        if (this.qcDate && this.qcDoneBy) {
-          this.validQC = "true";
-        }
-      } else {
-        this.validQC = "true";
-      }
-      if (this.vlassay && ((this.isSelectedOther == false) || (this.isSelectedOther == true && this.othervlassay))) {
+      if (this.vlassay && (this.isSelectedOther == false) || (this.isSelectedOther == true && this.othervlassay)) {
         this.validVlAssay = "true";
       }
-
-      if (this.qcDone && ((this.qcDone == 'no') || (this.qcDone == 'yes' && this.qcDate && this.qcDoneBy))) {
+      if (this.qcDone && (this.qcDone == 'no') || (this.qcDone == 'yes' && this.qcDate && this.qcDoneBy)) {
         this.validQC = "true";
       }
       if (this.vlassay && this.testDate != undefined && (this.validVlAssay == "true") && this.assayExpDate != "Invalid Date" && this.assayLotNo && this.responseDate != undefined && (this.validQC == "true")) {
@@ -503,8 +457,8 @@ interface selectArray {
       } else {
         this.validShipmentDetails = false;
       }
-    }
 
+    }
     if (next == 'next' && this.isView == "false") {
       if (isShipmentValid == true) {
         this.validShipmentDetails = true;
@@ -513,23 +467,39 @@ interface selectArray {
         this.validShipmentDetails = false;
         this.step = 1;
       }
-    } else {
-      if (this.isView == "false") {
-        if (this.validOtherInfo == false) {
-          this.step = 3;
-        }
-
-        if (this.isValidPTPanel == false) {
-          this.step = 2;
-        }
-
-        if (this.validShipmentDetails == false) {
-          this.step = 1;
-        }
+    }
+    if (next == 'submit' && this.isView == "false") {
+      if (isShipmentValid == true) {
+        this.validShipmentDetails = true;
+        this.step = 2;
+      } else {
+        this.validShipmentDetails = false;
+        this.step = 1;
       }
+      this.openInvalidPanel();
     }
 
   }
+
+  openInvalidPanel() {
+
+    if (this.validOtherInfo == false) {
+      this.step = 4;
+    }
+
+    if (this.isValidCustField == false) {
+      this.step = 3;
+    }
+
+    if (this.isValidPTPanel == false) {
+      this.step = 2;
+    }
+
+    if (this.validShipmentDetails == false) {
+      this.step = 1;
+    }
+  }
+
   nextStepPartiPanel() {
     this.step = 1;
   }
@@ -538,10 +508,6 @@ interface selectArray {
     if (this.isView == "true") {
       this.step = 3;
     }
-
-    // this.vlResultArray.forEach((vlElement, index) => {
-    //   this.ptPanelTestData['vlResult'][index] = vlElement;
-    // });
 
     this.mandatoryArray = this.ptPanelTestData['controlArray'].mandatory;
     this.mandatoryTrueArray = this.mandatoryArray.filter(i => i == true);
@@ -555,18 +521,18 @@ interface selectArray {
 
         this.VlFloat = parseFloat(element);
         if (this.VlFloat > 7) {
-          this.ToastService.presentToastWithOptions("VL Result has to be between 1 and 7");
+          this.ToastService.presentToastWithOptions("VL Result should be between 1 and 7");
           return false;
         }
-        if ((element|| element=='0') && (this.mandatoryArray[index] == true) && this.VlFloat <= 7) {
+        if ((element || element == '0') && (this.mandatoryArray[index] == true) && this.VlFloat <= 7) {
           this.validMandVLResultCount = this.validMandVLResultCount + 1;
         }
-        if ((element || element=='0')&& this.VlFloat <= 7) {
+        if ((element || element == '0') && this.VlFloat <= 7) {
           this.validFloatVLResultCount = this.validFloatVLResultCount + 1;
         }
       });
 
-      this.validVlCount = this.ptPanelTestData['vlResult'].filter(vl => vl != "" || vl=='0');
+      this.validVlCount = this.ptPanelTestData['vlResult'].filter(vl => vl != "" || vl == '0');
 
       if (this.mandatoryTrueArray.length <= this.validMandVLResultCount && this.validFloatVLResultCount == this.validVlCount.length) {
         this.isValidPTPanel = true;
@@ -587,59 +553,22 @@ interface selectArray {
       } else {
         this.step = 2;
       }
-    } else {
-      if (this.isView == "false") {
-        if (this.validOtherInfo == false) {
-          this.step = 3;
-        }
-
-        if (this.isValidPTPanel == false) {
-          this.step = 2;
-        }
-
-        if (this.validShipmentDetails == false) {
-          this.step = 1;
-        }
-      }
+    }
+    if (next == 'submit' && this.isView == "false") {
+      this.openInvalidPanel();
     }
   }
 
   nextStepOtherInfoPanel(event) {
 
-    if (event != 'onload') {
-      if (!this.supReview) {
-        this.invalidSupReview = "true";
-      }
-
-      this.validSupReview = "";
-
-      if (this.supReview == "yes") {
-        if (!this.supName) {
-          this.invalidSupName = "true";
-        }
-
-        if (this.supName) {
-          this.validSupReview = "true";
-        }
-      } else {
-        this.validSupReview = "true";
-      }
-
-      if (this.supReview && this.validSupReview == "true") {
-        this.validOtherInfo = true;
-      } else {
-        this.validOtherInfo = false;
-      }
+    if (this.supReview && (this.supReview == "no") || (this.supReview == 'yes' && this.supName)) {
+      this.validOtherInfo = true;
     } else {
-      this.step = 0;
-
-      if (this.supReview && ((this.supReview == "no") || (this.supReview == 'yes' && this.supName))) {
-        this.validOtherInfo = true;
-      } else {
-        this.validOtherInfo = false;
-      }
+      this.validOtherInfo = false;
     }
-
+    if (event == 'onload') {
+      this.step = 0;
+    }
   }
 
   prevStep() {
@@ -684,17 +613,31 @@ interface selectArray {
     }
   }
 
-  //  checkVlData(vldata, index) {
-  //  this.isNextStepPanelTest = true;
-  //  this.vlResultArray[index] = vldata;
-  //}
+  checkCustFieldPanel(params) {
 
-  // checkVlArray() {
-
-  //  this.vlResultArray.forEach((vlElement, index) => {
-  //   this.ptPanelTestData['vlResult'][index] = vlElement;
-  // });
-  //}
+    if (this.customFieldData['customField1Text']) {
+      if (!this.customFieldData['customField1Val']) {
+        this.isValidCustField = false;
+      } else {
+        if (this.customFieldData['customField2Text']) {
+          if (!this.customFieldData['customField2Val']) {
+            this.isValidCustField = false;
+          } else {
+            this.isValidCustField = true;
+          }
+        } else {
+          this.isValidCustField = true;
+        }
+      }
+    }
+    if (params == 'next') {
+      this.step = 4;
+    } else if (params == 'submit') {
+      if (this.isValidCustField == true) {
+        this.step = 4;
+      }
+    } else {}
+  }
 
   submitViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
 
@@ -703,6 +646,7 @@ interface selectArray {
     PTPanelTestForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
     this.nextStepOtherInfoPanel('submit');
+    this.checkCustFieldPanel('submit');
     this.nextStepPTPanelTest('submit', this.ptPanelTest);
     this.nextStepShipmentPanel(shipmentPanelForm.valid, 'submit');
 
@@ -728,7 +672,6 @@ interface selectArray {
       }
 
       this.updatedStatus = this.vlDataArray[0].updatedStatus;
-
       this.viralLoadJSON = {
 
         "authToken": this.authToken,
@@ -766,18 +709,18 @@ interface selectArray {
               "data": {
                 "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
                 "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
-                "testReceiptDate": this.dateFormat(new Date(this.testReceiptDate)),
-                "sampleRehydrationDate": this.dateFormat(new Date(this.sampleRhdDate)),
-                "testDate": this.dateFormat(new Date(this.testDate)),
+                "testReceiptDate": this.testReceiptDate?this.dateFormat(new Date(this.testReceiptDate)):'',
+                "sampleRehydrationDate": this.sampleRhdDate?this.dateFormat(new Date(this.sampleRhdDate)):'',
+                "testDate": this.testDate?this.dateFormat(new Date(this.testDate)):'',
                 "vlAssaySelect": this.shipmentsDetailsArray['vlAssaySelect'],
                 "vlAssaySelected": this.vlassay,
                 "otherAssay": this.othervlassay,
                 "specimenVolume": this.specVolTest,
-                "assayExpirationDate": this.dateFormat(new Date(this.assayExpDate)),
+                "assayExpirationDate": this.assayExpDate?this.dateFormat(new Date(this.assayExpDate)):'',
                 "assayLotNumber": this.assayLotNo,
-                "responseDate": this.dateFormat(new Date(this.responseDate)),
+                "responseDate": this.responseDate?this.dateFormat(new Date(this.responseDate)):'',
                 "modeOfReceiptSelect": this.modeOfReceiptArray,
-                "modeOfReceiptSelected": this.receiptmode,
+                "modeOfReceiptSelected": this.receiptmode?this.receiptmode:'',
                 "qcData": {
                   "qcRadioSelected": this.qcDone,
                   "qcDate": this.formattedQCDate,
@@ -825,6 +768,15 @@ interface selectArray {
                 "supervisorReviewSelected": this.supReview,
                 "approvalInputText": this.supName,
                 "comments": this.comments
+              }
+            },
+            "customFields": {
+              "status": this.showCustomFieldData,
+              "data": {
+                "customField1Text": this.customFieldData['customField1Text'],
+                "customField1Val": this.customFieldData['customField1Val'],
+                "customField2Text": this.customFieldData['customField2Text'],
+                "customField2Val": this.customFieldData['customField2Val']
               }
             }
           }

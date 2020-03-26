@@ -9,7 +9,13 @@
     <mat-expansion-panel *ngIf="showParticipantData" [expanded]="step === 0" (opened)="setStep(0)">
       <mat-expansion-panel-header>
         <mat-panel-title>
-          Participant Details
+          <ion-grid class="panelHeading">
+            <ion-row>
+              <ion-col size="12" class="grid-readonly-col">
+                <span class="text-title-color">Participant Details</span>
+              </ion-col>
+            </ion-row>
+          </ion-grid>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
