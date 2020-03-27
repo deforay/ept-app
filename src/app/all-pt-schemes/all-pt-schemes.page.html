@@ -6,14 +6,14 @@
   </ion-refresher>
   <ion-card *ngFor="let item of shippingsArray" class="eptCard">
     <ion-card-header class="CardHeader">
-      <p text-wrap class="schemeName"> {{item.schemeName}}</p>
+      <p text-wrap class="schemeName"> {{item.schemeName}} {{networkType}}</p>
     </ion-card-header>
     <ion-card-content class="cardContent">
       <ion-grid class="shipmentGrid">
         <ion-row *ngIf="item.shipmentDate">
           <ion-col size="5">
             <p text-wrap>
-              <span class="text-title-color">Shipment Date </span>
+              <span class="text-title-color">Shipment Date</span>
             </p>
           </ion-col>
           <ion-col size="1">
@@ -123,7 +123,7 @@
           </ion-col>
         </ion-row>
 
-        <ion-row  *ngIf="item.isSynced=='false'">
+        <ion-row *ngIf="item.isSynced=='false'">
           <ion-col size="12">
             <p text-wrap>
               <span class="text-title-color unSynced"> Unsynced shipment </span>
@@ -146,7 +146,7 @@
               class="text-center native-btn" (click)="goToTestForm(item,'true')">View Response
             </ion-button>
           </ion-col>
-          
+
         </ion-row>
 
       </ion-grid>
@@ -212,11 +212,11 @@
 </ion-content>
 
 
-<ion-footer *ngIf="localStorageUnSyncedArray.length!=0&& networkType!='none'">
-  <ion-toolbar>
-    <ion-button expand="full" class="text-center native-btn syncAll" (click)="syncShipments()">
-      <ion-icon ios="ios-sync" md="md-sync"></ion-icon>
-      Sync All ({{localStorageUnSyncedArray.length}})
-    </ion-button>
-  </ion-toolbar>
-</ion-footer>
+  <ion-footer *ngIf="localStorageUnSyncedArray.length!=0 && networkType!='none'">
+    <ion-toolbar>
+      <ion-button expand="full" class="text-center native-btn syncAll" (click)="syncShipments()">
+        <ion-icon ios="ios-sync" md="md-sync"></ion-icon>
+        Sync All ({{localStorageUnSyncedArray.length}})
+      </ion-button>
+    </ion-toolbar>
+  </ion-footer>

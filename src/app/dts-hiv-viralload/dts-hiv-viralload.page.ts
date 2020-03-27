@@ -184,6 +184,8 @@ interface selectArray {
   showCustomFieldData: boolean;
   isValidCustField: boolean = false;
   customFieldData = {};
+  validResponseDate: boolean = false;
+  validModeOfRec: boolean = false;
 
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -293,20 +295,29 @@ interface selectArray {
         if (this.shipmentsDetailsArray['specimenVolume']) {
           this.specVolTest = this.shipmentsDetailsArray['specimenVolume'];
         }
-
+    
         this.isQCDoneShow = this.isPartiQCAccess;
 
         if (this.isPartiQCAccess == true) {
           if (this.isQCDoneShow == true) {
-            this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
-            this.qcDone = this.shipmentsDetailsArray.qcData['qcRadioSelected'] ? this.shipmentsDetailsArray.qcData['qcRadioSelected'] : '';
-            if (this.shipmentsDetailsArray.qcData.qcDate) {
-              this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
+            if (this.shipmentsDetailsArray.qcData.status == true) {
+              this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
+              this.qcDone = this.shipmentsDetailsArray.qcData['qcRadioSelected'] ? this.shipmentsDetailsArray.qcData['qcRadioSelected'] : '';
+              if (this.shipmentsDetailsArray.qcData.qcDate) {
+                this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
+              }
+              this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
             }
-            this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
           }
         }
+        else{
+          this.isQCDoneShow = false;
+          this.qcDone = 'no';
+          this.qcDate = '';
+          this.qcDoneBy = ''; 
+          this.qcRadioArray=this.shipmentsDetailsArray.qcData.qcRadio;
 
+        }
         if (this.isPartiEditModeRec == true) {
           if (this.shipmentsDetailsArray['modeOfReceiptSelect']) {
             this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'];
@@ -438,7 +449,7 @@ interface selectArray {
   }
 
   nextStepShipmentPanel(isShipmentValid, next) {
- 
+
     if (this.isView == "true") {
       this.step = 2;
     }
@@ -449,10 +460,29 @@ interface selectArray {
       if (this.vlassay && (this.isSelectedOther == false) || (this.isSelectedOther == true && this.othervlassay)) {
         this.validVlAssay = "true";
       }
-      if (this.qcDone && (this.qcDone == 'no') || (this.qcDone == 'yes' && this.qcDate && this.qcDoneBy)) {
+      if (this.isQCDoneShow == true) {
+        if (this.qcDone && this.qcDone == 'no' && this.isQCDoneShow || (this.qcDone == 'yes' && this.qcDate && this.qcDoneBy && this.isQCDoneShow)) {
+          this.validQC = "true";
+        }
+      } else {
         this.validQC = "true";
       }
-      if (this.vlassay && this.testDate != undefined && (this.validVlAssay == "true") && this.assayExpDate != "Invalid Date" && this.assayLotNo && this.responseDate != undefined && (this.validQC == "true")) {
+      if (this.isPartiEditRespDate == false) {
+        this.validResponseDate = true;
+      } else {
+        if (this.responseDate) {
+          this.validResponseDate = true;
+        }
+      }
+      if (this.isPartiEditModeRec == true) {
+        if (this.receiptmode) {
+          this.validModeOfRec = true;
+        }
+      } else {
+        this.validModeOfRec = true;
+      }
+
+      if (this.vlassay && this.testDate != undefined && this.validVlAssay == "true" && this.assayExpDate != "Invalid Date" && this.assayLotNo && this.validResponseDate == true && this.validQC == "true" && this.validModeOfRec == true && this.testReceiptDate && this.sampleRhdDate) {
         this.validShipmentDetails = true;
       } else {
         this.validShipmentDetails = false;
@@ -709,18 +739,18 @@ interface selectArray {
               "data": {
                 "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
                 "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
-                "testReceiptDate": this.testReceiptDate?this.dateFormat(new Date(this.testReceiptDate)):'',
-                "sampleRehydrationDate": this.sampleRhdDate?this.dateFormat(new Date(this.sampleRhdDate)):'',
-                "testDate": this.testDate?this.dateFormat(new Date(this.testDate)):'',
+                "testReceiptDate": this.testReceiptDate ? this.dateFormat(new Date(this.testReceiptDate)) : '',
+                "sampleRehydrationDate": this.sampleRhdDate ? this.dateFormat(new Date(this.sampleRhdDate)) : '',
+                "testDate": this.testDate ? this.dateFormat(new Date(this.testDate)) : '',
                 "vlAssaySelect": this.shipmentsDetailsArray['vlAssaySelect'],
                 "vlAssaySelected": this.vlassay,
                 "otherAssay": this.othervlassay,
-                "specimenVolume": this.specVolTest,
-                "assayExpirationDate": this.assayExpDate?this.dateFormat(new Date(this.assayExpDate)):'',
+                "specimenVolume": this.specVolTest?this.specVolTest:'',
+                "assayExpirationDate": this.assayExpDate ? this.dateFormat(new Date(this.assayExpDate)) : '',
                 "assayLotNumber": this.assayLotNo,
-                "responseDate": this.responseDate?this.dateFormat(new Date(this.responseDate)):'',
+                "responseDate": this.responseDate ? this.dateFormat(new Date(this.responseDate)) : '',
                 "modeOfReceiptSelect": this.modeOfReceiptArray,
-                "modeOfReceiptSelected": this.receiptmode?this.receiptmode:'',
+                "modeOfReceiptSelected": this.receiptmode ? this.receiptmode : '',
                 "qcData": {
                   "qcRadioSelected": this.qcDone,
                   "qcDate": this.formattedQCDate,
@@ -783,7 +813,7 @@ interface selectArray {
         }
       }
       console.log(this.viralLoadJSON);
-      if (this.network.type == 'none' || this.network.type == null) {
+      if (this.network.type == 'none' || this.network.type==null) {
         this.viralLoadJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
 

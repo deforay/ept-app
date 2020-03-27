@@ -103,7 +103,9 @@ mat-radio-group {
 .login-full-width.grid-col-form.mat-form-field-invalid {
     height: 65px !important;
 }
-
+.login-full-width.grid-col-form.mat-form-field-invalid.sampleRehydrationDate{
+    height: 75px !important;
+}
 .login-full-width.grid-col-form.mat-text-area-field.mat-form-field-invalid {
     height: 75px !important;
 }
