@@ -123,7 +123,7 @@ export class LoginPage implements OnInit {
         apiUrl = "https://" + this.serverHostFormControl.value
       }
 
-      this.storage.set('apiUrl', apiUrl);
+      this.storage.set('apiUrl', apiUrl.trim());
       this.storage.get('appVersionNumber').then((appVersionNumber) => {
         if (appVersionNumber) {
           this.appVersionNumber = appVersionNumber;

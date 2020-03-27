@@ -295,12 +295,9 @@ interface selectArray {
         if (this.shipmentsDetailsArray['specimenVolume']) {
           this.specVolTest = this.shipmentsDetailsArray['specimenVolume'];
         }
-    
-        this.isQCDoneShow = this.isPartiQCAccess;
-
         if (this.isPartiQCAccess == true) {
-          if (this.isQCDoneShow == true) {
             if (this.shipmentsDetailsArray.qcData.status == true) {
+              this.isQCDoneShow = true;
               this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
               this.qcDone = this.shipmentsDetailsArray.qcData['qcRadioSelected'] ? this.shipmentsDetailsArray.qcData['qcRadioSelected'] : '';
               if (this.shipmentsDetailsArray.qcData.qcDate) {
@@ -308,7 +305,13 @@ interface selectArray {
               }
               this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
             }
-          }
+            else{
+              this.isQCDoneShow = false;
+              this.qcDone = 'no';
+              this.qcDate = '';
+              this.qcDoneBy = ''; 
+              this.qcRadioArray=this.shipmentsDetailsArray.qcData.qcRadio;
+            }
         }
         else{
           this.isQCDoneShow = false;
@@ -316,7 +319,6 @@ interface selectArray {
           this.qcDate = '';
           this.qcDoneBy = ''; 
           this.qcRadioArray=this.shipmentsDetailsArray.qcData.qcRadio;
-
         }
         if (this.isPartiEditModeRec == true) {
           if (this.shipmentsDetailsArray['modeOfReceiptSelect']) {
@@ -512,13 +514,9 @@ interface selectArray {
   }
 
   openInvalidPanel() {
-
+debugger;
     if (this.validOtherInfo == false) {
       this.step = 4;
-    }
-
-    if (this.isValidCustField == false) {
-      this.step = 3;
     }
 
     if (this.isValidPTPanel == false) {
@@ -644,7 +642,7 @@ interface selectArray {
   }
 
   checkCustFieldPanel(params) {
-
+debugger;
     if (this.customFieldData['customField1Text']) {
       if (!this.customFieldData['customField1Val']) {
         this.isValidCustField = false;
@@ -662,11 +660,7 @@ interface selectArray {
     }
     if (params == 'next') {
       this.step = 4;
-    } else if (params == 'submit') {
-      if (this.isValidCustField == true) {
-        this.step = 4;
-      }
-    } else {}
+    } 
   }
 
   submitViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
@@ -682,7 +676,7 @@ interface selectArray {
 
     if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.validOtherInfo == true) {
 
-      this.step = 3;
+      this.step = 4;
 
       this.isViralLoadFormValid = true;
       console.log(this.isViralLoadFormValid);
@@ -813,7 +807,7 @@ interface selectArray {
         }
       }
       console.log(this.viralLoadJSON);
-      if (this.network.type == 'none' || this.network.type==null) {
+      if (this.network.type == 'none') {
         this.viralLoadJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
 

@@ -303,7 +303,7 @@
             </ion-col>
           </ion-row>
 
-          <ion-row *ngIf="isQCDoneShow">
+          <ion-row *ngIf="isQCDoneShow && isPartiQCAccess">
             <ion-col size="12">
               <mat-label class="matLabel" style="margin-left: 10px;font-size: 13px;">QC Done</mat-label>
               <mat-radio-group aria-labelledby="example-radio-group-label" class="login-full-width grid-col-form"
@@ -317,7 +317,7 @@
           </ion-row>
 
 
-          <ion-row *ngIf="isQCDoneShow && qcDone=='yes'">
+          <ion-row *ngIf="isQCDoneShow && qcDone=='yes' && isPartiQCAccess">
             <ion-col size="12">
               <mat-form-field class="login-full-width grid-col-form"
                 [ngClass]="{ 'mat-form-field-invalid':!qcDate && isView==false }" appearance="outline">
