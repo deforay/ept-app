@@ -389,11 +389,11 @@
        </form>
        </mat-card-content>
 </mat-card>
+<form #sampleDetailsForm="ngForm" novalidate> 
 
     <mat-card class="main-card-panel" *ngIf="showSampleData">
       <mat-card-title> Sample Details</mat-card-title>
       <mat-card-content>
-    <form #SampleDetailsForm="ngForm" novalidate> 
       <div *ngFor="let sampleName of samplesNameArr;let i = index;">
         <mat-expansion-panel *ngIf="showSampleData" [expanded]="step === i+testKitIndex+2" (opened)="setStep(i+testKitIndex+2)">        
           <mat-expansion-panel-header>
@@ -479,13 +479,14 @@
                 *ngIf="sampleDetailsArray.resultsText[3]">
                   <mat-label>{{sampleDetailsArray.resultsText[3]}}</mat-label>
                   <mat-select [(ngModel)]="finalResultArr[i]"
-                  name="finalResult_[{{i}}]" #finalResult="ngModel" [disabled]="isView=='true'">               
+                  name="finalResultOf_[{{i}}]" #finalResultOf="ngModel" [disabled]="isView=='true'"  
+                  [required]="samplesArray.mandatory[i]==true">               
                     <mat-option>--Select--</mat-option>
                     <mat-option *ngFor="let item of sampleDetailsArray[sampleName]['Final-Result'].data" [value]="item.value">
                       {{item.show}}
                     </mat-option>
                   </mat-select>                      
-                 <!-- <mat-error *ngIf="samplesArray.mandatory[i]==true && !finalResultArr[i]">Please Enter {{sampleDetailsArray.resultsText[3]}}</mat-error> -->
+                 <mat-error *ngIf="samplesArray.mandatory[i]==true && !finalResultArr[i]">Please Enter {{sampleDetailsArray.resultsText[3]}}</mat-error>
                 </mat-form-field>
               </ion-col>
             </ion-row>
@@ -495,17 +496,18 @@
               <!--    [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
                  !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
               <ion-col  size="12" class="grid-readonly-col">
-                <mat-form-field  class="login-full-width grid-col-form"  appearance="outline"              
+                <mat-form-field  class="login-full-width grid-col-form"  appearance="outline"             
                 *ngIf="sampleDetailsArray.resultsText[2]">
                   <mat-label>{{sampleDetailsArray.resultsText[2]}}</mat-label>
                   <mat-select [(ngModel)]="finalResultArr[i]"
-                  name="finalResult_[{{i}}]" #finalResult="ngModel" [disabled]="isView=='true'">               
+                  name="finalResult_[{{i}}]" #finalResult="ngModel" [disabled]="isView=='true'" 
+                  [required]="samplesArray.mandatory[i]==true">               
                     <mat-option>--Select--</mat-option>
                     <mat-option *ngFor="let item of sampleDetailsArray[sampleName]['Final-Result'].data" [value]="item.value">
                       {{item.show}}
                     </mat-option>
                   </mat-select>                      
-                 <!-- <mat-error *ngIf="samplesArray.mandatory[i]==true && !finalResultArr[i]">Please Enter {{sampleDetailsArray.resultsText[3]}}</mat-error> -->
+                 <mat-error *ngIf="samplesArray.mandatory[i]==true && !finalResultArr[i]">Please Enter {{sampleDetailsArray.resultsText[2]}}</mat-error>
                 </mat-form-field>
               </ion-col>
             </ion-row>
@@ -519,13 +521,13 @@
 
 
      </div> 
-    </form>
+  
 
   </mat-card-content>
 </mat-card>
 
 
-
+</form>
     <!-- sample details end -->
 
     <!-- Custom Field panel starts-->
@@ -637,7 +639,7 @@
 
       <mat-action-row>
         <button mat-button color="primary" (click)="prevStep()">Previous</button>
-        <button mat-button color="warn" *ngIf="isView=='false'" (click)="submitSerologyForm(shipmentPanelForm,otherInfoPanelForm)">Submit</button>
+        <button mat-button color="warn" *ngIf="isView=='false'" (click)="submitSerologyForm(shipmentPanelForm,sampleDetailsForm,otherInfoPanelForm)">Submit</button>
       </mat-action-row>
     </mat-expansion-panel>
     </form>
