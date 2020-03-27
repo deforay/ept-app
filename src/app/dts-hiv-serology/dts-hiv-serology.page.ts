@@ -196,7 +196,7 @@ export class DTSHIVSerologyPage implements OnInit {
         this.shipmentData['modeOfReceipt'] = this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelected;
         this.shipmentData['algorithmUsedDropdown'] = this.dtsArray[0].dtsData.Heading2.data.algorithmUsedSelect;
         this.shipmentData['algorithmUsed'] = this.dtsArray[0].dtsData.Heading2.data.algorithmUsedSelected;
-        if (this.participantQcAccess == "yes") {
+        if (this.participantQcAccess == true) {
           if (this.dtsArray[0].dtsData.Heading2.data.qcData.status == true) {
             this.isQCDoneShow = true;
             this.qcRadioArray = this.dtsArray[0].dtsData.Heading2.data.qcData.qcRadio;
