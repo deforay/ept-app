@@ -24,6 +24,9 @@ import { LocalShipmentFormService } from '../app/service/localShipmentForm/local
 import { NgForm} from '@angular/forms';
 import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
 import { File } from '@ionic-native/file/ngx';
+import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
+import { FileOpener } from '@ionic-native/file-opener/ngx';
+
 @NgModule({
   declarations: [AppComponent],
   entryComponents: [],
@@ -54,6 +57,8 @@ import { File } from '@ionic-native/file/ngx';
     Platform,
     File,
     FileTransfer,
+    InAppBrowser,
+    FileOpener,
     NgForm,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
