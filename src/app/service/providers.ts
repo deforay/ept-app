@@ -10,10 +10,13 @@ import {
 import {
     AlertService
 } from '../service/alert/alert.service';
-
+import {
+    CommonService
+} from '../service/common/common.service';
 export {
     CrudServiceService,
     ToastService,
     LoaderService,
-    AlertService
+    AlertService,
+    CommonService
 }

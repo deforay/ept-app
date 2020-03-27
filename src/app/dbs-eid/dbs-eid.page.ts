@@ -185,7 +185,7 @@ export class DbsEidPage implements OnInit {
         this.shipmentData['extractionAssay'] = this.eidArray[0].eidData.Heading2.data.extractionAssaySelected;
         this.shipmentData['detectionAssay'] = this.eidArray[0].eidData.Heading2.data.detectionAssaySelected;
         this.shipmentData['modeOfReceipt'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected;
-        if (this.participantQcAccess == "yes") {
+        if (this.participantQcAccess == true) {
           if (this.eidArray[0].eidData.Heading2.data.qcData.status == true) {
             this.isQCDoneShow = true;
             this.qcRadioArray = this.eidArray[0].eidData.Heading2.data.qcData.qcRadio;

@@ -103,7 +103,7 @@
                 </ion-row>
       </ion-grid>
       <!-- <ion-button class="text-center native-btn" href="{{apiUrl}}{{item.downloadLink}}"  (click)="downloadReport()"*ngIf="item.downloadLink">Download Report</ion-button> -->
-      <ion-button class="text-center native-btn"   (click)="downloadReport(item.downloadLink)"*ngIf="item.downloadLink">Download Report</ion-button>
+      <ion-button class="text-center native-btn"   (click)="downloadReport(item.downloadLink,item.fileName)"*ngIf="item.downloadLink">Download Report</ion-button>
 
     </ion-card-content>
   </ion-card>

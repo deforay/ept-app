@@ -20,7 +20,8 @@ import {
 } from '@ionic/storage';
 import {
   AlertService,
-  ToastService
+  ToastService,
+  CommonService
 } from '../app/service/providers';
 import {
   Network
@@ -34,7 +35,8 @@ import {
 import {
   Router
 } from '@angular/router';
-
+import { File } from '@ionic-native/file/ngx';
+import {ROOT_DIRECTORY} from '../app/service/constant';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -85,6 +87,8 @@ export class AppComponent {
     private storage: Storage,
     public alertService: AlertService,
     public NetworkService: NetworkService,
+    public commonService: CommonService,
+    private file: File,
     public network: Network,
     public events: Events,
     public ToastService: ToastService,
@@ -110,6 +114,9 @@ export class AppComponent {
         this.appVersionNumber = "0.0.1";
         this.storage.set('appVersionNumber', this.appVersionNumber);
       });
+   //Create Directory for EPT REPORTS
+   this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
+
 
       this.NetworkService.initializeNetworkEvents();
       if (this.network.type == 'none') {
