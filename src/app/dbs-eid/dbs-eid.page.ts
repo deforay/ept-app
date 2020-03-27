@@ -340,7 +340,9 @@ export class DbsEidPage implements OnInit {
     // if (this.isView == "true") {
     //   this.setStep(2);
     // }
-    if (!this.shipmentData['shipmentTestingDate'] ||
+    if (!this.shipmentData['testReceiptDate'] ||
+      !this.shipmentData['sampleRehydrationDate'] ||
+      !this.shipmentData['shipmentTestingDate'] ||
       !this.shipmentData['extractionLotNumber'] ||
       !this.shipmentData['detectionLotNumber'] ||
       !this.shipmentData['extractionExpirationDate'] ||

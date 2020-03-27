@@ -88,7 +88,7 @@ import * as _ from 'lodash';
 
     //comment when take buid start
 
-    this.networkType = "4G";
+   // this.networkType = "4G";
 
     //end...
 
@@ -126,7 +126,7 @@ import * as _ from 'lodash';
       }
     })
 
-    if (this.networkType == 'none' || this.networkType == null) {
+    if (this.networkType == 'none') {
       this.callOfflineFunctions();
 
     } else {
