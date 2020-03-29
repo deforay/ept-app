@@ -571,15 +571,18 @@ export class DbsEidPage implements OnInit {
               //PT panel details
               "status": this.showPTPanelData,
               "data": {
-                //   "isPtPanelTested":this.isPtPanelTested,
-                "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
-                "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
-                "ptSupportComments": this.ptPanelData['ptSupportComments'],
-                "resultsText": this.ptPanelData['resultsTextData'],
-                "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
-                "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
                 "samples": this.ptPanelData['samples'],
-                "sampleSelected": this.ptPanelData['sampleData']
+                "resultsText": this.ptPanelData['resultsTextData'],
+                "sampleSelected": this.ptPanelData['sampleData'],
+                "samplesList":this.ptPanelData['samplesList'],
+                "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
+                "vlNotTestedReasonText":this.ptPanelData['vlNotTestedReasonText'],
+                "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
+                "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
+                "ptNotTestedCommentsText":this.ptPanelData['ptNotTestedCommentsText'],
+                "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
+                "ptSupportCommentsText":this.ptPanelData['ptSupportCommentsText'],
+                "ptSupportComments": this.ptPanelData['ptSupportComments'],               
               }
             },
             "Heading4": {

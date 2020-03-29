@@ -6,6 +6,21 @@ import {  CrudServiceService,ToastService,LoaderService } from '../../app/servic
 import {
   Storage
 } from '@ionic/storage';
+import {
+  FileTransfer,
+  FileUploadOptions,
+  FileTransferObject
+} from '@ionic-native/file-transfer/ngx';
+import {
+  File
+} from '@ionic-native/file/ngx';
+import {
+  FileOpener
+} from '@ionic-native/file-opener/ngx';
+import {
+  ROOT_DIRECTORY
+} from '../../app/service/constant';
+
 @Component({
   selector: 'app-summary-report',
   templateUrl: './summary-report.page.html',
@@ -21,6 +36,9 @@ export class SummaryReportPage implements OnInit {
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
+    private fileOpener: FileOpener,
+    private ft: FileTransfer, 
+    private file: File,
     private router: Router) { 
       this.storage.get('appVersionNumber').then((appVersionNumber) => {
         if (appVersionNumber) {
@@ -37,6 +55,20 @@ export class SummaryReportPage implements OnInit {
     }
 
   ngOnInit() {
+  }
+
+  downloadReport(downloadLink, fileName) {
+    const fileTransfer: FileTransferObject = this.ft.create();
+    let downloadUrl = this.apiUrl + downloadLink;
+
+    let path = this.file.externalRootDirectory + ROOT_DIRECTORY + '/';
+    fileTransfer.download(downloadUrl, path + fileName).then((entry) => {
+      console.log('download complete: ' + entry.toURL());
+      let url = entry.toURL();
+      this.fileOpener.open(url, 'application/pdf');
+    }, (error) => {
+      console.log(error);
+    });
   }
   getSummaryReports(){
     this.storage.get('participantLogin').then((partiLoginResult) => {

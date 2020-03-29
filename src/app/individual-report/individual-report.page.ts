@@ -65,6 +65,7 @@ export class IndividualReportPage {
   }
 
   downloadReport(downloadLink, fileName) {
+    this.LoaderService.presentLoading();
     const fileTransfer: FileTransferObject = this.ft.create();
     let downloadUrl = this.apiUrl + downloadLink;
 
@@ -72,15 +73,19 @@ export class IndividualReportPage {
     fileTransfer.download(downloadUrl, path + fileName).then((entry) => {
       console.log('download complete: ' + entry.toURL());
       let url = entry.toURL();
+      this.LoaderService.disMissLoading();
+
       this.fileOpener.open(url, 'application/pdf');
     }, (error) => {
+      this.LoaderService.disMissLoading();
+
       console.log(error);
     });
   }
   getIndividualReports() {
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
-        //   this.LoaderService.presentLoading();
+
         this.CrudServiceService.getData('/api/participant/get/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber)
           .then(result => {
             //   this.LoaderService.disMissLoading();
