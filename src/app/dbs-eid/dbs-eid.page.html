@@ -330,7 +330,7 @@
             <ion-col size="12">
               <mat-label class="matLabel" style="margin-left: 10px;font-size: 13px;">QC Done</mat-label>
               <mat-radio-group aria-labelledby="example-radio-group-label" class="login-full-width grid-col-form"
-                [(ngModel)]="qcDone" name="eidQcDone" #eidQcDone="ngModel" required [disabled]="isView=='true'">
+                [(ngModel)]="qcDone" name="eidQcDone" #eidQcDone="ngModel" required >
                 <mat-radio-button class="example-radio-button" *ngFor="let qcData of qcRadioArray"
                   [value]="qcData.value">
                   {{qcData.show}}
@@ -389,7 +389,7 @@
           <ion-col class="grid-input-col">
             <section class="div-section">
               <mat-checkbox [(ngModel)]="ptPanelNotTested" name="eidPtPanelTest" #eidPtPanelTest="ngModel"
-                [disabled]="isView=='true'">PT panel not tested</mat-checkbox>
+               >PT panel not tested</mat-checkbox>
             </section>
           </ion-col>
         </ion-row>
@@ -610,7 +610,6 @@
                 <mat-label>Supervisor Review </mat-label>
                 <mat-select [(ngModel)]="otherInfoData.supervisorReview" name="eidFormSupReview"
                   #eidFormSupReview="ngModel" required [disabled]="isView=='true'">
-                  <mat-option>--Select--</mat-option>
                   <mat-option *ngFor="let sr of otherInfoData.supervisorReviewDropdown" [value]="sr.value">
                     {{sr.show}}
                   </mat-option>

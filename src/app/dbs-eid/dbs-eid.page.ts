@@ -37,7 +37,9 @@ import {
   LocalShipmentFormService
 }
 from '../../app/service/localShipmentForm/local-shipment-form.service';
-import { throws } from 'assert';
+import {
+  throws
+} from 'assert';
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -65,7 +67,7 @@ export class DbsEidPage implements OnInit {
   showShipmentData: boolean;
   showPTPanelData: boolean;
   showOtherInfoData: boolean;
-  showCustomFieldData:boolean;
+  showCustomFieldData: boolean;
   ptPanelNotTested: boolean;
   participantData = {};
   shipmentData = {};
@@ -153,8 +155,8 @@ export class DbsEidPage implements OnInit {
   bindEIDData() {
 
     if (this.eidArray[0].eidData) {
-      if(this.eidArray[0].eidData.access.message){
-      this.viewAccessMessage = this.eidArray[0].eidData.access.message;
+      if (this.eidArray[0].eidData.access.message) {
+        this.viewAccessMessage = this.eidArray[0].eidData.access.message;
       }
       if (this.eidArray[0].eidData.Heading1.status == true) {
         this.showParticipantData = true;
@@ -258,39 +260,38 @@ export class DbsEidPage implements OnInit {
       }
       if (this.eidArray[0].eidData.customFields.status == true) {
         this.showCustomFieldData = true;
-        this.customFieldData['customField1Text'] = this.eidArray[0].eidData.customFields.data.customField1Text  ? this.eidArray[0].eidData.customFields.data.customField1Text:'';
-        this.customFieldData['customField1Val'] = this.eidArray[0].eidData.customFields.data.customField1Val  ? this.eidArray[0].eidData.customFields.data.customField1Val:'';
-        this.customFieldData['customField2Text'] = this.eidArray[0].eidData.customFields.data.customField2Text  ? this.eidArray[0].eidData.customFields.data.customField2Text:'';
-        this.customFieldData['customField2Val'] = this.eidArray[0].eidData.customFields.data.customField2Val  ? this.eidArray[0].eidData.customFields.data.customField2Val:'';
-       
+        this.customFieldData['customField1Text'] = this.eidArray[0].eidData.customFields.data.customField1Text ? this.eidArray[0].eidData.customFields.data.customField1Text : '';
+        this.customFieldData['customField1Val'] = this.eidArray[0].eidData.customFields.data.customField1Val ? this.eidArray[0].eidData.customFields.data.customField1Val : '';
+        this.customFieldData['customField2Text'] = this.eidArray[0].eidData.customFields.data.customField2Text ? this.eidArray[0].eidData.customFields.data.customField2Text : '';
+        this.customFieldData['customField2Val'] = this.eidArray[0].eidData.customFields.data.customField2Val ? this.eidArray[0].eidData.customFields.data.customField2Val : '';
+
       } else {
         this.showCustomFieldData = false;
       }
-     
+
       this.checkShipmentPanel('onload');
       this.checkPtPanel('onload');
-        if(this.showCustomFieldData==true){
-           this.checkCustFieldPanel('onload');
-           this.checkOtherInfoPanel('onload');
-        }else{
-          this.checkOtherInfoPanel('onload');
-        }
-        if(this.validShipmentDetails == false){
-             this.setStep(1);
-        }else if(this.isValidPTPanel==false){
-          this.setStep(2);        
-        }else if(this.showCustomFieldData==true && this.isValidCustField == false){
-          this.dynamicStep = 1;
-          this.setStep(3);
-        }else if(this.showCustomFieldData==false && this.otherInfoValid ==false){
-          this.dynamicStep = 0;
-          this.setStep(3);
-        }else if(this.showCustomFieldData==true && this.otherInfoValid ==false){
-          this.dynamicStep = 1;
-          this.setStep(4);
-        }else{
-          this.setStep(0);
-        }
+      if (this.showCustomFieldData == true) {
+        this.dynamicStep = 1;
+        this.checkCustFieldPanel('onload');
+      } else {
+        this.dynamicStep = 0;
+      }
+      this.checkOtherInfoPanel('onload');
+
+      if (this.validShipmentDetails == false) {
+        this.setStep(1); // Expand Shipment Details panel
+      } else if (this.isValidPTPanel == false) {
+        this.setStep(2); // Expand PT Panel panel       
+      } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
+        this.setStep(3); // Expand Custom Fields panel
+      } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
+        this.setStep(3); // Expand Other Information panel
+      } else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
+        this.setStep(4); // Expand Other Information panel
+      } else {
+        this.setStep(0); // Expand Participant Details Panel
+      }
 
     }
     if (this.eidArray[0].eidData.access.status == "fail") {
@@ -349,29 +350,24 @@ export class DbsEidPage implements OnInit {
       !this.shipmentData['detectionExpirationDate'] ||
       !this.shipmentData['responseDate'] ||
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
-        this.validShipmentDetails = false;
+      this.validShipmentDetails = false;
 
       if (param == 'next') {
-        //do nothing
         if (this.isView == "true") {
-          this.setStep(2);
+          this.nextStep();
+        } else {
+          //do nothing
         }
       }
-      if (param == 'submit') {
-        this.setStep(1);
-      }
+
     } else {
       this.validShipmentDetails = true;
-
       if (param == 'next') {
         this.nextStep();
       }
-      if (param == 'submit') {
-        //do nothing
-      }
     }
   }
-  
+
   checkPtPanel(params) {
 
     if (this.ptPanelNotTested == false || !this.ptPanelNotTested) {
@@ -430,121 +426,85 @@ export class DbsEidPage implements OnInit {
 
     }
     if (this.isView == "true") {
-      if(this.showCustomFieldData== true){
-        this.dynamicStep = 1;
-        this.setStep(3);
-      } else{ 
-        this.dynamicStep = 0;
-        this.setStep(3); 
+      if (params == 'next') {
+        this.nextStep();
       }
     } else {
-      // if (params == 'submit') {
-      //   if (this.isValidPTPanel == false) {
-      //     this.setStep(2);
-      //   } else {}
-      // }
       if (params == 'next') {
         if (this.isValidPTPanel == false) {
           //do  nothing
         } else {
-          if(this.showCustomFieldData== true){
-            this.dynamicStep = 1;            
-            this.setStep(3);
-          } else{ this.setStep(3); }
+          this.nextStep();
         }
       }
     }
   }
-  checkCustFieldPanel(params){
-    if(this.customFieldData['customField1Text']){
-      if(!this.customFieldData['customField1Val']){
+  checkCustFieldPanel(params) {
+    if (this.customFieldData['customField1Text']) {
+      if (!this.customFieldData['customField1Val']) {
         this.isValidCustField = false;
-      }else{
-        if(this.customFieldData['customField2Text']){
-          if(!this.customFieldData['customField2Val']){
-             this.isValidCustField = false;            
-          }else{
-             this.isValidCustField = true;
-          }
-        }else{
+      } else {
+        if (this.customFieldData['customField2Text']) {
+          if (!this.customFieldData['customField2Val']) {
+            this.isValidCustField = false;
+          } else {
             this.isValidCustField = true;
+          }
+        } else {
+          this.isValidCustField = true;
         }
       }
     }
 
-  if(params=='next'){
-    this.dynamicStep=1;
-   this.setStep(4);   
-  }
-  // if (params == 'onload' || params == 'submit') {
-  //   if (this.isValidCustField == false) {
-  //     this.setStep(3);
-  //   } else {}
-  // }
-   
+    if (params == 'next') {
+      this.nextStep();
+    }
+
   }
   checkOtherInfoPanel(params) {
-    if ((this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName'])
-     ||this.otherInfoData['supervisorReview']=='') {
+    if ((this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName']) ||
+      this.otherInfoData['supervisorReview'] == '') {
       this.otherInfoValid = false;
-      if(this.showCustomFieldData==true){
-        this.dynamicStep = 1;
-      }else{
-        this.dynamicStep = 0;
-      }
-      this.setStep(3+this.dynamicStep);
-
+      //this.setStep(this.dynamicStep+3);
     } else {
       this.otherInfoValid = true;
     }
-
-      // if(params=='onload'){
-
-      // }
- console.log(this.otherInfoValid)
   }
   submitEID(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
     shipmentPanelForm.control.markAllAsTouched();
     PTPanelTestForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
-    // this.checkShipmentPanel('submit');
-    // if (this.validShipmentDetails == true) {
-      
-    //   this.checkPtPanel('submit');
-    //   if (this.isValidPTPanel == true) {
-    //     this.checkOtherInfoPanel('submit');
-    //   } else {}
-    // } else {}
+    if (otherInfoPanelForm.valid == true) {
+      this.otherInfoValid = true;
+    } else {
+      this.otherInfoValid = false;
+    }
     this.checkShipmentPanel('submit');
     this.checkPtPanel('submit');
-      if(this.showCustomFieldData==true){
-         this.checkCustFieldPanel('submit');
-         this.checkOtherInfoPanel('submit');
-      }else{
-        this.checkOtherInfoPanel('submit');
-      }
-      if(this.validShipmentDetails == false){
-           this.setStep(1);
-      }else if(this.isValidPTPanel==false){
-        this.setStep(2);        
-      }else if(this.showCustomFieldData==true && this.isValidCustField == false){
-        this.dynamicStep = 1;
-        this.setStep(3);
-      }else if(this.showCustomFieldData==false && this.otherInfoValid ==false){
-        this.dynamicStep = 0;
-        this.setStep(3);
-      }else if(this.showCustomFieldData==true && this.otherInfoValid ==false){
-        this.dynamicStep = 1;
-        this.setStep(4);
-      }
+    if (this.showCustomFieldData == true) {
+      this.checkCustFieldPanel('submit');
+    } 
+    this.checkOtherInfoPanel('submit');
+    if (this.validShipmentDetails == false) {
+      this.setStep(1);
+    } else if (this.isValidPTPanel == false) {
+      this.setStep(2);
+    } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
+      this.setStep(3);
+    } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
+      this.setStep(3);
+    } else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
+      this.setStep(4);
+    }
+
     if (this.qcDone == 'no' || this.qcDone == '') {
       this.qcDate = "";
       this.qcDoneBy = "";
     }
     this.isSubmitted = "true";
-    if(this.ptPanelNotTested== true) {
+    if (this.ptPanelNotTested == true) {
       this.isPtPanelNotTestedRadio = "yes";
-    }else{
+    } else {
       this.isPtPanelNotTestedRadio = "no";
     }
     this.updatedStatus = this.eidArray[0].updatedStatus;
@@ -568,7 +528,7 @@ export class DbsEidPage implements OnInit {
           "eidData": {
             "access": {
               "status": this.eidArray[0].eidData.access.status
-              },
+            },
             "Heading1": {
               "status": this.showParticipantData,
               "data": {
@@ -611,8 +571,8 @@ export class DbsEidPage implements OnInit {
               //PT panel details
               "status": this.showPTPanelData,
               "data": {
-             //   "isPtPanelTested":this.isPtPanelTested,
-                 "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
+                //   "isPtPanelTested":this.isPtPanelTested,
+                "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
                 "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
                 "ptSupportComments": this.ptPanelData['ptSupportComments'],
                 "resultsText": this.ptPanelData['resultsTextData'],
@@ -636,13 +596,13 @@ export class DbsEidPage implements OnInit {
             "customFields": {
               "status": this.showCustomFieldData,
               "data": {
-                  "customField1Text":this.customFieldData['customField1Text'],
-                  "customField1Val": this.customFieldData['customField1Val'],
-                  "customField2Text": this.customFieldData['customField2Text'],
-                  "customField2Val": this.customFieldData['customField2Val']
+                "customField1Text": this.customFieldData['customField1Text'],
+                "customField1Val": this.customFieldData['customField1Val'],
+                "customField2Text": this.customFieldData['customField2Text'],
+                "customField2Val": this.customFieldData['customField2Val']
               }
-          }
-    
+            }
+
           }
         }
       }
@@ -658,10 +618,9 @@ export class DbsEidPage implements OnInit {
         this.CrudServiceService.postData('/api/shipments/save-form', this.EIDJSON).then((result) => {
             if (result["status"] == 'success') {
               this.ToastService.presentToastWithOptions(result['message']);
-              this.router.navigate(['/all-pt-schemes']);            
+              this.router.navigate(['/all-pt-schemes']);
             }
-          }
-          , (err) => {
+          }, (err) => {
             console.log(err);
           }
 
@@ -670,4 +629,3 @@ export class DbsEidPage implements OnInit {
     }
   }
 }
-
