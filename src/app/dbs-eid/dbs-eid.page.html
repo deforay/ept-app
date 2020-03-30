@@ -411,10 +411,10 @@
                       {{ptPanelData.resultsTextData[0]}}
                     </p>
                     <mat-form-field class="login-full-width " appearance="outline"
-                      [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !yourResultArray[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
+                      [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.yourResults[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
                       *ngIf="ptPanelData.samplesList">
                       <mat-label>{{ptPanelData.resultsTextData[1]}}</mat-label>
-                      <mat-select [(ngModel)]="yourResultArray[i]" name="yourResult[{{i}}]" #yourResult="ngModel"
+                      <mat-select [(ngModel)]="ptPanelData.samples.yourResults[i]" name="yourResult[{{i}}]" #yourResult="ngModel"
                         [disabled]="isView=='true'" [required]="ptPanelData.sampleTextData.mandatory[i]==true">
                         <mat-option>--Select--</mat-option>
                         <mat-option *ngFor="let item of ptPanelData.samplesList[sampleName]['Your-Results']"
@@ -422,7 +422,7 @@
                           {{item.show}}
                         </mat-option>
                       </mat-select>
-                      <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !yourResultArray[i]">Please
+                      <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.yourResults[i]">Please
                         Enter {{ptPanelData.resultsTextData[1]}}</mat-error>
 
                     </mat-form-field>
@@ -433,13 +433,13 @@
                   <ion-col class="grid-input-col">
 
                     <mat-form-field class="login-full-width grid-col-form"
-                      [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !hivCTODArray[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
+                      [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.hivCtOd[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
                       appearance="outline">
                       <mat-label>{{ptPanelData.resultsTextData[2]}}</mat-label>
-                      <input matInput [(ngModel)]="hivCTODArray[i]" [disabled]="isView=='true'"
+                      <input matInput [(ngModel)]="ptPanelData.samples.hivCtOd[i]" [disabled]="isView=='true'"
                         placeholder="Enter HIV CT/OD" name="hivCTOD[{{i}}]" #hivCTOD="ngModel"
                         [required]="ptPanelData.sampleTextData.mandatory[i]==true">
-                      <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !hivCTODArray[i]">Please Enter
+                      <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.hivCtOd[i]">Please Enter
                         {{ptPanelData.resultsTextData[2]}}</mat-error>
 
                     </mat-form-field>
@@ -450,13 +450,13 @@
                   <ion-col class="grid-input-col">
 
                     <mat-form-field class="login-full-width grid-col-form"
-                      [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !icQsValuesArray[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
+                      [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.IcQsValues[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
                       appearance="outline">
                       <mat-label>{{ptPanelData.resultsTextData[3]}}</mat-label>
-                      <input matInput [(ngModel)]="icQsValuesArray[i]" [disabled]="isView=='true'"
+                      <input matInput [(ngModel)]="ptPanelData.samples.IcQsValues[i]" [disabled]="isView=='true'"
                         placeholder="Enter IC/QS Values" name="icQsValues[{{i}}]" #icQsValues="ngModel"
                         [required]="ptPanelData.sampleTextData.mandatory[i]==true">
-                      <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !icQsValuesArray[i]">Please
+                      <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.IcQsValues[i]">Please
                         Enter {{ptPanelData.resultsTextData[3]}}</mat-error>
 
                     </mat-form-field>

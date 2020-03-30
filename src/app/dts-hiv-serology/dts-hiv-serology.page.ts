@@ -234,18 +234,24 @@ export class DTSHIVSerologyPage implements OnInit {
 
         this.testKitIndex = 0;
         this.testKitTextArray = this.testKitDetailsArray.kitText;
-        this.testKitNameArray = (this.testKitDetailsArray.kitName);
+        this.testKitNameArray = (this.testKitDetailsArray.kitNameDropdown);
         this.testKitModel['testKitTextArray'] = [...this.testKitTextArray];
 
         this.testKitTextArray.forEach((element) => {
-          this.testKitModel['kitName'].push(this.testKitDetailsArray.kitSelected[element].kitName);
-          this.testKitModel['kitValue'].push(this.testKitDetailsArray.kitSelected[element].kitValue);
-          this.testKitModel['kitOther'].push("");
+        //  this.testKitModel['kitName'].push(this.testKitDetailsArray.kitSelected[element].kitName);
+        //  this.testKitModel['kitValue'].push(this.testKitDetailsArray.kitSelected[element].kitValue);
+         // this.testKitModel['kitOther'].push("");
           if (this.testKitNameArray[element].status == true) {
             this.testKitIndex = this.testKitIndex + 1;
           }
         });
-        Object.values(this.testKitDetailsArray['lotNo']).forEach((lotvalue) => {
+        Object.values(this.testKitDetailsArray['kitName']).forEach((kitName) => {
+          this.testKitModel['kitValue'].push(kitName);
+        });
+        Object.values(this.testKitDetailsArray['kitOther']).forEach((kitOther) => {
+          this.testKitModel['kitOther'].push(kitOther);
+        });
+        Object.values(this.testKitDetailsArray['lot']).forEach((lotvalue) => {
           this.testKitModel['lot'].push(lotvalue);
         });
         Object.values(this.testKitDetailsArray['expDate']).forEach((expdate) => {
@@ -266,8 +272,11 @@ export class DTSHIVSerologyPage implements OnInit {
 
       if (this.dtsArray[0].dtsData.Heading4.status == true) {
         this.showSampleData = true;
+     debugger;  
         this.sampleDetailsArray = this.dtsArray[0].dtsData.Heading4.data;
-
+        console.log(this.sampleDetailsArray['sampleList']['DTSS01']['Final-Result'].data);
+        console.log(this.sampleDetailsArray['sampleList']['DTSS02']['Final-Result'].data);
+        console.log(this.sampleDetailsArray['sampleList']['DTSS03']['Final-Result'].data);
         this.sampleIndex = this.sampleDetailsArray.samples.label.length;
         this.samplesArray = this.sampleDetailsArray.samples;
         this.samplesNameArr = this.sampleDetailsArray.samples.label;
@@ -382,7 +391,9 @@ export class DTSHIVSerologyPage implements OnInit {
   }
 
   getSerologyDetails() {
+    this.dtsArray = [];
     this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
+    
       this.isView = dtsDataObj[0].isView;
       if (dtsDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
@@ -398,8 +409,7 @@ export class DTSHIVSerologyPage implements OnInit {
             this.bindSerologyData();
           }
         })
-      } else {
-        this.dtsArray = [];
+      } else {   
         this.dtsArray.push(dtsDataObj[0]);
         this.bindSerologyData();
       }

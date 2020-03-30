@@ -170,6 +170,7 @@ export class DbsEidPage implements OnInit {
         this.showParticipantData = false;
       }
       if (this.eidArray[0].eidData.Heading2.status == true) {
+  
         this.showShipmentData = true;
         this.shipmentData['shipmentDate'] = this.eidArray[0].eidData.Heading2.data.shipmentDate;
         this.shipmentData['resultDueDate'] = this.eidArray[0].eidData.Heading2.data.resultDueDate;
@@ -211,6 +212,7 @@ export class DbsEidPage implements OnInit {
         this.showShipmentData = false;
       }
       if (this.eidArray[0].eidData.Heading3.status == true) {
+
         this.showPTPanelData = true;
         this.ptPanelData['isPtTestNotPerformedRadio'] = this.eidArray[0].eidData.Heading3.data.isPtTestNotPerformedRadio;
         if (this.ptPanelData['isPtTestNotPerformedRadio'] == 'yes') {
@@ -225,24 +227,11 @@ export class DbsEidPage implements OnInit {
         this.ptPanelData['vlNotTestedReasonDropdown'] = this.eidArray[0].eidData.Heading3.data.vlNotTestedReason;
         this.ptPanelData['vlNotTestedReason'] = this.eidArray[0].eidData.Heading3.data.vlNotTestedReasonSelected;
         this.ptPanelData['vlNotTestedReasonText'] = this.eidArray[0].eidData.Heading3.data.vlNotTestedReasonText;
-        this.ptPanelData['sampleData'] = this.eidArray[0].eidData.Heading3.data.sampleSelected;
         this.ptPanelData['samplesList'] = this.eidArray[0].eidData.Heading3.data.samplesList;
-
         this.ptPanelData['sampleTextData'] = this.eidArray[0].eidData.Heading3.data.samples;
-        this.ptPanelData['resultsTextData'] = this.eidArray[0].eidData.Heading3.data.resultsText;
         this.ptPanelData['samples'] = this.ptPanelData['sampleTextData'];
-        // this.ptPanelData['sampleTextData'] = this.eidArray[0].eidData.Heading3.data.samples;
-        this.yourResultArray = [];
-        this.icQsValuesArray = [];
-        this.hivCTODArray = [];
-        this.ptPanelData['sampleTextData'].label.forEach(sampleName => {
-          this.yourResultArray.push(this.ptPanelData['sampleData'][sampleName]['Your-Results']);
-          this.hivCTODArray.push(this.ptPanelData['sampleData'][sampleName]['HIV-CT/OD']);
-          this.icQsValuesArray.push(this.ptPanelData['sampleData'][sampleName]['IC/QS-Values']);
-        });
-        this.ptPanelData['samples']['yourResults'] = [...this.yourResultArray];
-        this.ptPanelData['samples']['hivCtOd'] = [...this.hivCTODArray];
-        this.ptPanelData['samples']['IcQsValues'] = [...this.icQsValuesArray];
+        this.ptPanelData['resultsTextData'] = this.eidArray[0].eidData.Heading3.data.resultsText;
+      
       } else {
         this.showPTPanelData = false;
       }
@@ -308,13 +297,13 @@ export class DbsEidPage implements OnInit {
     }
   }
   getEIDFormDetails() {
-
+    this.eidArray=[];
     this.storage.get('selectedTestFormArray').then((eidDataObj) => {
-
+   
       this.isView = eidDataObj[0].isView;
       if (eidDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
-
+       
           if ((localStorageSelectedFormArray[0].isSynced == eidDataObj[0].isSynced) &&
             (localStorageSelectedFormArray[0].evaluationStatus == eidDataObj[0].evaluationStatus) &&
             (localStorageSelectedFormArray[0].mapId == eidDataObj[0].mapId) &&
@@ -373,17 +362,17 @@ export class DbsEidPage implements OnInit {
     if (this.ptPanelNotTested == false || !this.ptPanelNotTested) {
       this.ptPanelData['sampleTextData'].mandatory.forEach((mandCheck, index) => {
         if (mandCheck == true) {
-          if (this.yourResultArray[index] == '' || !this.yourResultArray[index]) {
+          if(this.ptPanelData['samples'].yourResults[index]==''||!this.ptPanelData['samples'].yourResults[index]){
             this.yourResultCheckArray[index] = 'invalid';
           } else {
             this.yourResultCheckArray[index] = 'valid';
           }
-          if (this.icQsValuesArray[index] == '' || !this.icQsValuesArray[index]) {
+          if(this.ptPanelData['samples'].hivCtOd[index]==''||!this.ptPanelData['samples'].hivCtOd[index]){
             this.icQsValuesCheckArray[index] = 'invalid';
           } else {
             this.icQsValuesCheckArray[index] = 'valid';
           }
-          if (this.hivCTODArray[index] == '' || !this.hivCTODArray[index]) {
+          if(this.ptPanelData['samples'].IcQsValues[index]==''||!this.ptPanelData['samples'].IcQsValues[index]){
             this.hivCTODCheckArray[index] = 'invalid';
           } else {
             this.hivCTODCheckArray[index] = 'valid';
@@ -471,6 +460,7 @@ export class DbsEidPage implements OnInit {
     }
   }
   submitEID(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
+
     shipmentPanelForm.control.markAllAsTouched();
     PTPanelTestForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
@@ -489,11 +479,14 @@ export class DbsEidPage implements OnInit {
       this.setStep(1);
     } else if (this.isValidPTPanel == false) {
       this.setStep(2);
-    } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
-      this.setStep(3);
+    }
+     else if (this.showCustomFieldData == true && this.isValidCustField == false) {
+      this.setStep(4);
     } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
       this.setStep(3);
-    } else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
+    }
+     else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
+     // else if (this.otherInfoValid == false) {
       this.setStep(4);
     }
 
@@ -509,7 +502,7 @@ export class DbsEidPage implements OnInit {
     }
     this.updatedStatus = this.eidArray[0].updatedStatus;
     if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.otherInfoValid == true) {
-
+debugger;
       this.EIDJSON = {
         "authToken": this.authToken,
         "appVersion": this.appVersionNumber,
@@ -573,7 +566,6 @@ export class DbsEidPage implements OnInit {
               "data": {
                 "samples": this.ptPanelData['samples'],
                 "resultsText": this.ptPanelData['resultsTextData'],
-                "sampleSelected": this.ptPanelData['sampleData'],
                 "samplesList":this.ptPanelData['samplesList'],
                 "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
                 "vlNotTestedReasonText":this.ptPanelData['vlNotTestedReasonText'],
@@ -610,7 +602,7 @@ export class DbsEidPage implements OnInit {
         }
       }
       console.log(this.EIDJSON);
-      if (this.network.type == 'none') {
+      if (this.network.type == 'none'|| this.network.type==null) {
         this.EIDJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.EIDJSON);
 

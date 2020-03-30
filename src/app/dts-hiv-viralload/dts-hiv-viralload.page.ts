@@ -514,7 +514,7 @@ interface selectArray {
   }
 
   openInvalidPanel() {
-debugger;
+
     if (this.validOtherInfo == false) {
       this.step = 4;
     }
@@ -642,7 +642,7 @@ debugger;
   }
 
   checkCustFieldPanel(params) {
-debugger;
+
     if (this.customFieldData['customField1Text']) {
       if (!this.customFieldData['customField1Val']) {
         this.isValidCustField = false;
