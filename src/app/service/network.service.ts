@@ -61,7 +61,7 @@ export class NetworkService {
       // if (this.previousStatus === ConnectionStatusEnum.Offline) {
       this.storage.set('networkConnectivity', true);
       this.eventCtrl.publish('network:online');
-      this.ToastService.presentToastWithOptions("You are in online");
+   //   this.ToastService.presentToastWithOptions("You are in online");
    //   this.previousStatus = ConnectionStatusEnum.Online;
       this.storage.get('networkConnectivity').then((data) => {
   

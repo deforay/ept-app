@@ -392,7 +392,7 @@
 <form #sampleDetailsForm="ngForm" novalidate> 
 
     <mat-card class="main-card-panel" *ngIf="showSampleData">
-      <mat-card-title> Sample Details {{sampleDetailsArray.samples.result3}}</mat-card-title>
+      <mat-card-title> Sample Details</mat-card-title>
       <mat-card-content>
       <div *ngFor="let sampleName of samplesNameArr;let i = index;">
         <mat-expansion-panel *ngIf="showSampleData" [expanded]="step === i+testKitIndex+2" (opened)="setStep(i+testKitIndex+2)">        
@@ -410,14 +410,13 @@
               </ion-grid>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <ion-row *ngIf="sampleDetailsArray.resultsText[0]">
+          <ion-row *ngIf="sampleDetailsArray.resultStatus[0]==true">
            <!-- [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true && 
             !result1Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
 
             <ion-col  size="12" class="grid-readonly-col">
 
-              <mat-form-field  class="login-full-width grid-col-form"  appearance="outline" 
-              *ngIf="sampleDetailsArray.resultsText[0]">
+              <mat-form-field  class="login-full-width grid-col-form"  appearance="outline">
                 <mat-label>{{sampleDetailsArray.resultsText[0]}}</mat-label>
                 <mat-select [(ngModel)]="result1Arr[i]"
                 name="result1_[{{i}}]" #result1="ngModel" [disabled]="isView=='true'">               
@@ -426,17 +425,16 @@
                     {{item.show}}
                   </mat-option>
                 </mat-select>                      
-               <!-- <mat-error *ngIf="samplesArray.mandatory[i]==true && !result1Arr[i]">Please Enter {{sampleDetailsArray.resultsText[1]}}</mat-error> -->
+               <!-- <mat-error *ngIf="samplesArray.mandatory[i]==true && !result1Arr[i]">Please Enter {{sampleDetailsArray.resultsText[0]}}</mat-error> -->
               </mat-form-field>
             </ion-col>
           </ion-row>
       
-          <ion-row *ngIf="sampleDetailsArray.resultsText[1]">
+          <ion-row *ngIf="sampleDetailsArray.resultStatus[1]">
                 <!-- [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
           !result2Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
             <ion-col  size="12" class="grid-readonly-col">
-              <mat-form-field  class="login-full-width grid-col-form"  appearance="outline"               
-              *ngIf="sampleDetailsArray.resultsText[1]">
+              <mat-form-field  class="login-full-width grid-col-form"  appearance="outline">
                 <mat-label>{{sampleDetailsArray.resultsText[1]}}</mat-label>
                 <mat-select [(ngModel)]="result2Arr[i]"
                 name="result2_[{{i}}]" #result2="ngModel" [disabled]="isView=='true'">               
@@ -450,13 +448,12 @@
             </ion-col>
           </ion-row>
       
-          <div *ngIf="sampleDetailsArray.samples.result3">
-            <ion-row *ngIf="sampleDetailsArray.resultsText[2]">
+          
+            <ion-row *ngIf="sampleDetailsArray.resultStatus[2]">
                     <!--  [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
                  !result3Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
              <ion-col  size="12" class="grid-readonly-col">
-                <mat-form-field  class="login-full-width grid-col-form"  appearance="outline"                
-                *ngIf="sampleDetailsArray.resultsText[2]">
+                <mat-form-field  class="login-full-width grid-col-form"  appearance="outline">
                   <mat-label>{{sampleDetailsArray.resultsText[2]}}</mat-label>
                   <mat-select [(ngModel)]="result3Arr[i]"
                   name="result3_[{{i}}]" #result3="ngModel" [disabled]="isView=='true'">               
@@ -469,36 +466,13 @@
                 </mat-form-field>
               </ion-col>
             </ion-row>
-         
-           <ion-row *ngIf="sampleDetailsArray.resultsText[3]">
-                 <!--  [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
-                 !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
-              <ion-col  size="12" class="grid-readonly-col">
-                <mat-form-field  class="login-full-width grid-col-form"  appearance="outline" 
-               
-                *ngIf="sampleDetailsArray.resultsText[3]">
-                  <mat-label>{{sampleDetailsArray.resultsText[3]}}</mat-label>
-                  <mat-select [(ngModel)]="finalResultArr[i]"
-                  name="finalResultOf_[{{i}}]" #finalResultOf="ngModel" [disabled]="isView=='true'"  
-                  [required]="samplesArray.mandatory[i]==true">               
-                    <mat-option>--Select--INdhuuuu</mat-option>
-                    <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Final-Result'].data" [value]="item.value">
-                      {{item.show}}
-                    </mat-option>
-                  </mat-select>                      
-                 <mat-error *ngIf="samplesArray.mandatory[i]==true && !finalResultArr[i]">Please Enter {{sampleDetailsArray.resultsText[3]}}</mat-error>
-                </mat-form-field>
-              </ion-col> 
-          </ion-row>
-         </div>
-          <div *ngIf="!sampleDetailsArray.samples.result3">
-            <ion-row *ngIf="sampleDetailsArray.resultsText[2]">
+      
+            <ion-row *ngIf="sampleDetailsArray.resultStatus[3]">
               <!--    [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
                  !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
               <ion-col  size="12" class="grid-readonly-col">
-                <mat-form-field  class="login-full-width grid-col-form"  appearance="outline"             
-                *ngIf="sampleDetailsArray.resultsText[2]">
-                  <mat-label>{{sampleDetailsArray.resultsText[2]}}</mat-label>
+                <mat-form-field  class="login-full-width grid-col-form"  appearance="outline">
+                  <mat-label>{{sampleDetailsArray.resultsText[3]}}</mat-label>
                   <mat-select [(ngModel)]="finalResultArr[i]"
                   name="finalResult_[{{i}}]" #finalResult="ngModel" [disabled]="isView=='true'" 
                   [required]="samplesArray.mandatory[i]==true">               
@@ -507,11 +481,11 @@
                       {{item.show}}
                     </mat-option>
                   </mat-select>                      
-                 <mat-error *ngIf="samplesArray.mandatory[i]==true && !finalResultArr[i]">Please Enter {{sampleDetailsArray.resultsText[2]}}</mat-error>
+                 <mat-error *ngIf="samplesArray.mandatory[i]==true && !finalResultArr[i]">Please Enter {{sampleDetailsArray.resultsText[3]}}</mat-error>
                 </mat-form-field>
               </ion-col>
             </ion-row>
-          </div> 
+          
 
           <mat-action-row>
             <button mat-button color="primary" (click)="prevStep()">Previous</button>

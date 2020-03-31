@@ -602,7 +602,7 @@ debugger;
         }
       }
       console.log(this.EIDJSON);
-      if (this.network.type == 'none'|| this.network.type==null) {
+      if (this.network.type == 'none') {
         this.EIDJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.EIDJSON);
 

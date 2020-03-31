@@ -228,14 +228,16 @@ export class DTSHIVSerologyPage implements OnInit {
         this.testKitModel['kitName'] = [];
         this.testKitModel['kitValue'] = [];
         this.testKitModel['kitOther'] = [];
-        this.testKitModel['testKitTextArray'] = [];
+      //  this.testKitModel['testKitTextArray'] = [];
+        this.testKitModel['kitNameDropdown']=[];
         this.testKitModel['lot'] = [];
         this.testKitModel['expDate'] = [];
 
         this.testKitIndex = 0;
         this.testKitTextArray = this.testKitDetailsArray.kitText;
         this.testKitNameArray = (this.testKitDetailsArray.kitNameDropdown);
-        this.testKitModel['testKitTextArray'] = [...this.testKitTextArray];
+        this.testKitModel['kitNameDropdown'] = this.testKitNameArray ;
+        this.testKitModel['kitText'] = [...this.testKitTextArray];
 
         this.testKitTextArray.forEach((element) => {
         //  this.testKitModel['kitName'].push(this.testKitDetailsArray.kitSelected[element].kitName);
@@ -245,8 +247,11 @@ export class DTSHIVSerologyPage implements OnInit {
             this.testKitIndex = this.testKitIndex + 1;
           }
         });
-        Object.values(this.testKitDetailsArray['kitName']).forEach((kitName) => {
-          this.testKitModel['kitValue'].push(kitName);
+        Object.values(this.testKitDetailsArray['kitName']).forEach((kitName) => {  
+          this.testKitModel['kitName'].push(kitName);
+        });
+        Object.values(this.testKitDetailsArray['kitValue']).forEach((kitValue) => {  
+          this.testKitModel['kitValue'].push(kitValue);
         });
         Object.values(this.testKitDetailsArray['kitOther']).forEach((kitOther) => {
           this.testKitModel['kitOther'].push(kitOther);
@@ -271,12 +276,11 @@ export class DTSHIVSerologyPage implements OnInit {
       }
 
       if (this.dtsArray[0].dtsData.Heading4.status == true) {
+      
         this.showSampleData = true;
-     debugger;  
+
         this.sampleDetailsArray = this.dtsArray[0].dtsData.Heading4.data;
-        console.log(this.sampleDetailsArray['sampleList']['DTSS01']['Final-Result'].data);
-        console.log(this.sampleDetailsArray['sampleList']['DTSS02']['Final-Result'].data);
-        console.log(this.sampleDetailsArray['sampleList']['DTSS03']['Final-Result'].data);
+        console.log(this.sampleDetailsArray);
         this.sampleIndex = this.sampleDetailsArray.samples.label.length;
         this.samplesArray = this.sampleDetailsArray.samples;
         this.samplesNameArr = this.sampleDetailsArray.samples.label;
@@ -367,7 +371,6 @@ export class DTSHIVSerologyPage implements OnInit {
       }else{
         this.setStep(0);
       }
-      console.log(this.step)
     }
 
     if (this.dtsArray[0].dtsData.access.status == "fail") {
@@ -403,7 +406,7 @@ export class DTSHIVSerologyPage implements OnInit {
             (localStorageSelectedFormArray[0].participantId == dtsDataObj[0].participantId) &&
             (localStorageSelectedFormArray[0].shipmentId == dtsDataObj[0].shipmentId) &&
             (localStorageSelectedFormArray[0].schemeType == dtsDataObj[0].schemeType)) {
-
+            this.dtsArray=[];
             this.isView = localStorageSelectedFormArray[0].isView;
             this.dtsArray.push(localStorageSelectedFormArray[0]);
             this.bindSerologyData();
@@ -419,12 +422,11 @@ export class DTSHIVSerologyPage implements OnInit {
 
   getSelectedTestKitName(event, index, testkitDropdownArr) {
     let testkitDropName = testkitDropdownArr.filter(element => element.value == event);
-    this.testKitModel['kitName'][index] = testkitDropName[0];
+    this.testKitModel['kitName'][index] = testkitDropName[0].show;
     //this.testKitModel['kitValue'][index] = event.value;
     if (this.testKitModel['kitValue'][index] != "other") {
       this.testKitModel['kitOther'][index] = "";
     }
-
   }
 
 
@@ -582,9 +584,12 @@ export class DTSHIVSerologyPage implements OnInit {
    
     if(this.isValidShipmentDetails ==false){
       this.setStep(1);
-    }else if(checkSampleIndex>=0){
+    }
+
+    else if(checkSampleIndex>=0){
       this.setStep(this.testKitIndex+ checkSampleIndex+2)
-    }else if(this.isValidOtherInfoPanel==false){
+    }
+    else if(this.isValidOtherInfoPanel==false){
       this.setStep(this.testKitIndex+this.sampleIndex+this.dynamicStep+2)
     }
 
@@ -603,7 +608,7 @@ export class DTSHIVSerologyPage implements OnInit {
     this.samplesObj['id'] = [...this.sampleDetailsArray.samples.id];
     this.samplesObj['label'] = [...this.sampleDetailsArray.samples.label];
     this.samplesObj['mandatory'] = [...this.sampleDetailsArray.samples.mandatory];
-    this.samplesObj['finalResult'] = [...this.finalResultArr]
+    this.samplesObj['finalResult'] = [...this.finalResultArr];
     // Samples Obj
 
 
@@ -654,8 +659,8 @@ export class DTSHIVSerologyPage implements OnInit {
               "testingDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
               "algorithmUsedSelected": this.shipmentData['algorithmUsed'],
               "algorithmUsedSelect": this.shipmentData['algorithmUsedDropdown'],
-              "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
-              "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'],
+              "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) :  this.shipmentData['responseDate'],
+              "modeOfReceiptSelected": this.shipmentData['modeOfReceipt']?this.shipmentData['modeOfReceipt']:'',
               "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
               "qcData": {
                 "qcRadioSelected": this.qcDone,
@@ -676,8 +681,9 @@ export class DTSHIVSerologyPage implements OnInit {
             "status": this.dtsArray[0].dtsData.Heading4.status,
             "data": {
               "samples": this.samplesObj,
-              "resultText": this.resultsTextArray,
-              // "sampleDetailSelected": this.sampleDetailsArray,
+              "resultsText": this.resultsTextArray,
+              "resultStatus":this.sampleDetailsArray.resultStatus,
+              "sampleList":this.sampleDetailsArray.sampleList
             }
           },
 
@@ -701,7 +707,6 @@ export class DTSHIVSerologyPage implements OnInit {
                 "customField2Val": this.customFieldData['customField2Val']
             }
           }
-
         }
       }
     }
