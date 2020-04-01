@@ -133,9 +133,9 @@ export class AppComponent {
 
       this.storage.get('isLogOut').then((isLogOut) => {
         if (isLogOut == false) {
-          this.router.navigateByUrl('/all-pt-schemes');
+          this.router.navigateByUrl('/all-pt-schemes', {replaceUrl: true});
         } else {
-          this.router.navigateByUrl('/login');
+          this.router.navigateByUrl('/login', {replaceUrl: true});
         }
       })
 

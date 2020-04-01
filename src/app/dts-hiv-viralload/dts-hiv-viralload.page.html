@@ -173,7 +173,7 @@
               <mat-form-field class="login-full-width grid-col-form " appearance="outline">
                 <mat-label class="matLabel">Test Receipt Date</mat-label>
                 <input matInput [matDatepicker]="testReceiptPicker" class="datepicker-input"
-                  [(ngModel)]="testReceiptDate" #vlTestReceiptDate="ngModel" name="vlTestReceiptDate"
+                  [(ngModel)]="testReceiptDate" type="tel" #vlTestReceiptDate="ngModel" name="vlTestReceiptDate"
                   placeholder="Choose a date Eg: 28-Feb-2020" disabled={{isView}} required>
                 <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
                 <mat-datepicker #testReceiptPicker disabled={{isView}}></mat-datepicker>

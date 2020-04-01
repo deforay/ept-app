@@ -452,6 +452,8 @@ interface selectArray {
 
   nextStepShipmentPanel(isShipmentValid, next) {
 
+    console.log(this.testReceiptDate);
+
     if (this.isView == "true") {
       this.step = 2;
     }

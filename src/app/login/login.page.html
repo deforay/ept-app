@@ -36,9 +36,10 @@
           </ion-row>
           <ion-row>
             <ion-col>
+              <!-- (ngModelChange)="emailFormControl=emailFormControl.trim()" -->
                 <mat-form-field class="login-full-width" appearance="outline">
                     <mat-label>Username</mat-label>
-                    <input matInput placeholder="Email Id" [formControl]="emailFormControl" [errorStateMatcher]="matcher">
+                    <input matInput placeholder="Email Id" [formControl]="emailFormControl" (keyup)="trimEmailFormControl()" [errorStateMatcher]="matcher">
                     <button mat-icon-button matSuffix>
                         <mat-icon >local_post_office
                           </mat-icon>

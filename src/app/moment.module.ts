@@ -7,10 +7,10 @@ import * as _moment from 'moment';
 const moment =  _moment;
 export const MY_FORMATS = {
   parse: {
-    dateInput: 'DD-MMM-YYYY',
+    dateInput: 'DD-MM-YYYY',
   },
   display: {
-    dateInput: 'DD-MMM-YYYY',
+    dateInput: 'DD-MM-YYYY',
     monthYearLabel: 'MMM YYYY',
     dateA11yLabel: 'll',
     monthYearA11yLabel: 'MMM YYYY',

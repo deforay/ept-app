@@ -1,5 +1,9 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
+// import {
+//   Storage
+// } from '@ionic/storage';
+
 
 const routes: Routes = [
   {
@@ -55,4 +59,19 @@ const routes: Routes = [
   ],
   exports: [RouterModule]
 })
-export class AppRoutingModule {}
+export class AppRoutingModule {
+  // changeRoute:any;
+  // constructor(  private storage: Storage){
+  //   this.storage.get('isLogOut').then((isLogOut) => {
+  //     if (isLogOut == false) {
+
+  //     this.changeRoute="all-pt-schemes";
+
+  //     }
+  //     else{
+  //       this.changeRoute="login";
+  //     }
+  //   })
+  // }
+ // @ViewChild(HeaderComponent,{static: false}) childReference;
+}

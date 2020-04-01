@@ -72,7 +72,7 @@ export class LoginPage implements OnInit {
 
   matcher = new MyErrorStateMatcher();
   pswdhide = true;
-
+  emailFormControlValue;
 
   constructor(
     public menu: MenuController,
@@ -100,6 +100,11 @@ export class LoginPage implements OnInit {
   ngOnInit() {
 
   }
+
+  trimEmailFormControl(){
+   this.emailFormControl.setValue(this.emailFormControl.value.trim());
+  }
+  
   ionViewDidEnter() {
     // the root left menu should be disabled on this page
     this.menu.enable(false);

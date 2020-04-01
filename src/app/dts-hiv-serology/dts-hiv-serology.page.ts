@@ -332,12 +332,12 @@ export class DTSHIVSerologyPage implements OnInit {
       this.testKitTextArray.forEach((element, index) => {
         this.checkTestKitPanel('onload', index)
       });
-      Object.values(this.testKitNameArray).forEach((element,index) => {
-        if(element.status==false){
-          this.isValidTestKitDetails.splice(index,1);
-        }
-       // this.isValidTestKitDetails.push(false);
-      });
+      // Object.values(this.testKitNameArray).forEach((element,index) => {
+      //   if(element.status==false){
+      //     this.isValidTestKitDetails.splice(index,1);
+      //   }
+      //  // this.isValidTestKitDetails.push(false);
+      // });
 
       this.sampleDetailsArray.samples.label.forEach((element, index) => {
         this.checkSampleDetailPanel('onload', index)
