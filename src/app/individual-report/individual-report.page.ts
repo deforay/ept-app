@@ -78,6 +78,7 @@ export class IndividualReportPage {
       this.fileOpener.open(url, 'application/pdf');
     }, (error) => {
       this.LoaderService.disMissLoading();
+      this.ToastService.presentToastWithOptions('Something went wrong.Please try again later.');
 
       console.log(error);
     });

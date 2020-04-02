@@ -58,6 +58,7 @@ export class SummaryReportPage implements OnInit {
   }
 
   downloadReport(downloadLink, fileName) {
+    this.LoaderService.presentLoading();
     const fileTransfer: FileTransferObject = this.ft.create();
     let downloadUrl = this.apiUrl + downloadLink;
 
@@ -65,8 +66,13 @@ export class SummaryReportPage implements OnInit {
     fileTransfer.download(downloadUrl, path + fileName).then((entry) => {
       console.log('download complete: ' + entry.toURL());
       let url = entry.toURL();
+      this.LoaderService.disMissLoading();
+
       this.fileOpener.open(url, 'application/pdf');
     }, (error) => {
+      this.LoaderService.disMissLoading();
+      this.ToastService.presentToastWithOptions('Something went wrong.Please try again later.');
+
       console.log(error);
     });
   }
