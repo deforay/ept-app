@@ -596,9 +596,8 @@ export class DTSHIVSerologyPage implements OnInit {
     this.expDateObj.forEach((element, index) => {
       this.testKitModel['expDate'][index] = element ? this.dateFormat(new Date(element)) : element
     });
-debugger;
-    this.result1Arr.forEach((element, index) => {
-      debugger;     
+
+    this.result1Arr.forEach((element, index) => { 
       if (element == null|| element==undefined) {
         this.result1Arr[index]="";
       }
