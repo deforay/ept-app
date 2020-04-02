@@ -15,6 +15,10 @@ export class AlertService {
   constructor(public alertController: AlertController, private router: Router,private market: Market,private storage: Storage) { }
 
   async presentAlertConfirm(headerMessage: string,contentMessage:string,alertName ? : any) {
+    const element = await this.alertController.getTop();
+    if (element && element.dismiss) {
+      element.dismiss();
+    }
     const alert = await this.alertController.create({
       header: headerMessage,
       message: contentMessage,
