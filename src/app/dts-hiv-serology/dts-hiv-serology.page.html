@@ -474,14 +474,13 @@
                 <mat-form-field  class="login-full-width grid-col-form"  appearance="outline">
                   <mat-label>{{sampleDetailsArray.resultsText[3]}}</mat-label>
                   <mat-select [(ngModel)]="finalResultArr[i]"
-                  name="finalResult_[{{i}}]" #finalResult="ngModel" [disabled]="isView=='true'">                         
+                  name="finalResult_[{{i}}]" #finalResult="ngModel" [disabled]="isView=='true'" [required]="samplesArray.mandatory[i]==true" >                         
                     <mat-option>--Select--</mat-option>
                    <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Final-Result'].data" [value]="item.value">
                       {{item.show}}
                     </mat-option>
                   </mat-select>         
-                 <!-- [required]="samplesArray.mandatory[i]==true"              -->
-                 <!-- <mat-error *ngIf="samplesArray.mandatory[i]==true && !finalResultArr[i]">Please Enter {{sampleDetailsArray.resultsText[3]}}</mat-error> -->
+                 <mat-error *ngIf="samplesArray.mandatory[i]==true && !finalResultArr[i]">Please Enter {{sampleDetailsArray.resultsText[3]}}</mat-error>
                 </mat-form-field>
               </ion-col>
             </ion-row>
