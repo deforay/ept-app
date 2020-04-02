@@ -40,6 +40,11 @@ import {
 import {
   LoadingController
 } from '@ionic/angular';
+import {
+  Network
+} from '@ionic-native/network/ngx';
+
+
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -83,28 +88,28 @@ export class LoginPage implements OnInit {
     public LoaderService: LoaderService,
     public alertService: AlertService,
     private appVersion: AppVersion,
-
+    public network: Network,
     public loadingController: LoadingController) {
-      this.appVersion.getVersionNumber().then((version) => {
-        if (version) {
-          this.appVersionNumber = version;
-          this.storage.set('appVersionNumber', this.appVersionNumber);
-
-        }
-
-      }, (err) => {
-        this.appVersionNumber = "0.0.1";
+    this.appVersion.getVersionNumber().then((version) => {
+      if (version) {
+        this.appVersionNumber = version;
         this.storage.set('appVersionNumber', this.appVersionNumber);
-      });
+
+      }
+
+    }, (err) => {
+      this.appVersionNumber = "0.0.1";
+      this.storage.set('appVersionNumber', this.appVersionNumber);
+    });
   }
   ngOnInit() {
 
   }
 
-  trimEmailFormControl(){
-   this.emailFormControl.setValue(this.emailFormControl.value.trim());
+  trimEmailFormControl() {
+    this.emailFormControl.setValue(this.emailFormControl.value.trim());
   }
-  
+
   ionViewDidEnter() {
     // the root left menu should be disabled on this page
     this.menu.enable(false);
@@ -114,77 +119,77 @@ export class LoginPage implements OnInit {
     // enable the root left menu when leaving this page
     this.menu.enable(true);
   }
- 
+
   login() {
 
+    if (this.network.type == 'none') {
+      this.ToastService.presentToastWithOptions("You are in offline.Please connect with online");
+    } else {
 
-    if (this.emailFormControl.invalid || this.pswdFormControl.invalid || this.serverHostFormControl.invalid) {} else {
-      var apiUrl = '';
-      if (this.serverHostFormControl.value.indexOf("https://") == 0 || this.serverHostFormControl.value.indexOf("Https://") == 0) {
-        apiUrl = this.serverHostFormControl.value 
-      } else if (this.serverHostFormControl.value.indexOf("http://") == 0 || this.serverHostFormControl.value.indexOf("Http://") == 0) {
-        apiUrl = this.serverHostFormControl.value
-      } else {
-        apiUrl = "https://" + this.serverHostFormControl.value
-      }
-
-      this.storage.set('apiUrl', apiUrl.trim());
-      this.storage.get('appVersionNumber').then((appVersionNumber) => {
-        if (appVersionNumber) {
-          this.appVersionNumber = appVersionNumber;
-          if (this.appVersionNumber) {
-            let loginJSON = {
-              "userId": this.emailFormControl.value,
-              "key": this.pswdFormControl.value,
-              "appVersion": this.appVersionNumber
-            }
-            this.CrudServiceService.postData('/api/login', loginJSON)
-              .then((result) => {
-          
-                if (result["status"] == 'success') {
-                  this.storage.set("isLogOut", false);
-                  if(result['data'].enableAddingTestResponseDate=="yes"){
-                    result['data'].enableAddingTestResponseDate=true;
-                  }
-                  else{
-                    result['data'].enableAddingTestResponseDate=false; 
-                  }
-                  if(result['data'].enableChoosingModeOfReceipt=="yes"){
-                    result['data'].enableChoosingModeOfReceipt=true;
-                  }
-                  else{
-                    result['data'].enableChoosingModeOfReceipt=false; 
-                  }
-                  if(result['data'].qcAccess=="yes"){
-                    result['data'].qcAccess=true;
-                  }
-                  else{
-                    result['data'].qcAccess=false; 
-                  }
-                  if(result['data'].viewOnlyAccess=="yes"){
-                    result['data'].viewOnlyAccess=true;
-                  }
-                  else{
-                    result['data'].viewOnlyAccess=false; 
-                  }
-                  this.storage.set('participantLogin', result['data']);
-                  this.router.navigate(['/all-pt-schemes']);
-      
-                } else if (result["status"] == 'version-failed') {
-
-                  this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
-                  
-                } else {
-                  this.ToastService.presentToastWithOptions(result["message"]);
-                }
-              }, (err) => {
-                //  this.LoaderService.disMissLoading();
-              });
-          }
+      if (this.emailFormControl.invalid || this.pswdFormControl.invalid || this.serverHostFormControl.invalid) {} else {
+        var apiUrl = '';
+        if (this.serverHostFormControl.value.indexOf("https://") == 0 || this.serverHostFormControl.value.indexOf("Https://") == 0) {
+          apiUrl = this.serverHostFormControl.value
+        } else if (this.serverHostFormControl.value.indexOf("http://") == 0 || this.serverHostFormControl.value.indexOf("Http://") == 0) {
+          apiUrl = this.serverHostFormControl.value
         } else {
-          console.log(appVersionNumber)
+          apiUrl = "https://" + this.serverHostFormControl.value
         }
-      })
+
+        this.storage.set('apiUrl', apiUrl.trim());
+        this.storage.get('appVersionNumber').then((appVersionNumber) => {
+          if (appVersionNumber) {
+            this.appVersionNumber = appVersionNumber;
+            if (this.appVersionNumber) {
+              let loginJSON = {
+                "userId": this.emailFormControl.value,
+                "key": this.pswdFormControl.value,
+                "appVersion": this.appVersionNumber
+              }
+              this.CrudServiceService.postData('/api/login', loginJSON)
+                .then((result) => {
+
+                  if (result["status"] == 'success') {
+                    this.storage.set("isLogOut", false);
+                    if (result['data'].enableAddingTestResponseDate == "yes") {
+                      result['data'].enableAddingTestResponseDate = true;
+                    } else {
+                      result['data'].enableAddingTestResponseDate = false;
+                    }
+                    if (result['data'].enableChoosingModeOfReceipt == "yes") {
+                      result['data'].enableChoosingModeOfReceipt = true;
+                    } else {
+                      result['data'].enableChoosingModeOfReceipt = false;
+                    }
+                    if (result['data'].qcAccess == "yes") {
+                      result['data'].qcAccess = true;
+                    } else {
+                      result['data'].qcAccess = false;
+                    }
+                    if (result['data'].viewOnlyAccess == "yes") {
+                      result['data'].viewOnlyAccess = true;
+                    } else {
+                      result['data'].viewOnlyAccess = false;
+                    }
+                    this.storage.set('participantLogin', result['data']);
+                    this.router.navigate(['/all-pt-schemes']);
+
+                  } else if (result["status"] == 'version-failed') {
+
+                    this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+
+                  } else {
+                    this.ToastService.presentToastWithOptions(result["message"]);
+                  }
+                }, (err) => {
+                  //  this.LoaderService.disMissLoading();
+                });
+            }
+          } else {
+            console.log(appVersionNumber)
+          }
+        })
+      }
     }
   }
 }

@@ -172,12 +172,12 @@
             <ion-col size="6" size-xs class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Shipment Receipt Date</mat-label>
-                <input matInput [matDatepicker]="testReceiptPicker" class="datepicker-input"
+                <input matInput [matDatepicker]="testReceiptPicker" type="tel" class="datepicker-input"
                   [(ngModel)]="shipmentData.testReceiptDate" [disabled]="isView=='true'" #eidTestRecieptDate="ngModel"
-                  name="eidTestRecieptDate" placeholder="Choose Shipment Receipt date" required>
+                  name="eidTestRecieptDate" placeholder="Choose a date Eg: 28-02-2020" required>
                 <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
                 <mat-datepicker #testReceiptPicker [disabled]="isView=='true'"></mat-datepicker>
-                <mat-error *ngIf="!shipmentData.testReceiptDate">Shipment Receipt Date is required
+                <mat-error *ngIf="!shipmentData.testReceiptDate">Shipment Receipt Date is required Eg: 28-02-2020
                 </mat-error>
               </mat-form-field>
             </ion-col>
@@ -186,11 +186,11 @@
                 <mat-label>Sample Rehydration Date</mat-label>
                 <input matInput [matDatepicker]="sampleRhdPicker" #eidSampleRehydrationDate="ngModel"
                   name="eidSampleRehydrationDate" [(ngModel)]="shipmentData.sampleRehydrationDate"
-                  placeholder="Choose Sample Rehydration Date" [disabled]="isView=='true'" required>
+                  placeholder="Choose a date Eg: 28-02-2020" type="tel" [disabled]="isView=='true'" required>
                 <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
                 <mat-datepicker #sampleRhdPicker [disabled]="isView=='true'"></mat-datepicker>
                 <mat-error *ngIf="!shipmentData.sampleRehydrationDate">
-                  Sample Rehydration Date is required
+                  Sample Rehydration Date is required Eg: 28-02-2020
                 </mat-error>
               </mat-form-field>
             </ion-col>
@@ -198,12 +198,12 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Shipment Testing Date</mat-label>
                 <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="shipmentData.shipmentTestingDate"
-                  placeholder="Choose Shipment Testing Date" #eidTestingDate="ngModel" name="eidTestingDate" required
+                placeholder="Choose a date Eg: 28-02-2020" type="tel"  #eidTestingDate="ngModel" name="eidTestingDate" required
                   [disabled]="isView=='true'">
                 <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
                 <mat-datepicker #testDatePicker [disabled]="isView=='true'"></mat-datepicker>
                 <mat-error *ngIf="!shipmentData.shipmentTestingDate">
-                  Shipment Testing Date is required
+                  Shipment Testing Date is required Eg: 28-02-2020
                 </mat-error>
 
               </mat-form-field>
@@ -274,12 +274,12 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Extraction Assay Expiration Date</mat-label>
                 <input matInput [matDatepicker]="extAssayExpiryDate" [(ngModel)]="shipmentData.extractionExpirationDate"
-                  placeholder="Choose a Date" #extExpDate="ngModel" name="extExpDate" required
+                placeholder="Choose a date Eg: 28-02-2020" type="tel" #extExpDate="ngModel" name="extExpDate" required
                   [disabled]="isView=='true'">
                 <mat-datepicker-toggle matSuffix [for]="extAssayExpiryDate"></mat-datepicker-toggle>
                 <mat-datepicker #extAssayExpiryDate [disabled]="isView=='true'"></mat-datepicker>
                 <mat-error *ngIf="!shipmentData.extractionExpirationDate">
-                  Extraction Assay Expiration Date is required
+                  Extraction Assay Expiration Date is required Eg: 28-02-2020
                 </mat-error>
 
               </mat-form-field>
@@ -288,12 +288,12 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Detection Assay Expiration Date</mat-label>
                 <input matInput [matDatepicker]="detAssayExpiryDate" #detExpDate="ngModel" name="detExpDate"
-                  [(ngModel)]="shipmentData.detectionExpirationDate" placeholder="Choose a date" required
+                  [(ngModel)]="shipmentData.detectionExpirationDate" placeholder="Choose a date Eg: 28-02-2020" type="tel" required
                   [disabled]="isView=='true'">
                 <mat-datepicker-toggle matSuffix [for]="detAssayExpiryDate"></mat-datepicker-toggle>
                 <mat-datepicker #detAssayExpiryDate [disabled]="isView=='true'"></mat-datepicker>
                 <mat-error *ngIf="!shipmentData.detectionExpirationDate">
-                  Detection Assay Expiration Date is required
+                  Detection Assay Expiration Date is required Eg: 28-02-2020
                 </mat-error>
               </mat-form-field>
             </ion-col>
@@ -302,12 +302,12 @@
             <ion-col size="6" size-xs class="grid-input-col" *ngIf="isPartiEditRespDate">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Response Date</mat-label>
-                <input matInput [matDatepicker]="respDate" placeholder="Choose a date" #eidrespDate="ngModel"
+                <input matInput [matDatepicker]="respDate" placeholder="Choose a date Eg: 28-02-2020" type="tel" #eidrespDate="ngModel"
                   name="eidrespDate" [(ngModel)]="shipmentData.responseDate" [required]="isPartiEditRespDate"
                   [disabled]="isView=='true'">
                 <mat-datepicker-toggle matSuffix [for]="respDate"></mat-datepicker-toggle>
                 <mat-datepicker #respDate [disabled]="isView=='true'"></mat-datepicker>
-                <mat-error *ngIf="!shipmentData.responseDate && isPartiEditRespDate"> Response Date is required
+                <mat-error *ngIf="!shipmentData.responseDate && isPartiEditRespDate"> Response Date is required Eg: 28-02-2020
                 </mat-error>
               </mat-form-field>
             </ion-col>
@@ -343,12 +343,12 @@
             <ion-col size="12">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>QC Date</mat-label>
-                <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" placeholder="Choose QC Date"
+                <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" placeholder="Choose a date Eg: 28-02-2020" type="tel"
                   [required]="isQCDoneShow && qcDone=='yes'" name="eidQcDate" #eidQcDate="ngModel"
                   [disabled]="isView=='true'">
                 <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
                 <mat-datepicker #qcDatePicker [disabled]="isView=='true'"></mat-datepicker>
-                <mat-error *ngIf="!qcDate">QC Date is required</mat-error>
+                <mat-error *ngIf="!qcDate">QC Date is required Eg: 28-02-2020</mat-error>
               </mat-form-field>
             </ion-col>
             <ion-col size="12">
@@ -356,7 +356,7 @@
                 <mat-label>QC Done By </mat-label>
                 <input matInput [(ngModel)]="qcDoneBy" name="eidqcDoneBy" #eidqcDoneBy="ngModel"
                   placeholder="Enter QC Done by" [required]="isQCDoneShow && qcDone=='yes'" [disabled]="isView=='true'">
-                <mat-error *ngIf="!qcDoneBy">Please enter QC done by name</mat-error>
+                <mat-error *ngIf="!qcDoneBy">Please enter QC done by</mat-error>
               </mat-form-field>
             </ion-col>
           </ion-row>
