@@ -8,7 +8,8 @@ import {
 import {
   CrudServiceService,
   ToastService,
-  LoaderService
+  LoaderService,
+  AlertService
 } from '../../app/service/providers';
 import {
   Storage
@@ -30,6 +31,12 @@ import {
 import {
   ROOT_DIRECTORY
 } from '../../app/service/constant';
+import {
+  Network
+} from '@ionic-native/network/ngx';
+import {
+  Events
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-individual-report',
@@ -41,27 +48,21 @@ export class IndividualReportPage {
   appVersionNumber: any;
   individualReports = [];
   apiUrl: string;
+  networkType: string;
+  skeltonArray: any = [];
+
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
+    public alertService: AlertService,
     private iab: InAppBrowser,
     private fileOpener: FileOpener,
     public LoaderService: LoaderService,
     private ft: FileTransfer, private file: File,
-    private router: Router) {
+    private router: Router,
+    public network: Network,
+    public events: Events) {
 
-    this.storage.get('appVersionNumber').then((appVersionNumber) => {
-      if (appVersionNumber) {
-        this.appVersionNumber = appVersionNumber;
-        this.getIndividualReports();
-
-      }
-    })
-    this.storage.get('apiUrl').then((url) => {
-      if (url) {
-        this.apiUrl = url;
-      }
-    })
   }
 
   downloadReport(downloadLink, fileName) {
@@ -83,12 +84,15 @@ export class IndividualReportPage {
       console.log(error);
     });
   }
+
   getIndividualReports() {
+    this.skeltonArray = [{}, {}, {}, {}];
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
 
         this.CrudServiceService.getData('/api/participant/get/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber)
           .then(result => {
+            this.skeltonArray = [];
             //   this.LoaderService.disMissLoading();
             if (result["status"] == 'success') {
               this.individualReports = result['data'];
@@ -108,7 +112,52 @@ export class IndividualReportPage {
   }
 
   ionViewWillEnter() {
-    //   this.getIndividualReports();   
 
+    this.networkType = this.network.type;
+    //this.networkType = 'none';
+
+    this.events.subscribe('network:offline', (data) => {
+      this.networkType = this.network.type;
+      if(this.router.url=='/individual-report'){
+      this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "reportModule");
+      }
+    })
+
+    // Online event
+    this.events.subscribe('network:online', () => { 
+      this.networkType = this.network.type;
+      if(this.router.url=='/individual-report'){
+      this.getOnlineIndividualReports();
+      }
+    })
+
+    if (this.networkType == "none") {
+      this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "reportModule");
+    } else {
+      this.getOnlineIndividualReports();
+    }
   }
+
+  getOnlineIndividualReports() {
+    this.storage.get('appVersionNumber').then((appVersionNumber) => {
+      if (appVersionNumber) {
+        this.appVersionNumber = appVersionNumber;
+        this.getIndividualReports();
+
+      }
+    })
+    this.storage.get('apiUrl').then((url) => {
+      if (url) {
+        this.apiUrl = url;
+      }
+    })
+  }
+
+  doRefresh(event) {
+    setTimeout(() => {
+      this.ionViewWillEnter();
+      event.target.complete();
+    }, 2000);
+  }
+
 }

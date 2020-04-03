@@ -383,7 +383,7 @@ export class DTSHIVSerologyPage implements OnInit {
   }
   dateFormat(dateObj) {
     if (dateObj != '') {
-      return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
+      return this.formattedDate = (dateObj.getFullYear()) + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + (dateObj.getDate())).slice(-2);
     } else {
       return dateObj;
     }
@@ -600,6 +600,26 @@ export class DTSHIVSerologyPage implements OnInit {
     this.result1Arr.forEach((element, index) => { 
       if (element == null|| element==undefined) {
         this.result1Arr[index]="";
+      }
+    })
+    this.result2Arr.forEach((element, index) => { 
+      if (element == null|| element==undefined) {
+        this.result2Arr[index]="";
+      }
+    })
+    this.result3Arr.forEach((element, index) => { 
+      if (element == null|| element==undefined) {
+        this.result3Arr[index]="";
+      }
+    })
+    this.finalResultArr.forEach((element, index) => { 
+      if (element == null|| element==undefined) {
+        this.finalResultArr[index]="";
+      }
+    })
+    this.testKitModel['kitValue'].forEach((element, index) => { 
+      if (element == null|| element==undefined) {
+        this.testKitModel['kitValue'][index]="";
       }
     })
     //Samples Obj

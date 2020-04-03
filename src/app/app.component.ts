@@ -35,8 +35,12 @@ import {
 import {
   Router
 } from '@angular/router';
-import { File } from '@ionic-native/file/ngx';
-import {ROOT_DIRECTORY} from '../app/service/constant';
+import {
+  File
+} from '@ionic-native/file/ngx';
+import {
+  ROOT_DIRECTORY
+} from '../app/service/constant';
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -114,8 +118,23 @@ export class AppComponent {
         this.appVersionNumber = "0.0.1";
         this.storage.set('appVersionNumber', this.appVersionNumber);
       });
-   //Create Directory for EPT REPORTS
-   this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
+
+      this.storage.get('isLogOut').then((isLogOut) => {
+        if (isLogOut == false && this.router.url!='/') {
+          this.router.navigateByUrl(this.router.url);
+        } 
+        else if(isLogOut == false && this.router.url=='/'){
+          this.router.navigateByUrl('/all-pt-schemes');
+        }
+        else {
+          this.router.navigateByUrl('/login', {
+            replaceUrl: true
+          });
+        }
+      })
+      
+      //Create Directory for EPT REPORTS
+      this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
 
 
       this.NetworkService.initializeNetworkEvents();
@@ -131,13 +150,7 @@ export class AppComponent {
 
       }
 
-      this.storage.get('isLogOut').then((isLogOut) => {
-        if (isLogOut == false) {
-          this.router.navigateByUrl('/all-pt-schemes', {replaceUrl: true});
-        } else {
-          this.router.navigateByUrl('/login', {replaceUrl: true});
-        }
-      })
+    
 
       this.platform.backButton.subscribeWithPriority(0, () => {
         if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes' || this.router.url === '/individual-report' || this.router.url === '/summary-report') {
@@ -160,13 +173,13 @@ export class AppComponent {
         }
       });
     });
-
-    // if(!this.appVersionNumber) {
-    //   //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-    //   this.appVersionNumber = "0.0.1";
-    //   this.storage.set('appVersionNumber', this.appVersionNumber);
-    //   //end
-    // }
+    
+    if (!this.appVersionNumber) {
+      //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
+      this.appVersionNumber = "0.0.1";
+      this.storage.set('appVersionNumber', this.appVersionNumber);
+      //end
+    }
 
 
   }

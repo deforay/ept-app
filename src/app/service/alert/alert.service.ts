@@ -47,9 +47,31 @@ export class AlertService {
             }
           }
         }
-      ]
+      ],
+      backdropDismiss: false
     });
 
+    await alert.present();
+  }
+
+  async presentAlert(headerMessage: string,contentMessage:string,alertName ? : any) {
+    const element = await this.alertController.getTop();
+    if (element && element.dismiss) {
+      element.dismiss();
+    }
+    const alert = await this.alertController.create({
+      header: headerMessage,
+    //  subHeader: 'Subtitle',
+      message: contentMessage,
+      buttons: [
+        {
+          text: 'OK',
+          handler: () => {
+          }
+        }
+      ],
+      backdropDismiss: false
+    });
     await alert.present();
   }
 }

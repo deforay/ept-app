@@ -51,9 +51,8 @@ from '@angular/platform-browser'
 
 import {
   Network
-}
+}from '@ionic-native/network/ngx';
 
-from '@ionic-native/network/ngx';
 
 import {
   LocalShipmentFormService
@@ -200,7 +199,6 @@ interface selectArray {
   ) {}
 
   ionViewWillEnter() {
-
     this.vlNotTestedReason = '';
     this.ptNotTestedComments = '';
     this.ptSupportComments = '';

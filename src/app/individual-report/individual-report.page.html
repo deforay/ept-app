@@ -1,6 +1,12 @@
 <app-header [titleHeader]="'Individual Report'" [isMenuOrBackButton]="'menu'"></app-header>
 
 <ion-content>
+
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="networkType!='none'">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+
+<div *ngIf="networkType!='none'">
   <ion-card *ngFor="let item of individualReports" class="eptCard">
     <ion-card-header class="CardHeader">
       <p text-wrap class="schemeName"> {{item.schemeName}}</p>
@@ -107,5 +113,70 @@
 
     </ion-card-content>
   </ion-card>
+
+  
+    <!-- ion-skeleton-text code start -->
+    <ion-card *ngFor="let item of skeltonArray" class="eptCard">
+      <ion-card-header class="CardHeader">
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      </ion-card-header>
+  
+      <ion-card-content class="cardContent">
+        <ion-grid class="shipmentGrid">
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p text-wrap>
+                <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p text-wrap>
+                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p text-wrap>
+                <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p text-wrap>
+                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p text-wrap>
+                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p text-wrap>
+                <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+    <!-- ion-skeleton-text code end -->
+  </div>
+
+    <ion-card class="eptCard noReports" *ngIf="networkType=='none'">
+      <ion-card-content class="cardContent">
+      <p class="noReports">
+        No reports data available 
+      </p>
+        </ion-card-content>
+    </ion-card>
 
 </ion-content>
