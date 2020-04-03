@@ -79,13 +79,10 @@ export class SummaryReportPage implements OnInit {
   getSummaryReports(){
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
-        //   this.LoaderService.presentLoading();
         this.CrudServiceService.getData('/api/participant/summary/?authToken=' + partiLoginResult.authToken+'&appVersion='+this.appVersionNumber)
           .then(result => {
-            //   this.LoaderService.disMissLoading();
             if (result["status"] == 'success') {
               this.summaryReports = result['data'];
-              console.log(this.summaryReports);
             }
              else if(result["status"] == "auth-fail") {
               this.ToastService.presentToastWithOptions(result["message"]);      
@@ -97,7 +94,6 @@ export class SummaryReportPage implements OnInit {
             }
           }, (err) => {
             console.log(err)
-            //    this.LoaderService.disMissLoading();
           });
       }
     });

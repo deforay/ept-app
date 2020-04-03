@@ -150,7 +150,8 @@ ion-toast {
 }
 .alert-head.sc-ion-alert-md{
     text-align: center;
-    background: (var(--ion-color-primary)) !important;
+  //  background: (var(--ion-color-primary)) !important;
+    background: #275f7f !important;
     padding-top: 13px !important;
     padding-bottom: 13px !important;
 }
@@ -165,8 +166,10 @@ ion-toast {
 .alert-head.sc-ion-alert-md + .alert-message.sc-ion-alert-md{
     padding-top: 14px;
     padding-bottom: 7px;
-    font-size: 14px;
-    color: var(--ion-color-step-550,#424242) !important;
+    font-size: 13.5px;
+    text-align: justify;
+    //color: var(--ion-color-step-550,#424242) !important;
+    color:black !important;
 }
 
 .alert-button.sc-ion-alert-md.primary{
@@ -184,6 +187,9 @@ input.mat-input-element{
 }
 .toolbar-background{
     background: #387ef5 !important;
+}
+.alert-button-inner.sc-ion-alert-md {
+    color:#275f7f !important;
 }
 // ion-button.button .button-native{ 
 //     height: 30px !important;
