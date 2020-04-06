@@ -44,3 +44,14 @@ ion-grid ion-row ion-col{
         color: black;
         font-size: 13.75px
     }
+    .skeltonRow{
+        padding: 6px;
+    }
+    .noReports{
+        text-align: center;
+        font-weight: 400;
+        color: black;
+    }
+    .eptCard.noReports{
+         padding:15px;
+    }

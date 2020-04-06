@@ -11,7 +11,8 @@ import {
   providedIn: 'root'
 })
 export class AlertService {
-
+  alertIndiviOfflineCount: number;
+  alertSummaryOfflineCount: number;
   constructor(public alertController: AlertController, private router: Router,private market: Market,private storage: Storage) { }
 
   async presentAlertConfirm(headerMessage: string,contentMessage:string,alertName ? : any) {
@@ -67,8 +68,15 @@ export class AlertService {
         {
           text: 'OK',
           handler: () => {
+        //    debugger;
+            // if(alertName=="individualReportAlert"){
+            //   this.alertIndiviOfflineCount=1;
+            // }
+            // if(alertName=="summaryReportAlert"){
+            //   this.alertSummaryOfflineCount=1;
+            // }
+            }
           }
-        }
       ],
       backdropDismiss: false
     });

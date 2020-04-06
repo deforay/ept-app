@@ -60,7 +60,11 @@ export class LocalShipmentFormService {
   }
 
    async offlineStoreShipmentForm(formJSON) {
-
+     
+    const element = await this.loadingCtrl.getTop();
+    if (element && element.dismiss) {
+      element.dismiss();
+    }
     const loading = await this.loadingCtrl.create({
       spinner: 'dots',
       message: 'Please wait',

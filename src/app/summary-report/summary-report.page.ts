@@ -1,8 +1,16 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 import {
   Router
 } from '@angular/router';
-import {  CrudServiceService,ToastService,LoaderService } from '../../app/service/providers';
+import {
+  CrudServiceService,
+  ToastService,
+  LoaderService,
+  AlertService
+} from '../../app/service/providers';
 import {
   Storage
 } from '@ionic/storage';
@@ -20,6 +28,12 @@ import {
 import {
   ROOT_DIRECTORY
 } from '../../app/service/constant';
+import {
+  Network
+} from '@ionic-native/network/ngx';
+import {
+  Events
+} from '@ionic/angular';
 
 @Component({
   selector: 'app-summary-report',
@@ -28,34 +42,28 @@ import {
 })
 export class SummaryReportPage implements OnInit {
   authToken: any;
-  appVersionNumber:any;
+  appVersionNumber: any;
   summaryReports = [];
-  apiUrl:string;
+  apiUrl: string;
+  networkType: string;
+  skeltonArray: any = [];
+  alertSummaryOfflineCount: number;
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
     private fileOpener: FileOpener,
-    private ft: FileTransfer, 
+    private ft: FileTransfer,
     private file: File,
-    private router: Router) { 
-      this.storage.get('appVersionNumber').then((appVersionNumber) => {
-        if (appVersionNumber) {
-         this.appVersionNumber=appVersionNumber;   
-       this.getSummaryReports();   
+    private router: Router,
+    public network: Network,
+    public events: Events,
+    public alertService: AlertService) {
 
-        }
-      })
-      this.storage.get('apiUrl').then((url) => {
-        if (url) {
-         this.apiUrl = url;
-        }
-      })
-    }
-
-  ngOnInit() {
   }
+
+  ngOnInit() {}
 
   downloadReport(downloadLink, fileName) {
     this.LoaderService.presentLoading();
@@ -76,21 +84,22 @@ export class SummaryReportPage implements OnInit {
       console.log(error);
     });
   }
-  getSummaryReports(){
+
+  getSummaryReports() {
+    this.skeltonArray = [{}, {}, {}, {}];
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
-        this.CrudServiceService.getData('/api/participant/summary/?authToken=' + partiLoginResult.authToken+'&appVersion='+this.appVersionNumber)
+        this.CrudServiceService.getData('/api/participant/summary/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber)
           .then(result => {
+            this.skeltonArray = [];
             if (result["status"] == 'success') {
               this.summaryReports = result['data'];
-            }
-             else if(result["status"] == "auth-fail") {
-              this.ToastService.presentToastWithOptions(result["message"]);      
-              this.storage.set("isLogOut",true);
+            } else if (result["status"] == "auth-fail") {
+              this.ToastService.presentToastWithOptions(result["message"]);
+              this.storage.set("isLogOut", true);
               this.router.navigate(['/login']);
-            }
-            else{
-              this.ToastService.presentToastWithOptions(result["message"]);   
+            } else {
+              this.ToastService.presentToastWithOptions(result["message"]);
             }
           }, (err) => {
             console.log(err)
@@ -98,10 +107,54 @@ export class SummaryReportPage implements OnInit {
       }
     });
   }
-  
-  ionViewWillEnter(){
- //   this.getIndividualReports();   
 
+  ionViewWillEnter() {
+    this.networkType = this.network.type;
+    // this.networkType = 'none';
+
+    this.events.subscribe('network:offline', (data) => {
+      this.networkType = this.network.type;
+      if (this.router.url == '/summary-report') {
+        // this.alertSummaryOfflineCount = 0;
+        // if (this.alertSummaryOfflineCount == 0) {
+          this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "summaryReportAlert");
+       // }
+      }
+    })
+
+    // Online event
+    this.events.subscribe('network:online', () => {
+      this.networkType = this.network.type;
+      if (this.router.url == '/summary-report') {
+        this.getOnlineSummaryReports();
+      }
+    })
+
+    if (this.networkType == "none") {
+      this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "reportModule");
+    } else {
+      this.getOnlineSummaryReports();
+    }
   }
 
+  getOnlineSummaryReports() {
+    this.storage.get('appVersionNumber').then((appVersionNumber) => {
+      if (appVersionNumber) {
+        this.appVersionNumber = appVersionNumber;
+        this.getSummaryReports();
+      }
+    })
+    this.storage.get('apiUrl').then((url) => {
+      if (url) {
+        this.apiUrl = url;
+      }
+    })
+  }
+
+  doRefresh(event) {
+    setTimeout(() => {
+      this.ionViewWillEnter();
+      event.target.complete();
+    }, 2000);
+  }
 }

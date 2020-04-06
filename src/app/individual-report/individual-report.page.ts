@@ -50,6 +50,7 @@ export class IndividualReportPage {
   apiUrl: string;
   networkType: string;
   skeltonArray: any = [];
+  alertIndiviOfflineCount: number;
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -85,7 +86,7 @@ export class IndividualReportPage {
   }
 
   getIndividualReports() {
-    this.skeltonArray = [{}, {}, {}, {}];
+    this.skeltonArray = [{}, {}, {}, {}, {}, {}];
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
         this.CrudServiceService.getData('/api/participant/get/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber)
@@ -110,20 +111,28 @@ export class IndividualReportPage {
   ionViewWillEnter() {
 
     this.networkType = this.network.type;
-    this.networkType = 'none';
+    console.log(this.networkType);
+    //  this.networkType = 'none';
 
     this.events.subscribe('network:offline', (data) => {
+   
       this.networkType = this.network.type;
-      if(this.router.url=='/individual-report'){
-      this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "reportModule");
+      //  this.alertIndiviOfflineCount = 0;
+      if (this.router.url == '/individual-report') {
+        // if (this.alertIndiviOfflineCount == 0) {
+        this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "individualReportAlert");
+        //   this.alertIndiviOfflineCount = 1;
+        // }
       }
     })
+    // this.events.unsubscribe('network:offline', (data) => {
 
+    // })
     // Online event
-    this.events.subscribe('network:online', () => { 
+    this.events.subscribe('network:online', () => {
       this.networkType = this.network.type;
-      if(this.router.url=='/individual-report'){
-      this.getOnlineIndividualReports();
+      if (this.router.url == '/individual-report') {
+        this.getOnlineIndividualReports();
       }
     })
 

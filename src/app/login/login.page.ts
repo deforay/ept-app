@@ -119,6 +119,14 @@ export class LoginPage implements OnInit {
     // enable the root left menu when leaving this page
     this.menu.enable(true);
   }
+  // (keypress)="omit_special_char($event)"
+  omit_special_char(event)
+  {   
+     var k;  
+     k = event.charCode;  //         k = event.keyCode;  (Both can be used)
+   //  return((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 || (k >= 48 && k <= 57)); 
+     return((k > 64 && k < 91) || (k > 96 && k < 123) || k == 8 || k == 32 ||  k != 191 || (k >= 48 && k <= 57)); 
+  }
 
   login() {
 
@@ -148,7 +156,6 @@ export class LoginPage implements OnInit {
               }
               this.CrudServiceService.postData('/api/login', loginJSON)
                 .then((result) => {
-
                   if (result["status"] == 'success') {
                     this.storage.set("isLogOut", false);
                     if (result['data'].enableAddingTestResponseDate == "yes") {
@@ -179,10 +186,15 @@ export class LoginPage implements OnInit {
                     this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
 
                   } else {
-                    this.ToastService.presentToastWithOptions(result["message"]);
+                    this.alertService.presentAlert('Alert',result["message"],'');
                   }
                 }, (err) => {
-                  //  this.LoaderService.disMissLoading();
+                  if (err.status == 0) {
+                    this.alertService.presentAlert('Alert',"Please check your login url",'');
+                  }
+                  else{
+                 this.alertService.presentAlert('Alert',"Something went wrong.Please try again later",'');
+                  }
                 });
             }
           } else {
