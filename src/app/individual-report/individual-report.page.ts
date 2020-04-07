@@ -37,7 +37,10 @@ import {
 import {
   Events
 } from '@ionic/angular';
-
+import { Subscription} from 'rxjs';
+import {
+  Platform,
+} from '@ionic/angular';
 @Component({
   selector: 'app-individual-report',
   templateUrl: './individual-report.page.html',
@@ -51,7 +54,7 @@ export class IndividualReportPage {
   networkType: string;
   skeltonArray: any = [];
   alertIndiviOfflineCount: number;
-
+  resumeListener: Subscription = new Subscription();
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -62,8 +65,14 @@ export class IndividualReportPage {
     private ft: FileTransfer, private file: File,
     private router: Router,
     public network: Network,
-    public events: Events) {
+    public events: Events,
+    private platform: Platform,) {
 
+  }
+
+  
+  ionViewWillLeave() {
+   // this.resumeListener.unsubscribe();
   }
 
   downloadReport(downloadLink, fileName) {
@@ -110,24 +119,18 @@ export class IndividualReportPage {
 
   ionViewWillEnter() {
 
+   // this.resumeListener = this.platform.resume.subscribe();
     this.networkType = this.network.type;
     console.log(this.networkType);
     //  this.networkType = 'none';
 
     this.events.subscribe('network:offline', (data) => {
-   
       this.networkType = this.network.type;
-      //  this.alertIndiviOfflineCount = 0;
-      if (this.router.url == '/individual-report') {
-        // if (this.alertIndiviOfflineCount == 0) {
+      if (this.router.url == '/individual-report') {  
         this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "individualReportAlert");
-        //   this.alertIndiviOfflineCount = 1;
-        // }
       }
     })
-    // this.events.unsubscribe('network:offline', (data) => {
-
-    // })
+   
     // Online event
     this.events.subscribe('network:online', () => {
       this.networkType = this.network.type;

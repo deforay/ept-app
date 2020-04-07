@@ -115,10 +115,7 @@ export class SummaryReportPage implements OnInit {
     this.events.subscribe('network:offline', (data) => {
       this.networkType = this.network.type;
       if (this.router.url == '/summary-report') {
-        // this.alertSummaryOfflineCount = 0;
-        // if (this.alertSummaryOfflineCount == 0) {
           this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "summaryReportAlert");
-       // }
       }
     })
 

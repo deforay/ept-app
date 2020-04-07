@@ -75,7 +75,7 @@ import * as _ from 'lodash';
     private router: Router,
     public network: Network,
     public events: Events) {
-
+  
   }
 
   dateFormat(dateObj) {
@@ -88,7 +88,7 @@ import * as _ from 'lodash';
 
     //comment when take buid start
 
-   // this.networkType = "4G";
+    this.networkType = "4G";
 
     //end...
 
@@ -104,6 +104,11 @@ import * as _ from 'lodash';
       this.callOnlineFunctions();
     })
 
+    this.onloadShipment();
+    
+  }
+  onloadShipment(){
+
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
@@ -111,7 +116,6 @@ import * as _ from 'lodash';
     })
 
     this.storage.get('participantLogin').then((partiLoginResult) => {
-
       if (partiLoginResult.authToken) {
         this.authToken = partiLoginResult.authToken;
       }
@@ -134,9 +138,7 @@ import * as _ from 'lodash';
     }
   }
 
-
   callOnlineFunctions() {
-
     this.getAllShipmentForms();
     this.getAllShippings();
   }
@@ -164,7 +166,9 @@ import * as _ from 'lodash';
   ngOnInit() {}
 
   getAllShippings() {
+ 
     this.skeltonArray = [{}, {}, {}, {}];
+    this.shippingsArray=[];
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
        
@@ -200,15 +204,17 @@ import * as _ from 'lodash';
             this.storage.set('participantLogin', this.partiDetailsArray);
 
             this.CrudServiceService.getData('/api/shipments/get/?authToken=' + result['data'].authToken + '&appVersion=' + this.appVersionNumber).then(result => {
-              this.skeltonArray = [];
+           
               if (result["status"] == 'success') {
-
+            //   setTimeout(() => {
+              
                 this.shippingsArray = result['data'];
 
                 this.storage.set("shipmentArray", this.shippingsArray);
-
+                this.skeltonArray = [];  
                 this.checkIsSynced();
 
+          //     }, 5000);
               }
             }, (err) => {});
           } else if (result["status"] == "auth-fail") {

@@ -297,13 +297,13 @@ export class DbsEidPage implements OnInit {
     }
   }
   getEIDFormDetails() {
-    this.eidArray=[];
+   
     this.storage.get('selectedTestFormArray').then((eidDataObj) => {
    
       this.isView = eidDataObj[0].isView;
       if (eidDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
-       
+     
           if ((localStorageSelectedFormArray[0].isSynced == eidDataObj[0].isSynced) &&
             (localStorageSelectedFormArray[0].evaluationStatus == eidDataObj[0].evaluationStatus) &&
             (localStorageSelectedFormArray[0].mapId == eidDataObj[0].mapId) &&
@@ -312,12 +312,14 @@ export class DbsEidPage implements OnInit {
             (localStorageSelectedFormArray[0].schemeType == eidDataObj[0].schemeType)) {
 
             this.isView = localStorageSelectedFormArray[0].isView;
+            this.eidArray=[];
             this.eidArray.push(localStorageSelectedFormArray[0]);
             this.bindEIDData();
 
           }
         })
       } else {
+      
         this.eidArray = [];
         this.eidArray.push(eidDataObj[0]);
         this.bindEIDData();
@@ -367,20 +369,20 @@ export class DbsEidPage implements OnInit {
           } else {
             this.yourResultCheckArray[index] = 'valid';
           }
-          if(this.ptPanelData['samples'].hivCtOd[index]==''||!this.ptPanelData['samples'].hivCtOd[index]){
-            this.icQsValuesCheckArray[index] = 'invalid';
-          } else {
-            this.icQsValuesCheckArray[index] = 'valid';
-          }
-          if(this.ptPanelData['samples'].IcQsValues[index]==''||!this.ptPanelData['samples'].IcQsValues[index]){
-            this.hivCTODCheckArray[index] = 'invalid';
-          } else {
-            this.hivCTODCheckArray[index] = 'valid';
-          }
+          // if(this.ptPanelData['samples'].hivCtOd[index]==''||!this.ptPanelData['samples'].hivCtOd[index]){
+          //   this.icQsValuesCheckArray[index] = 'invalid';
+          // } else {
+          //   this.icQsValuesCheckArray[index] = 'valid';
+          // }
+          // if(this.ptPanelData['samples'].IcQsValues[index]==''||!this.ptPanelData['samples'].IcQsValues[index]){
+          //   this.hivCTODCheckArray[index] = 'invalid';
+          // } else {
+          //   this.hivCTODCheckArray[index] = 'valid';
+          // }
         } else {
           this.yourResultCheckArray[index] = 'valid';
-          this.hivCTODCheckArray[index] = 'valid';
-          this.icQsValuesCheckArray[index] = 'valid';
+        //  this.hivCTODCheckArray[index] = 'valid';
+        //  this.icQsValuesCheckArray[index] = 'valid';
         }
       });
 
@@ -389,24 +391,26 @@ export class DbsEidPage implements OnInit {
         this.isValidPTPanel = false;
       } else {
         this.isValidPTPanel = true;
-        this.isQsArrayCheck = this.icQsValuesCheckArray.filter(i => i == 'invalid')
-        if (this.isQsArrayCheck.length > 0) {
-          this.isValidPTPanel = false;
-        } else {
-          this.isValidPTPanel = true;
-          this.hivCTODArrayCheck = this.hivCTODCheckArray.filter(i => i == 'invalid')
-          if (this.hivCTODArrayCheck.length > 0) {
-            this.isValidPTPanel = false;
-          } else {
-            this.isValidPTPanel = true;
-          }
-        }
+        // this.isQsArrayCheck = this.icQsValuesCheckArray.filter(i => i == 'invalid')
+        // if (this.isQsArrayCheck.length > 0) {
+        //   this.isValidPTPanel = false;
+        // } else {
+        //   this.isValidPTPanel = true;
+        //   this.hivCTODArrayCheck = this.hivCTODCheckArray.filter(i => i == 'invalid')
+        //   if (this.hivCTODArrayCheck.length > 0) {
+        //     this.isValidPTPanel = false;
+        //   } else {
+        //     this.isValidPTPanel = true;
+        //   }
+        // }
       }
 
     } else {
       if (!this.ptPanelData['vlNotTestedReason'] ||
-        !this.ptPanelData['ptNotTestedComments'] ||
-        !this.ptPanelData['ptSupportComments']) {
+        !this.ptPanelData['ptNotTestedComments'] 
+       // !this.ptPanelData['ptSupportComments']
+       )
+         {
         this.isValidPTPanel = false;
 
       } else {
@@ -502,7 +506,7 @@ export class DbsEidPage implements OnInit {
     }
     this.updatedStatus = this.eidArray[0].updatedStatus;
     if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.otherInfoValid == true) {
-debugger;
+
       this.EIDJSON = {
         "authToken": this.authToken,
         "appVersion": this.appVersionNumber,

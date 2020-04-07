@@ -11,12 +11,15 @@ import {
   Storage
 } from '@ionic/storage';
 import {
-  ToastService
+  ToastService,AlertService
 } from '../../app/service/providers';
 // export enum ConnectionStatusEnum {
 //   Online,
 //   Offline
 // }
+import {
+  Router
+} from '@angular/router';
 @Injectable({
   providedIn: 'root'
 })
@@ -28,7 +31,9 @@ export class NetworkService {
     public network: Network,
     private storage: Storage,
     public eventCtrl: Events,
-    public ToastService: ToastService
+    public ToastService: ToastService,
+    private router: Router,
+    public alertService: AlertService
   ) {
     
  //   this.previousStatus = ConnectionStatusEnum.Online;
@@ -55,8 +60,17 @@ export class NetworkService {
       this.storage.get('networkConnectivity').then((data) => {
     
       })
-
+    //   this.eventCtrl.subscribe('network:offline', (data) => {
+    //     debugger;
+    //  //   this.networkType = this.network.type;
+    //     if (this.router.url == '/individual-report') {
+    //       this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "individualReportAlert");
+    //     }
+    //   })
     });
+
+
+
     this.network.onConnect().subscribe(() => {
       console.log("online")
       // if (this.previousStatus === ConnectionStatusEnum.Offline) {

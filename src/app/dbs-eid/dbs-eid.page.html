@@ -438,9 +438,10 @@
                       <mat-label>{{ptPanelData.resultsTextData[2]}}</mat-label>
                       <input matInput [(ngModel)]="ptPanelData.samples.hivCtOd[i]" [disabled]="isView=='true'"
                         placeholder="Enter HIV CT/OD" name="hivCTOD[{{i}}]" #hivCTOD="ngModel"
-                        [required]="ptPanelData.sampleTextData.mandatory[i]==true">
-                      <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.hivCtOd[i]">Please Enter
-                        {{ptPanelData.resultsTextData[2]}}</mat-error>
+                        >
+                        <!-- [required]="ptPanelData.sampleTextData.mandatory[i]==true" -->
+                      <!-- <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.hivCtOd[i]">Please Enter
+                        {{ptPanelData.resultsTextData[2]}}</mat-error> -->
 
                     </mat-form-field>
                   </ion-col>
@@ -455,9 +456,10 @@
                       <mat-label>{{ptPanelData.resultsTextData[3]}}</mat-label>
                       <input matInput [(ngModel)]="ptPanelData.samples.IcQsValues[i]" [disabled]="isView=='true'"
                         placeholder="Enter IC/QS Values" name="icQsValues[{{i}}]" #icQsValues="ngModel"
-                        [required]="ptPanelData.sampleTextData.mandatory[i]==true">
-                      <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.IcQsValues[i]">Please
-                        Enter {{ptPanelData.resultsTextData[3]}}</mat-error>
+                       >
+                       <!-- [required]="ptPanelData.sampleTextData.mandatory[i]==true" -->
+                      <!-- <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.IcQsValues[i]">Please
+                        Enter {{ptPanelData.resultsTextData[3]}}</mat-error> -->
 
                     </mat-form-field>
                   </ion-col>
@@ -502,13 +504,13 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>
                   {{ptPanelData.ptSupportCommentsText}}
-
                 </mat-label>
                 <textarea matInput placeholder="Enter Your Support Comments here" name="eidPtNotSupportComments"
                   #eidPtNotSupportComments="ngModel" [disabled]="isView=='true'"
-                  [(ngModel)]="ptPanelData.ptSupportComments" [required]="ptPanelNotTested"></textarea>
-                <mat-error *ngIf="ptPanelNotTested && !ptPanelData.ptSupportComments">Please Enter Your Comments
-                </mat-error>
+                  [(ngModel)]="ptPanelData.ptSupportComments"></textarea>
+                  <!-- [required]="ptPanelNotTested" -->
+                <!-- <mat-error *ngIf="ptPanelNotTested && !ptPanelData.ptSupportComments">Please Enter Your Comments
+                </mat-error> -->
               </mat-form-field>
             </ion-col>
           </ion-row>

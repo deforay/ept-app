@@ -172,7 +172,15 @@ export class AppComponent {
 
         }
       });
-    });
+
+     this.platform.resume.subscribe ( (e) => {
+        console.trace("resume called"); });
+      
+      this.platform.pause.subscribe ( (e) => {
+        console.trace("pause called"); });
+        
+        });
+
     
     if (!this.appVersionNumber) {
       //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...

@@ -139,6 +139,10 @@ export class DTSHIVSerologyPage implements OnInit {
     public network: Network,
     public LocalShipmentFormService: LocalShipmentFormService,
   ) {
+   
+  }
+
+  ionViewWillEnter() {
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
@@ -156,9 +160,7 @@ export class DTSHIVSerologyPage implements OnInit {
       }
     })
   }
-
-
-
+  
   step = 0;
 
   setStep(index: number) {
