@@ -32,9 +32,6 @@ import {
   AlertService
 } from '../../app/service/providers';
 import {
-  AppVersion
-} from '@ionic-native/app-version/ngx';
-import {
   Storage
 } from '@ionic/storage';
 import {
@@ -43,7 +40,9 @@ import {
 import {
   Network
 } from '@ionic-native/network/ngx';
-
+import {
+  Events
+} from '@ionic/angular';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 
@@ -71,8 +70,7 @@ export class LoginPage implements OnInit {
     trimmedCharsValidator.checkTrimmedThreeChars
   ]);
   serverHostFormControl = new FormControl('', [
-    Validators.required,
-    // trimmedCharsValidator.checkTrimmedThreeChars
+    Validators.required
   ]);
 
   matcher = new MyErrorStateMatcher();
@@ -87,20 +85,10 @@ export class LoginPage implements OnInit {
     public ToastService: ToastService,
     public LoaderService: LoaderService,
     public alertService: AlertService,
-    private appVersion: AppVersion,
     public network: Network,
-    public loadingController: LoadingController) {
-    this.appVersion.getVersionNumber().then((version) => {
-      if (version) {
-        this.appVersionNumber = version;
-        this.storage.set('appVersionNumber', this.appVersionNumber);
-
-      }
-
-    }, (err) => {
-      this.appVersionNumber = "0.0.1";
-      this.storage.set('appVersionNumber', this.appVersionNumber);
-    });
+    public loadingController: LoadingController,
+    public events: Events) {
+  
   }
   ngOnInit() {
 
@@ -158,6 +146,7 @@ export class LoginPage implements OnInit {
                 .then((result) => {
                   if (result["status"] == 'success') {
                     this.storage.set("isLogOut", false);
+                    this.events.publish("loggedPartiName",result['data'].name);
                     if (result['data'].enableAddingTestResponseDate == "yes") {
                       result['data'].enableAddingTestResponseDate = true;
                     } else {

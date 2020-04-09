@@ -11,8 +11,12 @@ import {
   Storage
 } from '@ionic/storage';
 import {
-  ToastService,AlertService
+  ToastService,
+  AlertService
 } from '../../app/service/providers';
+import {
+  Platform
+} from '@ionic/angular';
 // export enum ConnectionStatusEnum {
 //   Online,
 //   Offline
@@ -33,11 +37,12 @@ export class NetworkService {
     public eventCtrl: Events,
     public ToastService: ToastService,
     private router: Router,
-    public alertService: AlertService
+    public alertService: AlertService,
+    private platform: Platform,
   ) {
-    
- //   this.previousStatus = ConnectionStatusEnum.Online;
-   
+
+    //   this.previousStatus = ConnectionStatusEnum.Online;
+
     // this.initializeNetworkEvents();
 
   }
@@ -54,19 +59,29 @@ export class NetworkService {
       console.log("Offline");
       this.storage.set('networkConnectivity', false);
       this.eventCtrl.publish('network:offline');
-      
+
       this.ToastService.presentToastWithOptions("You are in offline");
-    //  this.previousStatus = ConnectionStatusEnum.Offline;
+      //  this.previousStatus = ConnectionStatusEnum.Offline;
       this.storage.get('networkConnectivity').then((data) => {
-    
+
       })
-    //   this.eventCtrl.subscribe('network:offline', (data) => {
-    //     debugger;
-    //  //   this.networkType = this.network.type;
-    //     if (this.router.url == '/individual-report') {
-    //       this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "individualReportAlert");
-    //     }
-    //   })
+
+      this.platform.resume.subscribe((e) => {
+        console.trace("resume called");
+        this.eventCtrl.unsubscribe('network:offline', (data) => {})
+      });
+
+      this.platform.pause.subscribe((e) => {
+        console.trace("pause called");
+        this.eventCtrl.unsubscribe('network:offline', (data) => {})
+      });
+      //   this.eventCtrl.subscribe('network:offline', (data) => {
+      //     debugger;
+      //  //   this.networkType = this.network.type;
+      //     if (this.router.url == '/individual-report') {
+      //       this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "individualReportAlert");
+      //     }
+      //   })
     });
 
 
@@ -76,10 +91,10 @@ export class NetworkService {
       // if (this.previousStatus === ConnectionStatusEnum.Offline) {
       this.storage.set('networkConnectivity', true);
       this.eventCtrl.publish('network:online');
-   //   this.ToastService.presentToastWithOptions("You are in online");
-   //   this.previousStatus = ConnectionStatusEnum.Online;
+      //   this.ToastService.presentToastWithOptions("You are in online");
+      //   this.previousStatus = ConnectionStatusEnum.Online;
       this.storage.get('networkConnectivity').then((data) => {
-  
+
       })
     });
   }

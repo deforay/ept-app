@@ -30,6 +30,9 @@ margin: auto;
 .login-btn-grid button{ 
   width: 100%;
 }
+.loginTile{
+  margin-left: 8px;
+}
 .login-btn-grid a {
   color:#F44336;
   padding:0 5px 0 5px;
@@ -50,4 +53,7 @@ margin: auto;
 .mat-grid-list{
 //  padding-bottom: calc(((20% - 0.5px) * 1) + 0px) !important;
   padding-bottom: 40px !important;
+}
+.float-right{
+  font-size: 11px!important ;
 }

@@ -23,6 +23,9 @@ import {
   syncDataLimit
 } from '../service/constant';
 import * as _ from 'lodash';
+import {
+  LoadingController
+} from '@ionic/angular';
 
 @Component({
     selector: 'app-all-pt-schemes',
@@ -74,7 +77,8 @@ import * as _ from 'lodash';
     public LoaderService: LoaderService,
     private router: Router,
     public network: Network,
-    public events: Events) {
+    public events: Events,
+    public loadingCtrl: LoadingController) {
   
   }
 
@@ -253,14 +257,15 @@ import * as _ from 'lodash';
 
   checkIsSynced() {
     this.storage.get('localShipmentForm').then((localShipmentForm) => {
-    
-      if (localShipmentForm.length != 0) {
+ 
+     this.localStorageUnSyncedArray=[];
+       if (localShipmentForm.length != 0) {
         this.localShipmentArray = localShipmentForm;
         this.existingLabIndex = _.findIndex(localShipmentForm, {
           loginID: this.loginID
         });
 
-        if (this.existingLabIndex != 1) {
+        if (this.existingLabIndex != -1) {
           this.localStorageUnSyncedArray = localShipmentForm[this.existingLabIndex].shipmentArray;
           localShipmentForm[this.existingLabIndex].shipmentArray.forEach((localShipment, index) => {
             this.shippingsArray.forEach((shipmentAPI, index) => {
@@ -273,12 +278,27 @@ import * as _ from 'lodash';
           })
           console.log(this.localStorageUnSyncedArray);
         }
+        else{
+
+        }
+
       }
     })
   }
 
 
-  goToTestForm(item, isView) {
+  async goToTestForm(item, isView) {
+
+    const element = await this.loadingCtrl.getTop();
+    if (element && element.dismiss) {
+      element.dismiss();
+    }
+    const loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      message: 'Please wait',
+    });
+    await loading.present();
+
 
     if (isView == undefined) {
       isView = "false"
@@ -346,6 +366,7 @@ import * as _ from 'lodash';
         }
       }
     })
+    loading.dismiss();
   }
 
   syncShipments() {

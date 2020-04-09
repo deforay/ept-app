@@ -18,7 +18,7 @@
             <ion-col>
                 <mat-form-field class="login-full-width" appearance="outline">
                     <mat-label>Server Host</mat-label>
-                    <input matInput placeholder="https://ept.org.com" [formControl]="serverHostFormControl" [errorStateMatcher]="matcher" >
+                    <input matInput placeholder="https://ept.org.com" [formControl]="serverHostFormControl" [errorStateMatcher]="matcher" oninput="this.value?this.value=this.value.replace(/(?![A-Z a-z ./@:])./gmi,''):''">
                     <button mat-icon-button matSuffix>
                         <mat-icon>language
                           </mat-icon>
@@ -78,13 +78,13 @@
         </ion-grid>
 
 
-        <mat-grid-list class="login-btn-grid" cols="1" rowHeight="2:1">
-          <mat-grid-tile>
+        <mat-grid-list class="login-btn-grid" cols="2" rowHeight="2:1">
+          <mat-grid-tile class="loginTile">
             <button mat-raised-button color="primary" (click)="login()">Login</button>
           </mat-grid-tile>
-          <!-- <mat-grid-tile>
-            <a class="float-right" mat-flat-button routerLink=".">Forgot Password ?</a>
-          </mat-grid-tile> -->
+          <mat-grid-tile>
+            <a class="float-right" mat-flat-button routerLink="/forgot-password">Forgot Password ?</a>
+          </mat-grid-tile>
         </mat-grid-list>
 
       </mat-card-content>

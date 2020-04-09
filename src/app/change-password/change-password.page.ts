@@ -110,19 +110,19 @@ export class ChangePasswordPage implements OnInit {
       this.CrudServiceService.postData('/api/login/change-password',changePswdJson)
       .then(result => {
         if (result["status"] == 'success') {
+
           this.ToastService.presentToastWithOptions(result["message"]);
           this.storage.set("isLogOut", true);
           this.router.navigate(['/login'], {replaceUrl: true});
         }
         else if (result["status"] == "auth-fail") {
 
-          this.ToastService.presentToastWithOptions(result["message"]);
+          this.alertService.presentAlert("Alert",result["message"]);
           this.storage.set("isLogOut", true);
           this.router.navigate(['/login'], {replaceUrl: true});
 
         } else {
-
-          this.ToastService.presentToastWithOptions(result["message"]);
+          this.alertService.presentAlert("Alert",result["message"]);
         }
       }, (err) => {
        

@@ -133,11 +133,11 @@
 
         <ion-row>
           <ion-col size="6" *ngIf="isViewOnlyAccess==false">
-            <ion-button *ngIf="item.updatedOn=='' && responseSwitch==on" size="small" class="text-center native-btn"
+            <ion-button *ngIf="item.updatedOn=='' && responseSwitch==on && item.isSynced==''" size="small" class="text-center native-btn"
               (click)="goToTestForm(item)">Enter Response
             </ion-button>
 
-            <ion-button *ngIf="item.updatedOn!='' && responseSwitch==on" size="small" class="text-center native-btn"
+            <ion-button *ngIf="item.updatedOn!='' && responseSwitch==on || item.isSynced=='false'" size="small" class="text-center native-btn"
               (click)="goToTestForm(item)">Edit Response</ion-button>
           </ion-col>
 

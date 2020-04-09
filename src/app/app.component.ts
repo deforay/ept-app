@@ -82,6 +82,7 @@ export class AppComponent {
       icon: 'logout'
     },
   ];
+  participantName: any;
 
   constructor(
     private platform: Platform,
@@ -111,28 +112,21 @@ export class AppComponent {
         if (version) {
           this.appVersionNumber = version;
           this.storage.set('appVersionNumber', this.appVersionNumber);
-
         }
-
-      }, (err) => {
-        this.appVersionNumber = "0.0.1";
-        this.storage.set('appVersionNumber', this.appVersionNumber);
-      });
+      }, (err) => {});
 
       this.storage.get('isLogOut').then((isLogOut) => {
-        if (isLogOut == false && this.router.url!='/') {
+        if (isLogOut == false && this.router.url != '/') {
           this.router.navigateByUrl(this.router.url);
-        } 
-        else if(isLogOut == false && this.router.url=='/'){
+        } else if (isLogOut == false && this.router.url == '/') {
           this.router.navigateByUrl('/all-pt-schemes');
-        }
-        else {
+        } else {
           this.router.navigateByUrl('/login', {
             replaceUrl: true
           });
         }
       })
-      
+
       //Create Directory for EPT REPORTS
       this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
 
@@ -149,8 +143,6 @@ export class AppComponent {
         //  this.ToastService.presentToastWithOptions("You are in online");
 
       }
-
-    
 
       this.platform.backButton.subscribeWithPriority(0, () => {
         if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes' || this.router.url === '/individual-report' || this.router.url === '/summary-report') {
@@ -173,15 +165,24 @@ export class AppComponent {
         }
       });
 
-     this.platform.resume.subscribe ( (e) => {
-        console.trace("resume called"); });
-      
-      this.platform.pause.subscribe ( (e) => {
-        console.trace("pause called"); });
+      this.platform.resume.subscribe((e) => {
+        console.trace("resume called");
         
-        });
+      });
 
+      this.platform.pause.subscribe((e) => {
+        console.trace("pause called");
+      });
+
+    });
+
+    this.storage.get('participantLogin').then((participantLogin) => {
+      this.participantName = participantLogin.name;
+    })
     
+    this.events.subscribe('loggedPartiName', (result) => {
+      this.participantName =result;
+    })
     if (!this.appVersionNumber) {
       //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
       this.appVersionNumber = "0.0.1";

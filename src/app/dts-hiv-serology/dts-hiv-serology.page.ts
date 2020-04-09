@@ -392,7 +392,7 @@ export class DTSHIVSerologyPage implements OnInit {
   }
 
   getSerologyDetails() {
-    this.dtsArray = [];
+  
     this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
 
       this.isView = dtsDataObj[0].isView;
@@ -411,6 +411,7 @@ export class DTSHIVSerologyPage implements OnInit {
           }
         })
       } else {
+        this.dtsArray = [];
         this.dtsArray.push(dtsDataObj[0]);
         this.bindSerologyData();
       }

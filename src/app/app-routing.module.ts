@@ -50,6 +50,10 @@ const routes: Routes = [
   {
     path: 'dbs-eid',
     loadChildren: () => import('./dbs-eid/dbs-eid.module').then( m => m.DbsEidPageModule)
+  },
+  {
+    path: 'forgot-password',
+    loadChildren: () => import('./forgot-password/forgot-password.module').then( m => m.ForgotPasswordPageModule)
   }
 ];
 
