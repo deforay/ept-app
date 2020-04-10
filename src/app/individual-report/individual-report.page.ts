@@ -37,10 +37,6 @@ import {
 import {
   Events
 } from '@ionic/angular';
-import { Subscription} from 'rxjs';
-import {
-  Platform,
-} from '@ionic/angular';
 @Component({
   selector: 'app-individual-report',
   templateUrl: './individual-report.page.html',
@@ -53,8 +49,7 @@ export class IndividualReportPage {
   apiUrl: string;
   networkType: string;
   skeltonArray: any = [];
-  alertIndiviOfflineCount: number;
-  resumeListener: Subscription = new Subscription();
+
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -67,13 +62,8 @@ export class IndividualReportPage {
     private router: Router,
     public network: Network,
     public events: Events,
-    private platform: Platform,) {
+     ) {
 
-  }
-
-  
-  ionViewWillLeave() {
-   // this.resumeListener.unsubscribe();
   }
 
   downloadReport(downloadLink, fileName) {
@@ -90,7 +80,7 @@ export class IndividualReportPage {
       this.fileOpener.open(url, 'application/pdf');
     }, (error) => {
       this.LoaderService.disMissLoading();
-      this.ToastService.presentToastWithOptions('Something went wrong.Please try again later.');
+      this.alertService.presentAlert('Alert','Something went wrong.Please try again later.');
       console.log(error);
     });
   }
@@ -105,11 +95,11 @@ export class IndividualReportPage {
             if (result["status"] == 'success') {
               this.individualReports = result['data'];
             } else if (result["status"] == "auth-fail") {
-              this.ToastService.presentToastWithOptions(result["message"]);
+              this.alertService.presentAlert('Alert',result["message"]);
               this.storage.set("isLogOut", true);
               this.router.navigate(['/login']);
             } else {
-              this.ToastService.presentToastWithOptions(result["message"]);
+              this.alertService.presentAlert('Alert',result["message"]);
             }
           }, (err) => {
             console.log(err)
@@ -120,18 +110,25 @@ export class IndividualReportPage {
 
   ionViewWillEnter() {
 
-   // this.resumeListener = this.platform.resume.subscribe();
     this.networkType = this.network.type;
     console.log(this.networkType);
     //  this.networkType = 'none';
 
     this.events.subscribe('network:offline', (data) => {
       this.networkType = this.network.type;
-      if (this.router.url == '/individual-report') {  
-        this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "individualReportAlert");
+      if (this.router.url == '/individual-report') {
+        this.storage.set("individualrepALert", true);
+        setTimeout(() => {
+        this.storage.get('individualrepALert').then((result) => {
+          if (result == true) {
+            this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "individualReportAlert");
+            this.storage.set("individualrepALert", false); 
+          }
+        })
+      }, 2000);
       }
     })
-   
+
     // Online event
     this.events.subscribe('network:online', () => {
       this.networkType = this.network.type;

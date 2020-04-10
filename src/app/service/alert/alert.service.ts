@@ -11,7 +11,6 @@ import {
   providedIn: 'root'
 })
 export class AlertService {
-  participantName: string;
 
   constructor(public alertController: AlertController, private router: Router,private market: Market,private storage: Storage) { }
 

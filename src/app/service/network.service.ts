@@ -15,89 +15,91 @@ import {
   AlertService
 } from '../../app/service/providers';
 import {
-  Platform
-} from '@ionic/angular';
-// export enum ConnectionStatusEnum {
-//   Online,
-//   Offline
-// }
-import {
   Router
 } from '@angular/router';
+import {
+  Platform
+} from '@ionic/angular';
 @Injectable({
   providedIn: 'root'
 })
 
 export class NetworkService {
 
-  previousStatus;
+  appResumed: boolean = false;
+  eventOnline: boolean = false;
+  ok: boolean;
+
   constructor(
+    private platform: Platform,
     public network: Network,
     private storage: Storage,
     public eventCtrl: Events,
     public ToastService: ToastService,
     private router: Router,
     public alertService: AlertService,
-    private platform: Platform,
-  ) {
+  ) {}
 
-    //   this.previousStatus = ConnectionStatusEnum.Online;
-
-    // this.initializeNetworkEvents();
-
-  }
   public getNetworkType() {
-    //console.log( this.network.type);
     return this.network.type;
   }
+
   public initializeNetworkEvents(): void {
 
-
     this.network.onDisconnect().subscribe(() => {
-      // if (this.previousStatus === ConnectionStatusEnum.Online) {
-
-      console.log("Offline");
-      this.storage.set('networkConnectivity', false);
-      this.eventCtrl.publish('network:offline');
-
-      this.ToastService.presentToastWithOptions("You are in offline");
-      //  this.previousStatus = ConnectionStatusEnum.Offline;
-      this.storage.get('networkConnectivity').then((data) => {
-
-      })
-
-      this.platform.resume.subscribe((e) => {
+        debugger;
+        console.log("Offline");
+        this.eventOnline = true;
+        this.storage.set('networkConnectivity', false);
+        this.eventCtrl.publish('network:offline');
+        this.storage.get('appResumed').then((result) => {
+            if (result == true) {
+              this.appResumed = false;
+              this.storage.set("appResumed", false);
+            }
+          })
+          // if (this.appResumed == false) {
+          //   const onlineRouters = ['/summary-report', '/individual-report'];
+          //   if (!onlineRouters.includes(this.router.url)) {
+          //     this.ToastService.presentToastWithOptions("You are in offline");
+          //   }
+          // }
+        this.platform.resume.subscribe((e) => {
+        debugger;
         console.trace("resume called");
-        this.eventCtrl.unsubscribe('network:offline', (data) => {})
-      });
+        this.appResumed = true;
+        this.storage.set("appResumed", true);
+      })
 
       this.platform.pause.subscribe((e) => {
+        debugger;
         console.trace("pause called");
-        this.eventCtrl.unsubscribe('network:offline', (data) => {})
-      });
-      //   this.eventCtrl.subscribe('network:offline', (data) => {
-      //     debugger;
-      //  //   this.networkType = this.network.type;
-      //     if (this.router.url == '/individual-report') {
-      //       this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "individualReportAlert");
-      //     }
-      //   })
-    });
-
-
-
-    this.network.onConnect().subscribe(() => {
-      console.log("online")
-      // if (this.previousStatus === ConnectionStatusEnum.Offline) {
-      this.storage.set('networkConnectivity', true);
-      this.eventCtrl.publish('network:online');
-      //   this.ToastService.presentToastWithOptions("You are in online");
-      //   this.previousStatus = ConnectionStatusEnum.Online;
-      this.storage.get('networkConnectivity').then((data) => {
-
+        this.storage.remove('networkConnectivity');
       })
-    });
+    })
+
+
+      this.network.onConnect().subscribe(() => {
+        console.log("online")
+        this.storage.get('networkConnectivity').then((result) => {
+          if (result == false) {
+            this.storage.set('networkConnectivity', true);
+            this.eventCtrl.publish('network:online');
+            this.ToastService.presentToastWithOptions("You are in online");
+          }
+        })
+      });
+
+
+
+      this.eventCtrl.subscribe('network:offline', (data) => {
+        debugger;
+        if (this.appResumed == false && this.eventOnline) {
+          const onlineRouters = ['/summary-report', '/individual-report'];
+          if (!onlineRouters.includes(this.router.url)) {
+            this.ToastService.presentToastWithOptions("You are in offline");
+          }
+        }
+      })
   }
-
-
-}
+  }

@@ -119,7 +119,7 @@ export class LoginPage implements OnInit {
   login() {
 
     if (this.network.type == 'none') {
-      this.ToastService.presentToastWithOptions("You are in offline.Please connect with online");
+      this.alertService.presentAlert('Alert',"You are in offline.Please connect with online");
     } else {
 
       if (this.emailFormControl.invalid || this.pswdFormControl.invalid || this.serverHostFormControl.invalid) {} else {

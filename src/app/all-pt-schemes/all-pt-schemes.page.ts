@@ -8,7 +8,8 @@ import {
 import {
   CrudServiceService,
   ToastService,
-  LoaderService
+  LoaderService,
+  AlertService
 } from '../../app/service/providers';
 import {
   Storage
@@ -78,7 +79,8 @@ import {
     private router: Router,
     public network: Network,
     public events: Events,
-    public loadingCtrl: LoadingController) {
+    public loadingCtrl: LoadingController,
+    public alertService: AlertService) {
   
   }
 
@@ -92,7 +94,7 @@ import {
 
     //comment when take buid start
 
-    this.networkType = "4G";
+    //this.networkType = "4G";
 
     //end...
 
@@ -222,14 +224,13 @@ import {
               }
             }, (err) => {});
           } else if (result["status"] == "auth-fail") {
-
-            this.ToastService.presentToastWithOptions(result["message"]);
+            this.alertService.presentAlert('Alert',result["message"]);
             this.storage.set("isLogOut", true);
             this.router.navigate(['/login']);
 
           } else {
 
-            this.ToastService.presentToastWithOptions(result["message"]);
+            this.alertService.presentAlert('Alert',result["message"]);
           }
         }, (err) => {});
       }
@@ -333,7 +334,7 @@ import {
               if (this.TestFormArray[0].dtsData.access.status == 'success') {
                 this.router.navigate(['/dts-hiv-serology']);
               } else {
-                this.ToastService.presentToastWithOptions(this.TestFormArray[0].dtsData.access.message);
+                this.alertService.presentAlert('Alert',this.TestFormArray[0].dtsData.access.message);
               }
             }
           }
@@ -346,7 +347,7 @@ import {
               if (this.TestFormArray[0].vlData.access.status == 'success') {
                 this.router.navigate(['/dts-hiv-viralload']);
               } else {
-                this.ToastService.presentToastWithOptions(this.TestFormArray[0].vlData.access.message)
+                this.alertService.presentAlert('Alert',this.TestFormArray[0].vlData.access.message)
               }
             }
           }
@@ -359,7 +360,7 @@ import {
               if (this.TestFormArray[0].eidData.access.status == 'success') {
                 this.router.navigate(['/dbs-eid']);
               } else {
-                this.ToastService.presentToastWithOptions(this.TestFormArray[0].eidData.access.message)
+                this.alertService.presentAlert('Alert',this.TestFormArray[0].eidData.access.message)
               }
             }
           }

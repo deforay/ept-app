@@ -1,67 +1,42 @@
 import {
   Component,
   OnInit
-}
-
-from '@angular/core';
-
+} from '@angular/core';
 import {
   FormControl,
   FormGroupDirective,
   NgForm,
   Validators
-}
-
-from '@angular/forms';
-
+}from '@angular/forms';
 import {
   Storage
-}
-
-from '@ionic/storage';
-
+}from '@ionic/storage';
 import {
   Router,
   ActivatedRoute
-}
-
-from '@angular/router';
-
+}from '@angular/router';
 import {
   CrudServiceService,
   ToastService,
   LoaderService,
-}
-
-from '../../app/service/providers';
-
+  AlertService
+}from '../../app/service/providers';
 import {
   ErrorStateMatcher
-}
-
-from '@angular/material/core';
-
+}from '@angular/material/core';
 import {
   BrowserModule,
   DomSanitizer,
   disableDebugTools
-}
-
-from '@angular/platform-browser'
-
+}from '@angular/platform-browser'
 import {
   Network
-}from '@ionic-native/network/ngx';
-
-
+} from '@ionic-native/network/ngx';
 import {
   LocalShipmentFormService
 } from '../../app/service/localShipmentForm/local-shipment-form.service';
 
-
-
 /** Error when invalid control is dirty, touched, or submitted. */
-
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
@@ -78,9 +53,9 @@ interface selectArray {
     selector: 'app-dts-hiv-viralload',
     templateUrl: './dts-hiv-viralload.page.html',
     styleUrls: ['./dts-hiv-viralload.page.scss'],
-  }
+  })
 
-) export class DtsHivViralloadPage implements OnInit {
+ export class DtsHivViralloadPage implements OnInit {
 
   panelOpenState = false;
   partDetailsArray: any = [];
@@ -196,6 +171,7 @@ interface selectArray {
     private router: Router,
     public network: Network,
     public LocalShipmentFormService: LocalShipmentFormService,
+    public alertService: AlertService
   ) {}
 
   ionViewWillEnter() {
@@ -240,9 +216,9 @@ interface selectArray {
           this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
 
             if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
-           
+
               this.isView = localStorageSelectedFormArray[0].isView;
-              this.vlDataArray=[];
+              this.vlDataArray = [];
               this.vlDataArray.push(localStorageSelectedFormArray[0]);
               this.bindVLData();
 
@@ -295,29 +271,27 @@ interface selectArray {
           this.specVolTest = this.shipmentsDetailsArray['specimenVolume'];
         }
         if (this.isPartiQCAccess == true) {
-            if (this.shipmentsDetailsArray.qcData.status == true) {
-              this.isQCDoneShow = true;
-              this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
-              this.qcDone = this.shipmentsDetailsArray.qcData['qcRadioSelected'] ? this.shipmentsDetailsArray.qcData['qcRadioSelected'] : '';
-              if (this.shipmentsDetailsArray.qcData.qcDate) {
-                this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
-              }
-              this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
+          if (this.shipmentsDetailsArray.qcData.status == true) {
+            this.isQCDoneShow = true;
+            this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
+            this.qcDone = this.shipmentsDetailsArray.qcData['qcRadioSelected'] ? this.shipmentsDetailsArray.qcData['qcRadioSelected'] : '';
+            if (this.shipmentsDetailsArray.qcData.qcDate) {
+              this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
             }
-            else{
-              this.isQCDoneShow = false;
-              this.qcDone = 'no';
-              this.qcDate = '';
-              this.qcDoneBy = ''; 
-              this.qcRadioArray=this.shipmentsDetailsArray.qcData.qcRadio;
-            }
-        }
-        else{
+            this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
+          } else {
+            this.isQCDoneShow = false;
+            this.qcDone = 'no';
+            this.qcDate = '';
+            this.qcDoneBy = '';
+            this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
+          }
+        } else {
           this.isQCDoneShow = false;
           this.qcDone = 'no';
           this.qcDate = '';
-          this.qcDoneBy = ''; 
-          this.qcRadioArray=this.shipmentsDetailsArray.qcData.qcRadio;
+          this.qcDoneBy = '';
+          this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
         }
         if (this.isPartiEditModeRec == true) {
           if (this.shipmentsDetailsArray['modeOfReceiptSelect']) {
@@ -550,7 +524,7 @@ interface selectArray {
 
         this.VlFloat = parseFloat(element);
         if (this.VlFloat > 7) {
-          this.ToastService.presentToastWithOptions("VL Result should be between 1 and 7");
+          this.alertService.presentAlert("Alert","VL Result should be between 1 and 7");
           return false;
         }
         if ((element || element == '0') && (this.mandatoryArray[index] == true) && this.VlFloat <= 7) {
@@ -661,7 +635,7 @@ interface selectArray {
     }
     if (params == 'next') {
       this.step = 4;
-    } 
+    }
   }
 
   submitViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
@@ -740,7 +714,7 @@ interface selectArray {
                 "vlAssaySelect": this.shipmentsDetailsArray['vlAssaySelect'],
                 "vlAssaySelected": this.vlassay,
                 "otherAssay": this.othervlassay,
-                "specimenVolume": this.specVolTest?this.specVolTest:'',
+                "specimenVolume": this.specVolTest ? this.specVolTest : '',
                 "assayExpirationDate": this.assayExpDate ? this.dateFormat(new Date(this.assayExpDate)) : '',
                 "assayLotNumber": this.assayLotNo,
                 "responseDate": this.responseDate ? this.dateFormat(new Date(this.responseDate)) : '',

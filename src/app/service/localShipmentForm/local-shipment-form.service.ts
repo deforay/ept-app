@@ -121,7 +121,6 @@ export class LocalShipmentFormService {
             this.ToastService.presentToastWithOptions("Shipment form is stored in offline");
             this.router.navigate(['/all-pt-schemes']);
           }
-
         })
       }
     })
