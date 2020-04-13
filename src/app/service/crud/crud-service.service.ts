@@ -14,7 +14,9 @@ import {
 import {
   map
 } from 'rxjs/operators';
-
+import {
+  AlertService
+} from '../../../app/service/providers';
 
 ///import 'rxjs/add/operator/map';
 
@@ -26,8 +28,7 @@ export class CrudServiceService {
   constructor(public http: HttpClient,
     private storage: Storage,
       public loadingCtrl: LoadingController,
-    //   public events: Events,
-   //  public LoaderService: LoaderService
+      public alertService: AlertService,
   ) {
 
   }
@@ -63,9 +64,11 @@ export class CrudServiceService {
               //    this.LoaderService.hideLoader();
               resolve(res);
             }, (err) => {
+              debugger;
               if(loading){
                 loading.dismiss();
-              }        
+              }    
+              this.alertService.presentAlert('Alert',"Something went wrong.Please try again later",'');    
               //     this.LoaderService.hideLoader();
               reject(err);
             });

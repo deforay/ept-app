@@ -178,12 +178,12 @@ export class LoginPage implements OnInit {
                     this.alertService.presentAlert('Alert',result["message"],'');
                   }
                 }, (err) => {
-                  if (err.status == 0) {
-                    this.alertService.presentAlert('Alert',"Please check your login url",'');
-                  }
-                  else{
-                 this.alertService.presentAlert('Alert',"Something went wrong.Please try again later",'');
-                  }
+                //   if (err.status == 0) {
+                //     this.alertService.presentAlert('Alert',"Please check your login url",'');
+                //   }
+                //   else{
+                //  this.alertService.presentAlert('Alert',"Something went wrong.Please try again later",'');
+                //   }
                 });
             }
           } else {

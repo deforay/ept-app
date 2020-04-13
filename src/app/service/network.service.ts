@@ -28,8 +28,7 @@ export class NetworkService {
 
   appResumed: boolean = false;
   eventOnline: boolean = false;
-  ok: boolean;
-
+  eventOffline: boolean = false;
   constructor(
     private platform: Platform,
     public network: Network,
@@ -47,55 +46,66 @@ export class NetworkService {
   public initializeNetworkEvents(): void {
 
     this.network.onDisconnect().subscribe(() => {
-        console.log("Offline");
-        this.eventOnline = true;
-        this.storage.set('networkConnectivity', false);
-        this.eventCtrl.publish('network:offline');
-        this.storage.get('appResumed').then((result) => {
-            if (result == true) {
-              this.appResumed = false;
-              this.storage.set("appResumed", false);
-            }
-          })
-          // if (this.appResumed == false) {
-          //   const onlineRouters = ['/summary-report', '/individual-report'];
-          //   if (!onlineRouters.includes(this.router.url)) {
-          //     this.ToastService.presentToastWithOptions("You are in offline");
-          //   }
-          // }
-        this.platform.resume.subscribe((e) => {
-        console.trace("resume called");
-        this.appResumed = true;
-        this.storage.set("appResumed", true);
+      console.log("Offline");
+      this.eventOffline = true;
+      this.storage.set('networkConnectivity', false);
+      this.eventCtrl.publish('network:offline');
+      this.storage.get('appResumed').then((result) => {
+        if (result == true) {
+          this.appResumed = false;
+          this.storage.set("appResumed", false);
+        }
       })
+      // this.platform.pause.subscribe((e) => {
+      //   console.trace("pause called");
+      //   this.storage.remove('networkConnectivity');
+      // })
+    })
 
-      this.platform.pause.subscribe((e) => {
-        console.trace("pause called");
-        this.storage.remove('networkConnectivity');
-      })
+    
+    this.eventCtrl.subscribe('network:offline', (data) => {
+      if (this.appResumed == false && this.eventOffline) {
+        const onlineRouters = ['/summary-report', '/individual-report'];
+        if (!onlineRouters.includes(this.router.url)) {
+          this.ToastService.presentToastWithOptions("You are in offline");
+        }
+      }
     })
 
 
-      this.network.onConnect().subscribe(() => {
-        console.log("online")
-        this.storage.get('networkConnectivity').then((result) => {
-          if (result == false) {
-            this.storage.set('networkConnectivity', true);
-            this.eventCtrl.publish('network:online');
-            this.ToastService.presentToastWithOptions("You are in online");
-          }
-        })
-      });
+    this.platform.resume.subscribe((e) => {
+      console.trace("resume called");
+      this.appResumed = true;
+      this.storage.set("appResumed", true);
+    })
 
 
-
-      this.eventCtrl.subscribe('network:offline', (data) => {
-        if (this.appResumed == false && this.eventOnline) {
-          const onlineRouters = ['/summary-report', '/individual-report'];
-          if (!onlineRouters.includes(this.router.url)) {
-            this.ToastService.presentToastWithOptions("You are in offline");
-          }
+    this.network.onConnect().subscribe(() => {
+      console.log("online");
+      this.eventOnline = true;
+      this.storage.get('appResumed').then((result) => {
+        if (result == true) {
+          this.appResumed = false;
+          this.storage.set("appResumed", false);
         }
       })
+      this.storage.get('networkConnectivity').then((result) => {
+        if (result == false) {
+          this.storage.set('networkConnectivity', true);
+          this.eventCtrl.publish('network:online');
+        }
+      })
+    });
+
+
+    this.eventCtrl.subscribe('network:online', (data) => {
+      if (this.appResumed == false && this.eventOnline) {
+        const onlineRouters = ['/summary-report', '/individual-report'];
+        if (!onlineRouters.includes(this.router.url)) {
+          this.ToastService.presentToastWithOptions("You are in online");
+        }
+      }
+    })
+
   }
-  }
+}

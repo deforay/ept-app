@@ -164,15 +164,6 @@ export class AppComponent {
 
         }
       });
-
-      this.platform.resume.subscribe((e) => {
-        console.trace("resume called");
-      });
-
-      this.platform.pause.subscribe((e) => {
-        console.trace("pause called");
-      });
-
     });
 
     this.storage.get('participantLogin').then((participantLogin) => {

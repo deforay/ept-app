@@ -47,7 +47,6 @@ export class SummaryReportPage implements OnInit {
   apiUrl: string;
   networkType: string;
   skeltonArray: any = [];
-  alertSummaryOfflineCount: number;
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -79,7 +78,7 @@ export class SummaryReportPage implements OnInit {
       this.fileOpener.open(url, 'application/pdf');
     }, (error) => {
       this.LoaderService.disMissLoading();
-      this.ToastService.presentToastWithOptions('Something went wrong.Please try again later.');
+      this.alertService.presentAlert('Alert','Something went wrong.Please try again later.');
 
       console.log(error);
     });
@@ -95,11 +94,11 @@ export class SummaryReportPage implements OnInit {
             if (result["status"] == 'success') {
               this.summaryReports = result['data'];
             } else if (result["status"] == "auth-fail") {
-              this.ToastService.presentToastWithOptions(result["message"]);
+              this.alertService.presentAlert('Alert',result["message"]);
               this.storage.set("isLogOut", true);
               this.router.navigate(['/login']);
             } else {
-              this.ToastService.presentToastWithOptions(result["message"]);
+              this.alertService.presentAlert('Alert',result["message"]);
             }
           }, (err) => {
             console.log(err)
