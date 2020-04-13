@@ -1,9 +1,5 @@
 import { NgModule } from '@angular/core';
 import { PreloadAllModules, RouterModule, Routes } from '@angular/router';
-// import {
-//   Storage
-// } from '@ionic/storage';
-
 
 const routes: Routes = [
   // {
@@ -14,10 +10,6 @@ const routes: Routes = [
   {
     path: 'login',
     loadChildren: () => import('./login/login.module').then(m => m.LoginPageModule)
-  },
-  {
-    path: 'list',
-    loadChildren: () => import('./list/list.module').then(m => m.ListPageModule)
   },
   {
     path: 'dts-hiv-serology',
@@ -64,18 +56,4 @@ const routes: Routes = [
   exports: [RouterModule]
 })
 export class AppRoutingModule {
-  // changeRoute:any;
-  // constructor(  private storage: Storage){
-  //   this.storage.get('isLogOut').then((isLogOut) => {
-  //     if (isLogOut == false) {
-
-  //     this.changeRoute="all-pt-schemes";
-
-  //     }
-  //     else{
-  //       this.changeRoute="login";
-  //     }
-  //   })
-  // }
- // @ViewChild(HeaderComponent,{static: false}) childReference;
 }

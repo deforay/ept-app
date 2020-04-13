@@ -11,10 +11,11 @@ import {
   ErrorStateMatcher
 } from '@angular/material/core';
 import {
-  CrudServiceService,
   ToastService,
   LoaderService,
+  AlertService
 } from '../../app/service/providers';
+import { CrudServiceService} from '../../app/service/crud/crud-service.service';
 import {
   Storage
 } from '@ionic/storage';
@@ -138,6 +139,7 @@ export class DTSHIVSerologyPage implements OnInit {
     private router: Router,
     public network: Network,
     public LocalShipmentFormService: LocalShipmentFormService,
+    public alertService: AlertService
   ) {
    
   }
@@ -738,7 +740,7 @@ export class DTSHIVSerologyPage implements OnInit {
         }
       }
       console.log(this.serologyJSON);
-      if (this.network.type == 'none') {
+      if (this.network.type == 'none'||this.network.type == null) {
         this.serologyJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
 
@@ -750,11 +752,21 @@ export class DTSHIVSerologyPage implements OnInit {
               this.ToastService.presentToastWithOptions(result['message']);
               this.router.navigate(['/all-pt-schemes']);
             }
-          },
-          (err) => {
-            console.log(err);
-          }
-        );
+            else if (result["status"] == "auth-fail") {
+              this.alertService.presentAlert('Alert', result["message"]);
+              this.storage.set("isLogOut", true);
+              this.router.navigate(['/login']);
+            } else if (result["status"] == 'version-failed') {
+  
+              this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+  
+            } else {
+  
+              this.alertService.presentAlert('Alert', result["message"]);
+            }
+          }, (err) => {
+            this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+          });
       }
     }
   }

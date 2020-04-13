@@ -12,11 +12,11 @@ import {
   Validators
 } from '@angular/forms';
 import {
-  CrudServiceService,
   ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
+import { CrudServiceService} from '../../app/service/crud/crud-service.service';
 import {
   EmailIdValidator
 } from '../../validators/emailId.validator';
@@ -91,7 +91,11 @@ export class ForgotPasswordPage implements OnInit {
                 } else {
                   this.alertService.presentAlert('Alert',result["message"],'');
                 }
-              }, (err) => {});
+              }, (err) => {
+
+                this.alertService.presentAlert('Alert','Something went wrong.Please try again later');
+                
+              });
           }
         }
       })

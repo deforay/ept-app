@@ -20,11 +20,11 @@ import {
 
 import { Router} from '@angular/router';
 import {
-  CrudServiceService,
   ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
+import { CrudServiceService} from '../../app/service/crud/crud-service.service';
 import {
   Storage
 } from '@ionic/storage';
@@ -121,11 +121,16 @@ export class ChangePasswordPage implements OnInit {
           this.storage.set("isLogOut", true);
           this.router.navigate(['/login'], {replaceUrl: true});
 
+        }
+        else if (result["status"] == 'version-failed') {
+
+          this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+
         } else {
           this.alertService.presentAlert("Alert",result["message"]);
         }
       }, (err) => {
-       
+        this.alertService.presentAlert('Alert','Something went wrong.Please try again later');
       }); 
 
     }

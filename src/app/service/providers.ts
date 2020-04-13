@@ -1,7 +1,4 @@
 import {
-    CrudServiceService
-} from '../service/crud/crud-service.service';
-import {
     ToastService
 } from '../service/toast/toast.service';
 import {
@@ -14,7 +11,6 @@ import {
     CommonService
 } from '../service/common/common.service';
 export {
-    CrudServiceService,
     ToastService,
     LoaderService,
     AlertService,

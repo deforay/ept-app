@@ -7,28 +7,28 @@ import {
   FormGroupDirective,
   NgForm,
   Validators
-}from '@angular/forms';
+} from '@angular/forms';
 import {
   Storage
-}from '@ionic/storage';
+} from '@ionic/storage';
 import {
   Router,
   ActivatedRoute
-}from '@angular/router';
+} from '@angular/router';
 import {
-  CrudServiceService,
   ToastService,
   LoaderService,
   AlertService
-}from '../../app/service/providers';
+} from '../../app/service/providers';
+import { CrudServiceService} from '../../app/service/crud/crud-service.service';
 import {
   ErrorStateMatcher
-}from '@angular/material/core';
+} from '@angular/material/core';
 import {
   BrowserModule,
   DomSanitizer,
   disableDebugTools
-}from '@angular/platform-browser'
+} from '@angular/platform-browser'
 import {
   Network
 } from '@ionic-native/network/ngx';
@@ -50,12 +50,12 @@ interface selectArray {
 }
 
 @Component({
-    selector: 'app-dts-hiv-viralload',
-    templateUrl: './dts-hiv-viralload.page.html',
-    styleUrls: ['./dts-hiv-viralload.page.scss'],
-  })
+  selector: 'app-dts-hiv-viralload',
+  templateUrl: './dts-hiv-viralload.page.html',
+  styleUrls: ['./dts-hiv-viralload.page.scss'],
+})
 
- export class DtsHivViralloadPage implements OnInit {
+export class DtsHivViralloadPage implements OnInit {
 
   panelOpenState = false;
   partDetailsArray: any = [];
@@ -524,7 +524,7 @@ interface selectArray {
 
         this.VlFloat = parseFloat(element);
         if (this.VlFloat > 7) {
-          this.alertService.presentAlert("Alert","VL Result should be between 1 and 7");
+          this.alertService.presentAlert("Alert", "VL Result should be between 1 and 7");
           return false;
         }
         if ((element || element == '0') && (this.mandatoryArray[index] == true) && this.VlFloat <= 7) {
@@ -792,20 +792,25 @@ interface selectArray {
 
         this.CrudServiceService.postData('/api/shipments/save-form', this.viralLoadJSON).then((result) => {
 
-            if (result["status"] == 'success') {
-              this.ToastService.presentToastWithOptions(result['message']);
-              this.router.navigate(['/all-pt-schemes']);
-            }
+          if (result["status"] == 'success') {
+            this.ToastService.presentToastWithOptions(result['message']);
+            this.router.navigate(['/all-pt-schemes']);
+          } else if (result["status"] == "auth-fail") {
+            this.alertService.presentAlert('Alert', result["message"]);
+            this.storage.set("isLogOut", true);
+            this.router.navigate(['/login']);
+          } else if (result["status"] == 'version-failed') {
 
+            this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+
+          } else {
+
+            this.alertService.presentAlert('Alert', result["message"]);
           }
-
-          , (err) => {
-            console.log(err);
-          }
-
-        );
+        }, (err) => {
+          this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+        });
       }
-
     }
   }
 

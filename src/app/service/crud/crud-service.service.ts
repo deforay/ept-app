@@ -64,11 +64,9 @@ export class CrudServiceService {
               //    this.LoaderService.hideLoader();
               resolve(res);
             }, (err) => {
-              debugger;
               if(loading){
                 loading.dismiss();
               }    
-              this.alertService.presentAlert('Alert',"Something went wrong.Please try again later",'');    
               //     this.LoaderService.hideLoader();
               reject(err);
             });

@@ -16,10 +16,11 @@ import {
   ActivatedRoute
 } from '@angular/router';
 import {
-  CrudServiceService,
   ToastService,
-  LoaderService
+  LoaderService,
+  AlertService
 } from '../../app/service/providers';
+import { CrudServiceService} from '../../app/service/crud/crud-service.service';
 import {
   ErrorStateMatcher
 } from '@angular/material/core';
@@ -27,20 +28,14 @@ import {
   BrowserModule,
   DomSanitizer
 } from '@angular/platform-browser';
-
 import {
   Network
 }
 from '@ionic-native/network/ngx';
-
 import {
   LocalShipmentFormService
 }
 from '../../app/service/localShipmentForm/local-shipment-form.service';
-import {
-  throws
-} from 'assert';
-
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
@@ -113,7 +108,8 @@ export class DbsEidPage implements OnInit {
     private sanitizer: DomSanitizer,
     private router: Router,
     public network: Network,
-    public LocalShipmentFormService: LocalShipmentFormService) {
+    public LocalShipmentFormService: LocalShipmentFormService,
+    public alertService: AlertService) {
 
   }
 
@@ -619,11 +615,21 @@ export class DbsEidPage implements OnInit {
               this.ToastService.presentToastWithOptions(result['message']);
               this.router.navigate(['/all-pt-schemes']);
             }
+            else if (result["status"] == "auth-fail") {
+              this.alertService.presentAlert('Alert', result["message"]);
+              this.storage.set("isLogOut", true);
+              this.router.navigate(['/login']);
+            } else if (result["status"] == 'version-failed') {
+  
+              this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+  
+            } else {
+  
+              this.alertService.presentAlert('Alert', result["message"]);
+            }
           }, (err) => {
-            console.log(err);
-          }
-
-        );
+            this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+          });
       }
     }
   }
