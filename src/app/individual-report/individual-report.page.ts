@@ -49,6 +49,7 @@ export class IndividualReportPage {
   apiUrl: string;
   networkType: string;
   skeltonArray: any = [];
+  showNoData: boolean= false;
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -107,7 +108,15 @@ export class IndividualReportPage {
             }else {
               this.alertService.presentAlert('Alert',result["message"]);
             }
+            if (result["status"] != 'success') {
+              this.skeltonArray = [];
+              this.showNoData = true;
+            } else {
+              this.showNoData = false;
+            }
           }, (err) => {
+            this.skeltonArray = [];
+            this.showNoData=true;
             this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
           });
       }

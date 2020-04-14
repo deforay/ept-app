@@ -1,4 +1,7 @@
-import { Component, OnInit } from '@angular/core';
+import {
+  Component,
+  OnInit
+} from '@angular/core';
 import {
   FormControl,
   FormBuilder,
@@ -17,14 +20,20 @@ import {
 import {
   PasswordValidator
 } from '../../validators/password.validator';
-
-import { Router} from '@angular/router';
+import {
+  Network
+} from '@ionic-native/network/ngx';
+import {
+  Router
+} from '@angular/router';
 import {
   ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
-import { CrudServiceService} from '../../app/service/crud/crud-service.service';
+import {
+  CrudServiceService
+} from '../../app/service/crud/crud-service.service';
 import {
   Storage
 } from '@ionic/storage';
@@ -44,7 +53,7 @@ export class ChangePasswordPage implements OnInit {
   oldPswdFormControl = new FormControl('', [
     Validators.required,
     //PasswordValidator.pswdPatternValidation,
-   // trimmedCharsValidator.checkTrimmedEightChars
+    // trimmedCharsValidator.checkTrimmedEightChars
   ]);
   newPswdFormControl = new FormControl('', [
     Validators.required,
@@ -61,80 +70,90 @@ export class ChangePasswordPage implements OnInit {
   oldpswdhide = true;
   newpswdhide = true;
   confirmpswdhide = true;
-  matchPasswordError:boolean= false;
+  matchPasswordError: boolean = false;
   constructor(
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
     public alertService: AlertService,
-    private router: Router) {
-      this.storage.get('appVersionNumber').then((appVersionNumber) => {
-        if (appVersionNumber) {
-          this.appVersionNumber = appVersionNumber;
-        }
-      })
-     }
+    private router: Router,
+    public network: Network) {
+    this.storage.get('appVersionNumber').then((appVersionNumber) => {
+      if (appVersionNumber) {
+        this.appVersionNumber = appVersionNumber;
+      }
+    })
+  }
 
   ngOnInit() {
-    
+
   }
-  matchPassword(){
+  matchPassword() {
     var password = this.newPswdFormControl.value;
     var confirmPassword = this.confirmPswdFormControl.value;
-    if(password=='' || !password){
+    if (password == '' || !password) {
 
-    }else
-    if(password != confirmPassword && password!=''&&  confirmPassword!='') {
-        this.matchPasswordError = true;
-        this.confirmPswdFormControl.setErrors( { MatchPassword: true } );
-        
-    }else{
+    } else
+    if (password != confirmPassword && password != '' && confirmPassword != '') {
+      this.matchPasswordError = true;
+      this.confirmPswdFormControl.setErrors({
+        MatchPassword: true
+      });
+
+    } else {
       this.matchPasswordError = false;
     }
-    console.log( this.confirmPswdFormControl.errors)
+    console.log(this.confirmPswdFormControl.errors)
   }
-  changePassword(){
-    if (this.oldPswdFormControl.invalid || this.newPswdFormControl.invalid || this.confirmPswdFormControl.invalid) {
+  changePassword() {
+
+    if (this.network.type == 'none') {
+      this.alertService.presentAlert('Alert', "You are in offline.Please connect with online");
     } else {
-      this.storage.get('participantLogin').then((partiLoginResult) => {
-        if (partiLoginResult.authToken) {
 
-      let changePswdJson = {
-        "password": this.newPswdFormControl.value,
-        "authToken": partiLoginResult.authToken,
-        "oldPassword":this.oldPswdFormControl.value,
-        "appVersion": this.appVersionNumber
+      if (this.oldPswdFormControl.invalid || this.newPswdFormControl.invalid || this.confirmPswdFormControl.invalid) {} else {
+        this.storage.get('participantLogin').then((partiLoginResult) => {
+          if (partiLoginResult.authToken) {
+
+            let changePswdJson = {
+              "password": this.newPswdFormControl.value,
+              "authToken": partiLoginResult.authToken,
+              "oldPassword": this.oldPswdFormControl.value,
+              "appVersion": this.appVersionNumber
+            }
+
+            this.CrudServiceService.postData('/api/login/change-password', changePswdJson)
+              .then(result => {
+                if (result["status"] == 'success') {
+
+                  this.ToastService.presentToastWithOptions(result["message"]);
+                  this.storage.set("isLogOut", true);
+                  this.router.navigate(['/login'], {
+                    replaceUrl: true
+                  });
+                } else if (result["status"] == "auth-fail") {
+
+                  this.alertService.presentAlert("Alert", result["message"]);
+                  this.storage.set("isLogOut", true);
+                  this.router.navigate(['/login'], {
+                    replaceUrl: true
+                  });
+
+                } else if (result["status"] == 'version-failed') {
+
+                  this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+
+                } else {
+                  this.alertService.presentAlert("Alert", result["message"]);
+                }
+              }, (err) => {
+                this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+              });
+
+          }
+        })
       }
-
-      this.CrudServiceService.postData('/api/login/change-password',changePswdJson)
-      .then(result => {
-        if (result["status"] == 'success') {
-
-          this.ToastService.presentToastWithOptions(result["message"]);
-          this.storage.set("isLogOut", true);
-          this.router.navigate(['/login'], {replaceUrl: true});
-        }
-        else if (result["status"] == "auth-fail") {
-
-          this.alertService.presentAlert("Alert",result["message"]);
-          this.storage.set("isLogOut", true);
-          this.router.navigate(['/login'], {replaceUrl: true});
-
-        }
-        else if (result["status"] == 'version-failed') {
-
-          this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
-
-        } else {
-          this.alertService.presentAlert("Alert",result["message"]);
-        }
-      }, (err) => {
-        this.alertService.presentAlert('Alert','Something went wrong.Please try again later');
-      }); 
-
     }
-    })
-    } 
   }
 }

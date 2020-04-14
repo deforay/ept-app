@@ -20,7 +20,9 @@ import {
   LoaderService,
   AlertService
 } from '../../app/service/providers';
-import { CrudServiceService} from '../../app/service/crud/crud-service.service';
+import {
+  CrudServiceService
+} from '../../app/service/crud/crud-service.service';
 import {
   ErrorStateMatcher
 } from '@angular/material/core';
@@ -57,14 +59,13 @@ interface selectArray {
 
 export class DtsHivViralloadPage implements OnInit {
 
-  panelOpenState = false;
+
   partDetailsArray: any = [];
   shipmentsDetailsArray: any = [];
   ptPanelTestArray: any = [];
   ptPanelNotTestArray: any = [];
   otherInfoArray: any = [];
   viewAccessMessage: string = '';
-  vlAssayArray = [];
   isQCDoneShow: boolean;
   qcDone;
   vlCalc: any;
@@ -78,8 +79,6 @@ export class DtsHivViralloadPage implements OnInit {
   qcRadioArray = [];
   modeOfReceiptArray = [];
   receiptmode: any;
-  selectedModeOfReceipt: any = [];
-  selectedVlAssay = [];
   vlassay: any;
   isSelectedOther: boolean = false;
   changedVlAssay = [];
@@ -96,21 +95,15 @@ export class DtsHivViralloadPage implements OnInit {
   ptSupportComments: any;
   ptNotTestedReasonArray: any = [];
   supervisorReviewArray: any = [];
-  selectedSupReviewArray: any = [];
   vlDataArray: any = [];
-  selectedQCRadio: any = [];
   formattedDate;
   appVersionNumber: any;
   authToken: any;
   loginID: any;
-  viralLoadArray = [];
   notes: any = [];
   formattedQCDate: any;
-  sampleIDArrray = [];
   selectedParticipantID: any;
-  shipmentArray = [];
   selectedShipmentID: any;
-  participantArray = [];
   ptPanelTestData = {}
   ptPanelNotTestData = {}
   viralLoadJSON = {}
@@ -122,10 +115,7 @@ export class DtsHivViralloadPage implements OnInit {
   updatedStatus: any;
   isView: any;
   validShipmentDetails: boolean = false;
-  invalidSupReview: string;
   validOtherInfo: boolean = false;
-  invalidSupName: string;
-  validSupReview: string;
   isSelectedSupReviewYes: boolean = false;
   PTPanelTestForm: any;
   isViralLoadFormValid: boolean = false;
@@ -137,22 +127,12 @@ export class DtsHivViralloadPage implements OnInit {
   mandatoryTrueArray = [];
   vlResultArray = [];
   vlresult: any;
-  vlresultdata: any;
   isPartiQCAccess: boolean;
   isPartiEditRespDate: boolean;
   isPartiEditModeRec: boolean;
   shipmentPanelForm: NgForm
-  invalidVlAssay: any;
-  invalidTestReceiptDate: any;
-  invalidTestDate: any;
-  invalidOthervlassay: string;
-  invalidAssayExpDate: string;
-  invalidVlAssayLotNo: string;
-  invalidResponseDate: string;
   validVlAssay: string;
   validQC: string;
-  invalidQcDate: string;
-  invalidQcDoneBy: string;
   VlFloat: any;
   validVlCount: any;
   showCustomFieldData: boolean;
@@ -329,12 +309,6 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
         this.ptPanelTestData['controlArray'] = this.ptPanelTestArray['tableRowTxt'];
         this.ptPanelTestData['vlResult'] = [...this.ptPanelTestArray['vlResult']];
-        //   this.ptPanelTestData['vlResult']= this.ptPanelTestArray['vlResult'];
-        //   this.vlResultArray=[];
-        //   this.vlResultArray = [...this.ptPanelTestArray['vlResult']];
-        //    this.vlResultArray = this.ptPanelTestArray['vlResult'];
-
-        // this.ptPanelTestData['tndArray'] = this.ptPanelTestArray['tndReferenceRadioSelected'];
         this.ptPanelTestData['tndArray'] = [...this.ptPanelTestArray['tndReferenceRadioSelected']];
         this.ptPanelTestData['tndRadioArray'] = this.ptPanelTestArray['tndReferenceRadio'];
         this.ptPanelTestData['sampleIDArrray'] = this.ptPanelTestArray['tableRowTxt'].id;
@@ -814,4 +788,24 @@ export class DtsHivViralloadPage implements OnInit {
     }
   }
 
+  clearTestReceiptDate() {
+    this.testReceiptDate = "";
+  }
+
+  clearSampleRehydDate() {
+    this.sampleRhdDate = "";
+  }
+
+  clearTestingDate() {
+    this.testDate = "";
+  }
+  clearAssayExpDate() {
+    this.assayExpDate = '';
+  }
+  clearResponseDate() {
+    this.responseDate = ''
+  }
+  clearQCDate(){
+    this.qcDate='';
+  }
 }

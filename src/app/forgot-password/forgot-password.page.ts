@@ -49,13 +49,14 @@ export class ForgotPasswordPage implements OnInit {
     EmailIdValidator.patternValidation
   ]);
   appVersionNumber: any;
+
   constructor(public network: Network,
     private router: Router,
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
-    public alertService: AlertService, ) {}
+    public alertService: AlertService) {}
 
   ngOnInit() {}
 

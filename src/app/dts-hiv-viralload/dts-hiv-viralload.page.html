@@ -173,8 +173,9 @@
               <mat-form-field class="login-full-width grid-col-form " appearance="outline">
                 <mat-label class="matLabel">Test Receipt Date</mat-label>
                 <input matInput [matDatepicker]="testReceiptPicker" class="datepicker-input"
-                  [(ngModel)]="testReceiptDate"  #vlTestReceiptDate="ngModel" name="vlTestReceiptDate"
-                  placeholder="Choose Test Receipt Date" disabled required>
+                  [(ngModel)]="testReceiptDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"  #vlTestReceiptDate="ngModel" name="vlTestReceiptDate"
+                  placeholder="Choose Test Receipt Date" readonly required>
+                  <ion-icon name="close"  class="clearDateIcon" ios="ios-close" (click)="clearTestReceiptDate()"></ion-icon>
                 <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
                 <mat-datepicker #testReceiptPicker disabled={{isView}}></mat-datepicker>
                 <mat-error *ngIf="!testReceiptDate">Test Receipt Date is required </mat-error>
@@ -183,12 +184,13 @@
 
 
             <ion-col size="6" size-xs class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form sampleRehydrationDate" appearance="outline">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label class="matLabel">Sample Rehydration Date</mat-label>
                 <input matInput [matDatepicker]="sampleRhdPicker" [(ngModel)]="sampleRhdDate"
-                  placeholder="Choose Sample Rehydration Date" class="datepicker-input" #vlSampleRhdDate="ngModel" required
-                  name="vlSampleRhdDate" disabled>
+                  placeholder="Choose Sample Rehydration Date" class="datepicker-input" #vlSampleRhdDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" required
+                  name="vlSampleRhdDate" readonly>
                 <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
+                <ion-icon name="close"  class="clearDateIcon" ios="ios-close" (click)="clearSampleRehydDate()"></ion-icon>
                 <mat-datepicker #sampleRhdPicker disabled={{isView}}></mat-datepicker>
                 <mat-error *ngIf="!sampleRhdDate">Sample Rehydration Date is required </mat-error> 
               </mat-form-field>
@@ -201,8 +203,9 @@
                 [ngClass]="{ 'mat-form-field-invalid': !testDate && isView==false }" appearance="outline">
                 <mat-label class="matLabel">Testing Date </mat-label>
                 <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="testDate" name="vlTestDate"
-                  #vlTestDate="ngModel"  placeholder="Choose Testing Date" class="datepicker-input" required disabled>
+                  #vlTestDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"  placeholder="Choose Testing Date" class="datepicker-input" required readonly>
                 <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
+                <ion-icon name="close"  class="clearDateIcon" ios="ios-close" (click)="clearTestingDate()"></ion-icon>
                 <mat-datepicker #testDatePicker disabled={{isView}}></mat-datepicker>
                 <mat-error *ngIf="!testDate">
                   Testing Date is required </mat-error>
@@ -250,8 +253,9 @@
                 [ngClass]="{ 'mat-form-field-invalid': !assayExpDate && isView==false }" appearance="outline">
                 <mat-label class="matLabel">Assay Expiration Date</mat-label>
                 <input matInput [matDatepicker]="assayExpiryDate"  [(ngModel)]="assayExpDate" name="vlAssayExpDate"
-                  #vlAssayExpDate="ngModel" placeholder="Choose Assay Expiration Date" class="datepicker-input" disabled required>
+                  #vlAssayExpDate="ngModel" placeholder="Choose Assay Expiration Date" class="datepicker-input" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" readonly required>
                 <mat-datepicker-toggle matSuffix [for]="assayExpiryDate"></mat-datepicker-toggle>
+                <ion-icon name="close"  class="clearDateIcon" ios="ios-close" (click)="clearAssayExpDate()"></ion-icon>
                 <mat-datepicker #assayExpiryDate disabled={{isView}}></mat-datepicker>
                 <mat-error *ngIf="!assayExpDate">
               Assay Expiration Date is required </mat-error>
@@ -276,9 +280,10 @@
                 [ngClass]="{ 'mat-form-field-invalid':!responseDate && isView==false }" appearance="outline">
                 <mat-label class="matLabel">Response Date</mat-label>
                 <input matInput [matDatepicker]="respDate" placeholder="Choose Response Date"
-                  [(ngModel)]="responseDate" name="vlResponseDate" #vlResponseDate="ngModel" class="datepicker-input"
-                  disabled [required]="isPartiEditRespDate">
+                  [(ngModel)]="responseDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" name="vlResponseDate" #vlResponseDate="ngModel" class="datepicker-input"
+                  readonly [required]="isPartiEditRespDate">
                 <mat-datepicker-toggle matSuffix [for]="respDate"></mat-datepicker-toggle>
+                <ion-icon name="close"  class="clearDateIcon" ios="ios-close" (click)="clearResponseDate()"></ion-icon>
                 <mat-datepicker #respDate disabled={{isView}}></mat-datepicker>
                 <mat-error *ngIf="!responseDate">
                   Response Date is required </mat-error>
@@ -320,12 +325,13 @@
               <mat-form-field class="login-full-width grid-col-form"
                 [ngClass]="{ 'mat-form-field-invalid':!qcDate && isView==false }" appearance="outline">
                 <mat-label class="matLabel">QC Date</mat-label>
-                <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" name="vlQcDate" #vlQcDate="ngModel"  
+                <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" name="vlQcDate" #vlQcDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   placeholder="Choose QC Date" class="datepicker-input" 
-                  [required]="isQCDoneShow" disabled>
+                  [required]="isQCDoneShow" readonly>
                 <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
+                <ion-icon name="close" class="clearDateIcon" ios="ios-close" (click)="clearQCDate()"></ion-icon>
                 <mat-datepicker #qcDatePicker disabled={{isView}}></mat-datepicker>
-                <mat-error *ngIf="!qcDate">
+                <mat-error *ngIf="!qcDate || qcDate==''">
                   QC Date is required </mat-error>
               </mat-form-field>
             </ion-col>

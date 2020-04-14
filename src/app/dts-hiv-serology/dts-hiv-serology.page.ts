@@ -15,7 +15,9 @@ import {
   LoaderService,
   AlertService
 } from '../../app/service/providers';
-import { CrudServiceService} from '../../app/service/crud/crud-service.service';
+import {
+  CrudServiceService
+} from '../../app/service/crud/crud-service.service';
 import {
   Storage
 } from '@ionic/storage';
@@ -141,7 +143,7 @@ export class DTSHIVSerologyPage implements OnInit {
     public LocalShipmentFormService: LocalShipmentFormService,
     public alertService: AlertService
   ) {
-   
+
   }
 
   ionViewWillEnter() {
@@ -162,7 +164,7 @@ export class DTSHIVSerologyPage implements OnInit {
       }
     })
   }
-  
+
   step = 0;
 
   setStep(index: number) {
@@ -394,7 +396,7 @@ export class DTSHIVSerologyPage implements OnInit {
   }
 
   getSerologyDetails() {
-  
+
     this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
 
       this.isView = dtsDataObj[0].isView;
@@ -602,29 +604,29 @@ export class DTSHIVSerologyPage implements OnInit {
       this.testKitModel['expDate'][index] = element ? this.dateFormat(new Date(element)) : element
     });
 
-    this.result1Arr.forEach((element, index) => { 
-      if (element == null|| element==undefined) {
-        this.result1Arr[index]="";
+    this.result1Arr.forEach((element, index) => {
+      if (element == null || element == undefined) {
+        this.result1Arr[index] = "";
       }
     })
-    this.result2Arr.forEach((element, index) => { 
-      if (element == null|| element==undefined) {
-        this.result2Arr[index]="";
+    this.result2Arr.forEach((element, index) => {
+      if (element == null || element == undefined) {
+        this.result2Arr[index] = "";
       }
     })
-    this.result3Arr.forEach((element, index) => { 
-      if (element == null|| element==undefined) {
-        this.result3Arr[index]="";
+    this.result3Arr.forEach((element, index) => {
+      if (element == null || element == undefined) {
+        this.result3Arr[index] = "";
       }
     })
-    this.finalResultArr.forEach((element, index) => { 
-      if (element == null|| element==undefined) {
-        this.finalResultArr[index]="";
+    this.finalResultArr.forEach((element, index) => {
+      if (element == null || element == undefined) {
+        this.finalResultArr[index] = "";
       }
     })
-    this.testKitModel['kitValue'].forEach((element, index) => { 
-      if (element == null|| element==undefined) {
-        this.testKitModel['kitValue'][index]="";
+    this.testKitModel['kitValue'].forEach((element, index) => {
+      if (element == null || element == undefined) {
+        this.testKitModel['kitValue'][index] = "";
       }
     })
     //Samples Obj
@@ -740,7 +742,7 @@ export class DTSHIVSerologyPage implements OnInit {
         }
       }
       console.log(this.serologyJSON);
-      if (this.network.type == 'none'||this.network.type == null) {
+      if (this.network.type == 'none') {
         this.serologyJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
 
@@ -748,27 +750,46 @@ export class DTSHIVSerologyPage implements OnInit {
 
         this.serologyJSON['data']['isSynced'] = 'true';
         this.CrudServiceService.postData('/api/shipments/save-form', this.serologyJSON).then((result) => {
-            if (result["status"] == 'success') {
-              this.ToastService.presentToastWithOptions(result['message']);
-              this.router.navigate(['/all-pt-schemes']);
-            }
-            else if (result["status"] == "auth-fail") {
-              this.alertService.presentAlert('Alert', result["message"]);
-              this.storage.set("isLogOut", true);
-              this.router.navigate(['/login']);
-            } else if (result["status"] == 'version-failed') {
-  
-              this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
-  
-            } else {
-  
-              this.alertService.presentAlert('Alert', result["message"]);
-            }
-          }, (err) => {
-            this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
-          });
+          if (result["status"] == 'success') {
+            this.ToastService.presentToastWithOptions(result['message']);
+            this.router.navigate(['/all-pt-schemes']);
+          } else if (result["status"] == "auth-fail") {
+            this.alertService.presentAlert('Alert', result["message"]);
+            this.storage.set("isLogOut", true);
+            this.router.navigate(['/login']);
+          } else if (result["status"] == 'version-failed') {
+
+            this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+
+          } else {
+
+            this.alertService.presentAlert('Alert', result["message"]);
+          }
+        }, (err) => {
+          this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+        });
       }
     }
   }
 
+  clearTestReceiptDate() {
+    this.shipmentData['testReceiptDate'] = ""
+  }
+
+  clearSampleRehydDate() {
+    this.shipmentData['sampleRehydrationDate'] = ""
+  }
+  clearTestingDate() {
+
+    this.shipmentData['shipmentTestingDate']= "";
+  }
+  clearResponseDate(){
+    this.shipmentData['responseDate']="";
+  }
+  clearQCDate(){
+    this.qcDate="";
+  }
+  clearExpDate(i){
+  this.expDateObj[i]="";
+  }
 }

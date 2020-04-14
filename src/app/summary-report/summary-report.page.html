@@ -92,10 +92,10 @@
     <!-- ion-skeleton-text code end -->
   </div>
 
-  <ion-card class="eptCard noReports" *ngIf="networkType=='none'">
+  <ion-card class="eptCard noReports" *ngIf="networkType=='none' || showNoData">
     <ion-card-content class="cardContent">
     <p class="noReports">
-      No reports data available 
+      No summary reports available 
     </p>
       </ion-card-content>
   </ion-card>
