@@ -36,7 +36,7 @@ export class AlertService {
           
           handler: () => {
             if(alertName=='logoutAlert'){
-              this.router.navigate(['/login']);
+              this.router.navigate(['/enter-app-password']);
               this.storage.set("isLogOut", true);
             }
             if(alertName=='playStoreAlert'){

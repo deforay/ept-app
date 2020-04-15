@@ -71,6 +71,9 @@
 .padding-15{
     padding:15px;
 }
+.padding-10 {
+    padding: 10px;
+}
 .float-left{
     float: left;
 }
@@ -78,7 +81,13 @@
     float: right;
 }
 .eptCard:hover{
-    box-shadow: 3px 3px 3px 3px #c6d1e3;
+   box-shadow: 3px 3px 3px 6px #c6d1e3;
+   //@function box-shadow: 2px 5px 30px -10px #616161de;
+}
+.eptCard{
+    box-shadow: 2px 5px 30px -7px #616161de;
+    border-radius: 10px;
+    margin-bottom: 20px;
 }
 // .eptHeaderTitle{
 //     font-size:17px;
@@ -397,6 +406,8 @@ input.mat-input-element{
 .mat-expansion-panel mat-expansion-panel-header{
     height: 37px !important;   
     padding: 0 15px 0 10px !important;
+    border-left: 3px solid #3c8dbc;
+    border-radius: 6px;
 
 }
 // .mat-expansion-panel:nth-child(2n) mat-expansion-panel-header.mat-expanded.mat-expansion-panel-header{

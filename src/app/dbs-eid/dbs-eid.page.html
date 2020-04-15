@@ -200,14 +200,14 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Shipment Testing Date</mat-label>
                 <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="shipmentData.shipmentTestingDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
-                placeholder="Choose Shipment Testing Date" #eidTestingDate="ngModel" name="eidTestingDate" required
+                placeholder="Choose Shipment Testing Date" #eidTestingDate="ngModel" name="eidTestingDate"
                 readonly>
                 <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
                 <ion-icon name="close"  class="clearDateIcon" ios="ios-close" (click)="clearTestingDate()"></ion-icon>
                 <mat-datepicker #testDatePicker [disabled]="isView=='true'"></mat-datepicker>
-                <mat-error *ngIf="!shipmentData.shipmentTestingDate">
+                <!-- <mat-error *ngIf="!shipmentData.shipmentTestingDate">
                   Shipment Testing Date is required 
-                </mat-error>
+                </mat-error> -->
               </mat-form-field>
             </ion-col>
             <ion-col size="6" size-xs class="grid-input-col">
@@ -274,14 +274,14 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Extraction Assay Expiration Date</mat-label>
                 <input matInput [matDatepicker]="extAssayExpiryDate" [(ngModel)]="shipmentData.extractionExpirationDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
-                placeholder="Choose Extraction Assay Expiration Date"  #extExpDate="ngModel" name="extExpDate" required
+                placeholder="Choose Extraction Assay Expiration Date"  #extExpDate="ngModel" name="extExpDate"
                 readonly>
                 <mat-datepicker-toggle matSuffix [for]="extAssayExpiryDate"></mat-datepicker-toggle>
                 <ion-icon name="close"  class="clearDateIcon" ios="ios-close" (click)="clearExtAssExpDate()"></ion-icon>
                 <mat-datepicker #extAssayExpiryDate [disabled]="isView=='true'"></mat-datepicker>
-                <mat-error *ngIf="!shipmentData.extractionExpirationDate">
+                <!-- <mat-error *ngIf="!shipmentData.extractionExpirationDate">
                   Extraction Assay Expiration Date is required 
-                </mat-error>
+                </mat-error> -->
               </mat-form-field>
             </ion-col>
             <ion-col size="6" size-xs class="grid-input-col">

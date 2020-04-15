@@ -330,10 +330,8 @@ export class DbsEidPage implements OnInit {
     // }
     if (!this.shipmentData['testReceiptDate'] ||
       !this.shipmentData['sampleRehydrationDate'] ||
-      !this.shipmentData['shipmentTestingDate'] ||
       !this.shipmentData['extractionLotNumber'] ||
       !this.shipmentData['detectionLotNumber'] ||
-      !this.shipmentData['extractionExpirationDate'] ||
       !this.shipmentData['detectionExpirationDate'] ||
       !this.shipmentData['responseDate'] ||
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {

@@ -9,83 +9,105 @@
 
   </ion-grid>
   <form class="login-form">
-   
+
     <mat-card>
       <mat-card-title> </mat-card-title>
       <mat-card-content>
         <ion-grid>
           <ion-row>
             <ion-col>
-                <mat-form-field class="login-full-width" appearance="outline">
-                    <mat-label>Server Host</mat-label>
-                    <input matInput placeholder="https://ept.org.com" [formControl]="serverHostFormControl" [errorStateMatcher]="matcher" oninput="this.value?this.value=this.value.replace(/(?![A-Z a-z ./@:])./gmi,''):''">
-                    <button mat-icon-button matSuffix>
-                        <mat-icon>language
-                          </mat-icon>
-                    </button>
-                    
-                    <mat-error *ngIf="serverHostFormControl.hasError('required')">
-                      Please enter a valid Host URL
-                    </mat-error>
-                    <!-- <mat-error *ngIf="emailFormControl.hasError('required')">
+              <mat-form-field class="login-full-width" appearance="outline">
+                <mat-label>Server Host</mat-label>
+                <input matInput placeholder="https://ept.org.com" [formControl]="serverHostFormControl"
+                  [errorStateMatcher]="matcher"
+                  oninput="this.value?this.value=this.value.replace(/(?![A-Z a-z ./@:])./gmi,''):''">
+                <button mat-icon-button matSuffix>
+                  <mat-icon>language
+                  </mat-icon>
+                </button>
+
+                <mat-error *ngIf="serverHostFormControl.hasError('required')">
+                  Please enter a valid Host URL
+                </mat-error>
+                <!-- <mat-error *ngIf="emailFormControl.hasError('required')">
                       Email is <strong>required</strong>
                     </mat-error> -->
-                  </mat-form-field>
+              </mat-form-field>
             </ion-col>
-              
+
           </ion-row>
           <ion-row>
             <ion-col>
               <!-- (ngModelChange)="emailFormControl=emailFormControl.trim()" -->
-                <mat-form-field class="login-full-width" appearance="outline">
-                    <mat-label>Username</mat-label>
-                    <input matInput placeholder="Email Id" [formControl]="emailFormControl" (keyup)="trimEmailFormControl()" [errorStateMatcher]="matcher">
-                    <button mat-icon-button matSuffix>
-                        <mat-icon >local_post_office
-                          </mat-icon>
-                    </button>
-                    
-                    <mat-error *ngIf="(emailFormControl.hasError('invalidemail') && !emailFormControl.hasError('required'))">
-                      Please enter a valid email address
-                    </mat-error>
-                    <mat-error *ngIf="emailFormControl.hasError('required')">
-                      Email is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
+              <mat-form-field class="login-full-width" appearance="outline">
+                <mat-label>Username</mat-label>
+                <input matInput placeholder="Email Id" [formControl]="emailFormControl" (keyup)="trimEmailFormControl()"
+                  [errorStateMatcher]="matcher">
+                <button mat-icon-button matSuffix>
+                  <mat-icon>local_post_office
+                  </mat-icon>
+                </button>
+
+                <mat-error
+                  *ngIf="(emailFormControl.hasError('invalidemail') && !emailFormControl.hasError('required'))">
+                  Please enter a valid email address
+                </mat-error>
+                <mat-error *ngIf="emailFormControl.hasError('required')">
+                  Email is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
             </ion-col>
-              
+
           </ion-row>
           <ion-row>
             <ion-col>
-                <mat-form-field class="login-full-width" appearance="outline">
-                    <mat-label>Password</mat-label>
-                    <input matInput [type]="pswdhide ? 'password' : 'text'" [formControl]="pswdFormControl"
-                      [errorStateMatcher]="matcher">
-                    <button mat-icon-button matSuffix (click)="pswdhide = !pswdhide" [attr.aria-label]="'hide password'"
-                      [attr.aria-pressed]="hide">
-                      <mat-icon>{{pswdhide ? 'visibility_off' : 'visibility'}}</mat-icon>
-                    </button>
-                    <mat-error *ngIf="!pswdFormControl.hasError('required') && pswdFormControl.hasError('trimmedThreeChars')">
-                      Password must be atleast <strong>3 Characters</strong>
-                    </mat-error>
-                    <mat-error *ngIf="pswdFormControl.hasError('required')">
-                      Password is <strong>required</strong>
-                    </mat-error>
-                  </mat-form-field>
+              <mat-form-field class="login-full-width" appearance="outline">
+                <mat-label>Password</mat-label>
+                <input matInput [type]="pswdhide ? 'password' : 'text'" [formControl]="pswdFormControl"
+                  [errorStateMatcher]="matcher">
+                <button mat-icon-button matSuffix (click)="pswdhide = !pswdhide" [attr.aria-label]="'hide password'"
+                  [attr.aria-pressed]="hide">
+                  <mat-icon>{{pswdhide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                </button>
+                <mat-error
+                  *ngIf="!pswdFormControl.hasError('required') && pswdFormControl.hasError('trimmedThreeChars')">
+                  Password must be atleast <strong>3 Characters</strong>
+                </mat-error>
+                <mat-error *ngIf="pswdFormControl.hasError('required')">
+                  Password is <strong>required</strong>
+                </mat-error>
+              </mat-form-field>
             </ion-col>
-              
+
+          </ion-row>
+
+          <ion-row>
+            <ion-col>
+            </ion-col>
+            <!-- <ion-col> -->
+              <button ion-col mat-raised-button class="form-btn" color="primary" (click)="login()">Login</button>
+             
+              <!-- </ion-col> -->
+            <ion-col>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col>
+              <p class="forgotPassword" mat-flat-button routerLink="/forgot-password">Forgot Password ?</p>
+            </ion-col>
           </ion-row>
         </ion-grid>
 
 
-        <mat-grid-list class="login-btn-grid" cols="2" rowHeight="2:1">
+        <!-- <mat-grid-list class="login-btn-grid" cols="1" rowHeight="2:1">
           <mat-grid-tile class="loginTile">
             <button mat-raised-button color="primary" (click)="login()">Login</button>
           </mat-grid-tile>
           <mat-grid-tile>
             <a class="float-right" mat-flat-button routerLink="/forgot-password">Forgot Password ?</a>
           </mat-grid-tile>
-        </mat-grid-list>
+        </mat-grid-list> -->
+
 
       </mat-card-content>
     </mat-card>

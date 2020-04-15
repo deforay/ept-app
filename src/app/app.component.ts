@@ -119,7 +119,8 @@ export class AppComponent {
         if (isLogOut == false && this.router.url != '/') {
           this.router.navigateByUrl(this.router.url);
         } else if (isLogOut == false && this.router.url == '/') {
-          this.router.navigateByUrl('/all-pt-schemes');
+     //     this.router.navigateByUrl('/all-pt-schemes');
+          this.router.navigateByUrl('/enter-app-password');
         } else {
           this.router.navigateByUrl('/login', {
             replaceUrl: true

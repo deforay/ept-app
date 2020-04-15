@@ -4,9 +4,9 @@ import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { AppPasswordPageRoutingModule } from './app-password-routing.module';
+import { EnterAppPasswordPageRoutingModule } from './enter-app-password-routing.module';
 
-import { AppPasswordPage } from './app-password.page';
+import { EnterAppPasswordPage } from './enter-app-password.page';
 import { MaterialModule } from '../material.module';
 import { NgOtpInputModule } from 'ng-otp-input';
 @NgModule({
@@ -17,8 +17,8 @@ import { NgOtpInputModule } from 'ng-otp-input';
     MaterialModule,
     ReactiveFormsModule,
     NgOtpInputModule,
-    AppPasswordPageRoutingModule
+    EnterAppPasswordPageRoutingModule
   ],
-  declarations: [AppPasswordPage]
+  declarations: [EnterAppPasswordPage]
 })
-export class AppPasswordPageModule {}
+export class EnterAppPasswordPageModule {}
