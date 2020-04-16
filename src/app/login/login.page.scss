@@ -46,14 +46,6 @@ margin: auto;
 .mat-form-field-appearance-legacy .mat-hint {
   color: rgba(255,255,255,.7);
 }
-.mat-grid-tile{
- // padding-top: calc(((20% - 0.5px) * 1) + 0px) !important ;
-  padding-top: 40px !important ;
-}
-.mat-grid-list{
-//  padding-bottom: calc(((20% - 0.5px) * 1) + 0px) !important;
-  padding-bottom: 40px !important;
-}
 .float-right{
   font-size: 11px!important ;
 }
@@ -62,8 +54,11 @@ margin: auto;
   background: #3c8dbc !important;
 }
 .forgotPassword{
-    font-size: 13px;
-    color: #171414;
+    font-size: 12px;
+    color:(var(--ion-color-dark-grey));
     margin-top: 10px;
     text-align: center;
+}
+.loginRow{
+  padding: 10px;
 }

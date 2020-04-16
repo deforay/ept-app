@@ -27,6 +27,7 @@ export class AppPasswordPage implements OnInit {
   @ViewChild('ngConfirmPinInput', {
     static: false
   }) ngConfirmPinInput: any;
+
   config = {
     allowNumbersOnly: true,
     length:4,
@@ -39,7 +40,7 @@ export class AppPasswordPage implements OnInit {
       //  'color': '#003366',
       'font-size': '16px',
       'font-weight':'500',
-      'font-family': 'Roboto',
+      'font-family': "'Oswald', sans-serif",
       'text-align':'center',
       'border': 'none',
       'border-radius': '0',
@@ -59,7 +60,7 @@ export class AppPasswordPage implements OnInit {
       //  'color': '#003366',
       'font-size': '16px',
       'font-weight':'500',
-      'font-family': 'Roboto',
+      'font-family': "'Oswald', sans-serif",
       'text-align':'center',
       'border': 'none',
       'border-radius': '0',
@@ -71,6 +72,7 @@ export class AppPasswordPage implements OnInit {
   confirmAppPin: string;
   showCreatePinNumber = true;
   showConfirmPinNumber = false;
+
   constructor(private storage: Storage,  private router: Router,
     public CrudServiceService: CrudServiceService,
     public ToastService: ToastService,
@@ -89,20 +91,7 @@ export class AppPasswordPage implements OnInit {
     this.config.isPasswordInput = !this.config.isPasswordInput;
     console.log(this.config)
   }
-  handlePaste(e){
-    var clipboardData = e.clipboardData || window['clipboardData'];
-    if (clipboardData) {
-        /** @type {?} */
-        var pastedData = clipboardData.getData('Text');
-    }
-    // Stop data actually being pasted into div
-    e.stopPropagation();
-    e.preventDefault();
-    if (!pastedData) {
-        return;
-    }
-  }
-
+ 
   setVal(val) {
     this.ngCreatePinInput.setValue(val);
   }
@@ -145,7 +134,7 @@ export class AppPasswordPage implements OnInit {
       this.storage.set('appPin', this.confirmAppPin);
       setTimeout(() => {
         loading.dismiss();
-        this.ToastService.presentToastWithOptions("App Pin Number Created Successfully");
+        this.ToastService.presentToastWithOptions("App PIN number created successfully");
         this.router.navigate(['/all-pt-schemes'],{replaceUrl:true});
         this.createAppPin = '';
         this.ngCreatePinInput.setValue('');
@@ -154,21 +143,13 @@ export class AppPasswordPage implements OnInit {
       }, 1000);
 
     }else if(pin.length == 4 && this.confirmAppPin != this.createAppPin){
-      this.alertService.presentAlert('Alert', "The Confirm Pin Number does not match with Create Pin Number.");
+      this.alertService.presentAlert('Alert', "Confirm PIN number does not match with create PIN number.");
       this.ngConfirmPinInput.setValue('');
       this.confirmAppPin = '';
     }
   }
   }
 
-  ifKeyCode(event, targetCode) {
-    var key = event.keyCode || event.charCode;
-    return key == targetCode ? true : false;
-  }
-
-  ifLeftArrow(event) {
-    return this.ifKeyCode(event, 37);
-  }
   focusTo(eleId) {
     var ele = document.getElementById(eleId);
     if (ele) {
@@ -200,10 +181,10 @@ export class AppPasswordPage implements OnInit {
           return;       
     } 
 
-    if (pin.length == 4) {
+    // if (pin.length == 4) {
    
-      this.storage.set('createPin', this.createAppPin);
+    //   this.storage.set('createPin', this.createAppPin);
 
-    }
+    // }
   }
 }

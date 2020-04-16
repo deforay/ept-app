@@ -125,7 +125,7 @@ export class LoginPage implements OnInit {
         } else {
           apiUrl = "https://" + this.serverHostFormControl.value
         }
-
+        this.storage.remove('appPin');
         this.storage.set('apiUrl', apiUrl.trim());
         this.storage.get('appVersionNumber').then((appVersionNumber) => {
           if (appVersionNumber) {
@@ -163,12 +163,12 @@ export class LoginPage implements OnInit {
                       result['data'].viewOnlyAccess = false;
                     }
                     this.storage.set('participantLogin', result['data']);
-                    this.router.navigate(['/all-pt-schemes']);
+                    this.router.navigate(['/app-password']);
                     this.getAllShipmentsAPI();
 
                   } else if (result["status"] == 'version-failed') {
 
-                    this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+                    this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
 
                   } else {
                     this.alertService.presentAlert('Alert', result["message"], '');

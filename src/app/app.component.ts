@@ -115,19 +115,6 @@ export class AppComponent {
         }
       }, (err) => {});
 
-      this.storage.get('isLogOut').then((isLogOut) => {
-        if (isLogOut == false && this.router.url != '/') {
-          this.router.navigateByUrl(this.router.url);
-        } else if (isLogOut == false && this.router.url == '/') {
-     //     this.router.navigateByUrl('/all-pt-schemes');
-          this.router.navigateByUrl('/enter-app-password');
-        } else {
-          this.router.navigateByUrl('/login', {
-            replaceUrl: true
-          });
-        }
-      })
-
       //Create Directory for EPT REPORTS
       this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
 
@@ -148,7 +135,7 @@ export class AppComponent {
       this.platform.backButton.subscribeWithPriority(0, () => {
         if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes' || this.router.url === '/individual-report' || this.router.url === '/summary-report') {
 
-          this.alertService.presentAlertConfirm('e-PT', "Are you sure want to exit?", 'appExitAlert');
+          this.alertService.presentAlertConfirm('e-PT', '',"Are you sure want to exit?",'No','Yes','appExitAlert');
 
         } else if (this.router.url === '/dts-hiv-serology' || this.router.url === '/dts-hiv-viralload' ||
           this.router.url === '/dbs-eid') {
@@ -167,12 +154,55 @@ export class AppComponent {
       });
     });
 
+    this.storage.get('isLogOut').then((isLogOut) => {
+      this.storage.get('appPin').then((appPin) => {
+        if (isLogOut==false && appPin && this.router.url != '/') {
+          if (this.router.url == '/all-pt-schemes') {
+            this.selectedIndex = 0;
+            this.router.navigate(['/all-pt-schemes'], {
+              replaceUrl: true
+            });
+          } else if (this.router.url == '/individual-report') {
+            this.selectedIndex = 1;
+            this.router.navigate(['/individual-report'], {
+              replaceUrl: true
+            });
+          } else if (this.router.url == '/summary-report') {
+            this.selectedIndex = 2;
+            this.router.navigate(['/summary-report'], {
+              replaceUrl: true
+            });
+          } else if (this.router.url == '/change-password') {
+            this.selectedIndex = 3;
+            this.router.navigate(['/change-password'], {
+              replaceUrl: true
+            });
+          } else if (this.router.url == '/login') {
+            this.selectedIndex = 0;
+            this.router.navigateByUrl('/app-password');
+          } else {
+            this.router.navigateByUrl(this.router.url);
+          }
+        } else if (isLogOut==false && appPin && this.router.url == '/') {
+          this.selectedIndex = 0;
+          this.router.navigateByUrl('/enter-app-password');
+        } 
+        else if (isLogOut && !appPin) {
+          this.selectedIndex = 0;
+          this.router.navigateByUrl('/app-password');
+        } else {
+          this.selectedIndex = 0;
+          this.router.navigateByUrl('/login');
+        }
+      })
+    })
+    
     this.storage.get('participantLogin').then((participantLogin) => {
       this.participantName = participantLogin.name;
     })
-    
+
     this.events.subscribe('loggedPartiName', (result) => {
-      this.participantName =result;
+      this.participantName = result;
     })
     if (!this.appVersionNumber) {
       //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
@@ -184,7 +214,7 @@ export class AppComponent {
 
   }
   logout() {
-    this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
+    this.alertService.presentAlertConfirm('Logout','','Are you sure you want to logout?','No','Yes', 'logoutAlert');
     this.selectedIndex = 0;
 
   }
@@ -192,7 +222,7 @@ export class AppComponent {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     if (page.title == 'Log Out') {
-      this.alertService.presentAlertConfirm('Logout', 'Are you sure you want to logout?', 'logoutAlert');
+      this.alertService.presentAlertConfirm('Logout','','Are you sure you want to logout?','No','Yes', 'logoutAlert');
     } else {}
   }
 }

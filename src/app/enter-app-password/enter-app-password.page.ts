@@ -40,7 +40,7 @@ export class EnterAppPasswordPage implements OnInit {
       //  'color': '#003366',
       'font-size': '16px',
       'font-weight':'500',
-      'font-family': 'Roboto',
+      'font-family': "'Oswald', sans-serif",
       'text-align':'center',
       'border': 'none',
       'border-radius': '0',
@@ -54,19 +54,12 @@ export class EnterAppPasswordPage implements OnInit {
     public alertService: AlertService,
     public menu: MenuController,
     public loadingCtrl: LoadingController) { 
+
   }
 
   ngOnInit() {
   }
-
-  ifKeyCode(event, targetCode) {
-    var key = event.keyCode || event.charCode;
-    return key == targetCode ? true : false;
-  }
-
-  ifLeftArrow(event) {
-    return this.ifKeyCode(event, 37);
-  }
+  
   focusTo(eleId) {
     var ele = document.getElementById(eleId);
     if (ele) {
@@ -121,7 +114,7 @@ export class EnterAppPasswordPage implements OnInit {
             }, 1000);
 
           } else if (pin.length == 4 && this.appPin != pinNumber) {
-            this.alertService.presentAlertConfirm('Alert', "The Entered Pin Number is invalid.", 'goToCreatePin');
+            this.alertService.presentAlertConfirm('Alert','', 'Your PIN is incorrect.Click try again if you remember the PIN or login to reset your PIN', "Try Again", 'Login','invalidPIN');
             this.ngPinInput.setValue('');
             this.appPin = '';
           }

@@ -235,7 +235,7 @@ import {
 
                     } else if (result["status"] == 'version-failed') {
 
-                      this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+                      this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
 
                     } else {
 
@@ -263,7 +263,7 @@ import {
 
               } else if (result["status"] == 'version-failed') {
 
-                this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+                this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
 
               } else {
 
@@ -306,8 +306,7 @@ import {
 
               } else if (result["status"] == 'version-failed') {
 
-                this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
-
+                this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
               } else {
 
                 this.alertService.presentAlert('Alert', result["message"]);
@@ -541,7 +540,7 @@ import {
 
           } else if (result["status"] == 'version-failed') {
 
-            this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+            this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
 
           } else {
 
@@ -635,7 +634,7 @@ import {
 
               } else if (result["status"] == 'version-failed') {
                 if (this.versionFailAlertCount == 0) {
-                  this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+                  this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
                   this.versionFailAlertCount++;
                 }
               } else {

@@ -14,26 +14,26 @@ export class AlertService {
 
   constructor(public alertController: AlertController, private router: Router,private market: Market,private storage: Storage) { }
 
-  async presentAlertConfirm(headerMessage: string,contentMessage:string,alertName ? : any) {
+  async presentAlertConfirm(headerMessage: string,subtitle:string,contentMessage:string,rightSideButtonText:string,leftSideButtonText:string,alertName ? : any) {
     const element = await this.alertController.getTop();
     if (element && element.dismiss) {
       element.dismiss();
     }
     const alert = await this.alertController.create({
       header: headerMessage,
+      subHeader:subtitle,
       message: contentMessage,
       buttons: [
         {
-          text: 'No',
+          text: rightSideButtonText,
           role: 'cancel',
           cssClass: 'secondary',
           handler: () => {
        
           }
         }, {
-          text: 'Yes',
+          text: leftSideButtonText,
           cssClass: 'primary',
-          
           handler: () => {
             if(alertName=='logoutAlert'){
               this.router.navigate(['/enter-app-password']);
@@ -44,6 +44,11 @@ export class AlertService {
             }
             if(alertName=='appExitAlert'){
             navigator['app'].exitApp();
+            }
+            if(alertName=='invalidPIN'){
+              this.storage.set("isLogOut", true);
+              this.storage.remove('appPin');
+              this.router.navigate(['/login'], {replaceUrl: true});
             }
           }
         }

@@ -619,7 +619,7 @@ export class DbsEidPage implements OnInit {
               this.router.navigate(['/login']);
             } else if (result["status"] == 'version-failed') {
   
-              this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+              this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
   
             } else {
   

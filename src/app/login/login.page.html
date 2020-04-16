@@ -38,9 +38,8 @@
           </ion-row>
           <ion-row>
             <ion-col>
-              <!-- (ngModelChange)="emailFormControl=emailFormControl.trim()" -->
               <mat-form-field class="login-full-width" appearance="outline">
-                <mat-label>Username</mat-label>
+                <mat-label>Email</mat-label>
                 <input matInput placeholder="Email Id" [formControl]="emailFormControl" (keyup)="trimEmailFormControl()"
                   [errorStateMatcher]="matcher">
                 <button mat-icon-button matSuffix>
@@ -81,34 +80,20 @@
 
           </ion-row>
 
-          <ion-row>
+          <ion-row class="loginRow">
             <ion-col>
             </ion-col>
-            <!-- <ion-col> -->
               <button ion-col mat-raised-button class="form-btn" color="primary" (click)="login()">Login</button>
-             
-              <!-- </ion-col> -->
             <ion-col>
             </ion-col>
           </ion-row>
+
           <ion-row>
             <ion-col>
               <p class="forgotPassword" mat-flat-button routerLink="/forgot-password">Forgot Password ?</p>
             </ion-col>
           </ion-row>
         </ion-grid>
-
-
-        <!-- <mat-grid-list class="login-btn-grid" cols="1" rowHeight="2:1">
-          <mat-grid-tile class="loginTile">
-            <button mat-raised-button color="primary" (click)="login()">Login</button>
-          </mat-grid-tile>
-          <mat-grid-tile>
-            <a class="float-right" mat-flat-button routerLink="/forgot-password">Forgot Password ?</a>
-          </mat-grid-tile>
-        </mat-grid-list> -->
-
-
       </mat-card-content>
     </mat-card>
 

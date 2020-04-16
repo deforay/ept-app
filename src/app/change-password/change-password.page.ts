@@ -142,7 +142,7 @@ export class ChangePasswordPage implements OnInit {
 
                 } else if (result["status"] == 'version-failed') {
 
-                  this.alertService.presentAlertConfirm('Alert', result["message"], 'playStoreAlert');
+                  this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
 
                 } else {
                   this.alertService.presentAlert("Alert", result["message"]);
