@@ -78,19 +78,12 @@ export class ForgotPasswordPage implements OnInit {
             }
             this.CrudServiceService.postData('/api/login/forget-password', forgotPwdJSON)
               .then((result) => {
-               
-                if (result["status"] == 'success') {
-
-                   this.ToastService.presentToastWithOptions(result["message"]);
-                   this.storage.set("isLogOut", true);
-                   this.router.navigate(['/login'], {replaceUrl: true});
-
-                } else if (result["status"] == 'version-failed') {
+                if(result["status"] == 'version-failed') {
 
                   this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
 
                 } else {
-                  this.alertService.presentAlert('Alert',result["message"],'');
+                  this.alertService.presentAlert('e-PT',"We have received your password reset request.<br>If the email id you entered is registered on the system, you will receive an email with password reset instructions.<br> Please reach out to the PT provider for support or queries.")
                 }
               }, (err) => {
 

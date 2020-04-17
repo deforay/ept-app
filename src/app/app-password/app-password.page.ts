@@ -15,6 +15,10 @@ import {
   MenuController,
   LoadingController
 } from '@ionic/angular';
+import {
+  Events
+} from '@ionic/angular';
+
 @Component({
   selector: 'app-app-password',
   templateUrl: './app-password.page.html',
@@ -27,7 +31,7 @@ export class AppPasswordPage implements OnInit {
   @ViewChild('ngConfirmPinInput', {
     static: false
   }) ngConfirmPinInput: any;
-
+  participantName:string;
   config = {
     allowNumbersOnly: true,
     length:4,
@@ -79,12 +83,23 @@ export class AppPasswordPage implements OnInit {
     public LoaderService: LoaderService,
     public alertService: AlertService,
     public menu: MenuController,
-    public loadingCtrl: LoadingController,) { 
+    public loadingCtrl: LoadingController,
+    public events: Events,) { 
   }
 
   ngOnInit() {
   }
 
+
+  ionViewWillEnter() {
+    this.storage.get('participantLogin').then((participantLogin) => {
+      this.participantName = participantLogin.name;
+    })
+
+    this.events.subscribe('loggedPartiName', (result) => {
+      this.participantName = result;
+    })
+  }
   pswdConfig(){
     this.pswdhide = !this.pswdhide; 
    // if(pss)

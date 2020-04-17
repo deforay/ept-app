@@ -338,6 +338,7 @@
                   {{qcData.show}}
                 </mat-radio-button>
               </mat-radio-group>
+              <mat-error *ngIf="!qcDone">QC Done is required</mat-error>
             </ion-col>
           </ion-row>
 

@@ -92,7 +92,7 @@ import {
 
     //comment when take buid start
 
-    //this.networkType = "4G";
+   // this.networkType = "4G";
 
     //end...
 
@@ -649,10 +649,8 @@ import {
                 this.errSyncAllCount++;
               }
             }
-
           );
         }
-
       )
     }
   }

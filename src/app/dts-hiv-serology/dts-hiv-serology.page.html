@@ -339,7 +339,7 @@
               </ion-grid>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <ion-row>
+          <ion-row class="testKitRow">
             <ion-col size="12"  class="grid-readonly-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Kit Name </mat-label>
@@ -590,6 +590,7 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label>Supervisor Review </mat-label>
               <mat-select [(ngModel)]="supReview" name="serosupReview" #serosupReview="ngModel" required  [disabled]="isView=='true'">
+                <mat-option>--Select--</mat-option>
                 <mat-option *ngFor="let item of supervisorReviewArray" [value]="item.value">
                   {{item.show}}
                 </mat-option>

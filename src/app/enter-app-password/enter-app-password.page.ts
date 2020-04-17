@@ -1,4 +1,8 @@
-import { Component, OnInit,ViewChild } from '@angular/core';
+import {
+  Component,
+  OnInit,
+  ViewChild
+} from '@angular/core';
 import {
   Router
 } from '@angular/router';
@@ -10,10 +14,15 @@ import {
   LoaderService,
   AlertService
 } from '../../app/service/providers';
-import { CrudServiceService} from '../../app/service/crud/crud-service.service';
+import {
+  CrudServiceService
+} from '../../app/service/crud/crud-service.service';
 import {
   MenuController,
   LoadingController
+} from '@ionic/angular';
+import {
+  Events
 } from '@ionic/angular';
 
 @Component({
@@ -27,6 +36,7 @@ export class EnterAppPasswordPage implements OnInit {
     static: false
   }) ngPinInput: any;
   appPin: string;
+  participantName: string;
   showPinNumber = true;
   config = {
     allowNumbersOnly: true,
@@ -39,27 +49,38 @@ export class EnterAppPasswordPage implements OnInit {
       'height': '40px',
       //  'color': '#003366',
       'font-size': '16px',
-      'font-weight':'500',
+      'font-weight': '500',
       'font-family': "'Oswald', sans-serif",
-      'text-align':'center',
+      'text-align': 'center',
       'border': 'none',
       'border-radius': '0',
       'border-bottom': '2px solid #3c8dbc'
     }
   };
-  constructor(private storage: Storage,  private router: Router,
+  constructor(private storage: Storage, private router: Router,
     public CrudServiceService: CrudServiceService,
     public ToastService: ToastService,
     public LoaderService: LoaderService,
     public alertService: AlertService,
     public menu: MenuController,
-    public loadingCtrl: LoadingController) { 
+    public loadingCtrl: LoadingController,
+    public events: Events,
+  ) {
 
   }
 
-  ngOnInit() {
+  ionViewWillEnter() {
+    this.storage.get('participantLogin').then((participantLogin) => {
+      this.participantName = participantLogin.name;
+    })
+
+    this.events.subscribe('loggedPartiName', (result) => {
+      this.participantName = result;
+    })
   }
-  
+
+  ngOnInit() {}
+
   focusTo(eleId) {
     var ele = document.getElementById(eleId);
     if (ele) {
@@ -108,13 +129,15 @@ export class EnterAppPasswordPage implements OnInit {
             setTimeout(() => {
               loading.dismiss();
               this.ToastService.presentToastWithOptions("Pin verified successfully");
-              this.router.navigate(['/all-pt-schemes'],{replaceUrl:true});
+              this.router.navigate(['/all-pt-schemes'], {
+                replaceUrl: true
+              });
               this.ngPinInput.setValue('');
               this.appPin = '';
             }, 1000);
 
           } else if (pin.length == 4 && this.appPin != pinNumber) {
-            this.alertService.presentAlertConfirm('Alert','', 'Your PIN is incorrect.Click try again if you remember the PIN or login to reset your PIN', "Try Again", 'Login','invalidPIN');
+            this.alertService.presentAlertConfirm('Alert', '', 'Your PIN is incorrect.Click try again if you remember the PIN or login to reset your PIN', "Try Again", 'Login', 'invalidPIN');
             this.ngPinInput.setValue('');
             this.appPin = '';
           }

@@ -22,7 +22,7 @@
                   [errorStateMatcher]="matcher"
                   oninput="this.value?this.value=this.value.replace(/(?![A-Z a-z ./@:])./gmi,''):''">
                 <button mat-icon-button matSuffix>
-                  <mat-icon>language
+                  <mat-icon class="matIcons">language
                   </mat-icon>
                 </button>
 
@@ -43,7 +43,7 @@
                 <input matInput placeholder="Email Id" [formControl]="emailFormControl" (keyup)="trimEmailFormControl()"
                   [errorStateMatcher]="matcher">
                 <button mat-icon-button matSuffix>
-                  <mat-icon>local_post_office
+                  <mat-icon class="matIcons">local_post_office
                   </mat-icon>
                 </button>
 
@@ -66,7 +66,7 @@
                   [errorStateMatcher]="matcher">
                 <button mat-icon-button matSuffix (click)="pswdhide = !pswdhide" [attr.aria-label]="'hide password'"
                   [attr.aria-pressed]="hide">
-                  <mat-icon>{{pswdhide ? 'visibility_off' : 'visibility'}}</mat-icon>
+                  <mat-icon class="matIcons">{{pswdhide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
                 <mat-error
                   *ngIf="!pswdFormControl.hasError('required') && pswdFormControl.hasError('trimmedThreeChars')">
