@@ -20,7 +20,7 @@
                 <mat-label>Server Host</mat-label>
                 <input matInput placeholder="https://ept.org.com" [formControl]="serverHostFormControl"
                   [errorStateMatcher]="matcher"
-                  oninput="this.value?this.value=this.value.replace(/(?![A-Z a-z ./@:])./gmi,''):''">
+                  oninput="this.value?this.value=this.value.replace(/(?![A-Z a-z ./@:])./gmi,''):''" autocomplete="off">
                 <button mat-icon-button matSuffix>
                   <mat-icon class="matIcons">language
                   </mat-icon>
@@ -41,7 +41,7 @@
               <mat-form-field class="login-full-width" appearance="outline">
                 <mat-label>Email</mat-label>
                 <input matInput placeholder="Email Id" [formControl]="emailFormControl" (keyup)="trimEmailFormControl()"
-                  [errorStateMatcher]="matcher">
+                  [errorStateMatcher]="matcher" autocomplete="off">
                 <button mat-icon-button matSuffix>
                   <mat-icon class="matIcons">local_post_office
                   </mat-icon>
@@ -63,7 +63,7 @@
               <mat-form-field class="login-full-width" appearance="outline">
                 <mat-label>Password</mat-label>
                 <input matInput [type]="pswdhide ? 'password' : 'text'" [formControl]="pswdFormControl"
-                  [errorStateMatcher]="matcher">
+                  [errorStateMatcher]="matcher" autocomplete="off">
                 <button mat-icon-button matSuffix (click)="pswdhide = !pswdhide" [attr.aria-label]="'hide password'"
                   [attr.aria-pressed]="hide">
                   <mat-icon class="matIcons">{{pswdhide ? 'visibility_off' : 'visibility'}}</mat-icon>
@@ -89,8 +89,12 @@
           </ion-row>
 
           <ion-row>
+            <ion-col></ion-col>
             <ion-col>
-              <p class="forgotPassword" mat-flat-button routerLink="/forgot-password">Forgot Password ?</p>
+              <button ion-col  mat-button color="secondary" class="forgot-btn"  (click)="forgotPassword()">Forgot Password?</button>
+            </ion-col>
+            <ion-col>
+              <!-- <p class="forgotPassword" mat-flat-button routerLink="/forgot-password">Forgot Password ?</p> -->
             </ion-col>
           </ion-row>
         </ion-grid>
