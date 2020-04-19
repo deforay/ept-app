@@ -333,7 +333,8 @@ export class DbsEidPage implements OnInit {
       !this.shipmentData['extractionLotNumber'] ||
       !this.shipmentData['detectionLotNumber'] ||
       !this.shipmentData['detectionExpirationDate'] ||
-      !this.shipmentData['responseDate'] ||
+      (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) ||
+      (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate ) && this.participantQcAccess==true)||
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
       this.validShipmentDetails = false;
 
