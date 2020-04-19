@@ -180,10 +180,10 @@ export class DbsEidPage implements OnInit {
         this.shipmentData['detectionExpirationDate'] = this.eidArray[0].eidData.Heading2.data.detectionExpirationDate ? new Date(this.eidArray[0].eidData.Heading2.data.detectionExpirationDate) : '';
         this.shipmentData['extractionAssayDropdown'] = this.eidArray[0].eidData.Heading2.data.extractionAssaySelect;
         this.shipmentData['detectionAssayDropdown'] = this.eidArray[0].eidData.Heading2.data.detectionAssaySelect;
-        this.shipmentData['modeOfReceiptDropdown'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelect;
+        this.shipmentData['modeOfReceiptDropdown'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelect ? this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelect:[];
         this.shipmentData['extractionAssay'] = this.eidArray[0].eidData.Heading2.data.extractionAssaySelected;
         this.shipmentData['detectionAssay'] = this.eidArray[0].eidData.Heading2.data.detectionAssaySelected;
-        this.shipmentData['modeOfReceipt'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected;
+        this.shipmentData['modeOfReceipt'] =this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected ? this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected:'';
         if (this.participantQcAccess == true) {
           if (this.eidArray[0].eidData.Heading2.data.qcData.status == true) {
             this.isQCDoneShow = true;
@@ -488,10 +488,10 @@ export class DbsEidPage implements OnInit {
      // else if (this.otherInfoValid == false) {
       this.setStep(4);
     }
-
     if (this.qcDone == 'no' || this.qcDone == '') {
       this.qcDate = "";
       this.qcDoneBy = "";
+    
     }
     this.isSubmitted = "true";
     if (this.ptPanelNotTested == true) {

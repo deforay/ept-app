@@ -29,6 +29,9 @@ import {
 import {
   Storage
 } from '@ionic/storage';
+import {
+  MenuController
+} from '@ionic/angular';
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
@@ -52,6 +55,7 @@ export class ForgotPasswordPage implements OnInit {
 
   constructor(public network: Network,
     private router: Router,
+    public menu: MenuController,
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -60,6 +64,16 @@ export class ForgotPasswordPage implements OnInit {
 
   ngOnInit() {}
 
+  ionViewDidEnter() {
+    // the root left menu should be disabled on this page
+    this.menu.enable(false);
+  }
+
+  ionViewWillLeave() {
+    // enable the root left menu when leaving this page
+    this.menu.enable(true);
+  }
+  
   trimEmailFormControl() {
     this.emailFormControl.setValue(this.emailFormControl.value.trim());
   }

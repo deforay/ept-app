@@ -102,8 +102,6 @@ export class DtsHivViralloadPage implements OnInit {
   loginID: any;
   notes: any = [];
   formattedQCDate: any;
-  selectedParticipantID: any;
-  selectedShipmentID: any;
   ptPanelTestData = {}
   ptPanelNotTestData = {}
   viralLoadJSON = {}
@@ -190,30 +188,27 @@ export class DtsHivViralloadPage implements OnInit {
 
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
 
-        this.isView = vlDataObj[0].isView;
+      this.isView = vlDataObj[0].isView;
 
-        if (vlDataObj[0].isSynced == 'false') {
-          this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
+      if (vlDataObj[0].isSynced == 'false') {
+        this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
 
-            if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
+          if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
 
-              this.isView = localStorageSelectedFormArray[0].isView;
-              this.vlDataArray = [];
-              this.vlDataArray.push(localStorageSelectedFormArray[0]);
-              this.bindVLData();
+            this.isView = localStorageSelectedFormArray[0].isView;
+            this.vlDataArray = [];
+            this.vlDataArray.push(localStorageSelectedFormArray[0]);
+            this.bindVLData();
 
-            }
-          })
-        } else {
-          this.vlDataArray = [];
-          this.vlDataArray.push(vlDataObj[0]);
-          this.bindVLData();
-        }
-
-        console.log(this.vlDataArray);
+          }
+        })
+      } else {
+        this.vlDataArray = [];
+        this.vlDataArray.push(vlDataObj[0]);
+        this.bindVLData();
       }
-
-    )
+      console.log(this.vlDataArray);
+    })
   }
 
 
@@ -223,9 +218,6 @@ export class DtsHivViralloadPage implements OnInit {
       if (this.vlDataArray[0].vlData.access.message) {
         this.viewAccessMessage = this.vlDataArray[0].vlData.access.message;
       }
-      this.selectedParticipantID = this.vlDataArray[0].participantId;
-      this.selectedShipmentID = this.vlDataArray[0].shipmentId;
-
       if (this.vlDataArray[0].vlData.Heading1.status == true) {
         this.partDetailsArray = this.vlDataArray[0].vlData.Heading1.data;
       }
@@ -233,23 +225,11 @@ export class DtsHivViralloadPage implements OnInit {
       if (this.vlDataArray[0].vlData.Heading2.status == true) {
 
         this.shipmentsDetailsArray = this.vlDataArray[0].vlData.Heading2.data;
-
         this.testReceiptDate = this.shipmentsDetailsArray['testReceiptDate'] ? new Date(this.shipmentsDetailsArray['testReceiptDate']) : '';
-
-
         this.sampleRhdDate = this.shipmentsDetailsArray['sampleRehydrationDate'] ? new Date(this.shipmentsDetailsArray['sampleRehydrationDate']) : '';
-
-        if (this.shipmentsDetailsArray['testDate']) {
-          this.testDate = new Date(this.shipmentsDetailsArray['testDate']);
-        }
-
-        if (this.shipmentsDetailsArray['assayExpirationDate']) {
-          this.assayExpDate = new Date(this.shipmentsDetailsArray['assayExpirationDate']);
-        }
-
-        if (this.shipmentsDetailsArray['specimenVolume']) {
-          this.specVolTest = this.shipmentsDetailsArray['specimenVolume'];
-        }
+        this.testDate = this.shipmentsDetailsArray['testDate'] ? new Date(this.shipmentsDetailsArray['testDate']) : '';
+        this.assayExpDate = this.shipmentsDetailsArray['assayExpirationDate'] ? new Date(this.shipmentsDetailsArray['assayExpirationDate']) : '';
+        this.specVolTest = this.shipmentsDetailsArray['specimenVolume'] ? this.shipmentsDetailsArray['specimenVolume'] : '';
         if (this.isPartiQCAccess == true) {
           if (this.shipmentsDetailsArray.qcData.status == true) {
             this.isQCDoneShow = true;
@@ -259,46 +239,39 @@ export class DtsHivViralloadPage implements OnInit {
               this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
             }
             this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
-          } else {
+          } else {   
             this.isQCDoneShow = false;
-            this.qcDone = 'no';
+            this.qcDone = '';
             this.qcDate = '';
             this.qcDoneBy = '';
-            this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
           }
         } else {
           this.isQCDoneShow = false;
-          this.qcDone = 'no';
+          this.qcDone = '';
           this.qcDate = '';
           this.qcDoneBy = '';
-          this.qcRadioArray = this.shipmentsDetailsArray.qcData.qcRadio;
         }
         if (this.isPartiEditModeRec == true) {
-          if (this.shipmentsDetailsArray['modeOfReceiptSelect']) {
-            this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'];
-            this.receiptmode = this.shipmentsDetailsArray['modeOfReceiptSelected'] ? this.shipmentsDetailsArray['modeOfReceiptSelected'] : '';
-          }
+          this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'] ? this.shipmentsDetailsArray['modeOfReceiptSelect'] : [];
+          this.receiptmode = this.shipmentsDetailsArray['modeOfReceiptSelected'] ? this.shipmentsDetailsArray['modeOfReceiptSelected'] : '';
         }
 
         if (this.shipmentsDetailsArray['vlAssaySelect']) {
           this.isSelectedOther = false;
           this.vlassay = this.shipmentsDetailsArray['vlAssaySelected'] ? this.shipmentsDetailsArray['vlAssaySelected'] : '';
-
           if (this.shipmentsDetailsArray['otherAssay']) {
             this.othervlassay = this.shipmentsDetailsArray['otherAssay'];
             this.isSelectedOther = true;
           }
-        }
-
-        if (this.isPartiEditRespDate == true) {
-          if (this.shipmentsDetailsArray['responseDate']) {
-            this.responseDate = new Date(this.shipmentsDetailsArray['responseDate']);
+          else{
+            this.othervlassay ="";
           }
         }
 
-        if (this.shipmentsDetailsArray['assayLotNumber']) {
-          this.assayLotNo = this.shipmentsDetailsArray['assayLotNumber'];
+        if (this.isPartiEditRespDate == true) {
+          this.responseDate = this.shipmentsDetailsArray['responseDate'] ? new Date(this.shipmentsDetailsArray['responseDate']): "";
         }
+        this.assayLotNo = this.shipmentsDetailsArray['assayLotNumber'] ? this.shipmentsDetailsArray['assayLotNumber'] : "";
       }
 
       if (this.vlDataArray[0].vlData.Heading3.status == true) {
@@ -641,7 +614,7 @@ export class DtsHivViralloadPage implements OnInit {
         this.qcDoneBy = "";
         this.formattedQCDate = "";
       } else {
-        this.formattedQCDate = this.dateFormat(new Date(this.qcDate));
+        this.formattedQCDate = this.qcDate? this.dateFormat(new Date(this.qcDate)):'';
       }
 
       this.updatedStatus = this.vlDataArray[0].updatedStatus;
@@ -687,12 +660,12 @@ export class DtsHivViralloadPage implements OnInit {
                 "testDate": this.testDate ? this.dateFormat(new Date(this.testDate)) : '',
                 "vlAssaySelect": this.shipmentsDetailsArray['vlAssaySelect'],
                 "vlAssaySelected": this.vlassay,
-                "otherAssay": this.othervlassay,
+                "otherAssay": this.othervlassay ? this.othervlassay : '',
                 "specimenVolume": this.specVolTest ? this.specVolTest : '',
                 "assayExpirationDate": this.assayExpDate ? this.dateFormat(new Date(this.assayExpDate)) : '',
                 "assayLotNumber": this.assayLotNo,
                 "responseDate": this.responseDate ? this.dateFormat(new Date(this.responseDate)) : '',
-                "modeOfReceiptSelect": this.modeOfReceiptArray,
+                "modeOfReceiptSelect": this.modeOfReceiptArray ? this.modeOfReceiptArray : '',
                 "modeOfReceiptSelected": this.receiptmode ? this.receiptmode : '',
                 "qcData": {
                   "qcRadioSelected": this.qcDone,
@@ -775,7 +748,7 @@ export class DtsHivViralloadPage implements OnInit {
             this.router.navigate(['/login']);
           } else if (result["status"] == 'version-failed') {
 
-            this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert')
+            this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert')
 
           } else {
 
@@ -805,7 +778,7 @@ export class DtsHivViralloadPage implements OnInit {
   clearResponseDate() {
     this.responseDate = ''
   }
-  clearQCDate(){
-    this.qcDate='';
+  clearQCDate() {
+    this.qcDate = '';
   }
 }

@@ -69,6 +69,16 @@ export class EnterAppPasswordPage implements OnInit {
 
   }
 
+  ionViewDidEnter() {
+    // the root left menu should be disabled on this page
+    this.menu.enable(false);
+  }
+
+  ionViewWillLeave() {
+    // enable the root left menu when leaving this page
+    this.menu.enable(true);
+  }
+
   ionViewWillEnter() {
     this.storage.get('participantLogin').then((participantLogin) => {
       this.participantName = participantLogin.name;

@@ -198,8 +198,8 @@ export class DTSHIVSerologyPage implements OnInit {
         this.shipmentData['sampleRehydrationDate'] = this.dtsArray[0].dtsData.Heading2.data.sampleRehydrationDate ? new Date(this.dtsArray[0].dtsData.Heading2.data.sampleRehydrationDate) : '';
         this.shipmentData['responseDate'] = this.dtsArray[0].dtsData.Heading2.data.responseDate ? new Date(this.dtsArray[0].dtsData.Heading2.data.responseDate) : '';
         this.shipmentData['shipmentTestingDate'] = this.dtsArray[0].dtsData.Heading2.data.testingDate ? new Date(this.dtsArray[0].dtsData.Heading2.data.testingDate) : '';
-        this.shipmentData['modeOfReceiptDropdown'] = this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelect;
-        this.shipmentData['modeOfReceipt'] = this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelected;
+        this.shipmentData['modeOfReceiptDropdown'] = this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelect ? this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelect:[];
+        this.shipmentData['modeOfReceipt'] = this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelected ? this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelected:'';
         this.shipmentData['algorithmUsedDropdown'] = this.dtsArray[0].dtsData.Heading2.data.algorithmUsedSelect;
         this.shipmentData['algorithmUsed'] = this.dtsArray[0].dtsData.Heading2.data.algorithmUsedSelected;
         if (this.participantQcAccess == true) {
@@ -439,6 +439,7 @@ export class DTSHIVSerologyPage implements OnInit {
       !this.shipmentData['shipmentTestingDate'] ||
       !this.shipmentData['algorithmUsed'] ||
       (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) ||
+      (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate ) && this.participantQcAccess==true)||
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
       this.isValidShipmentDetails = false;
 
