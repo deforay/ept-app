@@ -277,7 +277,7 @@
             <ion-col size="12">
               <mat-label class="matLabel" style="margin-left: 5px;font-size: 13px;">QC Done</mat-label>
               <mat-radio-group aria-labelledby="example-radio-group-label" class="login-full-width grid-col-form"
-                [(ngModel)]="qcDone" name="vlQcDone" #vlQcDone="ngModel" required  [disabled]="isView=='true'">
+                [(ngModel)]="qcDone" name="vlQcDone" #vlQcDone="ngModel" [required]="isQCDoneShow"  [disabled]="isView=='true'">
                 <mat-radio-button class="example-radio-button" *ngFor="let qcData of qcRadioArray"
                   [value]="qcData.value">
                   {{qcData.show}}
@@ -291,7 +291,7 @@
             <ion-col size="12">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>QC Date</mat-label>
-                <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" name="seroqcDate" #seroqcDate="ngModel" placeholder="Choose QC Date"  [required]="isQCDoneShow" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" 
+                <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" name="seroqcDate" #seroqcDate="ngModel" placeholder="Choose QC Date" [required]="isQCDoneShow && qcDone=='yes'" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" 
                    readonly>
                 <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
                  <ion-icon name="close" class="clearDateIcon" ios="ios-close" (click)="clearQCDate()"></ion-icon>
@@ -304,7 +304,7 @@
             <ion-col size="12">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>QC Done By </mat-label>
-                <input matInput [(ngModel)]="qcDoneBy" name="seroqcDoneBy" #seroqcDoneBy="ngModel" placeholder="QC Done By" [required]="isQCDoneShow"  [disabled]="isView=='true'">
+                <input matInput [(ngModel)]="qcDoneBy" name="seroqcDoneBy" #seroqcDoneBy="ngModel" placeholder="QC Done By" [required]="isQCDoneShow && qcDone=='yes'"  [disabled]="isView=='true'">
                 <mat-error *ngIf="!qcDoneBy">QC Done By is required</mat-error>
               </mat-form-field>  
             </ion-col>

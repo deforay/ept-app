@@ -332,7 +332,7 @@
             <ion-col size="12">
               <mat-label class="matLabel" style="margin-left: 10px;font-size: 13px;">QC Done</mat-label>
               <mat-radio-group aria-labelledby="example-radio-group-label" class="login-full-width grid-col-form"
-                [(ngModel)]="qcDone" name="eidQcDone" #eidQcDone="ngModel" required >
+                [(ngModel)]="qcDone" name="eidQcDone" #eidQcDone="ngModel" [required]="isQCDoneShow" >
                 <mat-radio-button class="example-radio-button" *ngFor="let qcData of qcRadioArray"
                   [value]="qcData.value">
                   {{qcData.show}}

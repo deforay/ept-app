@@ -434,6 +434,7 @@ export class DTSHIVSerologyPage implements OnInit {
 
 
   checkShipmentPanel(param) {
+
     if (!this.shipmentData['testReceiptDate'] ||
       !this.shipmentData['sampleRehydrationDate'] ||
       !this.shipmentData['shipmentTestingDate'] ||
@@ -442,7 +443,6 @@ export class DTSHIVSerologyPage implements OnInit {
       (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate ) && this.participantQcAccess==true)||
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
       this.isValidShipmentDetails = false;
-
       if (param == 'next') {
         if (this.isView == "true") {
           this.nextStep();

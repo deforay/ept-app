@@ -327,7 +327,7 @@
                 <mat-label class="matLabel">QC Date</mat-label>
                 <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" name="vlQcDate" #vlQcDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   placeholder="Choose QC Date" class="datepicker-input" 
-                  [required]="isQCDoneShow" readonly>
+                  [required]="isQCDoneShow && qcDone=='yes'" readonly>
                 <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
                 <ion-icon name="close" class="clearDateIcon" ios="ios-close" (click)="clearQCDate()"></ion-icon>
                 <mat-datepicker #qcDatePicker disabled={{isView}}></mat-datepicker>
@@ -341,7 +341,7 @@
                 [ngClass]="{ 'mat-form-field-invalid':!qcDoneBy && isView==false }" appearance="outline">
                 <mat-label class="matLabel">QC Done By </mat-label>
                 <input matInput [(ngModel)]="qcDoneBy" placeholder="" name="vlQcDoneBy" #vlQcDoneBy="ngModel"
-                  [disabled]="isView=='true'" [required]="isQCDoneShow">
+                  [disabled]="isView=='true'" [required]="isQCDoneShow && qcDone=='yes'">
                 <mat-error *ngIf="!qcDoneBy">
                   QC Done By is required</mat-error>
               </mat-form-field>

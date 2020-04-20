@@ -239,7 +239,7 @@ export class DtsHivViralloadPage implements OnInit {
               this.qcDate = new Date(this.shipmentsDetailsArray.qcData.qcDate);
             }
             this.qcDoneBy = this.shipmentsDetailsArray.qcData.qcDoneBy;
-          } else {   
+          } else {
             this.isQCDoneShow = false;
             this.qcDone = '';
             this.qcDate = '';
@@ -251,10 +251,8 @@ export class DtsHivViralloadPage implements OnInit {
           this.qcDate = '';
           this.qcDoneBy = '';
         }
-        if (this.isPartiEditModeRec == true) {
-          this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'] ? this.shipmentsDetailsArray['modeOfReceiptSelect'] : [];
-          this.receiptmode = this.shipmentsDetailsArray['modeOfReceiptSelected'] ? this.shipmentsDetailsArray['modeOfReceiptSelected'] : '';
-        }
+        this.modeOfReceiptArray = this.shipmentsDetailsArray['modeOfReceiptSelect'] ? this.shipmentsDetailsArray['modeOfReceiptSelect'] : [];
+        this.receiptmode = this.shipmentsDetailsArray['modeOfReceiptSelected'] ? this.shipmentsDetailsArray['modeOfReceiptSelected'] : '';
 
         if (this.shipmentsDetailsArray['vlAssaySelect']) {
           this.isSelectedOther = false;
@@ -262,15 +260,11 @@ export class DtsHivViralloadPage implements OnInit {
           if (this.shipmentsDetailsArray['otherAssay']) {
             this.othervlassay = this.shipmentsDetailsArray['otherAssay'];
             this.isSelectedOther = true;
-          }
-          else{
-            this.othervlassay ="";
+          } else {
+            this.othervlassay = "";
           }
         }
-
-        if (this.isPartiEditRespDate == true) {
-          this.responseDate = this.shipmentsDetailsArray['responseDate'] ? new Date(this.shipmentsDetailsArray['responseDate']): "";
-        }
+        this.responseDate = this.shipmentsDetailsArray['responseDate'] ? new Date(this.shipmentsDetailsArray['responseDate']) : "";
         this.assayLotNo = this.shipmentsDetailsArray['assayLotNumber'] ? this.shipmentsDetailsArray['assayLotNumber'] : "";
       }
 
@@ -614,7 +608,7 @@ export class DtsHivViralloadPage implements OnInit {
         this.qcDoneBy = "";
         this.formattedQCDate = "";
       } else {
-        this.formattedQCDate = this.qcDate? this.dateFormat(new Date(this.qcDate)):'';
+        this.formattedQCDate = this.qcDate ? this.dateFormat(new Date(this.qcDate)) : '';
       }
 
       this.updatedStatus = this.vlDataArray[0].updatedStatus;

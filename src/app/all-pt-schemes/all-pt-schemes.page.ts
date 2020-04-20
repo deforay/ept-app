@@ -297,8 +297,10 @@ import {
           this.CrudServiceService.getData('/api/shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
               if (result["status"] == 'success') {
+                this.shipmentFormArray=[];
                 this.shipmentFormArray = result['data'];
                 this.storage.set("shipmentFormArray", this.shipmentFormArray);
+                this.storage.remove('selectedTestFormArray');
               } else if (result["status"] == "auth-fail") {
                 this.alertService.presentAlert('Alert', result["message"]);
                 this.storage.set("isLogOut", true);
