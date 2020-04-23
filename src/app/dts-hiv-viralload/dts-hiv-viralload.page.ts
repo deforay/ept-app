@@ -464,9 +464,11 @@ export class DtsHivViralloadPage implements OnInit {
       this.ptPanelTestData['vlResult'].forEach((element, index) => {
 
         this.VlFloat = parseFloat(element);
-        if (this.VlFloat > 7) {
-          this.alertService.presentAlert("Alert", "VL Result should be between 1 and 7");
-          return false;
+        if(next != 'onload'){
+          if (this.VlFloat > 7) {
+            this.alertService.presentAlert("Alert", "VL Result should be between 1 and 7");
+            throw false;      
+          }
         }
         if ((element || element == '0') && (this.mandatoryArray[index] == true) && this.VlFloat <= 7) {
           this.validMandVLResultCount = this.validMandVLResultCount + 1;

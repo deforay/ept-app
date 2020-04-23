@@ -252,7 +252,9 @@ import {
                   , (err) => {
                     this.showNoData = true;
                     this.skeltonArray = [];
+                    if(this.networkType!='none'){
                     this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+                    }
                   }
 
                 );
@@ -280,7 +282,9 @@ import {
             , (err) => {
               this.showNoData = true;
               this.skeltonArray = [];
+              if(this.networkType!='none'){
               this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+              }
             }
           );
         }
@@ -324,9 +328,10 @@ import {
             , (err) => {
               this.showNoData = true;
               this.skeltonArray = [];
+              if(this.networkType!='none'){
               this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
+              }
             }
-
           );
         }
       }
@@ -374,7 +379,6 @@ import {
 
 
   async goToTestForm(item, isView) {
-
     const element = await this.loadingCtrl.getTop();
 
     if (element && element.dismiss) {
@@ -393,9 +397,6 @@ import {
     if (isView == undefined) {
       isView = "false"
     }
-
-    ;
-
     this.storage.get('shipmentFormArray').then((shipmentFormArray) => {
       if (shipmentFormArray) {
 
@@ -551,9 +552,10 @@ import {
         }
 
         , (err) => {
+      
           this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
+    
         }
-
       );
     } else {
 

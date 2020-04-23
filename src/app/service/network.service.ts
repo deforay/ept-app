@@ -100,12 +100,8 @@ export class NetworkService {
 
     this.eventCtrl.subscribe('network:online', (data) => {
       if (this.appResumed == false && this.eventOnline) {
-        const onlineRouters = ['/summary-report', '/individual-report'];
-        if (!onlineRouters.includes(this.router.url)) {
           this.ToastService.presentToastWithOptions("You are in online");
-        }
       }
     })
-
   }
 }
