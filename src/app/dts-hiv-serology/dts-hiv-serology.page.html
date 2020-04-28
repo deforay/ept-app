@@ -324,7 +324,9 @@
       <mat-card-content>
     <form #testKitPanelForm="ngForm" novalidate> 
       <div *ngFor="let kitTextItem of testKitTextArray;let i = index;">
-        <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="testKitNameArray[kitTextItem].status==true">
+        <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="(shipmentData.algorithmUsed !='threeTestsDtsAlgo' && testKitNameArray[kitTextItem].status==true) || (shipmentData.algorithmUsed =='threeTestsDtsAlgo' && kitTextItem =='Test-3' || kitTextItem =='Test-1' && testKitNameArray[kitTextItem].status==true || kitTextItem =='Test-2' && testKitNameArray[kitTextItem].status==true)">
+
+          <!-- <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="testKitNameArray[kitTextItem].status==true"> -->
              <mat-expansion-panel-header>
             <mat-panel-title>
               <ion-grid class="panelHeading">
@@ -454,7 +456,8 @@
           </ion-row>
       
           
-            <ion-row *ngIf="sampleDetailsArray.resultStatus[2]">
+            <ion-row *ngIf="(sampleDetailsArray.resultStatus[2] && shipmentData.algorithmUsed !='threeTestsDtsAlgo') || (shipmentData.algorithmUsed =='threeTestsDtsAlgo' && sampleDetailsArray.resultStatus[2]==false)">
+              <!-- <ion-row *ngIf="sampleDetailsArray.resultStatus[2]"> -->
                     <!--  [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
                  !result3Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
              <ion-col  size="12" class="grid-readonly-col">
