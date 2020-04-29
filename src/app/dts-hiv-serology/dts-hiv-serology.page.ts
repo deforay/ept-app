@@ -387,6 +387,21 @@ export class DTSHIVSerologyPage implements OnInit {
       }
     })
   }
+  onSelectedAlgorithm(algValue){
+    console.log(this.testKitNameArray);
+
+    if(algValue=='threeTestsDtsAlgo'){
+      console.log(this.testKitNameArray);
+      this.testKitIndex = this.testKitTextArray.length;   
+    }else{
+      this.testKitIndex = 0;
+      this.testKitTextArray.forEach((element) => {
+        if (this.testKitNameArray[element].status == true) {
+          this.testKitIndex = this.testKitIndex + 1;
+        }
+      });
+    }
+  }
   dateFormat(dateObj) {
     if (dateObj != '') {
       return this.formattedDate = (dateObj.getFullYear()) + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + ('0' + (dateObj.getDate())).slice(-2);
