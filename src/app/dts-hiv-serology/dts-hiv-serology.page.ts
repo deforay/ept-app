@@ -630,6 +630,7 @@ export class DTSHIVSerologyPage implements OnInit {
         this.testKitModel['kitValue'][index] = "";
       }
     })
+
     //Samples Obj
     this.samplesObj['result1'] = [...this.result1Arr];
     this.samplesObj['result2'] = [...this.result2Arr];
