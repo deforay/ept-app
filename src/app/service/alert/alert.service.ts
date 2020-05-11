@@ -40,7 +40,7 @@ export class AlertService {
               this.storage.set("isLogOut", false);
             }
             if(alertName=='playStoreAlert'){
-              this.market.open('ept.deforay');
+              this.market.open('com.deforay.ept');
             }
             if(alertName=='appExitAlert'){
             navigator['app'].exitApp();
