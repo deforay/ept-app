@@ -29,6 +29,13 @@ import * as _ from 'lodash';
 import {
   LoadingController
 } from '@ionic/angular';
+import {
+  PopoverController
+} from '@ionic/angular';
+import {
+  ShipmentFilterComponent
+} from '../../app/shipment-filter/shipment-filter.component';
+
 
 @Component({
     selector: 'app-all-pt-schemes',
@@ -71,6 +78,7 @@ import {
   failureAlertCount: number = 0;
   errSyncAllCount: number = 0;
   showNoData: boolean = false;
+  shippingsCopyArray: any = [];
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -80,7 +88,8 @@ import {
     public network: Network,
     public events: Events,
     public loadingCtrl: LoadingController,
-    public alertService: AlertService) {}
+    public alertService: AlertService,
+    public popoverController: PopoverController) {}
 
   dateFormat(dateObj) {
     return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
@@ -92,7 +101,7 @@ import {
 
     //comment when take buid start
 
-   // this.networkType = "4G";
+    // this.networkType = "4G";
 
     //end...
 
@@ -110,9 +119,145 @@ import {
     })
 
     this.onloadShipment();
-
   }
 
+  async presentPopover(ev: any) {
+    const popover = await this.popoverController.create({
+      component: ShipmentFilterComponent,
+      event: ev,
+      translucent: true
+    });
+    popover.onDidDismiss()
+      .then((data) => {
+        let filterJSON = data['data'];
+        console.log(filterJSON);
+        this.applyFilter(filterJSON);
+      });
+    return await popover.present();
+  }
+
+
+  async applyFilter(filterJSON) {
+
+    const element = await this.loadingCtrl.getTop();
+    if (element && element.dismiss) {
+      element.dismiss();
+    }
+    const loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      message: 'Please wait',
+    });
+    await loading.present();
+    this.shippingsArray=[];
+    console.log(filterJSON);
+
+    if(filterJSON.shipmentFilter && filterJSON.participantFliter && filterJSON.schemeTypeFliter){
+
+      if (filterJSON.shipmentFilter == 'activeNotResp') {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => item.status == 'shipped' && item.updatedOn == '' && item.participantId==filterJSON.participantFliter && item.schemeType==filterJSON.schemeTypeFliter)
+      } else if (filterJSON.shipmentFilter == 'activeResp') {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.participantId==filterJSON.participantFliter && item.schemeType==filterJSON.schemeTypeFliter);
+      } else if (filterJSON.shipmentFilter == 'closed') {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => item.status == 'finalized' && item.participantId==filterJSON.participantFliter && item.schemeType==filterJSON.schemeTypeFliter);
+      } else {}
+    }
+    
+    else if(filterJSON.shipmentFilter && filterJSON.participantFliter=='' && filterJSON.schemeTypeFliter==''){
+      if (filterJSON.shipmentFilter == 'activeNotResp') {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => item.status == 'shipped' && item.updatedOn == '')
+      } else if (filterJSON.shipmentFilter == 'activeResp') {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '');
+      } else if (filterJSON.shipmentFilter == 'closed') {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => item.status == 'finalized');
+      } else {}
+
+    }
+    else if(filterJSON.shipmentFilter && filterJSON.participantFliter && filterJSON.schemeTypeFliter==''){
+
+      if (filterJSON.shipmentFilter == 'activeNotResp' && filterJSON.participantFliter) {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => item.status == 'shipped' && item.updatedOn == '' && item.participantId==filterJSON.participantFliter)
+      } else if (filterJSON.shipmentFilter == 'activeResp' && filterJSON.participantFliter) {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.participantId==filterJSON.participantFliter);
+      } else if (filterJSON.shipmentFilter == 'closed' && filterJSON.participantFliter) {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => item.status == 'finalized' && item.participantId==filterJSON.participantFliter);
+      } else {}
+    }
+
+    else if(filterJSON.participantFliter && filterJSON.shipmentFilter=='' && filterJSON.schemeTypeFliter==''){
+      if (filterJSON.participantFliter) {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => item.participantId==filterJSON.participantFliter)
+      }
+    }
+
+    else if(filterJSON.participantFliter && filterJSON.schemeTypeFliter && filterJSON.shipmentFilter==''){
+      
+      if (filterJSON.participantFliter && filterJSON.schemeTypeFliter ) {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => item.participantId==filterJSON.participantFliter && item.schemeType==filterJSON.schemeTypeFliter)
+      }
+
+    }
+
+    else if(filterJSON.schemeTypeFliter && filterJSON.participantFliter=='' && filterJSON.shipmentFilter==''){
+
+      if (filterJSON.schemeTypeFliter) {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => item.schemeType==filterJSON.schemeTypeFliter)
+      }
+
+    }
+
+    else if(filterJSON.schemeTypeFliter && filterJSON.shipmentFilter && filterJSON.participantFliter==''){
+      
+      if (filterJSON.shipmentFilter == 'activeNotResp' && filterJSON.schemeTypeFliter) {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => item.status == 'shipped' && item.updatedOn == '' && item.schemeType==filterJSON.schemeTypeFliter)
+      } else if (filterJSON.shipmentFilter == 'activeResp') {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.schemeType==filterJSON.schemeTypeFliter);
+      } else if (filterJSON.shipmentFilter == 'closed') {
+        this.shippingsArray = this.shippingsCopyArray.filter(
+          item => item.status == 'finalized' && item.schemeType==filterJSON.schemeTypeFliter);
+      } else {}
+
+
+    }
+
+
+    if(this.shippingsArray.length==0){
+          this.showNoData=true;
+    }
+    
+    // if (filterJSON.shipmentFilter == 'activeNotResp') {
+    //   this.shippingsArray = this.shippingsCopyArray.filter(
+    //     item => item.status == 'shipped' && item.updatedOn == '')
+    // } else if (filterJSON.shipmentFilter == 'activeResp') {
+    //   this.shippingsArray = this.shippingsCopyArray.filter(
+    //     item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '');
+    // } else if (filterJSON.shipmentFilter == 'closed') {
+    //   this.shippingsArray = this.shippingsCopyArray.filter(
+    //     item => item.status == 'finalized');
+    // } else {}
+
+    // if(filterJSON.participantFliter){
+    //   this.shippingsArray = this.shippingsCopyArray.filter(
+    //     item =>filterJSON.participantFliter==item.participantId)
+    // }
+
+    loading.dismiss();
+  
+
+  }
   onloadShipment() {
 
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
@@ -223,7 +368,7 @@ import {
                     if (result["status"] == 'success') {
 
                       this.shippingsArray = result['data'];
-
+                      this.shippingsCopyArray = result['data'];
                       this.storage.set("shipmentArray", this.shippingsArray);
                       this.skeltonArray = [];
                       this.getAllShipmentForms();
@@ -235,7 +380,7 @@ import {
 
                     } else if (result["status"] == 'version-failed') {
 
-                      this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
+                      this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
 
                     } else {
 
@@ -252,8 +397,8 @@ import {
                   , (err) => {
                     this.showNoData = true;
                     this.skeltonArray = [];
-                    if(this.networkType!='none'){
-                    this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+                    if (this.networkType != 'none') {
+                      this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
                     }
                   }
 
@@ -265,7 +410,7 @@ import {
 
               } else if (result["status"] == 'version-failed') {
 
-                this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
+                this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
 
               } else {
 
@@ -282,8 +427,8 @@ import {
             , (err) => {
               this.showNoData = true;
               this.skeltonArray = [];
-              if(this.networkType!='none'){
-              this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+              if (this.networkType != 'none') {
+                this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
               }
             }
           );
@@ -301,7 +446,7 @@ import {
           this.CrudServiceService.getData('/api/shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
               if (result["status"] == 'success') {
-                this.shipmentFormArray=[];
+                this.shipmentFormArray = [];
                 this.shipmentFormArray = result['data'];
                 this.storage.set("shipmentFormArray", this.shipmentFormArray);
                 this.storage.remove('selectedTestFormArray');
@@ -312,7 +457,7 @@ import {
 
               } else if (result["status"] == 'version-failed') {
 
-                this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
+                this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
               } else {
 
                 this.alertService.presentAlert('Alert', result["message"]);
@@ -328,8 +473,8 @@ import {
             , (err) => {
               this.showNoData = true;
               this.skeltonArray = [];
-              if(this.networkType!='none'){
-              this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
+              if (this.networkType != 'none') {
+                this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
               }
             }
           );
@@ -543,7 +688,7 @@ import {
 
           } else if (result["status"] == 'version-failed') {
 
-            this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
+            this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
 
           } else {
 
@@ -552,9 +697,9 @@ import {
         }
 
         , (err) => {
-      
+
           this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
-    
+
         }
       );
     } else {
@@ -567,95 +712,93 @@ import {
       this.errSyncAllCount = 0;
 
       _.times(this.syncDataCount, () => {
-          this.shipmentSubListArray = this.copylocalStorageUnSyncedArray.splice(0, syncDataLimit);
+        this.shipmentSubListArray = this.copylocalStorageUnSyncedArray.splice(0, syncDataLimit);
 
-          this.syncShipmentsJSON = {
+        this.syncShipmentsJSON = {
 
-            "authToken": this.authToken,
-            "appVersion": this.appVersionNumber,
-            "syncType": "group",
-            "data": this.shipmentSubListArray
-          }
+          "authToken": this.authToken,
+          "appVersion": this.appVersionNumber,
+          "syncType": "group",
+          "data": this.shipmentSubListArray
+        }
 
-          console.log(this.syncShipmentsJSON);
+        console.log(this.syncShipmentsJSON);
 
-          this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON).then((result) => {
+        this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON).then((result) => {
 
-              if (result["status"] == 'success') {
-                console.log(result);
-                this.resultArray = [];
-                this.resultArray.push(result['data']);
+          if (result["status"] == 'success') {
+            console.log(result);
+            this.resultArray = [];
+            this.resultArray.push(result['data']);
 
-                this.resultArray[0].forEach((result, index) => {
+            this.resultArray[0].forEach((result, index) => {
 
-                  if (result.status == "success") {
-                    this.subListRespSuccessCount = this.subListRespSuccessCount + 1;
+              if (result.status == "success") {
+                this.subListRespSuccessCount = this.subListRespSuccessCount + 1;
 
-                    this.localStorageUnSyncedArray.forEach((localSubUnSynced, index) => {
+                this.localStorageUnSyncedArray.forEach((localSubUnSynced, index) => {
 
-                        if (localSubUnSynced.mapId == result.data.mapId) {
-                          let syncedSubShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
-                              mapId: result.data.mapId
-                            }
-
-                          );
-                          this.localStorageUnSyncedArray.splice(syncedSubShipmentIndex, 1);
+                    if (localSubUnSynced.mapId == result.data.mapId) {
+                      let syncedSubShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
+                          mapId: result.data.mapId
                         }
-                      }
 
-                    )
-                  } else {
-                    this.subListRespErrorCount = this.subListRespErrorCount + 1;
-                  }
-                })
-
-                this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
-                this.storage.set("localShipmentForm", this.localShipmentArray);
-
-                if ((this.subListRespSuccessCount + this.subListRespErrorCount) == this.totSyncArrayLength) {
-                  this.getAllShippings();
-
-                  if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount == 0) {
-                    this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records synced successfully');
+                      );
+                      this.localStorageUnSyncedArray.splice(syncedSubShipmentIndex, 1);
+                    }
                   }
 
-                  if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount != 0) {
-                    this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records synced and ' + this.subListRespErrorCount + ' records unsynced successfully');
-                  }
-
-                  if (this.subListRespSuccessCount == 0 && this.subListRespErrorCount != 0) {
-                    this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records unsynced');
-                  }
-                }
-              } else if (result["status"] == "auth-fail") {
-
-                if (this.authFailAlertCount == 0) {
-                  this.alertService.presentAlert('Alert', result["message"]);
-                  this.authFailAlertCount++;
-                  this.storage.set("isLogOut", true);
-                  this.router.navigate(['/login']);
-                }
-
-              } else if (result["status"] == 'version-failed') {
-                if (this.versionFailAlertCount == 0) {
-                  this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
-                  this.versionFailAlertCount++;
-                }
+                )
               } else {
-                if (this.failureAlertCount == 0) {
-                  this.alertService.presentAlert('Alert', result["message"]);
-                  this.failureAlertCount++;
-                }
+                this.subListRespErrorCount = this.subListRespErrorCount + 1;
               }
-            }, (err) => {
-              if (this.errSyncAllCount == 0) {
-                this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
-                this.errSyncAllCount++;
+            })
+
+            this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
+            this.storage.set("localShipmentForm", this.localShipmentArray);
+
+            if ((this.subListRespSuccessCount + this.subListRespErrorCount) == this.totSyncArrayLength) {
+              this.getAllShippings();
+
+              if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount == 0) {
+                this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records synced successfully');
+              }
+
+              if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount != 0) {
+                this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records synced and ' + this.subListRespErrorCount + ' records unsynced successfully');
+              }
+
+              if (this.subListRespSuccessCount == 0 && this.subListRespErrorCount != 0) {
+                this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records unsynced');
               }
             }
-          );
-        }
-      )
+          } else if (result["status"] == "auth-fail") {
+
+            if (this.authFailAlertCount == 0) {
+              this.alertService.presentAlert('Alert', result["message"]);
+              this.authFailAlertCount++;
+              this.storage.set("isLogOut", true);
+              this.router.navigate(['/login']);
+            }
+
+          } else if (result["status"] == 'version-failed') {
+            if (this.versionFailAlertCount == 0) {
+              this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
+              this.versionFailAlertCount++;
+            }
+          } else {
+            if (this.failureAlertCount == 0) {
+              this.alertService.presentAlert('Alert', result["message"]);
+              this.failureAlertCount++;
+            }
+          }
+        }, (err) => {
+          if (this.errSyncAllCount == 0) {
+            this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
+            this.errSyncAllCount++;
+          }
+        });
+      })
     }
   }
 

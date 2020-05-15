@@ -1,0 +1,50 @@
+<ion-card>
+<ion-grid>
+  <ion-row>
+    <ion-col size="12" class="grid-input-col">
+      <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+        <mat-label>Shipment Status</mat-label>
+        <mat-select [(ngModel)]="shipmentStatusFliter" name="shipmentStatus" #shipmentStatus="ngModel">
+          <mat-option>--Select--</mat-option>
+          <mat-option value="activeNotResp">Active and Not Responded</mat-option>
+          <mat-option value="activeResp">Active and Responded</mat-option>
+          <mat-option value="closed">Closed</mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12" class="grid-input-col">
+    <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+      <mat-label>Participants</mat-label>
+      <mat-select [(ngModel)]="participantFliter" name="participant" #participant="ngModel">
+        <mat-option>--Select--</mat-option>
+        <mat-option *ngFor="let item of participantsArray" [value]="item.participant_id">
+          {{item.first_name + item.last_name}}
+        </mat-option>
+      </mat-select>
+    </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <ion-row>
+    <ion-col size="12"  class="grid-input-col">
+      <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+        <mat-label>Scheme Type</mat-label>
+        <mat-select [(ngModel)]="schemeTypeFliter" name="schemeType" #schemeType="ngModel">
+          <mat-option>--Select--</mat-option>
+          <mat-option *ngFor="let item of shipmentsArray" [value]="item.scheme_id">
+            {{item.scheme_name}}
+          </mat-option>
+        </mat-select>
+      </mat-form-field>
+    </ion-col>
+    </ion-row>
+</ion-grid>
+<ion-footer>
+  <ion-toolbar>
+    <ion-button expand="full" class="text-center native-btn syncAll" (click)="applyFilter()">
+     Apply
+    </ion-button>
+  </ion-toolbar>
+</ion-footer>
+</ion-card>

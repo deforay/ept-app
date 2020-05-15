@@ -1,9 +1,24 @@
-<app-header [titleHeader]="'All Shipments'" [isMenuOrBackButton]="'menu'"></app-header>
+<ion-header>
+  <ion-toolbar class="eptHeaderToolbar">
+          <ion-buttons slot="start">
+            <ion-menu-button></ion-menu-button>
+          </ion-buttons>
+          <ion-title class="eptHeaderTitle">
+            All Shipments
+          </ion-title>
+          <ion-buttons slot="end" (click)="presentPopover($event)" *ngIf="shippingsArray.length!=0">
+          <span class="eptHeaderTitle">Filter</span>&nbsp;
+          <ion-icon name="funnel" ios="ios-funnel" class="funnelIcon"></ion-icon>
+          </ion-buttons>
+  </ion-toolbar>
+</ion-header>
+
 
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  
   <ion-card *ngFor="let item of shippingsArray" class="eptCard">
     <ion-card-header class="CardHeader">
       <p text-wrap class="schemeName"> {{item.schemeName}}</p>
@@ -120,6 +135,9 @@
             <p text-wrap class="shipmentValues">
               <span>{{item.responseDate  | date :'d MMM y'}}</span>
             </p>
+            <p>
+              status:{{item.status}}
+            </p>
           </ion-col>
         </ion-row>
 
@@ -209,7 +227,7 @@
   </ion-card>
   <!-- ion-skeleton-text code end -->
 
-  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length!=0">
+  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0">
     <ion-card-content class="cardContent">
     <p class="noShipments">
       No shipments available 
