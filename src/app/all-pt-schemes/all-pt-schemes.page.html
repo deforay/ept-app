@@ -135,9 +135,6 @@
             <p text-wrap class="shipmentValues">
               <span>{{item.responseDate  | date :'d MMM y'}}</span>
             </p>
-            <p>
-              status:{{item.status}}
-            </p>
           </ion-col>
         </ion-row>
 
@@ -150,7 +147,7 @@
         </ion-row>
 
         <ion-row>
-          <ion-col size="6" *ngIf="isViewOnlyAccess==false">
+          <ion-col size="6" *ngIf="isViewOnlyAccess==false && item.status!='finalized'">
             <ion-button *ngIf="item.updatedOn=='' && responseSwitch==on && item.isSynced==''" size="small" class="text-center native-btn"
               (click)="goToTestForm(item)">Enter Response
             </ion-button>

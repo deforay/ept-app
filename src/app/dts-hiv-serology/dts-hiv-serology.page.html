@@ -1,9 +1,13 @@
-<app-header [titleHeader]="'DTS - HIV Serology'" [isMenuOrBackButton]="'back'"></app-header>
+<app-header  *ngIf="isShowReviewMsg==false" [titleHeader]="'DTS - HIV Serology'" [isMenuOrBackButton]="'back'"></app-header>
+
+<app-header *ngIf="isShowReviewMsg==true" [titleHeader]="'View DTS - HIV Serology'" [isMenuOrBackButton]="'back'"></app-header>
 
 <ion-content>
-  <ion-row>
+  
     <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
-  </ion-row>
+
+    <p *ngIf="isShowReviewMsg==true" class="infoMsg">Please review and verify your result submission</p>
+
   <mat-accordion>
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
       <mat-expansion-panel-header  >
@@ -629,11 +633,25 @@
 
       <mat-action-row>
         <button mat-button color="primary" (click)="prevStep()">Previous</button>
-        <button mat-button color="warn" *ngIf="isView=='false'" (click)="submitSerologyForm(shipmentPanelForm,sampleDetailsForm,otherInfoPanelForm)">Submit</button>
+        <button mat-button color="warn" *ngIf="summarizeForm==false" (click)="submitSerologyForm(shipmentPanelForm,sampleDetailsForm,otherInfoPanelForm)">Submit</button>
       </mat-action-row>
     </mat-expansion-panel>
     </form>
   </mat-accordion>
 
+  <ion-grid *ngIf="summarizeForm==true">
+    <ion-row>
+      <ion-col size="6">
+        <ion-button class="text-center native-btn summarizeButtons"
+        (click)="editForm()">Edit 
+      </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button class="text-center native-btn summarizeButtons confirm"
+        (click)="confirmSerologyForm(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Confirm 
+      </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 
 </ion-content>

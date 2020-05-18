@@ -1,8 +1,13 @@
-<app-header [titleHeader]="'DTS- HIV Viral Load'" [isMenuOrBackButton]="'back'"></app-header>
+<app-header *ngIf="summarizeForm==false" [titleHeader]="'DTS- HIV Viral Load'" [isMenuOrBackButton]="'back'"></app-header>
+
+<app-header *ngIf="summarizeForm==true" [titleHeader]="'View DTS- HIV Viral Load'" [isMenuOrBackButton]="'back'"></app-header>
 
 
 <ion-content>
   <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
+
+  <p *ngIf="summarizeForm==true" class="infoMsg">Please review and verify your result submission</p>
+  
   <mat-accordion class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
       <mat-expansion-panel-header>
@@ -663,13 +668,28 @@
         </ion-grid>
 
         <mat-action-row>
-          <button mat-button color="primary" (click)="prevStep()">Previous</button>
-          <button mat-button color="warn" type="submit" *ngIf="isView!='true'"
-            (click)="submitViralLoad(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>
+          <button mat-button color="primary" (click)="prevStep()">Previous</button>   
+
+          <button mat-button color="primary" *ngIf="summarizeForm==false" (click)="submitViralLoad(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>  
         </mat-action-row>
+
       </mat-expansion-panel>
     </form>
   </mat-accordion>
 
+<ion-grid *ngIf="summarizeForm==true">
+  <ion-row>
+    <ion-col size="6">
+      <ion-button class="text-center native-btn summarizeButtons"
+      (click)="editForm()">Edit 
+    </ion-button>
+    </ion-col>
+    <ion-col size="6">
+      <ion-button class="text-center native-btn summarizeButtons confirm"
+      (click)="confirmViralLoad(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Confirm 
+    </ion-button>
+    </ion-col>
+  </ion-row>
+</ion-grid>
 
 </ion-content>

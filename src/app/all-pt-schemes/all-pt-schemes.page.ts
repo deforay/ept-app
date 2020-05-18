@@ -233,30 +233,11 @@ import {
 
     }
 
-
     if(this.shippingsArray.length==0){
           this.showNoData=true;
     }
-    
-    // if (filterJSON.shipmentFilter == 'activeNotResp') {
-    //   this.shippingsArray = this.shippingsCopyArray.filter(
-    //     item => item.status == 'shipped' && item.updatedOn == '')
-    // } else if (filterJSON.shipmentFilter == 'activeResp') {
-    //   this.shippingsArray = this.shippingsCopyArray.filter(
-    //     item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '');
-    // } else if (filterJSON.shipmentFilter == 'closed') {
-    //   this.shippingsArray = this.shippingsCopyArray.filter(
-    //     item => item.status == 'finalized');
-    // } else {}
-
-    // if(filterJSON.participantFliter){
-    //   this.shippingsArray = this.shippingsCopyArray.filter(
-    //     item =>filterJSON.participantFliter==item.participantId)
-    // }
 
     loading.dismiss();
-  
-
   }
   onloadShipment() {
 
@@ -369,6 +350,9 @@ import {
 
                       this.shippingsArray = result['data'];
                       this.shippingsCopyArray = result['data'];
+                      this.shippingsArray.sort((a, b) => {
+                          return <any>new Date(b.resultDueDate) - <any>new Date(a.resultDueDate);
+                      });
                       this.storage.set("shipmentArray", this.shippingsArray);
                       this.skeltonArray = [];
                       this.getAllShipmentForms();

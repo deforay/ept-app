@@ -46,3 +46,9 @@ ion-grid ion-row ion-col:nth-child(3n){
 .testKitRow{
     margin-top: 10px;
 }
+.text-center.native-btn.summarizeButtons{
+    width: 120px;
+}
+.text-center.native-btn.summarizeButtons.confirm{
+  float: right;
+}

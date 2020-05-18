@@ -1,9 +1,13 @@
-<app-header [titleHeader]="'DBS - Early Infant Diagnosis'" [isMenuOrBackButton]="'back'"></app-header>
+<app-header *ngIf="isShowReviewMsg==false"  [titleHeader]="'DBS - Early Infant Diagnosis'" [isMenuOrBackButton]="'back'"></app-header>
 
+<app-header *ngIf="isShowReviewMsg==true" [titleHeader]="'View DBS - Early Infant Diagnosis'" [isMenuOrBackButton]="'back'"></app-header>
 
 <ion-content>
   <ion-row>
     <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
+
+    <p *ngIf="isShowReviewMsg==true" class="infoMsg">Please review and verify your result submission</p>
+
   </ion-row>
   <mat-accordion class="example-headers-align">
     <mat-expansion-panel *ngIf="showParticipantData" [expanded]="step === 0" (opened)="setStep(0)">
@@ -652,7 +656,7 @@
 
         <mat-action-row>
           <button mat-button color="primary" (click)="prevStep()">Previous</button>
-          <button mat-button color="warn" *ngIf="isView=='false'" type='submit'
+          <button mat-button color="warn" *ngIf="summarizeForm==false" type='submit'
             (click)="submitEID(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>
         </mat-action-row>
       </mat-expansion-panel>
@@ -661,5 +665,18 @@
 
   </mat-accordion>
 
-
+  <ion-grid *ngIf="summarizeForm==true">
+    <ion-row>
+      <ion-col size="6">
+        <ion-button class="text-center native-btn summarizeButtons"
+        (click)="editForm()">Edit 
+      </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button class="text-center native-btn summarizeButtons confirm"
+        (click)="confirmEID(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Confirm 
+      </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
 </ion-content>

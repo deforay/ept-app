@@ -30,7 +30,9 @@ import {
 import {
   LocalShipmentFormService
 } from '../../app/service/localShipmentForm/local-shipment-form.service';
-
+import {
+  LoadingController
+} from '@ionic/angular';
 
 
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -134,6 +136,9 @@ export class DTSHIVSerologyPage implements OnInit {
   customFieldData = {};
   samplesObj = {};
   dynamicStep = 0;
+  summarizeForm: boolean = false;
+  isShowReviewMsg: boolean = false;
+
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -141,12 +146,14 @@ export class DTSHIVSerologyPage implements OnInit {
     private router: Router,
     public network: Network,
     public LocalShipmentFormService: LocalShipmentFormService,
-    public alertService: AlertService
+    public alertService: AlertService,
+    public loadingCtrl: LoadingController,
   ) {
 
   }
 
   ionViewWillEnter() {
+    this.summarizeForm = false;
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
@@ -412,6 +419,7 @@ export class DTSHIVSerologyPage implements OnInit {
 
   getSerologyDetails() {
 
+
     this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
 
       this.isView = dtsDataObj[0].isView;
@@ -576,7 +584,7 @@ export class DTSHIVSerologyPage implements OnInit {
 
 
 
-  submitSerologyForm(shipmentPanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
+  async submitSerologyForm(shipmentPanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
     shipmentPanelForm.control.markAllAsTouched();
     // sampleDetailsForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
@@ -759,6 +767,206 @@ export class DTSHIVSerologyPage implements OnInit {
         }
       }
       console.log(this.serologyJSON);
+      const element = await this.loadingCtrl.getTop();
+      if (element && element.dismiss) {
+        element.dismiss();
+      }
+      const loading = await this.loadingCtrl.create({
+        spinner: 'dots',
+        message: 'Please wait',
+      });
+      await loading.present();
+      this.isView='true';
+      this.isShowReviewMsg=true;
+      this.summarizeForm=true;
+      loading.dismiss();
+    }
+  }
+
+
+  confirmSerologyForm(shipmentPanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
+    shipmentPanelForm.control.markAllAsTouched();
+    // sampleDetailsForm.control.markAllAsTouched();
+    otherInfoPanelForm.control.markAllAsTouched();
+    if (otherInfoPanelForm.valid == true) {
+      this.isValidOtherInfoPanel = true;
+    } else {
+      this.isValidOtherInfoPanel = false;
+    }
+    this.checkShipmentPanel('submit');
+    this.testKitTextArray.forEach((element, index) => {
+      this.checkTestKitPanel('submit', index)
+    });
+    this.sampleDetailsArray.samples.label.forEach((element, index) => {
+      this.checkSampleDetailPanel('submit', index)
+    });
+    if (this.showCustomFieldData == true) {
+      this.checkCustFieldPanel('submit');
+      this.checkOtherInfoPanel('submit');
+    } else {
+      this.checkOtherInfoPanel('submit');
+    }
+
+    // let checkSampleIndex = this.isValidSampleDetails.findIndex(valid => valid==false);
+
+    if (this.isValidShipmentDetails == false) {
+      this.setStep(1);
+    }
+
+    // else if(checkSampleIndex>=0){
+    //   this.setStep(this.testKitIndex+ checkSampleIndex+2)
+    // }
+    // else if(this.isValidOtherInfoPanel==false){
+    //   this.setStep(this.testKitIndex+this.sampleIndex+this.dynamicStep+2)
+    // }
+    else if (this.isValidOtherInfoPanel == false) {
+      this.setStep(this.testKitIndex + this.dynamicStep + 2)
+    }
+
+
+    this.expDateObj.forEach((element, index) => {
+      this.testKitModel['expDate'][index] = element ? this.dateFormat(new Date(element)) : element
+    }); this.isShowReviewMsg=false;
+
+    this.result1Arr.forEach((element, index) => {
+      if (element == null || element == undefined) {
+        this.result1Arr[index] = "";
+      }
+    })
+    this.result2Arr.forEach((element, index) => {
+      if (element == null || element == undefined) {
+        this.result2Arr[index] = "";
+      }
+    })
+    this.result3Arr.forEach((element, index) => {
+      if (element == null || element == undefined) {
+        this.result3Arr[index] = "";
+      }
+    })
+    this.finalResultArr.forEach((element, index) => {
+      if (element == null || element == undefined) {
+        this.finalResultArr[index] = "";
+      }
+    })
+    this.testKitModel['kitValue'].forEach((element, index) => {
+      if (element == null || element == undefined) {
+        this.testKitModel['kitValue'][index] = "";
+      }
+    })
+
+    //Samples Obj
+    this.samplesObj['result1'] = [...this.result1Arr];
+    this.samplesObj['result2'] = [...this.result2Arr];
+    //  if (this.showResult3 == true) {
+    this.samplesObj['result3'] = [...this.result3Arr];
+    //}
+    this.samplesObj['id'] = [...this.sampleDetailsArray.samples.id];
+    this.samplesObj['label'] = [...this.sampleDetailsArray.samples.label];
+    this.samplesObj['mandatory'] = [...this.sampleDetailsArray.samples.mandatory];
+    this.samplesObj['finalResult'] = [...this.finalResultArr];
+    // Samples Obj
+
+
+    if (this.qcDone == 'no' || this.qcDone == '') {
+      this.qcDate = "";
+      this.qcDoneBy = "";
+    }
+    // (checkSampleIndex== undefined || checkSampleIndex==-1)
+    if (this.isValidShipmentDetails == true && this.isValidOtherInfoPanel == true) {
+
+      this.serologyJSON = {
+
+        "authToken": this.authToken,
+        "appVersion": this.appVersionNumber,
+        "syncType": "single",
+        "data": {
+          "evaluationStatus": this.dtsArray[0].evaluationStatus,
+          "participantId": this.dtsArray[0].participantId,
+          "schemeType": this.dtsArray[0].schemeType,
+          "shipmentId": this.dtsArray[0].shipmentId,
+          "mapId": this.dtsArray[0].mapId,
+          "isSynced": true,
+          "createdOn": this.dtsArray[0].createdOn ? this.dtsArray[0].createdOn : "",
+          "updatedOn": this.dtsArray[0].updatedOn ? this.dtsArray[0].updatedOn : "",
+          "updatedStatus": this.dtsArray[0].updatedStatus,
+          "dtsData": {
+            "access": {
+              "status": this.dtsArray[0].dtsData.access.status
+            },
+            "Heading1": {
+              //participant details
+              "status": this.dtsArray[0].dtsData.Heading1.status,
+              "data": {
+                "participantName": this.partiDetailsArray.participantName,
+                "participantCode": this.partiDetailsArray.participantCode,
+                "participantAffiliation": this.partiDetailsArray.affiliation,
+                "participantPhone": this.partiDetailsArray.phone,
+                "participantMobile": this.partiDetailsArray.mobile,
+              }
+            },
+            "Heading2": {
+              //shipment details
+              "status": this.dtsArray[0].dtsData.Heading2.status,
+              "data": {
+                "shipmentDate": this.shipmentData['shipmentDate'],
+                "resultDueDate": this.shipmentData['resultDueDate'],
+                "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
+                "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
+                "testingDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
+                "algorithmUsedSelected": this.shipmentData['algorithmUsed'],
+                "algorithmUsedSelect": this.shipmentData['algorithmUsedDropdown'],
+                "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
+                "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'] ? this.shipmentData['modeOfReceipt'] : '',
+                "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
+                "qcData": {
+                  "qcRadioSelected": this.qcDone,
+                  "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
+                  "qcDoneBy": this.qcDoneBy,
+                  "status": this.isQCDoneShow,
+                  "qcRadio": this.qcRadioArray
+                }
+              }
+            },
+            "Heading3": {
+              //test details
+              "status": this.dtsArray[0].dtsData.Heading3.status,
+              "data": this.testKitModel
+            },
+            "Heading4": {
+              //sample details
+              "status": this.dtsArray[0].dtsData.Heading4.status,
+              "data": {
+                "samples": this.samplesObj,
+                "resultsText": this.resultsTextArray,
+                "resultStatus": this.sampleDetailsArray.resultStatus,
+                "sampleList": this.sampleDetailsArray.sampleList
+              }
+            },
+
+            "Heading5": {
+              //other information
+              "status": this.dtsArray[0].dtsData.Heading5.status,
+              "data": {
+                "supervisorReview": this.supervisorReviewArray,
+                "approvalLabel": this.approvalLabel,
+                "supervisorReviewSelected": this.supReview,
+                "approvalInputText": this.supervisorName,
+                "comments": this.comments
+              }
+            },
+            "customFields": {
+              "status": this.showCustomFieldData,
+              "data": {
+                "customField1Text": this.customFieldData['customField1Text'],
+                "customField1Val": this.customFieldData['customField1Val'],
+                "customField2Text": this.customFieldData['customField2Text'],
+                "customField2Val": this.customFieldData['customField2Val']
+              }
+            }
+          }
+        }
+      }
+      console.log(this.serologyJSON);
       if (this.network.type == 'none') {
         this.serologyJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
@@ -787,6 +995,11 @@ export class DTSHIVSerologyPage implements OnInit {
         });
       }
     }
+  }
+  editForm() {
+    this.isShowReviewMsg=false;
+    this.summarizeForm = true;
+    this.isView='false';
   }
 
   clearTestReceiptDate() {

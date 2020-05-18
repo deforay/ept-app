@@ -37,6 +37,9 @@ import {
 import {
   LocalShipmentFormService
 } from '../../app/service/localShipmentForm/local-shipment-form.service';
+import {
+  LoadingController
+} from '@ionic/angular';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -138,7 +141,10 @@ export class DtsHivViralloadPage implements OnInit {
   customFieldData = {};
   validResponseDate: boolean = false;
   validModeOfRec: boolean = false;
-
+  localFormToSubmitArray: any = [];
+  schemeType;
+  summarizeForm: boolean = false;
+  isEditForm: boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -149,7 +155,8 @@ export class DtsHivViralloadPage implements OnInit {
     private router: Router,
     public network: Network,
     public LocalShipmentFormService: LocalShipmentFormService,
-    public alertService: AlertService
+    public alertService: AlertService,
+    public loadingCtrl: LoadingController,
   ) {}
 
   ionViewWillEnter() {
@@ -184,8 +191,13 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   getVLFormDetails() {
-
-
+   
+    this.storage.get('localFormToSubmit').then((localFormToSubmit) => {
+      if (localFormToSubmit) {
+        this.localFormToSubmitArray = [];
+        this.localFormToSubmitArray.push(localFormToSubmit);
+      }
+    })
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
 
       this.isView = vlDataObj[0].isView;
@@ -194,7 +206,7 @@ export class DtsHivViralloadPage implements OnInit {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
 
           if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
-
+            this.summarizeForm = false;
             this.isView = localStorageSelectedFormArray[0].isView;
             this.vlDataArray = [];
             this.vlDataArray.push(localStorageSelectedFormArray[0]);
@@ -202,7 +214,22 @@ export class DtsHivViralloadPage implements OnInit {
 
           }
         })
+      } else if (this.localFormToSubmitArray.length != 0 && vlDataObj[0].mapId == this.localFormToSubmitArray[0]['data']['mapId']) {
+       
+        this.schemeType = this.localFormToSubmitArray[0]['data']['schemeType'];
+        if (this.schemeType == 'vl' && vlDataObj[0].mapId == this.localFormToSubmitArray[0]['data']['mapId']) {
+          this.summarizeForm = true;
+          this.vlDataArray = [];
+          this.vlDataArray.push(this.localFormToSubmitArray[0]['data']);
+          if (this.isEditForm == true) {
+            this.isView = 'false';
+          } else {
+            this.isView = 'true';
+          }
+          this.bindVLData();
+        }
       } else {
+        this.summarizeForm = false;
         this.vlDataArray = [];
         this.vlDataArray.push(vlDataObj[0]);
         this.bindVLData();
@@ -464,10 +491,10 @@ export class DtsHivViralloadPage implements OnInit {
       this.ptPanelTestData['vlResult'].forEach((element, index) => {
 
         this.VlFloat = parseFloat(element);
-        if(next != 'onload'){
+        if (next != 'onload') {
           if (this.VlFloat > 7) {
             this.alertService.presentAlert("Alert", "VL Result should be between 1 and 7");
-            throw false;      
+            throw false;
           }
         }
         if ((element || element == '0') && (this.mandatoryArray[index] == true) && this.VlFloat <= 7) {
@@ -581,7 +608,7 @@ export class DtsHivViralloadPage implements OnInit {
     }
   }
 
-  submitViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
+  async submitViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
 
     this.isNextStepPanelTest = true;
     shipmentPanelForm.control.markAllAsTouched();
@@ -725,14 +752,181 @@ export class DtsHivViralloadPage implements OnInit {
         }
       }
       console.log(this.viralLoadJSON);
+      this.storage.set('localFormToSubmit', this.viralLoadJSON);
+      const element = await this.loadingCtrl.getTop();
+      if (element && element.dismiss) {
+        element.dismiss();
+      }
+      const loading = await this.loadingCtrl.create({
+        spinner: 'dots',
+        message: 'Please wait',
+      });
+      await loading.present();
+      setTimeout(() => {
+        this.storage.get('localFormToSubmit').then((localFormToSubmit) => {
+          if (localFormToSubmit) {
+            this.getVLFormDetails();
+            this.router.navigate(['/dts-hiv-viralload']);
+            loading.dismiss();
+          }
+        })
+      }, 3000);
+    }
+  }
+
+  confirmViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
+
+    this.isNextStepPanelTest = true;
+    shipmentPanelForm.control.markAllAsTouched();
+    PTPanelTestForm.control.markAllAsTouched();
+    otherInfoPanelForm.control.markAllAsTouched();
+    this.nextStepOtherInfoPanel('submit');
+    this.checkCustFieldPanel('submit');
+    this.nextStepPTPanelTest('submit', this.ptPanelTest);
+    this.nextStepShipmentPanel(shipmentPanelForm.valid, 'submit');
+
+    if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.validOtherInfo == true) {
+
+      this.step = 4;
+
+      this.isViralLoadFormValid = true;
+      console.log(this.isViralLoadFormValid);
+
+      if (this.ptPanelTest == true) {
+        this.isPTPerformedRadio = 'yes';
+      } else {
+        this.isPTPerformedRadio = 'no';
+      }
+
+      if (this.qcDone == 'no') {
+        this.qcDate = "";
+        this.qcDoneBy = "";
+        this.formattedQCDate = "";
+      } else {
+        this.formattedQCDate = this.qcDate ? this.dateFormat(new Date(this.qcDate)) : '';
+      }
+
+      this.updatedStatus = this.vlDataArray[0].updatedStatus;
+      this.viralLoadJSON = {
+
+        "authToken": this.authToken,
+        "appVersion": this.appVersionNumber,
+        "syncType": "single",
+        "data": {
+          "evaluationStatus": this.vlDataArray[0].evaluationStatus,
+          "participantId": this.vlDataArray[0].participantId,
+          "schemeType": this.vlDataArray[0].schemeType,
+          "shipmentId": this.vlDataArray[0].shipmentId,
+          //  "shipmentCode":
+          "mapId": this.vlDataArray[0].mapId,
+          "isSynced": true,
+          "createdOn": this.vlDataArray[0].createdOn ? this.vlDataArray[0].createdOn : "",
+          "updatedOn": this.vlDataArray[0].updatedOn ? this.vlDataArray[0].updatedOn : "",
+          "updatedStatus": this.updatedStatus,
+          "vlData": {
+            "access": {
+              "status": this.vlDataArray[0].vlData.access.status
+            },
+            "Heading1": {
+              //participant details
+              "status": this.vlDataArray[0].vlData.Heading1.status,
+              "data": {
+                "participantName": this.partDetailsArray.participantName,
+                "participantCode": this.partDetailsArray.participantCode,
+                "participantAffiliation": this.partDetailsArray.affiliation,
+                "participantPhone": this.partDetailsArray.phone,
+                "participantMobile": this.partDetailsArray.mobile,
+              }
+            },
+            "Heading2": {
+              //shipment details vlResultSectionLabel
+              "status": this.vlDataArray[0].vlData.Heading2.status,
+              "data": {
+                "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
+                "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
+                "testReceiptDate": this.testReceiptDate ? this.dateFormat(new Date(this.testReceiptDate)) : '',
+                "sampleRehydrationDate": this.sampleRhdDate ? this.dateFormat(new Date(this.sampleRhdDate)) : '',
+                "testDate": this.testDate ? this.dateFormat(new Date(this.testDate)) : '',
+                "vlAssaySelect": this.shipmentsDetailsArray['vlAssaySelect'],
+                "vlAssaySelected": this.vlassay,
+                "otherAssay": this.othervlassay ? this.othervlassay : '',
+                "specimenVolume": this.specVolTest ? this.specVolTest : '',
+                "assayExpirationDate": this.assayExpDate ? this.dateFormat(new Date(this.assayExpDate)) : '',
+                "assayLotNumber": this.assayLotNo,
+                "responseDate": this.responseDate ? this.dateFormat(new Date(this.responseDate)) : '',
+                "modeOfReceiptSelect": this.modeOfReceiptArray ? this.modeOfReceiptArray : '',
+                "modeOfReceiptSelected": this.receiptmode ? this.receiptmode : '',
+                "qcData": {
+                  "qcRadioSelected": this.qcDone,
+                  "qcDate": this.formattedQCDate,
+                  "qcDoneBy": this.qcDoneBy,
+                  "status": this.isQCDoneShow,
+                  "qcRadio": this.qcRadioArray
+                }
+              }
+            },
+            "Heading3": {
+              //PT panel details
+              "status": this.vlDataArray[0].vlData.Heading3.status,
+              "data": {
+                "isPtTestNotPerformedRadio": this.isPTPerformedRadio,
+                "no": {
+                  "note": this.ptPanelTestData['notes'],
+                  "tableHeading": this.ptPanelTestData['controlHeads'],
+                  "tableRowTxt": {
+                    "id": this.ptPanelTestData['sampleIDArrray'],
+                    "label": this.ptPanelTestData['controlArray'].label,
+                    "mandatory": this.ptPanelTestData['controlArray'].mandatory,
+                  },
+                  "tndReferenceRadio": this.ptPanelTestData['tndRadioArray'],
+                  "tndReferenceRadioSelected": this.ptPanelTestData['tndArray'],
+                  "vlResult": this.ptPanelTestData['vlResult'],
+                  "vlResultSectionLabel": this.ptPanelTestData['vlResultSectionLabel']
+                },
+                "yes": {
+                  "vlNotTestedReasonSelected": this.ptPanelNotTestData['vlNotTestedReason'],
+                  "commentsTextArea": this.ptPanelNotTestData['ptNotTestedComments'],
+                  "supportTextArea": this.ptPanelNotTestData['ptSupportComments'],
+                  "commentsText": this.ptPanelNotTestData['ptNotTestedCommentsLabel'],
+                  "supportText": this.ptPanelNotTestData['ptSupportCommentsLabel'],
+                  "vlNotTestedReasonSelect": this.ptPanelNotTestData['ptNotTestedReasonArray'],
+                  "vlNotTestedReasonText": this.ptPanelNotTestData['ptNotTestedReasonLabel']
+                }
+              }
+            },
+            "Heading4": {
+              //other information
+              "status": this.vlDataArray[0].vlData.Heading4.status,
+              "data": {
+                "supervisorReview": this.supervisorReviewArray,
+                "approvalLabel": this.approvalLabel,
+                "supervisorReviewSelected": this.supReview,
+                "approvalInputText": this.supName,
+                "comments": this.comments
+              }
+            },
+            "customFields": {
+              "status": this.showCustomFieldData,
+              "data": {
+                "customField1Text": this.customFieldData['customField1Text'],
+                "customField1Val": this.customFieldData['customField1Val'],
+                "customField2Text": this.customFieldData['customField2Text'],
+                "customField2Val": this.customFieldData['customField2Val']
+              }
+            }
+          }
+        }
+      }
+      console.log(this.viralLoadJSON);
+
       if (this.network.type == 'none') {
         this.viralLoadJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
-
+        this.storage.remove('localFormToSubmit');
       } else {
 
         this.viralLoadJSON['data']['isSynced'] = 'true';
-
+        this.storage.remove('localFormToSubmit');
         this.CrudServiceService.postData('/api/shipments/save-form', this.viralLoadJSON).then((result) => {
 
           if (result["status"] == 'success') {
@@ -755,6 +949,12 @@ export class DtsHivViralloadPage implements OnInit {
         });
       }
     }
+  }
+
+  editForm() {
+    this.isEditForm = true;
+    this.summarizeForm = false;
+    this.getVLFormDetails();
   }
 
   clearTestReceiptDate() {
