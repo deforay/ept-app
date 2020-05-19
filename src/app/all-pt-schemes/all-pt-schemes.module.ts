@@ -8,6 +8,7 @@ import { AllPTSchemesPageRoutingModule } from './all-pt-schemes-routing.module';
 import { MaterialModule } from '../material.module';
 import { AllPTSchemesPage } from './all-pt-schemes.page';
 import { ComponentsModule } from '../component/components.module';
+import { Ng2SearchPipeModule } from 'ng2-search-filter';
 @NgModule({
   imports: [
     CommonModule,
@@ -16,6 +17,7 @@ import { ComponentsModule } from '../component/components.module';
     ComponentsModule,
     ReactiveFormsModule,
     MaterialModule,
+    Ng2SearchPipeModule,
     AllPTSchemesPageRoutingModule
   ],
   declarations: [AllPTSchemesPage]

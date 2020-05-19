@@ -356,6 +356,8 @@ import {
 
                       this.shippingsArray = result['data'];
                       this.shippingsCopyArray = result['data'];
+                      this.shippingsArray = this.shippingsCopyArray.filter(
+                        item => item.status == 'shipped' && item.updatedOn == '')
                       this.shippingsArray.sort((a, b) => {
                         return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
                       });

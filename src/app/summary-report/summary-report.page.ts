@@ -93,6 +93,9 @@ export class SummaryReportPage implements OnInit {
             this.skeltonArray = [];
             if (result["status"] == 'success') {
               this.summaryReports = result['data'];
+              this.summaryReports.sort((a, b) => {
+                return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
+              });
             }
              else if (result["status"] == "auth-fail") {
               this.alertService.presentAlert('Alert',result["message"]);

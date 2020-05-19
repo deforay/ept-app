@@ -144,7 +144,7 @@ export class DtsHivViralloadPage implements OnInit {
   localFormToSubmitArray: any = [];
   schemeType;
   summarizeForm: boolean = false;
-  isEditForm: boolean = false;
+  isShowReviewMsg: boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -191,13 +191,6 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   getVLFormDetails() {
-   
-    this.storage.get('localFormToSubmit').then((localFormToSubmit) => {
-      if (localFormToSubmit) {
-        this.localFormToSubmitArray = [];
-        this.localFormToSubmitArray.push(localFormToSubmit);
-      }
-    })
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
 
       this.isView = vlDataObj[0].isView;
@@ -206,30 +199,15 @@ export class DtsHivViralloadPage implements OnInit {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
 
           if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
-            this.summarizeForm = false;
+          
             this.isView = localStorageSelectedFormArray[0].isView;
             this.vlDataArray = [];
             this.vlDataArray.push(localStorageSelectedFormArray[0]);
             this.bindVLData();
-
           }
         })
-      } else if (this.localFormToSubmitArray.length != 0 && vlDataObj[0].mapId == this.localFormToSubmitArray[0]['data']['mapId']) {
+      }  else {
        
-        this.schemeType = this.localFormToSubmitArray[0]['data']['schemeType'];
-        if (this.schemeType == 'vl' && vlDataObj[0].mapId == this.localFormToSubmitArray[0]['data']['mapId']) {
-          this.summarizeForm = true;
-          this.vlDataArray = [];
-          this.vlDataArray.push(this.localFormToSubmitArray[0]['data']);
-          if (this.isEditForm == true) {
-            this.isView = 'false';
-          } else {
-            this.isView = 'true';
-          }
-          this.bindVLData();
-        }
-      } else {
-        this.summarizeForm = false;
         this.vlDataArray = [];
         this.vlDataArray.push(vlDataObj[0]);
         this.bindVLData();
@@ -752,7 +730,6 @@ export class DtsHivViralloadPage implements OnInit {
         }
       }
       console.log(this.viralLoadJSON);
-      this.storage.set('localFormToSubmit', this.viralLoadJSON);
       const element = await this.loadingCtrl.getTop();
       if (element && element.dismiss) {
         element.dismiss();
@@ -762,15 +739,10 @@ export class DtsHivViralloadPage implements OnInit {
         message: 'Please wait',
       });
       await loading.present();
-      setTimeout(() => {
-        this.storage.get('localFormToSubmit').then((localFormToSubmit) => {
-          if (localFormToSubmit) {
-            this.getVLFormDetails();
-            this.router.navigate(['/dts-hiv-viralload']);
-            loading.dismiss();
-          }
-        })
-      }, 3000);
+      this.isView='true';
+      this.isShowReviewMsg=true;
+      this.summarizeForm=true;
+      loading.dismiss();
     }
   }
 
@@ -952,9 +924,9 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   editForm() {
-    this.isEditForm = true;
-    this.summarizeForm = false;
-    this.getVLFormDetails();
+    this.isShowReviewMsg=false;
+    this.summarizeForm = true;
+    this.isView='false';
   }
 
   clearTestReceiptDate() {

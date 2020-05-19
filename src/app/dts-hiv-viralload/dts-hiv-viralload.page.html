@@ -1,12 +1,12 @@
-<app-header *ngIf="summarizeForm==false" [titleHeader]="'DTS- HIV Viral Load'" [isMenuOrBackButton]="'back'"></app-header>
+<app-header *ngIf="isShowReviewMsg==false" [titleHeader]="'DTS- HIV Viral Load'" [isMenuOrBackButton]="'back'"></app-header>
 
-<app-header *ngIf="summarizeForm==true" [titleHeader]="'View DTS- HIV Viral Load'" [isMenuOrBackButton]="'back'"></app-header>
+<app-header *ngIf="isShowReviewMsg==true" [titleHeader]="'View DTS- HIV Viral Load'" [isMenuOrBackButton]="'back'"></app-header>
 
 
 <ion-content>
   <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
 
-  <p *ngIf="summarizeForm==true" class="infoMsg">Please review and verify your result submission</p>
+  <p *ngIf="isShowReviewMsg==true" class="infoMsg">Please review and verify your result submission</p>
   
   <mat-accordion class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">

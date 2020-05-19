@@ -95,6 +95,9 @@ export class IndividualReportPage {
             this.skeltonArray = [];
             if (result["status"] == 'success') {
               this.individualReports = result['data'];
+              this.individualReports.sort((a, b) => {
+                return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
+              });
             } 
             else if (result["status"] == "auth-fail") {
               this.alertService.presentAlert('Alert',result["message"]);
