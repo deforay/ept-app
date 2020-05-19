@@ -28,6 +28,8 @@ export class ShipmentFilterComponent implements OnInit {
   shipmentStatusFliter: any;
   participantFliter: any;
   schemeTypeFliter: any;
+  shipmentStatusFliterName: any;
+  participantFliterName: any;
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -59,15 +61,26 @@ export class ShipmentFilterComponent implements OnInit {
   }
 
   applyFilter() {
-  
-    if (this.shipmentStatusFliter == undefined && this.participantFliter == undefined && this.schemeTypeFliter == undefined) {
-      this.alertService.presentAlert('Alert', "Please select atleast one field");
-    }
-    else{
+
+      if(this.shipmentStatusFliter=='activeNotResp'){
+      this.shipmentStatusFliterName="Active and Not Responded";
+      }
+      else if(this.shipmentStatusFliter=='activeResp'){
+        this.shipmentStatusFliterName="Active and Responded";
+      } 
+      else if(this.shipmentStatusFliter=='closed'){
+        this.shipmentStatusFliterName="Closed";
+      }
+      if(this.participantFliter!=undefined){
+      this.participantFliterName=this.participantFliter.first_name.concat(this.participantFliter.last_name? this.participantFliter.last_name:'');
+      }
       let filterJSON = {
-        shipmentFilter: this.shipmentStatusFliter ? this.shipmentStatusFliter:'',
-        participantFliter: this.participantFliter ? this.participantFliter:'',
-        schemeTypeFliter: this.schemeTypeFliter ? this.schemeTypeFliter:''
+        shipmentFilterID: this.shipmentStatusFliter ? this.shipmentStatusFliter:'',
+        participantFliterId: this.participantFliter ?  this.participantFliter.participant_id:'',
+        participantFliterName:this.participantFliterName ?  this.participantFliterName:'',
+        schemeTypeFliterID: this.schemeTypeFliter ? this.schemeTypeFliter.scheme_id:'',
+        schemeTypeFliterName: this.schemeTypeFliter ? this.schemeTypeFliter.scheme_name:'',
+        shipmentFilterName:this.shipmentStatusFliterName ? this.shipmentStatusFliterName :''
       }
       this.popoverController.dismiss(filterJSON);
       this.popoverController.dismiss({
@@ -75,5 +88,12 @@ export class ShipmentFilterComponent implements OnInit {
       });
     
   }
+
+  resetFilter(){
+
+    this.popoverController.dismiss('reset');
+    this.popoverController.dismiss({
+      'dismissed': true
+    });
   }
 }

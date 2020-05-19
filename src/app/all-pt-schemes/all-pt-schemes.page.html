@@ -6,19 +6,24 @@
           <ion-title class="eptHeaderTitle">
             All Shipments
           </ion-title>
-          <ion-buttons slot="end" (click)="presentPopover($event)" *ngIf="shippingsArray.length!=0">
+          <ion-buttons slot="end" (click)="presentPopover($event)" *ngIf="shippingsArray.length!=0 || NoFilteredData">
           <span class="eptHeaderTitle">Filter</span>&nbsp;
           <ion-icon name="funnel" ios="ios-funnel" class="funnelIcon"></ion-icon>
           </ion-buttons>
   </ion-toolbar>
 </ion-header>
 
-
 <ion-content>
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
   
+  <mat-chip-list aria-label="Fish selection" class="filterChipList" *ngIf="filterJSON">
+    <mat-chip *ngIf="filterJSON.shipmentFilterName">{{filterJSON.shipmentFilterName}}</mat-chip>
+    <mat-chip *ngIf="filterJSON.participantFliterName">{{filterJSON.participantFliterName}}</mat-chip>
+    <mat-chip *ngIf="filterJSON.schemeTypeFliterName">{{filterJSON.schemeTypeFliterName}}</mat-chip>
+  </mat-chip-list>
+
   <ion-card *ngFor="let item of shippingsArray" class="eptCard">
     <ion-card-header class="CardHeader">
       <p text-wrap class="schemeName"> {{item.schemeName}}</p>
@@ -147,18 +152,18 @@
         </ion-row>
 
         <ion-row>
-          <ion-col size="6" *ngIf="isViewOnlyAccess==false && item.status!='finalized'">
-            <ion-button *ngIf="item.updatedOn=='' && responseSwitch==on && item.isSynced==''" size="small" class="text-center native-btn"
+          <ion-col size="6">
+            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && responseSwitch==on && item.isSynced==''" size="small" class="text-center native-btn"
               (click)="goToTestForm(item)">Enter Response
             </ion-button>
 
-            <ion-button *ngIf="item.updatedOn!='' && responseSwitch==on || item.isSynced=='false'" size="small" class="text-center native-btn"
+            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && responseSwitch==on || item.isSynced=='false'" size="small" class="text-center native-btn"
               (click)="goToTestForm(item)">Edit Response</ion-button>
           </ion-col>
 
           <ion-col size="6">
-            <ion-button size="small" [ngStyle]="{'float':isViewOnlyAccess === false ? 'right' : 'left' }"
-              class="text-center native-btn" (click)="goToTestForm(item,'true')">View Response
+            <ion-button size="small"
+              class="text-center native-btn viewResponse" (click)="goToTestForm(item,'true')">View Response
             </ion-button>
           </ion-col>
 

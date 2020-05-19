@@ -19,7 +19,7 @@
       <mat-label>Participants</mat-label>
       <mat-select [(ngModel)]="participantFliter" name="participant" #participant="ngModel">
         <mat-option>--Select--</mat-option>
-        <mat-option *ngFor="let item of participantsArray" [value]="item.participant_id">
+        <mat-option *ngFor="let item of participantsArray" [value]="item">
           {{item.first_name + item.last_name}}
         </mat-option>
       </mat-select>
@@ -32,7 +32,7 @@
         <mat-label>Scheme Type</mat-label>
         <mat-select [(ngModel)]="schemeTypeFliter" name="schemeType" #schemeType="ngModel">
           <mat-option>--Select--</mat-option>
-          <mat-option *ngFor="let item of shipmentsArray" [value]="item.scheme_id">
+          <mat-option *ngFor="let item of shipmentsArray" [value]="item">
             {{item.scheme_name}}
           </mat-option>
         </mat-select>
@@ -41,10 +41,21 @@
     </ion-row>
 </ion-grid>
 <ion-footer>
-  <ion-toolbar>
-    <ion-button expand="full" class="text-center native-btn syncAll" (click)="applyFilter()">
-     Apply
-    </ion-button>
+  <ion-toolbar class="filterToolbar">
+    <ion-grid class="filterFooterGrid">
+      <ion-row>
+        <ion-col size="6">
+          <ion-button size="small"
+              class="text-center native-btn filterButton" (click)="applyFilter()">Apply
+            </ion-button>
+        </ion-col>
+        <ion-col size="6">
+          <ion-button size="small"
+          class="text-center native-btn filterButton resetButton" (click)="resetFilter()">Reset
+        </ion-button>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
   </ion-toolbar>
 </ion-footer>
 </ion-card>

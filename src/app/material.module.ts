@@ -26,6 +26,7 @@ import {
 
 //  ErrorStateMatcher
 } from "@angular/material";
+import {MatChipsModule} from '@angular/material/chips';
 // import {} from '@angular/material/radio';
 @NgModule({
   declarations: [],
@@ -54,7 +55,8 @@ import {
     MatMenuModule,
     MatListModule,
     MatRadioModule,
-    MatProgressSpinnerModule
+    MatProgressSpinnerModule,
+    MatChipsModule
 
    // ErrorStateMatcher
   ]
