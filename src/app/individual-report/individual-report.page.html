@@ -6,8 +6,23 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <ion-card class="searchCard">
+    <ion-grid>
+      <ion-row>
+        <ion-col size="12" class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+            <mat-label>Search</mat-label>
+            <input matInput [(ngModel)]="search"
+             #searchShipment="ngModel" name="searchShipment">
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
+    </ion-card>
+
+
 <div *ngIf="networkType!='none'">
-  <ion-card *ngFor="let item of individualReports" class="eptCard">
+  <ion-card *ngFor="let item of individualReports | filter:search" class="eptCard">
     <ion-card-header class="CardHeader">
       <p text-wrap class="schemeName"> {{item.schemeName}}</p>
     </ion-card-header>

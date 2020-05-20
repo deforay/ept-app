@@ -1,0 +1,106 @@
+<app-header [titleHeader]="'My Profile'" [isMenuOrBackButton]="'menu'"></app-header>
+
+<ion-content>
+  <div class="profileDiv">
+    <form #profilePageForm="ngForm" novalidate>
+      <ion-grid>
+        <ion-row>
+          <ion-col size="12">
+            <mat-form-field class="login-full-width cust-form" appearance="outline">
+              <mat-label class="matLabel">Primary e-mail address (used for login)</mat-label>
+              <input matInput [(ngModel)]="primaryEmail" placeholder="" name="profilePrimaryEmail"
+                #profilePrimaryEmail="ngModel">
+              <button mat-icon-button matSuffix>
+                <mat-icon class="matIcons">email</mat-icon>
+              </button>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <mat-form-field class="login-full-width cust-form" appearance="outline">
+              <mat-label class="matLabel">First Name</mat-label>
+              <input matInput [(ngModel)]="firstName" placeholder="" name="profileFirstName" #profileFirstName="ngModel"
+                required>
+                <button mat-icon-button matSuffix>
+                  <mat-icon class="matIcons">account_box</mat-icon>
+                </button>
+              <mat-error *ngIf="!firstName">
+                First Name is required</mat-error>
+            </mat-form-field>
+
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <mat-form-field class="login-full-width cust-form" appearance="outline">
+              <mat-label class="matLabel">Last Name</mat-label>
+              <input matInput [(ngModel)]="lastName" placeholder="Last Name" name="profileLastName"
+                #profileLastName="ngModel" required>
+                <button mat-icon-button matSuffix>
+                  <mat-icon class="matIcons">perm_contact_calendar</mat-icon>
+                </button>
+              <mat-error *ngIf="!lastName">
+                Last Name is required</mat-error>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <mat-form-field class="login-full-width cust-form" appearance="outline">
+              <mat-label class="matLabel">Secondary e-mail address</mat-label>
+              <input matInput [(ngModel)]="secEmailAddress" placeholder="" name="profileSecEmailAddress"
+                #profileSecEmailAddress="ngModel" required>
+                <button mat-icon-button matSuffix>
+                  <mat-icon class="matIcons">email</mat-icon>
+                </button>
+              <mat-error *ngIf="!secEmailAddress">
+                Secondary e-mail address is required</mat-error>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <mat-form-field class="login-full-width cust-form" appearance="outline">
+              <mat-label class="matLabel">Cell Phone Number</mat-label>
+              <input matInput [(ngModel)]="cellPhoneNo" placeholder="" name="profileCellPhoneNo"
+                #profileCellPhoneNo="ngModel" required>
+                <button mat-icon-button matSuffix>
+                  <mat-icon class="matIcons">call</mat-icon>
+                </button>
+              <mat-error *ngIf="!cellPhoneNo">
+                Cell Phone Number is required</mat-error>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+        <ion-row>
+          <ion-col size="12">
+            <mat-form-field class="login-full-width cust-form" appearance="outline">
+              <mat-label class="matLabel">Phone Number</mat-label>
+              <input matInput [(ngModel)]="phoneNo" placeholder="" name="profilePhoneNo" #profilePhoneNo="ngModel">
+              <button mat-icon-button matSuffix>
+                <mat-icon class="matIcons">phone_enabled
+                </mat-icon>
+              </button>
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+
+        <ion-row class="submitRow">
+          <ion-col>
+          </ion-col>
+          <button ion-col mat-raised-button color="primary" class="text-center" type="submit"
+            (click)="updateProfile()">Submit</button>
+          <ion-col>
+          </ion-col>
+        </ion-row>
+
+      </ion-grid>
+    </form>
+  </div>
+</ion-content>

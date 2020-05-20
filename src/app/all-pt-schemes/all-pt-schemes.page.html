@@ -17,6 +17,7 @@
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+  <ion-card class="searchCard">
 <ion-grid>
   <ion-row>
     <ion-col size="12" class="grid-input-col">
@@ -28,6 +29,7 @@
     </ion-col>
   </ion-row>
 </ion-grid>
+</ion-card>
   <mat-chip-list aria-label="Fish selection" class="filterChipList" *ngIf="filterJSON">
     <mat-chip *ngIf="filterJSON.shipmentFilterName">{{filterJSON.shipmentFilterName}}</mat-chip>
     <mat-chip *ngIf="filterJSON.participantFliterName">{{filterJSON.participantFliterName}}</mat-chip>

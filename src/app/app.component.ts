@@ -77,6 +77,11 @@ export class AppComponent {
       icon: 'password'
     },
     {
+      title: 'My Profile',
+      url: '/profile',
+      icon: 'password'
+    },
+    {
       title: 'Logout',
       url: '/login',
       icon: 'logout'
@@ -185,7 +190,8 @@ export class AppComponent {
           }
         } else if (isLogOut==false && appPin && this.router.url == '/') {
           this.selectedIndex = 0;
-          this.router.navigateByUrl('/enter-app-password');
+         // this.router.navigateByUrl('/enter-app-password');
+          this.router.navigateByUrl('/profile');
         } 
         else if (isLogOut && !appPin) {
           this.selectedIndex = 0;

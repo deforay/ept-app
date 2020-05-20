@@ -50,6 +50,10 @@ const routes: Routes = [
   {
     path: 'enter-app-password',
     loadChildren: () => import('./enter-app-password/enter-app-password.module').then( m => m.EnterAppPasswordPageModule)
+  },
+  {
+    path: 'profile',
+    loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
   }
 ];
 

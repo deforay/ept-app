@@ -57,6 +57,7 @@ export class EnterAppPasswordPage implements OnInit {
       'border-bottom': '2px solid #3c8dbc'
     }
   };
+  forceProfileCheck: any;
   constructor(private storage: Storage, private router: Router,
     public CrudServiceService: CrudServiceService,
     public ToastService: ToastService,
@@ -102,7 +103,7 @@ export class EnterAppPasswordPage implements OnInit {
     var ele = document.getElementById(eleId);
   }
   async onPinNumberChange(pin) {
-    console.log(pin)
+
     this.appPin = pin;
 
     var regex = /^[0-9]*$/
@@ -138,10 +139,23 @@ export class EnterAppPasswordPage implements OnInit {
             loading.present();
             setTimeout(() => {
               loading.dismiss();
+              debugger;
               this.ToastService.presentToastWithOptions("Pin verified successfully");
-              this.router.navigate(['/all-pt-schemes'], {
-                replaceUrl: true
-              });
+              this.storage.get('participantLogin').then((participantLogin) => {
+                debugger;
+                this.forceProfileCheck = participantLogin.forceProfileCheck;
+                if(this.forceProfileCheck=='yes'){
+                  this.router.navigate(['/profile'], {
+                    replaceUrl: true
+                  });
+                }
+                else{
+                  this.router.navigate(['/all-pt-schemes'], {
+                    replaceUrl: true
+                  });
+                }
+              })
+             
               this.ngPinInput.setValue('');
               this.appPin = '';
             }, 1000);

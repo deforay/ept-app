@@ -1,25 +1,24 @@
 import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
-import { FormsModule } from '@angular/forms';
+import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
 
 import { IonicModule } from '@ionic/angular';
 
-import { SummaryReportPageRoutingModule } from './summary-report-routing.module';
+import { ProfilePageRoutingModule } from './profile-routing.module';
 
-import { SummaryReportPage } from './summary-report.page';
+import { ProfilePage } from './profile.page';
 import { MaterialModule } from '../material.module';
 import { ComponentsModule } from '../component/components.module';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
 @NgModule({
   imports: [
     CommonModule,
     FormsModule,
     IonicModule,
+    ReactiveFormsModule,
     MaterialModule,
     ComponentsModule,
-    Ng2SearchPipeModule,
-    SummaryReportPageRoutingModule
+    ProfilePageRoutingModule
   ],
-  declarations: [SummaryReportPage]
+  declarations: [ProfilePage]
 })
-export class SummaryReportPageModule {}
+export class ProfilePageModule {}
