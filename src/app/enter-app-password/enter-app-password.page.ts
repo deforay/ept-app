@@ -139,10 +139,10 @@ export class EnterAppPasswordPage implements OnInit {
             loading.present();
             setTimeout(() => {
               loading.dismiss();
-              debugger;
+            
               this.ToastService.presentToastWithOptions("Pin verified successfully");
               this.storage.get('participantLogin').then((participantLogin) => {
-                debugger;
+               
                 this.forceProfileCheck = participantLogin.forceProfileCheck;
                 if(this.forceProfileCheck=='yes'){
                   this.router.navigate(['/profile'], {

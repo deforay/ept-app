@@ -77,7 +77,6 @@ export class ProfilePage implements OnInit {
               .then(result => {
                 if (result["status"] == 'success') {
                   this.profileDetailsArray = result['data'];
-                  console.log(this.profileDetailsArray);
                   this.primaryEmail = this.profileDetailsArray.primaryEmail;
                   this.firstName = this.profileDetailsArray.firstName;
                   this.lastName = this.profileDetailsArray.lastName;
@@ -140,10 +139,12 @@ export class ProfilePage implements OnInit {
 
         this.alertService.presentAlert('Alert', result["message"]);
       }
-
     })
   }
 
-
-
+  back(){
+    this.router.navigate(['/all-pt-schemes'],{
+      replaceUrl: true
+    });
+  }
 }

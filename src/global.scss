@@ -325,6 +325,12 @@ input.mat-input-element {
     color: #000;
     margin: 5px;
 }
+.searchBar{
+    margin-left: 3px;
+    padding-right: 17px !important;
+    margin-top: 2px;
+    margin-bottom: -8px;
+}
 
 /* Global CSS Changes Ends */
 
@@ -578,6 +584,7 @@ input.mat-input-element {
         }
     }
 }
+
 
 //   .mat-form-field-appearance-outline .mat-form-field-infix {
 //     padding: 10px;

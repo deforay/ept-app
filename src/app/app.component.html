@@ -58,7 +58,7 @@
           </ion-menu-toggle>
         </ion-list> -->
       </ion-content>
-      <ion-footer class="ion-no-border">
+      <ion-footer class="ion-no-border" *ngIf="appVersionNumber">
         <ion-toolbar>
           <ion-title >Version : {{appVersionNumber}}</ion-title>
         </ion-toolbar>

@@ -34,7 +34,9 @@ import {
 import {
   Events
 } from '@ionic/angular';
-
+import {
+  LoadingController
+} from '@ionic/angular';
 @Component({
   selector: 'app-summary-report',
   templateUrl: './summary-report.page.html',
@@ -59,14 +61,23 @@ export class SummaryReportPage implements OnInit {
     private router: Router,
     public network: Network,
     public events: Events,
-    public alertService: AlertService) {
+    public alertService: AlertService,
+    public loadingCtrl: LoadingController,) {
 
   }
 
   ngOnInit() {}
 
-  downloadReport(downloadLink, fileName) {
-    this.LoaderService.presentLoading();
+  async downloadReport(downloadLink, fileName) {
+    const element = await this.loadingCtrl.getTop();
+    if (element && element.dismiss) {
+      element.dismiss();
+    }
+    const loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      message: 'Please wait',
+    });
+    await loading.present();
     const fileTransfer: FileTransferObject = this.ft.create();
     let downloadUrl = this.apiUrl + downloadLink;
 
@@ -74,11 +85,11 @@ export class SummaryReportPage implements OnInit {
     fileTransfer.download(downloadUrl, path + fileName).then((entry) => {
       console.log('download complete: ' + entry.toURL());
       let url = entry.toURL();
-      this.LoaderService.disMissLoading();
+      loading.dismiss();
 
       this.fileOpener.open(url, 'application/pdf');
     }, (error) => {
-      this.LoaderService.disMissLoading();
+      loading.dismiss();
       this.alertService.presentAlert('Alert','Something went wrong.Please try again later.');
       console.log(error);
     });
@@ -94,7 +105,7 @@ export class SummaryReportPage implements OnInit {
             if (result["status"] == 'success') {
               this.summaryReports = result['data'];
               this.summaryReports.sort((a, b) => {
-                return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
+                return <any > new Date(b.statusUpdatedOn) - < any > new Date(a.statusUpdatedOn);
               });
             }
              else if (result["status"] == "auth-fail") {

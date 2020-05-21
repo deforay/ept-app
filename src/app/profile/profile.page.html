@@ -23,9 +23,9 @@
               <mat-label class="matLabel">First Name</mat-label>
               <input matInput [(ngModel)]="firstName" placeholder="" name="profileFirstName" #profileFirstName="ngModel"
                 required>
-                <button mat-icon-button matSuffix>
-                  <mat-icon class="matIcons">account_box</mat-icon>
-                </button>
+              <button mat-icon-button matSuffix>
+                <mat-icon class="matIcons">account_box</mat-icon>
+              </button>
               <mat-error *ngIf="!firstName">
                 First Name is required</mat-error>
             </mat-form-field>
@@ -39,9 +39,9 @@
               <mat-label class="matLabel">Last Name</mat-label>
               <input matInput [(ngModel)]="lastName" placeholder="Last Name" name="profileLastName"
                 #profileLastName="ngModel" required>
-                <button mat-icon-button matSuffix>
-                  <mat-icon class="matIcons">perm_contact_calendar</mat-icon>
-                </button>
+              <button mat-icon-button matSuffix>
+                <mat-icon class="matIcons">portrait</mat-icon>
+              </button>
               <mat-error *ngIf="!lastName">
                 Last Name is required</mat-error>
             </mat-form-field>
@@ -54,9 +54,9 @@
               <mat-label class="matLabel">Secondary e-mail address</mat-label>
               <input matInput [(ngModel)]="secEmailAddress" placeholder="" name="profileSecEmailAddress"
                 #profileSecEmailAddress="ngModel" required>
-                <button mat-icon-button matSuffix>
-                  <mat-icon class="matIcons">email</mat-icon>
-                </button>
+              <button mat-icon-button matSuffix>
+                <mat-icon class="matIcons">email</mat-icon>
+              </button>
               <mat-error *ngIf="!secEmailAddress">
                 Secondary e-mail address is required</mat-error>
             </mat-form-field>
@@ -69,9 +69,9 @@
               <mat-label class="matLabel">Cell Phone Number</mat-label>
               <input matInput [(ngModel)]="cellPhoneNo" placeholder="" name="profileCellPhoneNo"
                 #profileCellPhoneNo="ngModel" required>
-                <button mat-icon-button matSuffix>
-                  <mat-icon class="matIcons">call</mat-icon>
-                </button>
+              <button mat-icon-button matSuffix>
+                <mat-icon class="matIcons">phone_iphone</mat-icon>
+              </button>
               <mat-error *ngIf="!cellPhoneNo">
                 Cell Phone Number is required</mat-error>
             </mat-form-field>
@@ -91,12 +91,16 @@
           </ion-col>
         </ion-row>
 
-        <ion-row class="submitRow">
+        <ion-row>
           <ion-col>
+            <button ion-col mat-raised-button class="text-center back" color="primary" (click)="back()">
+              <ion-icon slot="start" name="arrow-back" class="backIcon"></ion-icon>Back
+            </button>
           </ion-col>
-          <button ion-col mat-raised-button color="primary" class="text-center" type="submit"
-            (click)="updateProfile()">Submit</button>
+          <ion-col></ion-col>
           <ion-col>
+            <button ion-col mat-raised-button color="primary" class="text-center submit" type="submit"
+              (click)="updateProfile()">Submit</button>
           </ion-col>
         </ion-row>
 

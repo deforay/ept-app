@@ -35,8 +35,20 @@ import {
 import {
   ShipmentFilterComponent
 } from '../../app/shipment-filter/shipment-filter.component';
-
-
+import {
+  FileTransfer,
+  FileUploadOptions,
+  FileTransferObject
+} from '@ionic-native/file-transfer/ngx';
+import {
+  FileOpener
+} from '@ionic-native/file-opener/ngx';
+import {
+  File
+} from '@ionic-native/file/ngx';
+import {
+  ROOT_DIRECTORY
+} from '../../app/service/constant';
 @Component({
     selector: 'app-all-pt-schemes',
     templateUrl: './all-pt-schemes.page.html',
@@ -81,7 +93,7 @@ import {
   shippingsCopyArray: any = [];
   NoFilteredData: boolean = false;
   filterJSON: any = [];
-
+  apiUrl: string;
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public ToastService: ToastService,
@@ -91,7 +103,10 @@ import {
     public events: Events,
     public loadingCtrl: LoadingController,
     public alertService: AlertService,
-    public popoverController: PopoverController) {}
+    public popoverController: PopoverController,
+    private ft: FileTransfer,
+    private file: File,
+    private fileOpener: FileOpener,) {}
 
   dateFormat(dateObj) {
     return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
@@ -103,7 +118,7 @@ import {
 
     //comment when take buid start
 
-     this.networkType = "4G";
+    // this.networkType = "4G";
 
     //end...
 
@@ -138,7 +153,6 @@ import {
             this.onloadShipment();
           } else {
             this.filterJSON = data['data'];
-            console.log(this.filterJSON);
             if (this.filterJSON.shipmentFilterID == "" && this.filterJSON.participantFliterId == "" && this.filterJSON.schemeTypeFliterID == "") {
               this.onloadShipment();
             } else {
@@ -233,16 +247,15 @@ import {
           item => item.status == 'finalized' && item.schemeType == filterJSON.schemeTypeFliterID);
       } else {}
 
-
     }
 
+    console.log(this.shippingsArray);
     if (this.shippingsArray.length == 0) {
       this.showNoData = true;
       this.NoFilteredData = true;
     } else {
       this.NoFilteredData = false;
     }
-
     loading.dismiss();
   }
   onloadShipment() {
@@ -274,6 +287,12 @@ import {
     } else {
       this.callOnlineFunctions();
     }
+
+    this.storage.get('apiUrl').then((url) => {
+      if (url) {
+        this.apiUrl = url;
+      }
+    })
   }
 
   callOnlineFunctions() {
@@ -793,6 +812,35 @@ import {
       })
     }
   }
+
+  async downloadReport(downloadLink, fileName) {
+ 
+   const element = await this.loadingCtrl.getTop();
+    if (element && element.dismiss) {
+      element.dismiss();
+    }
+    const loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      message: 'Please wait',
+    });
+    await loading.present();
+  
+    const fileTransfer: FileTransferObject = this.ft.create();
+    let downloadUrl = this.apiUrl + downloadLink;
+
+    let path = this.file.externalRootDirectory + ROOT_DIRECTORY + '/';
+    fileTransfer.download(downloadUrl, path + fileName).then((entry) => {
+      console.log('download complete: ' + entry.toURL());
+      let url = entry.toURL();
+      loading.dismiss();
+      this.fileOpener.open(url, 'application/pdf');
+    }, (error) => {
+      loading.dismiss();
+      this.alertService.presentAlert('Alert','Something went wrong.Please try again later.');
+      console.log(error);
+    });
+  }
+
 
   doRefresh(event) {
     setTimeout(() => {

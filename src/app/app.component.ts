@@ -79,7 +79,7 @@ export class AppComponent {
     {
       title: 'My Profile',
       url: '/profile',
-      icon: 'password'
+      icon: 'user'
     },
     {
       title: 'Logout',
@@ -182,7 +182,14 @@ export class AppComponent {
             this.router.navigate(['/change-password'], {
               replaceUrl: true
             });
-          } else if (this.router.url == '/login') {
+          }
+          else if (this.router.url == '/profile') {
+            this.selectedIndex = 1;
+            this.router.navigate(['/profile'], {
+              replaceUrl: true
+            });
+          }
+           else if (this.router.url == '/login') {
             this.selectedIndex = 0;
             this.router.navigateByUrl('/app-password');
           } else {
@@ -190,8 +197,7 @@ export class AppComponent {
           }
         } else if (isLogOut==false && appPin && this.router.url == '/') {
           this.selectedIndex = 0;
-         // this.router.navigateByUrl('/enter-app-password');
-          this.router.navigateByUrl('/profile');
+          this.router.navigateByUrl('/enter-app-password');
         } 
         else if (isLogOut && !appPin) {
           this.selectedIndex = 0;
