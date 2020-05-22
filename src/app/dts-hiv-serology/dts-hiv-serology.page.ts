@@ -126,10 +126,10 @@ export class DTSHIVSerologyPage implements OnInit {
   showOtherInfoData: boolean;
   showCustomFieldData: boolean;
   samplesArray = [];
-  result1Arr = [];
-  result2Arr = [];
-  result3Arr = [];
-  finalResultArr = [];
+  result1Arr :any= [];
+  result2Arr:any = [];
+  result3Arr:any = [];
+  finalResultArr:any = [];
   showResult3: boolean = false;
   isValidSampleDetails = [];
   isValidTestKitDetails = [];
@@ -289,9 +289,7 @@ export class DTSHIVSerologyPage implements OnInit {
       }
 
       if (this.dtsArray[0].dtsData.Heading4.status == true) {
-
         this.showSampleData = true;
-
         this.sampleDetailsArray = this.dtsArray[0].dtsData.Heading4.data;
         console.log(this.sampleDetailsArray);
         this.sampleIndex = this.sampleDetailsArray.samples.label.length;
@@ -496,8 +494,8 @@ export class DTSHIVSerologyPage implements OnInit {
 
   }
   checkSampleDetailPanel(params, index) {
-
-    if (!this.finalResultArr[index]) {
+debugger;
+    if (!this.finalResultArr[index].value) {
       this.isValidSampleDetails[index] = false;
     } else {
       this.isValidSampleDetails[index] = true;
@@ -585,6 +583,7 @@ export class DTSHIVSerologyPage implements OnInit {
 
 
   async submitSerologyForm(shipmentPanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
+
     shipmentPanelForm.control.markAllAsTouched();
     // sampleDetailsForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
@@ -632,20 +631,32 @@ export class DTSHIVSerologyPage implements OnInit {
       if (element == null || element == undefined) {
         this.result1Arr[index] = "";
       }
+      else{
+        this.result1Arr[index] =this.result1Arr[index].value
+      }
     })
     this.result2Arr.forEach((element, index) => {
       if (element == null || element == undefined) {
         this.result2Arr[index] = "";
+      }
+      else{
+        this.result2Arr[index] =this.result2Arr[index].value
       }
     })
     this.result3Arr.forEach((element, index) => {
       if (element == null || element == undefined) {
         this.result3Arr[index] = "";
       }
+      else{
+        this.result3Arr[index] =this.result3Arr[index].value
+      }
     })
     this.finalResultArr.forEach((element, index) => {
       if (element == null || element == undefined) {
         this.finalResultArr[index] = "";
+      }
+      else{
+        this.finalResultArr[index] =this.finalResultArr[index].value
       }
     })
     this.testKitModel['kitValue'].forEach((element, index) => {
@@ -826,26 +837,38 @@ export class DTSHIVSerologyPage implements OnInit {
 
     this.expDateObj.forEach((element, index) => {
       this.testKitModel['expDate'][index] = element ? this.dateFormat(new Date(element)) : element
-    }); this.isShowReviewMsg=false;
+    });
 
     this.result1Arr.forEach((element, index) => {
       if (element == null || element == undefined) {
         this.result1Arr[index] = "";
+      }
+      else{
+        this.result1Arr[index] =this.result1Arr[index].value
       }
     })
     this.result2Arr.forEach((element, index) => {
       if (element == null || element == undefined) {
         this.result2Arr[index] = "";
       }
+      else{
+        this.result2Arr[index] =this.result2Arr[index].value
+      }
     })
     this.result3Arr.forEach((element, index) => {
       if (element == null || element == undefined) {
         this.result3Arr[index] = "";
       }
+      else{
+        this.result3Arr[index] =this.result3Arr[index].value
+      }
     })
     this.finalResultArr.forEach((element, index) => {
       if (element == null || element == undefined) {
         this.finalResultArr[index] = "";
+      }
+      else{
+        this.finalResultArr[index] =this.finalResultArr[index].value
       }
     })
     this.testKitModel['kitValue'].forEach((element, index) => {
@@ -1021,5 +1044,8 @@ export class DTSHIVSerologyPage implements OnInit {
   }
   clearExpDate(i){
   this.expDateObj[i]="";
+  }
+  public objectComparisonFunction = function( option, value ) : boolean {
+    return option.value === value;
   }
 }

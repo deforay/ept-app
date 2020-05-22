@@ -6,7 +6,7 @@
           <ion-title class="eptHeaderTitle">
             All Shipments
           </ion-title>
-          <ion-buttons slot="end" (click)="presentPopover($event)" *ngIf="shippingsArray.length!=0 || NoFilteredData">
+          <ion-buttons slot="end" (click)="presentPopover($event)" *ngIf="shippingsOriginalArray.length!=0 || NoFilteredData">
           <span class="eptHeaderTitle">Filter</span>&nbsp;
           <ion-icon name="funnel" ios="ios-funnel" class="funnelIcon"></ion-icon>
           </ion-buttons>
@@ -19,7 +19,7 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-<ion-searchbar *ngIf="showNoData==false && shippingsArray.length!=0" class="searchBar" [(ngModel)]="search" mode="ios" showCancelButton="never"
+<ion-searchbar *ngIf="shippingsArray.length!=0" class="searchBar" [(ngModel)]="search" mode="ios" showCancelButton="never"
 #searchShipment="ngModel" name="searchShipment"></ion-searchbar>
 
   <mat-chip-list aria-label="Fish selection" class="filterChipList" *ngIf="filterJSON">

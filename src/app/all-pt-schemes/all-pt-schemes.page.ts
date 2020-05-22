@@ -90,7 +90,7 @@ import {
   failureAlertCount: number = 0;
   errSyncAllCount: number = 0;
   showNoData: boolean = false;
-  shippingsCopyArray: any = [];
+  shippingsOriginalArray: any = [];
   NoFilteredData: boolean = false;
   filterJSON: any = [];
   apiUrl: string;
@@ -182,68 +182,68 @@ import {
     if (filterJSON.shipmentFilterID && filterJSON.participantFliterId && filterJSON.schemeTypeFliterID) {
 
       if (filterJSON.shipmentFilterID == 'activeNotResp') {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'shipped' && item.updatedOn == '' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID)
       } else if (filterJSON.shipmentFilterID == 'activeResp') {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
       } else if (filterJSON.shipmentFilterID == 'closed') {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'finalized' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
       } else {}
     } else if (filterJSON.shipmentFilterID && filterJSON.participantFliterId == '' && filterJSON.schemeTypeFliterID == '') {
       if (filterJSON.shipmentFilterID == 'activeNotResp') {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'shipped' && item.updatedOn == '')
       } else if (filterJSON.shipmentFilterID == 'activeResp') {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '');
       } else if (filterJSON.shipmentFilterID == 'closed') {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'finalized');
       } else {}
 
     } else if (filterJSON.shipmentFilterID && filterJSON.participantFliterId && filterJSON.schemeTypeFliterID == '') {
 
       if (filterJSON.shipmentFilterID == 'activeNotResp' && filterJSON.participantFliterId) {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'shipped' && item.updatedOn == '' && item.participantId == filterJSON.participantFliterId)
       } else if (filterJSON.shipmentFilterID == 'activeResp' && filterJSON.participantFliterId) {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.participantId == filterJSON.participantFliterId);
       } else if (filterJSON.shipmentFilterID == 'closed' && filterJSON.participantFliterId) {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'finalized' && item.participantId == filterJSON.participantFliterId);
       } else {}
     } else if (filterJSON.participantFliterId && filterJSON.shipmentFilterID == '' && filterJSON.schemeTypeFliterID == '') {
       if (filterJSON.participantFliterId) {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.participantId == filterJSON.participantFliterId)
       }
     } else if (filterJSON.participantFliterId && filterJSON.schemeTypeFliterID && filterJSON.shipmentFilterID == '') {
 
       if (filterJSON.participantFliterId && filterJSON.schemeTypeFliterID) {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID)
       }
 
     } else if (filterJSON.schemeTypeFliterID && filterJSON.participantFliterId == '' && filterJSON.shipmentFilterID == '') {
 
       if (filterJSON.schemeTypeFliterID) {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.schemeType == filterJSON.schemeTypeFliterID)
       }
 
     } else if (filterJSON.schemeTypeFliterID && filterJSON.shipmentFilterID && filterJSON.participantFliterId == '') {
 
       if (filterJSON.shipmentFilterID == 'activeNotResp' && filterJSON.schemeTypeFliterID) {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'shipped' && item.updatedOn == '' && item.schemeType == filterJSON.schemeTypeFliterID)
       } else if (filterJSON.shipmentFilterID == 'activeResp') {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.schemeType == filterJSON.schemeTypeFliterID);
       } else if (filterJSON.shipmentFilterID == 'closed') {
-        this.shippingsArray = this.shippingsCopyArray.filter(
+        this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'finalized' && item.schemeType == filterJSON.schemeTypeFliterID);
       } else {}
 
@@ -374,13 +374,14 @@ import {
                     if (result["status"] == 'success') {
 
                       this.shippingsArray = result['data'];
-                      this.shippingsCopyArray = result['data'];
-                      this.shippingsArray = this.shippingsCopyArray.filter(
+                      this.shippingsOriginalArray = result['data'];
+                      this.shippingsArray = this.shippingsOriginalArray.filter(
                         item => item.status == 'shipped' && item.updatedOn == '')
                       this.shippingsArray.sort((a, b) => {
                         return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
                       });
-                      this.storage.set("shipmentArray", this.shippingsArray);
+                      console.log(this.shippingsArray);
+                      this.storage.set("shipmentArray", this.shippingsOriginalArray);
                       this.skeltonArray = [];
                       this.getAllShipmentForms();
                       this.checkIsSynced();
@@ -399,6 +400,11 @@ import {
                     }
                     if (result["status"] != 'success') {
                       this.skeltonArray = [];
+                      this.showNoData = true;
+                    } else {
+                      this.showNoData = false;
+                    }
+                    if (this.shippingsArray.length == 0) {
                       this.showNoData = true;
                     } else {
                       this.showNoData = false;
@@ -475,6 +481,11 @@ import {
               }
               if (result["status"] != 'success') {
                 this.skeltonArray = [];
+                this.showNoData = true;
+              } else {
+                this.showNoData = false;
+              }
+              if (this.shippingsArray.length == 0) {
                 this.showNoData = true;
               } else {
                 this.showNoData = false;

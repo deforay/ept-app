@@ -61,7 +61,7 @@ export class ProfilePage implements OnInit {
     private router: Router,
     public CrudServiceService: CrudServiceService,
     public events: Events) {
-   
+
   }
 
   ngOnInit() {}
@@ -102,48 +102,51 @@ export class ProfilePage implements OnInit {
       }
     })
   }
-  updateProfile() {
-    let profileJSON = {
-      "authToken": this.authToken,
-      "appVersion": this.appVersionNumber,
-      "dmId": this.profileDetailsArray.dmId,
-      "primaryEmail": this.primaryEmail,
-      "firstName": this.firstName,
-      "lastName": this.lastName,
-      "secondaryEmail": this.secEmailAddress,
-      "mobile": this.cellPhoneNo,
-      "phone": this.phoneNo
-    }
-    this.CrudServiceService.postData('/api/participant/update-profile', profileJSON).then((result) => {
+  updateProfile(profilePageForm: NgForm) {
+    if (profilePageForm.valid) {
 
-      if (result["status"] == 'success') {
-        this.events.publish("loggedPartiName", this.firstName.concat(' '+this.lastName));
-        this.ToastService.presentToastWithOptions(result['message']);
-        this.router.navigate(['/all-pt-schemes'],{
-          replaceUrl: true
-        });
-      } else if (result["status"] == "force-login") {
-        this.alertService.presentAlert('Success', result["message"]);
-        this.router.navigate(['/login'], {
-          replaceUrl: true
-        });
-      } else if (result["status"] == "auth-fail") {
-        this.alertService.presentAlert('Alert', result["message"]);
-        this.storage.set("isLogOut", true);
-        this.router.navigate(['/login']);
-      } else if (result["status"] == 'version-failed') {
-
-        this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert')
-
-      } else {
-
-        this.alertService.presentAlert('Alert', result["message"]);
+      let profileJSON = {
+        "authToken": this.authToken,
+        "appVersion": this.appVersionNumber,
+        "dmId": this.profileDetailsArray.dmId,
+        "primaryEmail": this.primaryEmail,
+        "firstName": this.firstName,
+        "lastName": this.lastName,
+        "secondaryEmail": this.secEmailAddress,
+        "mobile": this.cellPhoneNo,
+        "phone": this.phoneNo
       }
-    })
+      this.CrudServiceService.postData('/api/participant/update-profile', profileJSON).then((result) => {
+
+        if (result["status"] == 'success') {
+          this.events.publish("loggedPartiName", this.firstName.concat(' ' + this.lastName));
+          this.ToastService.presentToastWithOptions(result['message']);
+          this.router.navigate(['/all-pt-schemes'], {
+            replaceUrl: true
+          });
+        } else if (result["status"] == "force-login") {
+          this.alertService.presentAlert('Success', result["message"]);
+          this.router.navigate(['/login'], {
+            replaceUrl: true
+          });
+        } else if (result["status"] == "auth-fail") {
+          this.alertService.presentAlert('Alert', result["message"]);
+          this.storage.set("isLogOut", true);
+          this.router.navigate(['/login']);
+        } else if (result["status"] == 'version-failed') {
+
+          this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert')
+
+        } else {
+
+          this.alertService.presentAlert('Alert', result["message"]);
+        }
+      })
+    }
   }
 
-  back(){
-    this.router.navigate(['/all-pt-schemes'],{
+  back() {
+    this.router.navigate(['/all-pt-schemes'], {
       replaceUrl: true
     });
   }

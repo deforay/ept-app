@@ -417,8 +417,14 @@
             <mat-panel-title>
               <ion-grid class="panelHeading">
                 <ion-row>
-                  <ion-col size="10" class="grid-readonly-col">
+                  <ion-col size="5" class="grid-readonly-col">
                     <span class="text-title-color">{{sampleName}} <span class="danger-text" *ngIf="samplesArray.mandatory[i]==true">*</span></span>
+                  </ion-col>
+                  <ion-col size="5" class="grid-readonly-col" >
+                  <!-- <span class="resultAbbreviation">{{result1Arr[i]?result1Arr[i].resultCode:'X'}} - {{result2Arr[i]?result2Arr[i].resultCode:'X'}} - {{result3Arr[i]?result3Arr[i].resultCode:'X'}} = {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span> -->
+
+                  <span class="resultAbbreviation">{{result1Arr[i]?result1Arr[i].resultCode:'X'}} - {{result2Arr[i]?result2Arr[i].resultCode:'X'}} - {{result3Arr[i]?result3Arr[i].resultCode:'X'}} = {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span>
+
                   </ion-col>
                   <ion-col size="2" class="grid-readonly-col" *ngIf="isValidSampleDetails[i]">
                     <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
@@ -430,15 +436,15 @@
           <ion-row *ngIf="sampleDetailsArray.resultStatus[0]==true">
            <!-- [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true && 
             !result1Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
-
+           
             <ion-col  size="12" class="grid-readonly-col">
 
               <mat-form-field  class="login-full-width grid-col-form"  appearance="outline">
                 <mat-label>{{sampleDetailsArray.resultsText[0]}}</mat-label>
                 <mat-select [(ngModel)]="result1Arr[i]"
-                name="result1_[{{i}}]" #result1="ngModel" [disabled]="isView=='true'">               
+                name="result1_[{{i}}]" #result1="ngModel" [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">               
                   <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-1'].data" [value]="item.value">
+                  <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-1'].data" [value]="item">
                     {{item.show}}
                   </mat-option>
                 </mat-select>                      
@@ -454,9 +460,9 @@
               <mat-form-field  class="login-full-width grid-col-form"  appearance="outline">
                 <mat-label>{{sampleDetailsArray.resultsText[1]}}</mat-label>
                 <mat-select [(ngModel)]="result2Arr[i]"
-                name="result2_[{{i}}]" #result2="ngModel" [disabled]="isView=='true'">               
+                name="result2_[{{i}}]" #result2="ngModel" [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">               
                   <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-2'].data" [value]="item.value">
+                  <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-2'].data" [value]="item">
                     {{item.show}}
                   </mat-option>
                 </mat-select>                      
@@ -475,9 +481,9 @@
                 <mat-form-field  class="login-full-width grid-col-form"  appearance="outline">
                   <mat-label>{{sampleDetailsArray.resultsText[2]}}</mat-label>
                   <mat-select [(ngModel)]="result3Arr[i]"
-                  name="result3_[{{i}}]" #result3="ngModel" [disabled]="isView=='true'">               
+                  name="result3_[{{i}}]" #result3="ngModel" [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">               
                     <mat-option>--Select--</mat-option>
-                    <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-3'].data" [value]="item.value">
+                    <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-3'].data" [value]="item">
                       {{item.show}}
                     </mat-option>
                   </mat-select>                    
@@ -493,9 +499,9 @@
                 <mat-form-field  class="login-full-width grid-col-form"  appearance="outline">
                   <mat-label>{{sampleDetailsArray.resultsText[3]}}</mat-label>
                   <mat-select [(ngModel)]="finalResultArr[i]"
-                  name="finalResult_[{{i}}]" #finalResult="ngModel" [disabled]="isView=='true'"  >                         
+                  name="finalResult_[{{i}}]" #finalResult="ngModel" [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">           
                     <mat-option>--Select--</mat-option>
-                   <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Final-Result'].data" [value]="item.value">
+                   <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Final-Result'].data" [value]="item">
                       {{item.show}}
                     </mat-option>
                   </mat-select> 

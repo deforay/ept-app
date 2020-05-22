@@ -1,4 +1,5 @@
 /* CSS Changes in DTS - HIV Serology Page */
+
 ion-row {
     p.accessMsg{
         color: #f44336;
@@ -13,6 +14,12 @@ ion-grid ion-row ion-col{
         margin:5px;
     }
 } 
+.resultAbbreviation{
+    float: right;
+    margin: -18px !important;
+    margin-top: 1px!important;
+    color: #28378d;
+}
 ion-grid ion-row ion-col.grid-readonly-col p{
    margin: 0px!important;
 }
