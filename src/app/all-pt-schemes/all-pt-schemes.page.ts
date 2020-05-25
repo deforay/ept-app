@@ -114,6 +114,7 @@ import {
 
   ionViewWillEnter() {
 
+    this.filterJSON=[];
     this.networkType = this.network.type;
 
     //comment when take buid start
@@ -442,6 +443,7 @@ import {
             }
 
             , (err) => {
+         
               this.showNoData = true;
               this.skeltonArray = [];
               if (this.networkType != 'none') {
@@ -461,7 +463,7 @@ import {
     this.storage.get('participantLogin').then((partiLoginResult) => {
         if (partiLoginResult.authToken) {
           this.CrudServiceService.getData('/api/shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
-
+          
               if (result["status"] == 'success') {
                 this.shipmentFormArray = [];
                 this.shipmentFormArray = result['data'];

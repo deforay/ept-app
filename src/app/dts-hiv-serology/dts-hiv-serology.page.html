@@ -420,10 +420,11 @@
                   <ion-col size="5" class="grid-readonly-col">
                     <span class="text-title-color">{{sampleName}} <span class="danger-text" *ngIf="samplesArray.mandatory[i]==true">*</span></span>
                   </ion-col>
+                
                   <ion-col size="5" class="grid-readonly-col" >
-                  <!-- <span class="resultAbbreviation">{{result1Arr[i]?result1Arr[i].resultCode:'X'}} - {{result2Arr[i]?result2Arr[i].resultCode:'X'}} - {{result3Arr[i]?result3Arr[i].resultCode:'X'}} = {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span> -->
-
                   <span class="resultAbbreviation">{{result1Arr[i]?result1Arr[i].resultCode:'X'}} - {{result2Arr[i]?result2Arr[i].resultCode:'X'}} - {{result3Arr[i]?result3Arr[i].resultCode:'X'}} = {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span>
+
+                  <!-- <span class="resultAbbreviation">{{result1Arr[i]?result1Arr[i].resultCode:'X'}} - {{result2Arr[i]?result2Arr[i].resultCode:'X'}} - {{result3Arr[i]?result3Arr[i].resultCode:'X'}} = {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span> -->
 
                   </ion-col>
                   <ion-col size="2" class="grid-readonly-col" *ngIf="isValidSampleDetails[i]">

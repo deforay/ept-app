@@ -126,10 +126,10 @@ export class DTSHIVSerologyPage implements OnInit {
   showOtherInfoData: boolean;
   showCustomFieldData: boolean;
   samplesArray = [];
-  result1Arr :any= [];
-  result2Arr:any = [];
-  result3Arr:any = [];
-  finalResultArr:any = [];
+  result1Arr: any = [];
+  result2Arr: any = [];
+  result3Arr: any = [];
+  finalResultArr: any = [];
   showResult3: boolean = false;
   isValidSampleDetails = [];
   isValidTestKitDetails = [];
@@ -138,6 +138,7 @@ export class DTSHIVSerologyPage implements OnInit {
   dynamicStep = 0;
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
+  samplesLabelPushArray:any=[];
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -205,8 +206,8 @@ export class DTSHIVSerologyPage implements OnInit {
         this.shipmentData['sampleRehydrationDate'] = this.dtsArray[0].dtsData.Heading2.data.sampleRehydrationDate ? new Date(this.dtsArray[0].dtsData.Heading2.data.sampleRehydrationDate) : '';
         this.shipmentData['responseDate'] = this.dtsArray[0].dtsData.Heading2.data.responseDate ? new Date(this.dtsArray[0].dtsData.Heading2.data.responseDate) : '';
         this.shipmentData['shipmentTestingDate'] = this.dtsArray[0].dtsData.Heading2.data.testingDate ? new Date(this.dtsArray[0].dtsData.Heading2.data.testingDate) : '';
-        this.shipmentData['modeOfReceiptDropdown'] = this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelect ? this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelect:[];
-        this.shipmentData['modeOfReceipt'] = this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelected ? this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelected:'';
+        this.shipmentData['modeOfReceiptDropdown'] = this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelect ? this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelect : [];
+        this.shipmentData['modeOfReceipt'] = this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelected ? this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelected : '';
         this.shipmentData['algorithmUsedDropdown'] = this.dtsArray[0].dtsData.Heading2.data.algorithmUsedSelect;
         this.shipmentData['algorithmUsed'] = this.dtsArray[0].dtsData.Heading2.data.algorithmUsedSelected;
         if (this.participantQcAccess == true) {
@@ -289,14 +290,32 @@ export class DTSHIVSerologyPage implements OnInit {
       }
 
       if (this.dtsArray[0].dtsData.Heading4.status == true) {
+        debugger;
         this.showSampleData = true;
         this.sampleDetailsArray = this.dtsArray[0].dtsData.Heading4.data;
         console.log(this.sampleDetailsArray);
         this.sampleIndex = this.sampleDetailsArray.samples.label.length;
         this.samplesArray = this.sampleDetailsArray.samples;
+        this.samplesLabelPushArray.push(this.sampleDetailsArray.samples.label);
         this.samplesNameArr = this.sampleDetailsArray.samples.label;
 
         this.result1Arr = [...this.sampleDetailsArray.samples.result1];
+        //   this.sampleDetailsArray.samples.result1Code.push({'resultCode':"N"})
+        // this.samplesLabelPushArray[0].forEach((sample, index) => {
+        //   this.sampleDetailsArray['sampleList'][sample]['Result-1'].data.forEach((element, index) => {
+        //     debugger;
+        //     if(element.selected=='selected'){
+        //       this.result1Arr[index]=element;
+        //     }
+        //   })
+        // })
+        this.result1Arr[0]={resultCode: "R",
+        selected: "",
+        show: "REACTIVE",
+        value: "1"
+      }
+
+        // this.result1Arr[0].value=0;
         this.result2Arr = [...this.sampleDetailsArray.samples.result2];
         if (this.sampleDetailsArray.samples.result3) {
           this.result3Arr = [...this.sampleDetailsArray.samples.result3];
@@ -392,13 +411,13 @@ export class DTSHIVSerologyPage implements OnInit {
       }
     })
   }
-  onSelectedAlgorithm(algValue){
+  onSelectedAlgorithm(algValue) {
     console.log(this.testKitNameArray);
 
-    if(algValue=='threeTestsDtsAlgo'){
+    if (algValue == 'threeTestsDtsAlgo') {
       console.log(this.testKitNameArray);
-      this.testKitIndex = this.testKitTextArray.length;   
-    }else{
+      this.testKitIndex = this.testKitTextArray.length;
+    } else {
       this.testKitIndex = 0;
       this.testKitTextArray.forEach((element) => {
         if (this.testKitNameArray[element].status == true) {
@@ -461,7 +480,7 @@ export class DTSHIVSerologyPage implements OnInit {
       !this.shipmentData['shipmentTestingDate'] ||
       !this.shipmentData['algorithmUsed'] ||
       (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) ||
-      (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate ) && this.participantQcAccess==true)||
+      (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate) && this.participantQcAccess == true) ||
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
       this.isValidShipmentDetails = false;
       if (param == 'next') {
@@ -494,8 +513,8 @@ export class DTSHIVSerologyPage implements OnInit {
 
   }
   checkSampleDetailPanel(params, index) {
-debugger;
-    if (!this.finalResultArr[index].value) {
+
+    if (!this.finalResultArr[index]) {
       this.isValidSampleDetails[index] = false;
     } else {
       this.isValidSampleDetails[index] = true;
@@ -628,35 +647,32 @@ debugger;
     });
 
     this.result1Arr.forEach((element, index) => {
-      if (element == null || element == undefined) {
+      debugger;
+      if (element == null || element == undefined || element == "") {
         this.result1Arr[index] = "";
-      }
-      else{
-        this.result1Arr[index] =this.result1Arr[index].value
+      } else {
+        this.result1Arr[index] = element;
       }
     })
     this.result2Arr.forEach((element, index) => {
-      if (element == null || element == undefined) {
+      if (element == null || element == undefined || element == "") {
         this.result2Arr[index] = "";
-      }
-      else{
-        this.result2Arr[index] =this.result2Arr[index].value
+      } else {
+        this.result2Arr[index] = element;
       }
     })
     this.result3Arr.forEach((element, index) => {
-      if (element == null || element == undefined) {
+      if (element == null || element == undefined || element == "") {
         this.result3Arr[index] = "";
-      }
-      else{
-        this.result3Arr[index] =this.result3Arr[index].value
+      } else {
+        this.result3Arr[index] = element;
       }
     })
     this.finalResultArr.forEach((element, index) => {
-      if (element == null || element == undefined) {
+      if (element == null || element == undefined || element == "") {
         this.finalResultArr[index] = "";
-      }
-      else{
-        this.finalResultArr[index] =this.finalResultArr[index].value
+      } else {
+        this.finalResultArr[index] = element;
       }
     })
     this.testKitModel['kitValue'].forEach((element, index) => {
@@ -778,6 +794,7 @@ debugger;
         }
       }
       console.log(this.serologyJSON);
+      debugger;
       const element = await this.loadingCtrl.getTop();
       if (element && element.dismiss) {
         element.dismiss();
@@ -787,9 +804,9 @@ debugger;
         message: 'Please wait',
       });
       await loading.present();
-      this.isView='true';
-      this.isShowReviewMsg=true;
-      this.summarizeForm=true;
+      this.isView = 'true';
+      this.isShowReviewMsg = true;
+      this.summarizeForm = true;
       loading.dismiss();
     }
   }
@@ -840,35 +857,31 @@ debugger;
     });
 
     this.result1Arr.forEach((element, index) => {
-      if (element == null || element == undefined) {
+      if (element == null || element == undefined || element == "") {
         this.result1Arr[index] = "";
-      }
-      else{
-        this.result1Arr[index] =this.result1Arr[index].value
+      } else {
+        this.result1Arr[index] = this.result1Arr[index].value
       }
     })
     this.result2Arr.forEach((element, index) => {
-      if (element == null || element == undefined) {
+      if (element == null || element == undefined || element == "") {
         this.result2Arr[index] = "";
-      }
-      else{
-        this.result2Arr[index] =this.result2Arr[index].value
+      } else {
+        this.result2Arr[index] = this.result2Arr[index].value
       }
     })
     this.result3Arr.forEach((element, index) => {
-      if (element == null || element == undefined) {
+      if (element == null || element == undefined || element == "") {
         this.result3Arr[index] = "";
-      }
-      else{
-        this.result3Arr[index] =this.result3Arr[index].value
+      } else {
+        this.result3Arr[index] = this.result3Arr[index].value
       }
     })
     this.finalResultArr.forEach((element, index) => {
-      if (element == null || element == undefined) {
+      if (element == null || element == undefined || element == "") {
         this.finalResultArr[index] = "";
-      }
-      else{
-        this.finalResultArr[index] =this.finalResultArr[index].value
+      } else {
+        this.finalResultArr[index] = this.finalResultArr[index].value
       }
     })
     this.testKitModel['kitValue'].forEach((element, index) => {
@@ -990,39 +1003,40 @@ debugger;
         }
       }
       console.log(this.serologyJSON);
-      if (this.network.type == 'none') {
-        this.serologyJSON['data']['isSynced'] = 'false';
-        this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
+      debugger;
+      // if (this.network.type == 'none') {
+      //   this.serologyJSON['data']['isSynced'] = 'false';
+      //   this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
 
-      } else {
+      // } else {
 
-        this.serologyJSON['data']['isSynced'] = 'true';
-        this.CrudServiceService.postData('/api/shipments/save-form', this.serologyJSON).then((result) => {
-          if (result["status"] == 'success') {
-            this.ToastService.presentToastWithOptions(result['message']);
-            this.router.navigate(['/all-pt-schemes']);
-          } else if (result["status"] == "auth-fail") {
-            this.alertService.presentAlert('Alert', result["message"]);
-            this.storage.set("isLogOut", true);
-            this.router.navigate(['/login']);
-          } else if (result["status"] == 'version-failed') {
+      //   this.serologyJSON['data']['isSynced'] = 'true';
+      //   this.CrudServiceService.postData('/api/shipments/save-form', this.serologyJSON).then((result) => {
+      //     if (result["status"] == 'success') {
+      //       this.ToastService.presentToastWithOptions(result['message']);
+      //       this.router.navigate(['/all-pt-schemes']);
+      //     } else if (result["status"] == "auth-fail") {
+      //       this.alertService.presentAlert('Alert', result["message"]);
+      //       this.storage.set("isLogOut", true);
+      //       this.router.navigate(['/login']);
+      //     } else if (result["status"] == 'version-failed') {
 
-            this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
+      //       this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
 
-          } else {
+      //     } else {
 
-            this.alertService.presentAlert('Alert', result["message"]);
-          }
-        }, (err) => {
-          this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
-        });
-      }
+      //       this.alertService.presentAlert('Alert', result["message"]);
+      //     }
+      //   }, (err) => {
+      //     this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+      //   });
+      // }
     }
   }
   editForm() {
-    this.isShowReviewMsg=false;
+    this.isShowReviewMsg = false;
     this.summarizeForm = true;
-    this.isView='false';
+    this.isView = 'false';
   }
 
   clearTestReceiptDate() {
@@ -1034,18 +1048,19 @@ debugger;
   }
   clearTestingDate() {
 
-    this.shipmentData['shipmentTestingDate']= "";
+    this.shipmentData['shipmentTestingDate'] = "";
   }
-  clearResponseDate(){
-    this.shipmentData['responseDate']="";
+  clearResponseDate() {
+    this.shipmentData['responseDate'] = "";
   }
-  clearQCDate(){
-    this.qcDate="";
+  clearQCDate() {
+    this.qcDate = "";
   }
-  clearExpDate(i){
-  this.expDateObj[i]="";
+  clearExpDate(i) {
+    this.expDateObj[i] = "";
   }
-  public objectComparisonFunction = function( option, value ) : boolean {
-    return option.value === value;
+  public objectComparisonFunction = function (option, value): boolean {
+   
+    return option.value === option.value;
   }
 }
