@@ -156,25 +156,22 @@
         </ion-row>
 
         <ion-row>
-          <ion-col size="6">
-            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && responseSwitch==on && item.isSynced==''" size="small" class="text-center native-btn"
-              (click)="goToTestForm(item)">Enter Response
-            </ion-button>
-
-            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && responseSwitch==on || item.isSynced=='false'" size="small" class="text-center native-btn"
-              (click)="goToTestForm(item)">Edit Response</ion-button>
-
-            <ion-button *ngIf="item.status=='finalized' && item.invididualReport!=''" size="small" class="text-center native-btn download"
-              (click)="downloadReport(item.invididualReport,item.invididualFileName)">Download Report</ion-button>
-
-          </ion-col>
 
           <ion-col size="6">
-            <ion-button size="small"
+            <ion-button size="small" *ngIf="item.updatedOn!=''"
               class="text-center native-btn viewResponse" (click)="goToTestForm(item,'true')">View Response
             </ion-button>
           </ion-col>
 
+          <ion-col size="6">
+            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && responseSwitch==on && item.isSynced==''" size="small" class="text-center native-btn"
+              (click)="goToTestForm(item)">Enter Response
+            </ion-button>
+            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && responseSwitch==on || item.isSynced=='false'" size="small" class="text-center native-btn"
+              (click)="goToTestForm(item)">Edit Response</ion-button>
+            <ion-button *ngIf="item.status=='finalized' && item.invididualReport!=''" size="small" class="text-center native-btn download"
+              (click)="downloadReport(item.invididualReport,item.invididualFileName)">Download Report</ion-button>
+          </ion-col>
         </ion-row>
 
       </ion-grid>
@@ -237,10 +234,39 @@
   </ion-card>
   <!-- ion-skeleton-text code end -->
 
-  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0">
+  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && !filterJSON">
     <ion-card-content class="cardContent">
     <p class="noShipments">
       No shipments available 
+    </p>
+      </ion-card-content>
+  </ion-card>
+
+
+  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='activeNotResp'">
+    <ion-card-content class="cardContent">
+    <p class="noShipments">
+      No active shipments found. <br>
+      If you would like to see previous shipments, please click on the filter button above and choose an appropriate option.
+    </p>
+      </ion-card-content>
+  </ion-card>
+
+
+  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='activeResp'">
+    <ion-card-content class="cardContent">
+    <p class="noShipments">
+      No active shipments that are already responded found. <br>
+      If you would like to see other shipments, please click on the filter button above and choose an appropriate option.
+    </p>
+      </ion-card-content>
+  </ion-card>
+
+  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='closed'">
+    <ion-card-content class="cardContent">
+    <p class="noShipments">
+      No finalized/closed shipments found. <br>
+      If you would like to see other shipments, please click on the filter button above and choose an appropriate option.
     </p>
       </ion-card-content>
   </ion-card>

@@ -79,6 +79,7 @@ export class IndividualReportPage {
    }
    const loading = await this.loadingCtrl.create({
      spinner: 'dots',
+     mode:'ios',
      message: 'Please wait',
    });
    await loading.present();

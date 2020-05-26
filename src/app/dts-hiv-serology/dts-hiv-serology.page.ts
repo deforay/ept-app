@@ -138,7 +138,6 @@ export class DTSHIVSerologyPage implements OnInit {
   dynamicStep = 0;
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
-  samplesLabelPushArray:any=[];
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -290,32 +289,15 @@ export class DTSHIVSerologyPage implements OnInit {
       }
 
       if (this.dtsArray[0].dtsData.Heading4.status == true) {
-        debugger;
+       
         this.showSampleData = true;
         this.sampleDetailsArray = this.dtsArray[0].dtsData.Heading4.data;
         console.log(this.sampleDetailsArray);
         this.sampleIndex = this.sampleDetailsArray.samples.label.length;
         this.samplesArray = this.sampleDetailsArray.samples;
-        this.samplesLabelPushArray.push(this.sampleDetailsArray.samples.label);
         this.samplesNameArr = this.sampleDetailsArray.samples.label;
 
         this.result1Arr = [...this.sampleDetailsArray.samples.result1];
-        //   this.sampleDetailsArray.samples.result1Code.push({'resultCode':"N"})
-        // this.samplesLabelPushArray[0].forEach((sample, index) => {
-        //   this.sampleDetailsArray['sampleList'][sample]['Result-1'].data.forEach((element, index) => {
-        //     debugger;
-        //     if(element.selected=='selected'){
-        //       this.result1Arr[index]=element;
-        //     }
-        //   })
-        // })
-        this.result1Arr[0]={resultCode: "R",
-        selected: "",
-        show: "REACTIVE",
-        value: "1"
-      }
-
-        // this.result1Arr[0].value=0;
         this.result2Arr = [...this.sampleDetailsArray.samples.result2];
         if (this.sampleDetailsArray.samples.result3) {
           this.result3Arr = [...this.sampleDetailsArray.samples.result3];
@@ -514,7 +496,7 @@ export class DTSHIVSerologyPage implements OnInit {
   }
   checkSampleDetailPanel(params, index) {
 
-    if (!this.finalResultArr[index]) {
+    if (!this.finalResultArr[index].value) {
       this.isValidSampleDetails[index] = false;
     } else {
       this.isValidSampleDetails[index] = true;
@@ -647,30 +629,49 @@ export class DTSHIVSerologyPage implements OnInit {
     });
 
     this.result1Arr.forEach((element, index) => {
-      debugger;
       if (element == null || element == undefined || element == "") {
-        this.result1Arr[index] = "";
+        this.result1Arr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
       } else {
         this.result1Arr[index] = element;
       }
     })
     this.result2Arr.forEach((element, index) => {
       if (element == null || element == undefined || element == "") {
-        this.result2Arr[index] = "";
+        this.result2Arr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
       } else {
         this.result2Arr[index] = element;
       }
     })
     this.result3Arr.forEach((element, index) => {
       if (element == null || element == undefined || element == "") {
-        this.result3Arr[index] = "";
+        this.result3Arr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
       } else {
         this.result3Arr[index] = element;
       }
     })
     this.finalResultArr.forEach((element, index) => {
       if (element == null || element == undefined || element == "") {
-        this.finalResultArr[index] = "";
+        this.finalResultArr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
       } else {
         this.finalResultArr[index] = element;
       }
@@ -794,13 +795,14 @@ export class DTSHIVSerologyPage implements OnInit {
         }
       }
       console.log(this.serologyJSON);
-      debugger;
+  
       const element = await this.loadingCtrl.getTop();
       if (element && element.dismiss) {
         element.dismiss();
       }
       const loading = await this.loadingCtrl.create({
         spinner: 'dots',
+        mode:'ios',
         message: 'Please wait',
       });
       await loading.present();
@@ -858,30 +860,50 @@ export class DTSHIVSerologyPage implements OnInit {
 
     this.result1Arr.forEach((element, index) => {
       if (element == null || element == undefined || element == "") {
-        this.result1Arr[index] = "";
+        this.result1Arr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
       } else {
-        this.result1Arr[index] = this.result1Arr[index].value
+        this.result1Arr[index] = element
       }
     })
     this.result2Arr.forEach((element, index) => {
       if (element == null || element == undefined || element == "") {
-        this.result2Arr[index] = "";
+        this.result2Arr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
       } else {
-        this.result2Arr[index] = this.result2Arr[index].value
+        this.result2Arr[index] = element
       }
     })
     this.result3Arr.forEach((element, index) => {
       if (element == null || element == undefined || element == "") {
-        this.result3Arr[index] = "";
+        this.result3Arr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
       } else {
-        this.result3Arr[index] = this.result3Arr[index].value
+        this.result3Arr[index] = element
       }
     })
     this.finalResultArr.forEach((element, index) => {
       if (element == null || element == undefined || element == "") {
-        this.finalResultArr[index] = "";
+        this.finalResultArr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
       } else {
-        this.finalResultArr[index] = this.finalResultArr[index].value
+        this.finalResultArr[index] = element
       }
     })
     this.testKitModel['kitValue'].forEach((element, index) => {
@@ -1003,34 +1025,34 @@ export class DTSHIVSerologyPage implements OnInit {
         }
       }
       console.log(this.serologyJSON);
-      debugger;
-      // if (this.network.type == 'none') {
-      //   this.serologyJSON['data']['isSynced'] = 'false';
-      //   this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
+    
+      if (this.network.type == 'none') {
+        this.serologyJSON['data']['isSynced'] = 'false';
+        this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
 
-      // } else {
+      } else {
 
-      //   this.serologyJSON['data']['isSynced'] = 'true';
-      //   this.CrudServiceService.postData('/api/shipments/save-form', this.serologyJSON).then((result) => {
-      //     if (result["status"] == 'success') {
-      //       this.ToastService.presentToastWithOptions(result['message']);
-      //       this.router.navigate(['/all-pt-schemes']);
-      //     } else if (result["status"] == "auth-fail") {
-      //       this.alertService.presentAlert('Alert', result["message"]);
-      //       this.storage.set("isLogOut", true);
-      //       this.router.navigate(['/login']);
-      //     } else if (result["status"] == 'version-failed') {
+        this.serologyJSON['data']['isSynced'] = 'true';
+        this.CrudServiceService.postData('/api/shipments/save-form', this.serologyJSON).then((result) => {
+          if (result["status"] == 'success') {
+            this.ToastService.presentToastWithOptions(result['message']);
+            this.router.navigate(['/all-pt-schemes']);
+          } else if (result["status"] == "auth-fail") {
+            this.alertService.presentAlert('Alert', result["message"]);
+            this.storage.set("isLogOut", true);
+            this.router.navigate(['/login']);
+          } else if (result["status"] == 'version-failed') {
 
-      //       this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
+            this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
 
-      //     } else {
+          } else {
 
-      //       this.alertService.presentAlert('Alert', result["message"]);
-      //     }
-      //   }, (err) => {
-      //     this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
-      //   });
-      // }
+            this.alertService.presentAlert('Alert', result["message"]);
+          }
+        }, (err) => {
+          this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+        });
+      }
     }
   }
   editForm() {
@@ -1059,8 +1081,8 @@ export class DTSHIVSerologyPage implements OnInit {
   clearExpDate(i) {
     this.expDateObj[i] = "";
   }
-  public objectComparisonFunction = function (option, value): boolean {
-   
-    return option.value === option.value;
+  objectComparisonFunction(o1: any, o2: any): boolean {
+    return o1.value === o2.value;
   }
+
 }

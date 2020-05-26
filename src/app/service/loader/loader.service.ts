@@ -19,6 +19,7 @@ export class LoaderService {
 
     const loading = await this.loadingController.create({
       spinner: 'dots',
+      mode:'ios',
       message: 'Please wait',
     });
     await loading.present();
@@ -27,6 +28,7 @@ export class LoaderService {
   async Loading(load) {
     const loading = await this.loadingController.create({
       spinner: 'dots',
+      mode:'ios',
       message: 'Please wait',
     });
     if (load == 'present') {

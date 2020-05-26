@@ -23,6 +23,7 @@ export class AlertService {
       header: headerMessage,
       subHeader:subtitle,
       message: contentMessage,
+      mode:"ios",
       buttons: [
         {
           text: rightSideButtonText,
@@ -68,6 +69,7 @@ export class AlertService {
       header: headerMessage,
     //  subHeader: 'Subtitle',
       message: contentMessage,
+      mode:"ios",
       buttons: [
         {
           text: 'OK',

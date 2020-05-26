@@ -175,10 +175,11 @@ import {
     const loading = await this.loadingCtrl.create({
       spinner: 'dots',
       message: 'Please wait',
+      mode:'ios'
     });
     await loading.present();
     this.shippingsArray = [];
-    console.log(filterJSON);
+   
 
     if (filterJSON.shipmentFilterID && filterJSON.participantFliterId && filterJSON.schemeTypeFliterID) {
 
@@ -191,7 +192,8 @@ import {
       } else if (filterJSON.shipmentFilterID == 'closed') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'finalized' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
-      } else {}
+      } else {
+      }
     } else if (filterJSON.shipmentFilterID && filterJSON.participantFliterId == '' && filterJSON.schemeTypeFliterID == '') {
       if (filterJSON.shipmentFilterID == 'activeNotResp') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
@@ -556,6 +558,7 @@ import {
 
     const loading = await this.loadingCtrl.create({
         spinner: 'dots',
+        mode:'ios',
         message: 'Please wait',
       }
 
@@ -834,6 +837,7 @@ import {
     }
     const loading = await this.loadingCtrl.create({
       spinner: 'dots',
+      mode:'ios',
       message: 'Please wait',
     });
     await loading.present();

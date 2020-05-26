@@ -111,9 +111,7 @@ export class AppPasswordPage implements OnInit {
   }
   pswdConfig(){
     this.pswdhide = !this.pswdhide; 
-   // if(pss)
     this.config.isPasswordInput = !this.config.isPasswordInput;
-    console.log(this.config)
   }
  
   setVal(val) {
@@ -123,7 +121,7 @@ export class AppPasswordPage implements OnInit {
 
  async onConfirmPinNumberChange(pin){
     this.confirmAppPin = pin;
-    console.log(pin);
+
     var regex = /^[0-9]*$/
 
     var isValid = regex.test(pin);
@@ -131,7 +129,7 @@ export class AppPasswordPage implements OnInit {
     let totalId = document.getElementsByClassName("wrapper")[1].id;
     let totalIdlen = document.getElementsByClassName("wrapper")[1].id.length;
     let mainId = totalId.substr(2, totalIdlen);
-   console.log(mainId);
+
     let prevInputId  = 'otp_' + (pin.length -1).toString()+'_' + mainId;
 
     if (!isValid) {
@@ -149,6 +147,7 @@ export class AppPasswordPage implements OnInit {
     const loading = await this.loadingCtrl.create({
       message: 'Please wait...',
       spinner: 'dots',
+      mode:'ios',
       backdropDismiss: false
     });
 
@@ -194,8 +193,7 @@ export class AppPasswordPage implements OnInit {
     let totalId = document.getElementsByClassName("wrapper")[0].id;
     let totalIdlen = document.getElementsByClassName("wrapper")[0].id.length;
     let mainId = totalId.substr(2, totalIdlen);
-    console.log(mainId);
-   
+  
     let prevInputId  = 'otp_' + (pin.length -1).toString()+'_' + mainId;
 
     if (!isValid) {

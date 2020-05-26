@@ -16,8 +16,9 @@ export class ToastService {
     const toast = await this.toastCtrl.create({
       header: message,
       cssClass:'toastMessage',
+      mode:'ios',
      // message: message,
-      duration: 2000,
+      //duration: 2000,
       position: 'bottom',
       // buttons: [
       //   {
@@ -44,7 +45,7 @@ export class ToastService {
 
     header: message,
     cssClass:'toastMessage',
-
+    mode:'ios',
     // duration: 10000,
      position: 'bottom',
     //  buttons: [

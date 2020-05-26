@@ -420,12 +420,8 @@
                   <ion-col size="5" class="grid-readonly-col">
                     <span class="text-title-color">{{sampleName}} <span class="danger-text" *ngIf="samplesArray.mandatory[i]==true">*</span></span>
                   </ion-col>
-                
                   <ion-col size="5" class="grid-readonly-col" >
                   <span class="resultAbbreviation">{{result1Arr[i]?result1Arr[i].resultCode:'X'}} - {{result2Arr[i]?result2Arr[i].resultCode:'X'}} - {{result3Arr[i]?result3Arr[i].resultCode:'X'}} = {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span>
-
-                  <!-- <span class="resultAbbreviation">{{result1Arr[i]?result1Arr[i].resultCode:'X'}} - {{result2Arr[i]?result2Arr[i].resultCode:'X'}} - {{result3Arr[i]?result3Arr[i].resultCode:'X'}} = {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span> -->
-
                   </ion-col>
                   <ion-col size="2" class="grid-readonly-col" *ngIf="isValidSampleDetails[i]">
                     <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
@@ -439,7 +435,6 @@
             !result1Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
            
             <ion-col  size="12" class="grid-readonly-col">
-
               <mat-form-field  class="login-full-width grid-col-form"  appearance="outline">
                 <mat-label>{{sampleDetailsArray.resultsText[0]}}</mat-label>
                 <mat-select [(ngModel)]="result1Arr[i]"

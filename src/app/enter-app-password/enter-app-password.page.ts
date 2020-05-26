@@ -130,6 +130,7 @@ export class EnterAppPasswordPage implements OnInit {
       const loading = await this.loadingCtrl.create({
         message: 'Please wait...',
         spinner: 'dots',
+        mode:'ios',
         backdropDismiss: false
       });
       this.storage.get('appPin').then((pinNumber) => {
