@@ -6,7 +6,6 @@ import {
   Router
 } from '@angular/router';
 import {
-  ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
@@ -47,7 +46,8 @@ import {
   File
 } from '@ionic-native/file/ngx';
 import {
-  ROOT_DIRECTORY
+  ROOT_DIRECTORY,
+  SHIPMENTS_REPORTS_DIRECTORY
 } from '../../app/service/constant';
 @Component({
     selector: 'app-all-pt-schemes',
@@ -96,7 +96,6 @@ import {
   apiUrl: string;
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
-    public ToastService: ToastService,
     public LoaderService: LoaderService,
     private router: Router,
     public network: Network,
@@ -106,7 +105,7 @@ import {
     public popoverController: PopoverController,
     private ft: FileTransfer,
     private file: File,
-    private fileOpener: FileOpener,) {}
+    private fileOpener: FileOpener, ) {}
 
   dateFormat(dateObj) {
     return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
@@ -114,12 +113,12 @@ import {
 
   ionViewWillEnter() {
 
-    this.filterJSON=[];
+    this.filterJSON = [];
     this.networkType = this.network.type;
 
     //comment when take buid start
 
-    // this.networkType = "4G";
+    //   this.networkType = 'none';
 
     //end...
 
@@ -150,7 +149,7 @@ import {
       .then((data) => {
         if (data['data']) {
           if (data['data'] == 'reset') {
-            this.filterJSON=[];
+            this.filterJSON = [];
             this.onloadShipment();
           } else {
             this.filterJSON = data['data'];
@@ -175,11 +174,11 @@ import {
     const loading = await this.loadingCtrl.create({
       spinner: 'dots',
       message: 'Please wait',
-      mode:'ios'
+      mode: 'ios'
     });
     await loading.present();
     this.shippingsArray = [];
-   
+
 
     if (filterJSON.shipmentFilterID && filterJSON.participantFliterId && filterJSON.schemeTypeFliterID) {
 
@@ -192,8 +191,7 @@ import {
       } else if (filterJSON.shipmentFilterID == 'closed') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'finalized' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
-      } else {
-      }
+      } else {}
     } else if (filterJSON.shipmentFilterID && filterJSON.participantFliterId == '' && filterJSON.schemeTypeFliterID == '') {
       if (filterJSON.shipmentFilterID == 'activeNotResp') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
@@ -311,6 +309,15 @@ import {
 
       if (shipmentArray.length != 0) {
         this.shippingsArray = shipmentArray;
+        this.shippingsOriginalArray = shipmentArray;
+        this.shippingsArray = this.shippingsOriginalArray.filter(
+          item => item.status == 'shipped' && item.updatedOn == '')
+        this.shippingsArray.sort((a, b) => {
+          return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
+        });
+        console.log(this.shippingsArray);
+        this.storage.set("shipmentArray", this.shippingsOriginalArray);
+        this.skeltonArray = [];
       }
     })
 
@@ -445,7 +452,7 @@ import {
             }
 
             , (err) => {
-         
+
               this.showNoData = true;
               this.skeltonArray = [];
               if (this.networkType != 'none') {
@@ -465,7 +472,7 @@ import {
     this.storage.get('participantLogin').then((partiLoginResult) => {
         if (partiLoginResult.authToken) {
           this.CrudServiceService.getData('/api/shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
-          
+
               if (result["status"] == 'success') {
                 this.shipmentFormArray = [];
                 this.shipmentFormArray = result['data'];
@@ -558,7 +565,7 @@ import {
 
     const loading = await this.loadingCtrl.create({
         spinner: 'dots',
-        mode:'ios',
+        mode: 'ios',
         message: 'Please wait',
       }
 
@@ -696,15 +703,15 @@ import {
               this.getAllShippings();
 
               if (this.responseSuccessCount != 0 && this.responseErrorCount == 0) {
-                this.ToastService.presentToastWithOptions(+this.responseSuccessCount + ' records synced successfully');
+                this.alertService.presentAlert('Success',+this.responseSuccessCount + ' records synced successfully');
               }
 
               if (this.responseSuccessCount != 0 && this.responseErrorCount != 0) {
-                this.ToastService.presentToastWithOptions(+this.responseSuccessCount + ' records synced and ' + this.responseErrorCount + ' records unsynced successfully');
+                this.alertService.presentAlert('Success',+this.responseSuccessCount + ' records synced and ' + this.responseErrorCount + ' records unsynced successfully');
               }
 
               if (this.responseSuccessCount == 0 && this.responseErrorCount != 0) {
-                this.ToastService.presentToastWithOptions(+this.responseErrorCount + ' records unsynced');
+                this.alertService.presentAlert('Success',+this.responseErrorCount + ' records unsynced');
               }
             }
 
@@ -788,15 +795,15 @@ import {
               this.getAllShippings();
 
               if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount == 0) {
-                this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records synced successfully');
+                this.alertService.presentAlert('Success',+this.subListRespSuccessCount + ' records synced successfully');
               }
 
               if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount != 0) {
-                this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records synced and ' + this.subListRespErrorCount + ' records unsynced successfully');
+                this.alertService.presentAlert('Success',+this.subListRespSuccessCount + ' records synced and ' + this.subListRespErrorCount + ' records unsynced successfully');
               }
 
               if (this.subListRespSuccessCount == 0 && this.subListRespErrorCount != 0) {
-                this.ToastService.presentToastWithOptions(+this.subListRespSuccessCount + ' records unsynced');
+                this.alertService.presentAlert('Success',+this.subListRespSuccessCount + ' records unsynced');
               }
             }
           } else if (result["status"] == "auth-fail") {
@@ -830,22 +837,22 @@ import {
   }
 
   async downloadReport(downloadLink, fileName) {
- 
-   const element = await this.loadingCtrl.getTop();
+
+    const element = await this.loadingCtrl.getTop();
     if (element && element.dismiss) {
       element.dismiss();
     }
     const loading = await this.loadingCtrl.create({
       spinner: 'dots',
-      mode:'ios',
+      mode: 'ios',
       message: 'Please wait',
     });
     await loading.present();
-  
+
     const fileTransfer: FileTransferObject = this.ft.create();
     let downloadUrl = this.apiUrl + downloadLink;
 
-    let path = this.file.externalRootDirectory + ROOT_DIRECTORY + '/';
+    let path = this.file.externalRootDirectory + ROOT_DIRECTORY + '/' + SHIPMENTS_REPORTS_DIRECTORY;
     fileTransfer.download(downloadUrl, path + fileName).then((entry) => {
       console.log('download complete: ' + entry.toURL());
       let url = entry.toURL();
@@ -853,7 +860,7 @@ import {
       this.fileOpener.open(url, 'application/pdf');
     }, (error) => {
       loading.dismiss();
-      this.alertService.presentAlert('Alert','Something went wrong.Please try again later.');
+      this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
       console.log(error);
     });
   }

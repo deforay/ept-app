@@ -139,6 +139,7 @@ export class EnterAppPasswordPage implements OnInit {
           if (pin.length == 4 && this.appPin == pinNumber) {
             loading.present();
             setTimeout(() => {
+              
               loading.dismiss();
             
               this.ToastService.presentToastWithOptions("Pin verified successfully");

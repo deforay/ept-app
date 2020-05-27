@@ -91,9 +91,12 @@ ion-menu-button{
      color:white !important;
 }
 .text-center.native-btn.viewResponse{
-float: right;
+    float: left;
 }
-.text-center.native-btn.download{
+.text-center.native-btn.enterEdit.download{
     font-size: 10px!important;
+}
+.text-center.native-btn.enterEdit{
+    float: right;
 }
 

@@ -39,7 +39,7 @@ import {
   File
 } from '@ionic-native/file/ngx';
 import {
-  ROOT_DIRECTORY
+  ROOT_DIRECTORY,INDIVIDUAL_REPORTS_DIRECTORY,SUMMARY_REPORTS_DIRECTORY,SHIPMENTS_REPORTS_DIRECTORY
 } from '../app/service/constant';
 @Component({
   selector: 'app-root',
@@ -123,6 +123,20 @@ export class AppComponent {
       //Create Directory for EPT REPORTS
       this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
 
+      let newdir = this.file.externalRootDirectory + ROOT_DIRECTORY + '/';
+      console.log(newdir);
+
+      setTimeout(function () {
+        this.directoryProvider.createDirectory(newdir, INDIVIDUAL_REPORTS_DIRECTORY);
+      }, 4000);
+
+      setTimeout(function () {
+        this.directoryProvider.createDirectory(newdir, SUMMARY_REPORTS_DIRECTORY);
+      }, 6000);
+
+      setTimeout(function () {
+        this.directoryProvider.createDirectory(newdir, SHIPMENTS_REPORTS_DIRECTORY);
+      }, 8000);
 
       this.NetworkService.initializeNetworkEvents();
       if (this.network.type == 'none') {
@@ -138,7 +152,7 @@ export class AppComponent {
       }
 
       this.platform.backButton.subscribeWithPriority(0, () => {
-        if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes' || this.router.url === '/individual-report' || this.router.url === '/summary-report') {
+        if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes' || this.router.url === '/individual-report' || this.router.url === '/summary-report' ) {
 
           this.alertService.presentAlertConfirm('e-PT', '',"Are you sure want to exit?",'No','Yes','appExitAlert');
 
@@ -161,6 +175,7 @@ export class AppComponent {
 
     this.storage.get('isLogOut').then((isLogOut) => {
       this.storage.get('appPin').then((appPin) => {
+      
         if (isLogOut==false && appPin && this.router.url != '/') {
           if (this.router.url == '/all-pt-schemes') {
             this.selectedIndex = 0;
@@ -184,7 +199,7 @@ export class AppComponent {
             });
           }
           else if (this.router.url == '/profile') {
-            this.selectedIndex = 1;
+            this.selectedIndex = 4;
             this.router.navigate(['/profile'], {
               replaceUrl: true
             });
@@ -201,7 +216,7 @@ export class AppComponent {
         } 
         else if (isLogOut && !appPin) {
           this.selectedIndex = 0;
-          this.router.navigateByUrl('/app-password');
+          this.router.navigateByUrl('/login');
         } else {
           this.selectedIndex = 0;
           this.router.navigateByUrl('/login');

@@ -32,7 +32,7 @@ import {
   FileOpener
 } from '@ionic-native/file-opener/ngx';
 import {
-  ROOT_DIRECTORY
+  ROOT_DIRECTORY,INDIVIDUAL_REPORTS_DIRECTORY
 } from '../../app/service/constant';
 import {
   Network
@@ -86,8 +86,7 @@ export class IndividualReportPage {
 
     const fileTransfer: FileTransferObject = this.ft.create();
     let downloadUrl = this.apiUrl + downloadLink;
-
-    let path = this.file.externalRootDirectory + ROOT_DIRECTORY + '/';
+    let path = this.file.externalRootDirectory + ROOT_DIRECTORY + '/' +INDIVIDUAL_REPORTS_DIRECTORY;
     fileTransfer.download(downloadUrl, path + fileName).then((entry) => {
       console.log('download complete: ' + entry.toURL());
       let url = entry.toURL();

@@ -430,7 +430,7 @@
               </ion-grid>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <ion-row *ngIf="sampleDetailsArray.resultStatus[0]==true">
+          <ion-row *ngIf="sampleDetailsArray.resultStatus[0]==true" class="sampleRow">
            <!-- [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true && 
             !result1Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
            
@@ -635,7 +635,7 @@
 
       <mat-action-row>
         <button mat-button color="primary" (click)="prevStep()">Previous</button>
-        <button mat-button color="warn" *ngIf="summarizeForm==false" (click)="submitSerologyForm(shipmentPanelForm,sampleDetailsForm,otherInfoPanelForm)">Submit</button>
+        <button mat-button color="warn" *ngIf="summarizeForm==false && isView!='true'" (click)="submitSerologyForm(shipmentPanelForm,sampleDetailsForm,otherInfoPanelForm)">Submit</button>
       </mat-action-row>
     </mat-expansion-panel>
     </form>

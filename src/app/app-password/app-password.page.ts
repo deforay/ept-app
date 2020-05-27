@@ -156,7 +156,7 @@ export class AppPasswordPage implements OnInit {
 
       this.storage.set('appPin', this.confirmAppPin);
       setTimeout(() => {
-        loading.dismiss();
+      //  loading.dismiss();
         this.ToastService.presentToastWithOptions("App PIN number created successfully");
         this.router.navigate(['/all-pt-schemes'],{replaceUrl:true});
         this.createAppPin = '';

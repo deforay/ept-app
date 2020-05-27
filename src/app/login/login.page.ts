@@ -110,6 +110,10 @@ export class LoginPage implements OnInit {
     this.menu.enable(true);
   }
 
+  ionViewWillEnter(){
+    this.storage.remove('appPin');
+  }
+
   login() {
 
     if (this.network.type == 'none') {

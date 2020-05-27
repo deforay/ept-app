@@ -18,7 +18,7 @@ export class ToastService {
       cssClass:'toastMessage',
       mode:'ios',
      // message: message,
-      //duration: 2000,
+      duration: 3000,
       position: 'bottom',
       // buttons: [
       //   {
@@ -46,7 +46,7 @@ export class ToastService {
     header: message,
     cssClass:'toastMessage',
     mode:'ios',
-    // duration: 10000,
+    duration: 3000,
      position: 'bottom',
     //  buttons: [
     //    {

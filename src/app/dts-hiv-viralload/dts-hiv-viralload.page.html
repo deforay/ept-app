@@ -670,7 +670,7 @@
         <mat-action-row>
           <button mat-button color="primary" (click)="prevStep()">Previous</button>   
 
-          <button mat-button color="primary" *ngIf="summarizeForm==false" (click)="submitViralLoad(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>  
+          <button mat-button color="primary" *ngIf="summarizeForm==false && isView!='true'" (click)="submitViralLoad(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>  
         </mat-action-row>
 
       </mat-expansion-panel>

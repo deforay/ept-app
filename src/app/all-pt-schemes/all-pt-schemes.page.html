@@ -164,12 +164,12 @@
           </ion-col>
 
           <ion-col size="6">
-            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && responseSwitch==on && item.isSynced==''" size="small" class="text-center native-btn"
+            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && responseSwitch==on && item.isSynced==''" size="small" class="text-center native-btn enterEdit"
               (click)="goToTestForm(item)">Enter Response
             </ion-button>
-            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && responseSwitch==on || item.isSynced=='false'" size="small" class="text-center native-btn"
+            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && responseSwitch==on || item.isSynced=='false'" size="small" class="text-center native-btn enterEdit"
               (click)="goToTestForm(item)">Edit Response</ion-button>
-            <ion-button *ngIf="item.status=='finalized' && item.invididualReport!=''" size="small" class="text-center native-btn download"
+            <ion-button *ngIf="item.status=='finalized' && item.invididualReport!=''" size="small" class="text-center native-btn enterEdit download"
               (click)="downloadReport(item.invididualReport,item.invididualFileName)">Download Report</ion-button>
           </ion-col>
         </ion-row>
@@ -236,9 +236,11 @@
 
   <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && !filterJSON">
     <ion-card-content class="cardContent">
-    <p class="noShipments">
-      No shipments available 
-    </p>
+      <p class="noShipments">
+        No active shipments found. <br>
+        If you would like to see previous shipments, please click on the filter button above and choose an appropriate option.<br>
+        Please contact your PT provider if you need support.
+      </p>
       </ion-card-content>
   </ion-card>
 
@@ -247,7 +249,8 @@
     <ion-card-content class="cardContent">
     <p class="noShipments">
       No active shipments found. <br>
-      If you would like to see previous shipments, please click on the filter button above and choose an appropriate option.
+      If you would like to see previous shipments, please click on the filter button above and choose an appropriate option.<br>
+      Please contact your PT provider if you need support.
     </p>
       </ion-card-content>
   </ion-card>
@@ -257,7 +260,8 @@
     <ion-card-content class="cardContent">
     <p class="noShipments">
       No active shipments that are already responded found. <br>
-      If you would like to see other shipments, please click on the filter button above and choose an appropriate option.
+      If you would like to see other shipments, please click on the filter button above and choose an appropriate option.<br>
+      Please contact your PT provider if you need support.
     </p>
       </ion-card-content>
   </ion-card>
@@ -266,7 +270,8 @@
     <ion-card-content class="cardContent">
     <p class="noShipments">
       No finalized/closed shipments found. <br>
-      If you would like to see other shipments, please click on the filter button above and choose an appropriate option.
+      If you would like to see other shipments, please click on the filter button above and choose an appropriate option.<br>
+      Please contact your PT provider if you need support.
     </p>
       </ion-card-content>
   </ion-card>

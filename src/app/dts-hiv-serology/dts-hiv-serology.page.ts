@@ -11,7 +11,6 @@ import {
   ErrorStateMatcher
 } from '@angular/material/core';
 import {
-  ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
@@ -141,7 +140,6 @@ export class DTSHIVSerologyPage implements OnInit {
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
-    public ToastService: ToastService,
     public LoaderService: LoaderService,
     private router: Router,
     public network: Network,
@@ -1035,7 +1033,7 @@ export class DTSHIVSerologyPage implements OnInit {
         this.serologyJSON['data']['isSynced'] = 'true';
         this.CrudServiceService.postData('/api/shipments/save-form', this.serologyJSON).then((result) => {
           if (result["status"] == 'success') {
-            this.ToastService.presentToastWithOptions(result['message']);
+            this.alertService.presentAlert('Success', result["message"]);
             this.router.navigate(['/all-pt-schemes']);
           } else if (result["status"] == "auth-fail") {
             this.alertService.presentAlert('Alert', result["message"]);
