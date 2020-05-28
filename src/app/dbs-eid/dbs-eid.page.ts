@@ -16,7 +16,6 @@ import {
   ActivatedRoute
 } from '@angular/router';
 import {
-  ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
@@ -109,7 +108,6 @@ export class DbsEidPage implements OnInit {
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
-    public ToastService: ToastService,
     public LoaderService: LoaderService,
     public CrudServiceService: CrudServiceService,
     private sanitizer: DomSanitizer,
@@ -782,7 +780,7 @@ export class DbsEidPage implements OnInit {
 
         this.CrudServiceService.postData('/api/shipments/save-form', this.EIDJSON).then((result) => {
             if (result["status"] == 'success') {
-              this.ToastService.presentToastWithOptions(result['message']);
+              this.alertService.presentAlert('Success',result['message']);
               this.router.navigate(['/all-pt-schemes']);
             }
             else if (result["status"] == "auth-fail") {

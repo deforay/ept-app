@@ -6,7 +6,6 @@ import {
   Storage
 } from '@ionic/storage';
 import {
-  ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
@@ -79,7 +78,6 @@ export class AppPasswordPage implements OnInit {
 
   constructor(private storage: Storage,  private router: Router,
     public CrudServiceService: CrudServiceService,
-    public ToastService: ToastService,
     public LoaderService: LoaderService,
     public alertService: AlertService,
     public menu: MenuController,
@@ -156,8 +154,8 @@ export class AppPasswordPage implements OnInit {
 
       this.storage.set('appPin', this.confirmAppPin);
       setTimeout(() => {
-      //  loading.dismiss();
-        this.ToastService.presentToastWithOptions("App PIN number created successfully");
+        loading.dismiss();
+        this.alertService.presentAlert('Success',"App PIN number created successfully");
         this.router.navigate(['/all-pt-schemes'],{replaceUrl:true});
         this.createAppPin = '';
         this.ngCreatePinInput.setValue('');

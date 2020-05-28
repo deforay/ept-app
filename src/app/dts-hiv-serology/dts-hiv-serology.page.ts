@@ -1023,7 +1023,7 @@ export class DTSHIVSerologyPage implements OnInit {
         }
       }
       console.log(this.serologyJSON);
-    
+  
       if (this.network.type == 'none') {
         this.serologyJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);

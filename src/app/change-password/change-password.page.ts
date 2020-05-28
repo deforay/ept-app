@@ -27,7 +27,6 @@ import {
   Router
 } from '@angular/router';
 import {
-  ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
@@ -74,7 +73,6 @@ export class ChangePasswordPage implements OnInit {
   constructor(
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
-    public ToastService: ToastService,
     public LoaderService: LoaderService,
     public alertService: AlertService,
     private router: Router,
@@ -127,7 +125,7 @@ export class ChangePasswordPage implements OnInit {
               .then(result => {
                 if (result["status"] == 'success') {
 
-                  this.ToastService.presentToastWithOptions(result["message"]);
+                  this.alertService.presentAlert('Success',result["message"]);
                   this.router.navigate(['/all-pt-schemes'], {
                     replaceUrl: true
                   });

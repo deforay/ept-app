@@ -6,7 +6,6 @@ import {
   Router
 } from '@angular/router';
 import {
-  ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
@@ -56,7 +55,6 @@ export class IndividualReportPage {
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
-    public ToastService: ToastService,
     public alertService: AlertService,
     private iab: InAppBrowser,
     private fileOpener: FileOpener,

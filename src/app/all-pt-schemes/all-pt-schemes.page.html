@@ -146,7 +146,7 @@
             </p>
           </ion-col>
         </ion-row>
-
+       
         <ion-row *ngIf="item.isSynced=='false'">
           <ion-col size="12">
             <p text-wrap>
@@ -270,6 +270,17 @@
     <ion-card-content class="cardContent">
     <p class="noShipments">
       No finalized/closed shipments found. <br>
+      If you would like to see other shipments, please click on the filter button above and choose an appropriate option.<br>
+      Please contact your PT provider if you need support.
+    </p>
+      </ion-card-content>
+  </ion-card>
+
+
+  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='excluded'">
+    <ion-card-content class="cardContent">
+    <p class="noShipments">
+      No delayed/excluded shipments found. <br>
       If you would like to see other shipments, please click on the filter button above and choose an appropriate option.<br>
       Please contact your PT provider if you need support.
     </p>

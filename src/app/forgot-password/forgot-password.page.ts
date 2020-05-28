@@ -12,7 +12,6 @@ import {
   Validators
 } from '@angular/forms';
 import {
-  ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
@@ -58,7 +57,6 @@ export class ForgotPasswordPage implements OnInit {
     public menu: MenuController,
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
-    public ToastService: ToastService,
     public LoaderService: LoaderService,
     public alertService: AlertService) {}
 

@@ -6,7 +6,6 @@ import {
   Router
 } from '@angular/router';
 import {
-  ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
@@ -53,7 +52,6 @@ export class SummaryReportPage implements OnInit {
   
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
-    public ToastService: ToastService,
     public LoaderService: LoaderService,
     private fileOpener: FileOpener,
     private ft: FileTransfer,
@@ -62,7 +60,7 @@ export class SummaryReportPage implements OnInit {
     public network: Network,
     public events: Events,
     public alertService: AlertService,
-    public loadingCtrl: LoadingController,) {
+    public loadingCtrl: LoadingController) {
 
   }
 

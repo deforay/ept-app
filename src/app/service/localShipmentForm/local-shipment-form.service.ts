@@ -5,8 +5,8 @@ import {
   Storage
 } from '@ionic/storage';
 import {
-  ToastService,
   LoaderService,
+  AlertService
 } from '../../../app/service/providers';
 import {
   Router,
@@ -31,8 +31,8 @@ export class LocalShipmentFormService {
   existingLabIndex: any;
 
   constructor(private storage: Storage,
-    public ToastService: ToastService,
     private router: Router,
+    public alertService:AlertService,
     public LoaderService: LoaderService,
     public loadingCtrl: LoadingController,
     ) {
@@ -119,7 +119,7 @@ export class LocalShipmentFormService {
           this.storage.set("localShipmentForm", this.localShipmentFormArray);
 
           if (this.localShipmentFormArray.length != 0) {
-            this.ToastService.presentToastWithOptions("Shipment form is stored in offline");
+            this.alertService.presentAlert('Success',"Thank you for submitting your result.<br> Your result is recorded on this device.<br><br>To send the result to PT provider, please click on the sync button once your device is connected to the internet.");
             this.router.navigate(['/all-pt-schemes']);
           }
         })

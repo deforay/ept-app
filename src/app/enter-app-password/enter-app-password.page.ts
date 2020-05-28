@@ -60,12 +60,12 @@ export class EnterAppPasswordPage implements OnInit {
   forceProfileCheck: any;
   constructor(private storage: Storage, private router: Router,
     public CrudServiceService: CrudServiceService,
-    public ToastService: ToastService,
     public LoaderService: LoaderService,
     public alertService: AlertService,
     public menu: MenuController,
     public loadingCtrl: LoadingController,
     public events: Events,
+    public toastService:ToastService
   ) {
 
   }
@@ -142,7 +142,7 @@ export class EnterAppPasswordPage implements OnInit {
               
               loading.dismiss();
             
-              this.ToastService.presentToastWithOptions("Pin verified successfully");
+              this.toastService.presentToastWithOptions("Pin verified successfully");
               this.storage.get('participantLogin').then((participantLogin) => {
                
                 this.forceProfileCheck = participantLogin.forceProfileCheck;

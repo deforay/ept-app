@@ -94,6 +94,7 @@ import {
   NoFilteredData: boolean = false;
   filterJSON: any = [];
   apiUrl: string;
+  
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public LoaderService: LoaderService,
@@ -105,7 +106,7 @@ import {
     public popoverController: PopoverController,
     private ft: FileTransfer,
     private file: File,
-    private fileOpener: FileOpener, ) {}
+    private fileOpener: FileOpener) {}
 
   dateFormat(dateObj) {
     return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
@@ -124,12 +125,11 @@ import {
 
     // Offline event
     this.events.subscribe('network:offline', (data) => {
-        this.networkType = this.network.type;
-        this.callOfflineFunctions();
-      }
+      this.networkType = this.network.type;
+      this.callOfflineFunctions();
+    })
 
-    ) // Online event
-
+    // Online event
     this.events.subscribe('network:online', () => {
       this.networkType = this.network.type;
       this.callOnlineFunctions();
@@ -191,6 +191,9 @@ import {
       } else if (filterJSON.shipmentFilterID == 'closed') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'finalized' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
+      } else if (filterJSON.shipmentFilterID == 'excluded') {
+        this.shippingsArray = this.shippingsOriginalArray.filter(
+          item => item.is_excluded == 'yes' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
       } else {}
     } else if (filterJSON.shipmentFilterID && filterJSON.participantFliterId == '' && filterJSON.schemeTypeFliterID == '') {
       if (filterJSON.shipmentFilterID == 'activeNotResp') {
@@ -202,6 +205,9 @@ import {
       } else if (filterJSON.shipmentFilterID == 'closed') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'finalized');
+      } else if (filterJSON.shipmentFilterID == 'excluded') {
+        this.shippingsArray = this.shippingsOriginalArray.filter(
+          item => item.is_excluded == 'yes');
       } else {}
 
     } else if (filterJSON.shipmentFilterID && filterJSON.participantFliterId && filterJSON.schemeTypeFliterID == '') {
@@ -215,6 +221,9 @@ import {
       } else if (filterJSON.shipmentFilterID == 'closed' && filterJSON.participantFliterId) {
         this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'finalized' && item.participantId == filterJSON.participantFliterId);
+      } else if (filterJSON.shipmentFilterID == 'excluded' && filterJSON.participantFliterId) {
+        this.shippingsArray = this.shippingsOriginalArray.filter(
+          item => item.is_excluded == 'yes' && item.participantId == filterJSON.participantFliterId);
       } else {}
     } else if (filterJSON.participantFliterId && filterJSON.shipmentFilterID == '' && filterJSON.schemeTypeFliterID == '') {
       if (filterJSON.participantFliterId) {
@@ -246,6 +255,9 @@ import {
       } else if (filterJSON.shipmentFilterID == 'closed') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'finalized' && item.schemeType == filterJSON.schemeTypeFliterID);
+      } else if (filterJSON.shipmentFilterID == 'excluded') {
+        this.shippingsArray = this.shippingsOriginalArray.filter(
+          item => item.is_excluded == 'yes' && item.schemeType == filterJSON.schemeTypeFliterID);
       } else {}
 
     }
@@ -255,9 +267,11 @@ import {
       this.showNoData = true;
       this.NoFilteredData = true;
     } else {
+      this.checkIsSynced()
       this.NoFilteredData = false;
     }
     loading.dismiss();
+
   }
   onloadShipment() {
 
@@ -703,15 +717,15 @@ import {
               this.getAllShippings();
 
               if (this.responseSuccessCount != 0 && this.responseErrorCount == 0) {
-                this.alertService.presentAlert('Success',+this.responseSuccessCount + ' records synced successfully');
+                this.alertService.presentAlert('Success', +this.responseSuccessCount + ' records synced successfully');
               }
 
               if (this.responseSuccessCount != 0 && this.responseErrorCount != 0) {
-                this.alertService.presentAlert('Success',+this.responseSuccessCount + ' records synced and ' + this.responseErrorCount + ' records unsynced successfully');
+                this.alertService.presentAlert('Success', +this.responseSuccessCount + ' records synced and ' + this.responseErrorCount + ' records unsynced successfully');
               }
 
               if (this.responseSuccessCount == 0 && this.responseErrorCount != 0) {
-                this.alertService.presentAlert('Success',+this.responseErrorCount + ' records unsynced');
+                this.alertService.presentAlert('Success', +this.responseErrorCount + ' records unsynced');
               }
             }
 
@@ -795,15 +809,15 @@ import {
               this.getAllShippings();
 
               if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount == 0) {
-                this.alertService.presentAlert('Success',+this.subListRespSuccessCount + ' records synced successfully');
+                this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records synced successfully');
               }
 
               if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount != 0) {
-                this.alertService.presentAlert('Success',+this.subListRespSuccessCount + ' records synced and ' + this.subListRespErrorCount + ' records unsynced successfully');
+                this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records synced and ' + this.subListRespErrorCount + ' records unsynced successfully');
               }
 
               if (this.subListRespSuccessCount == 0 && this.subListRespErrorCount != 0) {
-                this.alertService.presentAlert('Success',+this.subListRespSuccessCount + ' records unsynced');
+                this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records unsynced');
               }
             }
           } else if (result["status"] == "auth-fail") {

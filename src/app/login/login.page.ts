@@ -26,7 +26,6 @@ import {
   Router
 } from '@angular/router';
 import {
-  ToastService,
   LoaderService,
   AlertService
 } from '../../app/service/providers';
@@ -84,7 +83,6 @@ export class LoginPage implements OnInit {
     private router: Router,
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
-    public ToastService: ToastService,
     public LoaderService: LoaderService,
     public alertService: AlertService,
     public network: Network,
@@ -202,7 +200,13 @@ export class LoginPage implements OnInit {
         this.storage.set("shipmentFormArray", this.shipmentFormArray);
       }
     })
+    this.CrudServiceService.getData('/api/participant/get-filter/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
+      if (result["status"] == 'success') {
+        this.storage.set('filterDetails',result['data']);
+      }
+    })
   }
+  
   forgotPassword(){
     this.router.navigate(['/forgot-password']);
 
