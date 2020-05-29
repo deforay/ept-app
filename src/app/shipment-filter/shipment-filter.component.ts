@@ -20,6 +20,9 @@ import {
 import {
   Events
 } from '@ionic/angular';
+import {
+  Router
+} from '@angular/router';
 @Component({
   selector: 'app-shipment-filter',
   templateUrl: './shipment-filter.component.html',
@@ -44,6 +47,7 @@ export class ShipmentFilterComponent implements OnInit {
     public alertService: AlertService,
     public network: Network,
     public events: Events,
+    private router: Router,
   ) {
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
@@ -95,8 +99,27 @@ export class ShipmentFilterComponent implements OnInit {
             this.participantsArray = result['data']['participants'];
             this.shipmentsArray = result['data']['shipments'];
           }
-        })
-      }
+          else if (result["status"] == "auth-fail") {
+            this.alertService.presentAlert('Alert', result["message"]);
+            this.storage.set("isLogOut", true);
+            this.router.navigate(['/login']);
+
+          } else if (result["status"] == 'version-failed') {
+
+            this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
+
+          } else {
+            if (this.networkType != 'none') {
+            this.alertService.presentAlert('Alert', result["message"]);
+            }
+          }
+          }
+          , (err) => {
+            if (this.networkType != 'none') {
+            this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
+            }
+          })
+        }
     })
   }
 

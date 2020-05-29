@@ -302,7 +302,7 @@ export class DbsEidPage implements OnInit {
   getEIDFormDetails() {
    
     this.storage.get('selectedTestFormArray').then((eidDataObj) => {
-   
+   debugger;
       this.isView = eidDataObj[0].isView;
       if (eidDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {

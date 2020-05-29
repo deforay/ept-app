@@ -119,7 +119,7 @@ import {
 
     //comment when take buid start
 
-    //   this.networkType = 'none';
+       this.networkType = 'none';
 
     //end...
 
@@ -330,6 +330,11 @@ import {
           return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
         });
         console.log(this.shippingsArray);
+        if (this.shippingsArray.length == 0) {
+          this.showNoData = true;
+        } else {
+          this.showNoData = false;
+        }
         this.storage.set("shipmentArray", this.shippingsOriginalArray);
         this.skeltonArray = [];
       }
@@ -466,7 +471,6 @@ import {
             }
 
             , (err) => {
-
               this.showNoData = true;
               this.skeltonArray = [];
               if (this.networkType != 'none') {

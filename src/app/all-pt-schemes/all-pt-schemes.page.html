@@ -234,7 +234,7 @@
   </ion-card>
   <!-- ion-skeleton-text code end -->
 
-  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && !filterJSON">
+  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON==''">
     <ion-card-content class="cardContent">
       <p class="noShipments">
         No active shipments found. <br>
