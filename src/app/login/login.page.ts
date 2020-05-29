@@ -106,11 +106,6 @@ export class LoginPage implements OnInit {
   ionViewWillLeave() {
     // enable the root left menu when leaving this page
     this.menu.enable(true);
-  }
-
-  ionViewWillEnter(){
-    
-    this.storage.remove('appPin');
     this.emailFormControl.setValue('');
     this.emailFormControl.markAsUntouched();
     this.emailFormControl.setErrors(null);
@@ -120,6 +115,10 @@ export class LoginPage implements OnInit {
     this.serverHostFormControl.setValue('');
     this.serverHostFormControl.markAsUntouched();
     this.serverHostFormControl.setErrors(null);
+  }
+
+  ionViewWillEnter(){
+    this.storage.remove('appPin');
   }
 
   login() {

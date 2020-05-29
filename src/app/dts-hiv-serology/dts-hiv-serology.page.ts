@@ -568,12 +568,11 @@ export class DTSHIVSerologyPage implements OnInit {
   }
 
   checkOtherInfoPanel(param) {
-    if ((this.supReview == 'yes' && !this.supervisorName) || this.supReview == '') {
+    if ((this.supReview == 'yes' && !this.supervisorName) || (this.supReview == ''||this.supReview==undefined)) {
       this.isValidOtherInfoPanel = false;
     } else {
       this.isValidOtherInfoPanel = true;
     }
-
   }
   prevStep() {
     this.step--;
@@ -618,7 +617,8 @@ export class DTSHIVSerologyPage implements OnInit {
     //   this.setStep(this.testKitIndex+this.sampleIndex+this.dynamicStep+2)
     // }
     else if (this.isValidOtherInfoPanel == false) {
-      this.setStep(this.testKitIndex + this.dynamicStep + 2)
+      this.setStep(this.testKitIndex +this.sampleIndex+ this.dynamicStep + 2)
+     // this.setStep(this.testKitIndex +this.dynamicStep + 2)
     }
 
 
@@ -697,6 +697,7 @@ export class DTSHIVSerologyPage implements OnInit {
       this.qcDate = "";
       this.qcDoneBy = "";
     }
+  
     // (checkSampleIndex== undefined || checkSampleIndex==-1)
     if (this.isValidShipmentDetails == true && this.isValidOtherInfoPanel == true) {
 
@@ -848,7 +849,8 @@ export class DTSHIVSerologyPage implements OnInit {
     //   this.setStep(this.testKitIndex+this.sampleIndex+this.dynamicStep+2)
     // }
     else if (this.isValidOtherInfoPanel == false) {
-      this.setStep(this.testKitIndex + this.dynamicStep + 2)
+     // this.setStep(this.testKitIndex + this.dynamicStep + 2)
+       this.setStep(this.testKitIndex +this.sampleIndex+ this.dynamicStep + 2)
     }
 
 
@@ -1024,7 +1026,7 @@ export class DTSHIVSerologyPage implements OnInit {
       }
       console.log(this.serologyJSON);
   
-      if (this.network.type == 'none') {
+      if (this.network.type == 'none'|| this.network.type==null) {
         this.serologyJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
 

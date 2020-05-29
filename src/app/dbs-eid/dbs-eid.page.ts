@@ -507,127 +507,133 @@ export class DbsEidPage implements OnInit {
     }
     this.updatedStatus = this.eidArray[0].updatedStatus;
     if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.otherInfoValid == true) {
-debugger;
+
       if (this.shipmentData['shipmentTestingDate']) {
-        if (new Date(this.shipmentData['shipmentTestingDate']) > new Date(this.shipmentData['testReceiptDate'])) {
+        if (new Date(this.shipmentData['shipmentTestingDate']) >= new Date(this.shipmentData['testReceiptDate'])) {
           this.isValidTestingDate = true;
+        } else {
+          this.alertService.presentAlert('Alert', "Testing Date has to come after the Shipment Receipt Date");
+          this.isValidTestingDate = false;
+          return false;
         }
       } else {
         this.isValidTestingDate = true;
       }
-      this.EIDJSON = {
-        "authToken": this.authToken,
-        "appVersion": this.appVersionNumber,
-        "syncType": "single",
-        "data": {
-          "evaluationStatus": this.eidArray[0].evaluationStatus,
-          "participantId": this.eidArray[0].participantId,
-          "schemeType": this.eidArray[0].schemeType,
-          "shipmentId": this.eidArray[0].shipmentId,
-          //  "shipmentCode":
-          "mapId": this.eidArray[0].mapId,
-          "isSynced": true,
-          "createdOn": this.eidArray[0].createdOn ? this.eidArray[0].createdOn : "",
-          "updatedOn": this.eidArray[0].updatedOn ? this.eidArray[0].updatedOn : "",
-          "updatedStatus": this.updatedStatus,
-          "eidData": {
-            "access": {
-              "status": this.eidArray[0].eidData.access.status
-            },
-            "Heading1": {
-              "status": this.showParticipantData,
-              "data": {
-                "participantName": this.participantData['participantName'],
-                "participantCode": this.participantData['participantCode'],
-                "participantAffiliation": this.participantData['affiliation'],
-                "participantPhone": this.participantData['phone'],
-                "participantMobile": this.participantData['mobile'],
-              }
-            },
-            "Heading2": {
-              "status": this.showShipmentData,
-              "data": {
-                "shipmentDate": this.shipmentData['shipmentDate'],
-                "resultDueDate": this.shipmentData['resultDueDate'],
-                "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
-                "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
-                "testDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
-                "extractionAssaySelected": this.shipmentData['extractionAssay'],
-                "extractionAssaySelect": this.shipmentData['extractionAssayDropdown'],
-                "detectionAssaySelect": this.shipmentData['detectionAssayDropdown'],
-                "detectionAssaySelected": this.shipmentData['detectionAssay'],
-                "extractionLotNumber": this.shipmentData['extractionLotNumber'],
-                "detectionLotNumber": this.shipmentData['detectionLotNumber'],
-                "extractionExpirationDate": this.shipmentData['extractionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['extractionExpirationDate'])) : this.shipmentData['extractionExpirationDate'],
-                "detectionExpirationDate": this.shipmentData['detectionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['detectionExpirationDate'])) : this.shipmentData['detectionExpirationDate'],
-                "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
-                "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'],
-                "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
-                "qcData": {
-                  "qcRadioSelected": this.qcDone,
-                  "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
-                  "qcDoneBy": this.qcDoneBy,
-                  "status": this.isQCDoneShow,
-                  "qcRadio": this.qcRadioArray
+      if (this.isValidTestingDate) {
+        this.EIDJSON = {
+          "authToken": this.authToken,
+          "appVersion": this.appVersionNumber,
+          "syncType": "single",
+          "data": {
+            "evaluationStatus": this.eidArray[0].evaluationStatus,
+            "participantId": this.eidArray[0].participantId,
+            "schemeType": this.eidArray[0].schemeType,
+            "shipmentId": this.eidArray[0].shipmentId,
+            //  "shipmentCode":
+            "mapId": this.eidArray[0].mapId,
+            "isSynced": true,
+            "createdOn": this.eidArray[0].createdOn ? this.eidArray[0].createdOn : "",
+            "updatedOn": this.eidArray[0].updatedOn ? this.eidArray[0].updatedOn : "",
+            "updatedStatus": this.updatedStatus,
+            "eidData": {
+              "access": {
+                "status": this.eidArray[0].eidData.access.status
+              },
+              "Heading1": {
+                "status": this.showParticipantData,
+                "data": {
+                  "participantName": this.participantData['participantName'],
+                  "participantCode": this.participantData['participantCode'],
+                  "participantAffiliation": this.participantData['affiliation'],
+                  "participantPhone": this.participantData['phone'],
+                  "participantMobile": this.participantData['mobile'],
+                }
+              },
+              "Heading2": {
+                "status": this.showShipmentData,
+                "data": {
+                  "shipmentDate": this.shipmentData['shipmentDate'],
+                  "resultDueDate": this.shipmentData['resultDueDate'],
+                  "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
+                  "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
+                  "testDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
+                  "extractionAssaySelected": this.shipmentData['extractionAssay'],
+                  "extractionAssaySelect": this.shipmentData['extractionAssayDropdown'],
+                  "detectionAssaySelect": this.shipmentData['detectionAssayDropdown'],
+                  "detectionAssaySelected": this.shipmentData['detectionAssay'],
+                  "extractionLotNumber": this.shipmentData['extractionLotNumber'],
+                  "detectionLotNumber": this.shipmentData['detectionLotNumber'],
+                  "extractionExpirationDate": this.shipmentData['extractionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['extractionExpirationDate'])) : this.shipmentData['extractionExpirationDate'],
+                  "detectionExpirationDate": this.shipmentData['detectionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['detectionExpirationDate'])) : this.shipmentData['detectionExpirationDate'],
+                  "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
+                  "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'],
+                  "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
+                  "qcData": {
+                    "qcRadioSelected": this.qcDone,
+                    "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
+                    "qcDoneBy": this.qcDoneBy,
+                    "status": this.isQCDoneShow,
+                    "qcRadio": this.qcRadioArray
+                  }
+                }
+              },
+              "Heading3": {
+                //PT panel details
+                "status": this.showPTPanelData,
+                "data": {
+                  "samples": this.ptPanelData['samples'],
+                  "resultsText": this.ptPanelData['resultsTextData'],
+                  "samplesList": this.ptPanelData['samplesList'],
+                  "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
+                  "vlNotTestedReasonText": this.ptPanelData['vlNotTestedReasonText'],
+                  "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
+                  "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
+                  "ptNotTestedCommentsText": this.ptPanelData['ptNotTestedCommentsText'],
+                  "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
+                  "ptSupportCommentsText": this.ptPanelData['ptSupportCommentsText'],
+                  "ptSupportComments": this.ptPanelData['ptSupportComments'],
+                }
+              },
+              "Heading4": {
+                //other information
+                "status": this.showOtherInfoData,
+                "data": {
+                  "supervisorReview": this.otherInfoData['supervisorReviewDropdown'],
+                  "approvalLabel": this.otherInfoData['approvalLabel'],
+                  "supervisorReviewSelected": this.otherInfoData['supervisorReview'],
+                  "approvalInputText": this.otherInfoData['supervisorName'],
+                  "comments": this.otherInfoData['comments']
+                }
+              },
+              "customFields": {
+                "status": this.showCustomFieldData,
+                "data": {
+                  "customField1Text": this.customFieldData['customField1Text'],
+                  "customField1Val": this.customFieldData['customField1Val'],
+                  "customField2Text": this.customFieldData['customField2Text'],
+                  "customField2Val": this.customFieldData['customField2Val']
                 }
               }
-            },
-            "Heading3": {
-              //PT panel details
-              "status": this.showPTPanelData,
-              "data": {
-                "samples": this.ptPanelData['samples'],
-                "resultsText": this.ptPanelData['resultsTextData'],
-                "samplesList": this.ptPanelData['samplesList'],
-                "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
-                "vlNotTestedReasonText": this.ptPanelData['vlNotTestedReasonText'],
-                "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
-                "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
-                "ptNotTestedCommentsText": this.ptPanelData['ptNotTestedCommentsText'],
-                "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
-                "ptSupportCommentsText": this.ptPanelData['ptSupportCommentsText'],
-                "ptSupportComments": this.ptPanelData['ptSupportComments'],
-              }
-            },
-            "Heading4": {
-              //other information
-              "status": this.showOtherInfoData,
-              "data": {
-                "supervisorReview": this.otherInfoData['supervisorReviewDropdown'],
-                "approvalLabel": this.otherInfoData['approvalLabel'],
-                "supervisorReviewSelected": this.otherInfoData['supervisorReview'],
-                "approvalInputText": this.otherInfoData['supervisorName'],
-                "comments": this.otherInfoData['comments']
-              }
-            },
-            "customFields": {
-              "status": this.showCustomFieldData,
-              "data": {
-                "customField1Text": this.customFieldData['customField1Text'],
-                "customField1Val": this.customFieldData['customField1Val'],
-                "customField2Text": this.customFieldData['customField2Text'],
-                "customField2Val": this.customFieldData['customField2Val']
-              }
-            }
 
+            }
           }
         }
+        console.log(this.EIDJSON);
+        const element = await this.loadingCtrl.getTop();
+        if (element && element.dismiss) {
+          element.dismiss();
+        }
+        const loading = await this.loadingCtrl.create({
+          spinner: 'dots',
+          mode: 'ios',
+          message: 'Please wait',
+        });
+        await loading.present();
+        this.isView = 'true';
+        this.isShowReviewMsg = true;
+        this.summarizeForm = true;
+        loading.dismiss();
       }
-      console.log(this.EIDJSON);
-      const element = await this.loadingCtrl.getTop();
-      if (element && element.dismiss) {
-        element.dismiss();
-      }
-      const loading = await this.loadingCtrl.create({
-        spinner: 'dots',
-        mode: 'ios',
-        message: 'Please wait',
-      });
-      await loading.present();
-      this.isView = 'true';
-      this.isShowReviewMsg = true;
-      this.summarizeForm = true;
-      loading.dismiss();
     }
   }
 
@@ -673,133 +679,145 @@ debugger;
     }
     this.updatedStatus = this.eidArray[0].updatedStatus;
     if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.otherInfoValid == true) {
-
-      this.EIDJSON = {
-        "authToken": this.authToken,
-        "appVersion": this.appVersionNumber,
-        "syncType": "single",
-        "data": {
-          "evaluationStatus": this.eidArray[0].evaluationStatus,
-          "participantId": this.eidArray[0].participantId,
-          "schemeType": this.eidArray[0].schemeType,
-          "shipmentId": this.eidArray[0].shipmentId,
-          //  "shipmentCode":
-          "mapId": this.eidArray[0].mapId,
-          "isSynced": true,
-          "createdOn": this.eidArray[0].createdOn ? this.eidArray[0].createdOn : "",
-          "updatedOn": this.eidArray[0].updatedOn ? this.eidArray[0].updatedOn : "",
-          "updatedStatus": this.updatedStatus,
-          "eidData": {
-            "access": {
-              "status": this.eidArray[0].eidData.access.status
-            },
-            "Heading1": {
-              "status": this.showParticipantData,
-              "data": {
-                "participantName": this.participantData['participantName'],
-                "participantCode": this.participantData['participantCode'],
-                "participantAffiliation": this.participantData['affiliation'],
-                "participantPhone": this.participantData['phone'],
-                "participantMobile": this.participantData['mobile'],
-              }
-            },
-            "Heading2": {
-              "status": this.showShipmentData,
-              "data": {
-                "shipmentDate": this.shipmentData['shipmentDate'],
-                "resultDueDate": this.shipmentData['resultDueDate'],
-                "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
-                "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
-                "testDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
-                "extractionAssaySelected": this.shipmentData['extractionAssay'],
-                "extractionAssaySelect": this.shipmentData['extractionAssayDropdown'],
-                "detectionAssaySelect": this.shipmentData['detectionAssayDropdown'],
-                "detectionAssaySelected": this.shipmentData['detectionAssay'],
-                "extractionLotNumber": this.shipmentData['extractionLotNumber'],
-                "detectionLotNumber": this.shipmentData['detectionLotNumber'],
-                "extractionExpirationDate": this.shipmentData['extractionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['extractionExpirationDate'])) : this.shipmentData['extractionExpirationDate'],
-                "detectionExpirationDate": this.shipmentData['detectionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['detectionExpirationDate'])) : this.shipmentData['detectionExpirationDate'],
-                "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
-                "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'],
-                "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
-                "qcData": {
-                  "qcRadioSelected": this.qcDone,
-                  "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
-                  "qcDoneBy": this.qcDoneBy,
-                  "status": this.isQCDoneShow,
-                  "qcRadio": this.qcRadioArray
+      if (this.shipmentData['shipmentTestingDate']) {
+        if (new Date(this.shipmentData['shipmentTestingDate']) >= new Date(this.shipmentData['testReceiptDate'])) {
+          this.isValidTestingDate = true;
+        } else {
+          this.alertService.presentAlert('Alert', "Testing Date has to come after the Shipment Receipt Date");
+          this.isValidTestingDate = false;
+          return false;
+        }
+      } else {
+        this.isValidTestingDate = true;
+      }
+      if (this.isValidTestingDate) {
+        this.EIDJSON = {
+          "authToken": this.authToken,
+          "appVersion": this.appVersionNumber,
+          "syncType": "single",
+          "data": {
+            "evaluationStatus": this.eidArray[0].evaluationStatus,
+            "participantId": this.eidArray[0].participantId,
+            "schemeType": this.eidArray[0].schemeType,
+            "shipmentId": this.eidArray[0].shipmentId,
+            //  "shipmentCode":
+            "mapId": this.eidArray[0].mapId,
+            "isSynced": true,
+            "createdOn": this.eidArray[0].createdOn ? this.eidArray[0].createdOn : "",
+            "updatedOn": this.eidArray[0].updatedOn ? this.eidArray[0].updatedOn : "",
+            "updatedStatus": this.updatedStatus,
+            "eidData": {
+              "access": {
+                "status": this.eidArray[0].eidData.access.status
+              },
+              "Heading1": {
+                "status": this.showParticipantData,
+                "data": {
+                  "participantName": this.participantData['participantName'],
+                  "participantCode": this.participantData['participantCode'],
+                  "participantAffiliation": this.participantData['affiliation'],
+                  "participantPhone": this.participantData['phone'],
+                  "participantMobile": this.participantData['mobile'],
+                }
+              },
+              "Heading2": {
+                "status": this.showShipmentData,
+                "data": {
+                  "shipmentDate": this.shipmentData['shipmentDate'],
+                  "resultDueDate": this.shipmentData['resultDueDate'],
+                  "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
+                  "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
+                  "testDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
+                  "extractionAssaySelected": this.shipmentData['extractionAssay'],
+                  "extractionAssaySelect": this.shipmentData['extractionAssayDropdown'],
+                  "detectionAssaySelect": this.shipmentData['detectionAssayDropdown'],
+                  "detectionAssaySelected": this.shipmentData['detectionAssay'],
+                  "extractionLotNumber": this.shipmentData['extractionLotNumber'],
+                  "detectionLotNumber": this.shipmentData['detectionLotNumber'],
+                  "extractionExpirationDate": this.shipmentData['extractionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['extractionExpirationDate'])) : this.shipmentData['extractionExpirationDate'],
+                  "detectionExpirationDate": this.shipmentData['detectionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['detectionExpirationDate'])) : this.shipmentData['detectionExpirationDate'],
+                  "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
+                  "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'],
+                  "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
+                  "qcData": {
+                    "qcRadioSelected": this.qcDone,
+                    "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
+                    "qcDoneBy": this.qcDoneBy,
+                    "status": this.isQCDoneShow,
+                    "qcRadio": this.qcRadioArray
+                  }
+                }
+              },
+              "Heading3": {
+                //PT panel details
+                "status": this.showPTPanelData,
+                "data": {
+                  "samples": this.ptPanelData['samples'],
+                  "resultsText": this.ptPanelData['resultsTextData'],
+                  "samplesList": this.ptPanelData['samplesList'],
+                  "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
+                  "vlNotTestedReasonText": this.ptPanelData['vlNotTestedReasonText'],
+                  "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
+                  "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
+                  "ptNotTestedCommentsText": this.ptPanelData['ptNotTestedCommentsText'],
+                  "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
+                  "ptSupportCommentsText": this.ptPanelData['ptSupportCommentsText'],
+                  "ptSupportComments": this.ptPanelData['ptSupportComments'],
+                }
+              },
+              "Heading4": {
+                //other information
+                "status": this.showOtherInfoData,
+                "data": {
+                  "supervisorReview": this.otherInfoData['supervisorReviewDropdown'],
+                  "approvalLabel": this.otherInfoData['approvalLabel'],
+                  "supervisorReviewSelected": this.otherInfoData['supervisorReview'],
+                  "approvalInputText": this.otherInfoData['supervisorName'],
+                  "comments": this.otherInfoData['comments']
+                }
+              },
+              "customFields": {
+                "status": this.showCustomFieldData,
+                "data": {
+                  "customField1Text": this.customFieldData['customField1Text'],
+                  "customField1Val": this.customFieldData['customField1Val'],
+                  "customField2Text": this.customFieldData['customField2Text'],
+                  "customField2Val": this.customFieldData['customField2Val']
                 }
               }
-            },
-            "Heading3": {
-              //PT panel details
-              "status": this.showPTPanelData,
-              "data": {
-                "samples": this.ptPanelData['samples'],
-                "resultsText": this.ptPanelData['resultsTextData'],
-                "samplesList": this.ptPanelData['samplesList'],
-                "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
-                "vlNotTestedReasonText": this.ptPanelData['vlNotTestedReasonText'],
-                "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
-                "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
-                "ptNotTestedCommentsText": this.ptPanelData['ptNotTestedCommentsText'],
-                "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
-                "ptSupportCommentsText": this.ptPanelData['ptSupportCommentsText'],
-                "ptSupportComments": this.ptPanelData['ptSupportComments'],
-              }
-            },
-            "Heading4": {
-              //other information
-              "status": this.showOtherInfoData,
-              "data": {
-                "supervisorReview": this.otherInfoData['supervisorReviewDropdown'],
-                "approvalLabel": this.otherInfoData['approvalLabel'],
-                "supervisorReviewSelected": this.otherInfoData['supervisorReview'],
-                "approvalInputText": this.otherInfoData['supervisorName'],
-                "comments": this.otherInfoData['comments']
-              }
-            },
-            "customFields": {
-              "status": this.showCustomFieldData,
-              "data": {
-                "customField1Text": this.customFieldData['customField1Text'],
-                "customField1Val": this.customFieldData['customField1Val'],
-                "customField2Text": this.customFieldData['customField2Text'],
-                "customField2Val": this.customFieldData['customField2Val']
-              }
-            }
 
+            }
           }
         }
-      }
-      console.log(this.EIDJSON);
-      if (this.network.type == 'none') {
-        this.EIDJSON['data']['isSynced'] = 'false';
-        this.LocalShipmentFormService.offlineStoreShipmentForm(this.EIDJSON);
+        console.log(this.EIDJSON);
+        if (this.network.type == 'none') {
+          this.EIDJSON['data']['isSynced'] = 'false';
+          this.LocalShipmentFormService.offlineStoreShipmentForm(this.EIDJSON);
 
-      } else {
+        } else {
 
-        this.EIDJSON['data']['isSynced'] = 'true';
+          this.EIDJSON['data']['isSynced'] = 'true';
 
-        this.CrudServiceService.postData('/api/shipments/save-form', this.EIDJSON).then((result) => {
-          if (result["status"] == 'success') {
-            this.alertService.presentAlert('Success', result['message']);
-            this.router.navigate(['/all-pt-schemes']);
-          } else if (result["status"] == "auth-fail") {
-            this.alertService.presentAlert('Alert', result["message"]);
-            this.storage.set("isLogOut", true);
-            this.router.navigate(['/login']);
-          } else if (result["status"] == 'version-failed') {
+          this.CrudServiceService.postData('/api/shipments/save-form', this.EIDJSON).then((result) => {
+            if (result["status"] == 'success') {
+              this.alertService.presentAlert('Success', result['message']);
+              this.router.navigate(['/all-pt-schemes']);
+            } else if (result["status"] == "auth-fail") {
+              this.alertService.presentAlert('Alert', result["message"]);
+              this.storage.set("isLogOut", true);
+              this.router.navigate(['/login']);
+            } else if (result["status"] == 'version-failed') {
 
-            this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
+              this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
 
-          } else {
+            } else {
 
-            this.alertService.presentAlert('Alert', result["message"]);
-          }
-        }, (err) => {
-          this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
-        });
+              this.alertService.presentAlert('Alert', result["message"]);
+            }
+          }, (err) => {
+            this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+          });
+        }
       }
     }
   }

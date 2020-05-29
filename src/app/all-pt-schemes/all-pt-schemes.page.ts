@@ -35,6 +35,9 @@ import {
   ShipmentFilterComponent
 } from '../../app/shipment-filter/shipment-filter.component';
 import {
+  SyncAllShipmentsComponent
+} from '../../app/sync-all-shipments/sync-all-shipments.component';
+import {
   FileTransfer,
   FileUploadOptions,
   FileTransferObject
@@ -119,7 +122,7 @@ import {
 
     //comment when take buid start
 
-       this.networkType = 'none';
+     //  this.networkType = 'none';
 
     //end...
 
@@ -661,197 +664,219 @@ import {
     loading.dismiss();
   }
 
-  syncShipments() {
+  async syncShipments(ev: any) {
 
-
-    this.totSyncArrayLength = this.localStorageUnSyncedArray.length;
-    this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
-
-    if (this.totSyncArrayLength > syncDataLimit) {
-      this.syncDataCount = Math.floor(this.totSyncArrayLength / syncDataLimit) + (this.totSyncArrayLength % syncDataLimit);
-    } else if (this.totSyncArrayLength <= syncDataLimit) {
-      this.syncDataCount = 1;
-    } else {}
-
-    if (this.syncDataCount == 1) {
-
-      this.responseSuccessCount = 0;
-      this.responseErrorCount = 0;
-
-      this.syncShipmentsJSON = {
-        "authToken": this.authToken,
-        "appVersion": this.appVersionNumber,
-        "syncType": "group",
-        "data": this.localStorageUnSyncedArray
-      }
-
-      this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON).then((result) => {
-
-          console.log(result);
-
-          if (result["status"] == 'success') {
-            this.resultArray = [];
-            this.resultArray.push(result['data']);
-
-            this.resultArray[0].forEach((result, index) => {
-              if (result.status == "success") {
-                this.responseSuccessCount = this.responseSuccessCount + 1;
-
-                this.localStorageUnSyncedArray.forEach((localUnSynced, index) => {
-                    if (localUnSynced.mapId == result.data.mapId) {
-                      this.syncedShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
-                          mapId: result.data.mapId
-                        }
-
-                      );
-                      this.localStorageUnSyncedArray.splice(this.syncedShipmentIndex, 1);
-                    }
-                  }
-
-                )
-              } else {
-                this.responseErrorCount = this.responseErrorCount + 1;
-              }
-            })
-
-            this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
-            this.storage.set("localShipmentForm", this.localShipmentArray);
-
-            if ((this.responseSuccessCount + this.responseErrorCount) == this.totSyncArrayLength) {
-              this.getAllShippings();
-
-              if (this.responseSuccessCount != 0 && this.responseErrorCount == 0) {
-                this.alertService.presentAlert('Success', +this.responseSuccessCount + ' records synced successfully');
-              }
-
-              if (this.responseSuccessCount != 0 && this.responseErrorCount != 0) {
-                this.alertService.presentAlert('Success', +this.responseSuccessCount + ' records synced and ' + this.responseErrorCount + ' records unsynced successfully');
-              }
-
-              if (this.responseSuccessCount == 0 && this.responseErrorCount != 0) {
-                this.alertService.presentAlert('Success', +this.responseErrorCount + ' records unsynced');
-              }
-            }
-
-          } else if (result["status"] == "auth-fail") {
-            this.alertService.presentAlert('Alert', result["message"]);
-            this.storage.set("isLogOut", true);
-            this.router.navigate(['/login']);
-
-          } else if (result["status"] == 'version-failed') {
-
-            this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
-
+    const popover = await this.popoverController.create({
+      component: SyncAllShipmentsComponent,
+      event: ev,
+      translucent: true,
+      backdropDismiss: true,
+    });
+    popover.onDidDismiss()
+      .then((data) => {
+        if (data['data']) {
+          if (data['data'] == 'reset') {
+            this.filterJSON = [];
+            this.onloadShipment();
           } else {
-
-            this.alertService.presentAlert('Alert', result["message"]);
-          }
-        }
-
-        , (err) => {
-
-          this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
-
-        }
-      );
-    } else {
-
-      this.subListRespSuccessCount = 0;
-      this.subListRespErrorCount = 0;
-      this.authFailAlertCount = 0;
-      this.versionFailAlertCount = 0;
-      this.failureAlertCount = 0;
-      this.errSyncAllCount = 0;
-
-      _.times(this.syncDataCount, () => {
-        this.shipmentSubListArray = this.copylocalStorageUnSyncedArray.splice(0, syncDataLimit);
-
-        this.syncShipmentsJSON = {
-
-          "authToken": this.authToken,
-          "appVersion": this.appVersionNumber,
-          "syncType": "group",
-          "data": this.shipmentSubListArray
-        }
-
-        console.log(this.syncShipmentsJSON);
-
-        this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON).then((result) => {
-
-          if (result["status"] == 'success') {
-            console.log(result);
-            this.resultArray = [];
-            this.resultArray.push(result['data']);
-
-            this.resultArray[0].forEach((result, index) => {
-
-              if (result.status == "success") {
-                this.subListRespSuccessCount = this.subListRespSuccessCount + 1;
-
-                this.localStorageUnSyncedArray.forEach((localSubUnSynced, index) => {
-
-                    if (localSubUnSynced.mapId == result.data.mapId) {
-                      let syncedSubShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
-                          mapId: result.data.mapId
-                        }
-
-                      );
-                      this.localStorageUnSyncedArray.splice(syncedSubShipmentIndex, 1);
-                    }
-                  }
-
-                )
-              } else {
-                this.subListRespErrorCount = this.subListRespErrorCount + 1;
-              }
-            })
-
-            this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
-            this.storage.set("localShipmentForm", this.localShipmentArray);
-
-            if ((this.subListRespSuccessCount + this.subListRespErrorCount) == this.totSyncArrayLength) {
-              this.getAllShippings();
-
-              if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount == 0) {
-                this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records synced successfully');
-              }
-
-              if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount != 0) {
-                this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records synced and ' + this.subListRespErrorCount + ' records unsynced successfully');
-              }
-
-              if (this.subListRespSuccessCount == 0 && this.subListRespErrorCount != 0) {
-                this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records unsynced');
-              }
-            }
-          } else if (result["status"] == "auth-fail") {
-
-            if (this.authFailAlertCount == 0) {
-              this.alertService.presentAlert('Alert', result["message"]);
-              this.authFailAlertCount++;
-              this.storage.set("isLogOut", true);
-              this.router.navigate(['/login']);
-            }
-
-          } else if (result["status"] == 'version-failed') {
-            if (this.versionFailAlertCount == 0) {
-              this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
-              this.versionFailAlertCount++;
-            }
-          } else {
-            if (this.failureAlertCount == 0) {
-              this.alertService.presentAlert('Alert', result["message"]);
-              this.failureAlertCount++;
+            this.filterJSON = data['data'];
+            if (this.filterJSON.shipmentFilterID == "" && this.filterJSON.participantFliterId == "" && this.filterJSON.schemeTypeFliterID == "") {
+              this.onloadShipment();
+            } else {
+              this.applyFilter(this.filterJSON);
             }
           }
-        }, (err) => {
-          if (this.errSyncAllCount == 0) {
-            this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
-            this.errSyncAllCount++;
-          }
-        });
-      })
-    }
+        }
+      });
+    return await popover.present();
+    // this.totSyncArrayLength = this.localStorageUnSyncedArray.length;
+    // this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
+
+    // if (this.totSyncArrayLength > syncDataLimit) {
+    //   this.syncDataCount = Math.floor(this.totSyncArrayLength / syncDataLimit) + (this.totSyncArrayLength % syncDataLimit);
+    // } else if (this.totSyncArrayLength <= syncDataLimit) {
+    //   this.syncDataCount = 1;
+    // } else {}
+
+    // if (this.syncDataCount == 1) {
+
+    //   this.responseSuccessCount = 0;
+    //   this.responseErrorCount = 0;
+
+    //   this.syncShipmentsJSON = {
+    //     "authToken": this.authToken,
+    //     "appVersion": this.appVersionNumber,
+    //     "syncType": "group",
+    //     "data": this.localStorageUnSyncedArray
+    //   }
+
+    //   this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON).then((result) => {
+
+    //       console.log(result);
+
+    //       if (result["status"] == 'success') {
+    //         this.resultArray = [];
+    //         this.resultArray.push(result['data']);
+
+    //         this.resultArray[0].forEach((result, index) => {
+    //           if (result.status == "success") {
+    //             this.responseSuccessCount = this.responseSuccessCount + 1;
+
+    //             this.localStorageUnSyncedArray.forEach((localUnSynced, index) => {
+    //                 if (localUnSynced.mapId == result.data.mapId) {
+    //                   this.syncedShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
+    //                       mapId: result.data.mapId
+    //                     }
+
+    //                   );
+    //                   this.localStorageUnSyncedArray.splice(this.syncedShipmentIndex, 1);
+    //                 }
+    //               }
+
+    //             )
+    //           } else {
+    //             this.responseErrorCount = this.responseErrorCount + 1;
+    //           }
+    //         })
+
+    //         this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
+    //         this.storage.set("localShipmentForm", this.localShipmentArray);
+
+    //         if ((this.responseSuccessCount + this.responseErrorCount) == this.totSyncArrayLength) {
+    //           this.getAllShippings();
+
+    //           if (this.responseSuccessCount != 0 && this.responseErrorCount == 0) {
+    //             this.alertService.presentAlert('Success', +this.responseSuccessCount + ' records synced successfully');
+    //           }
+
+    //           if (this.responseSuccessCount != 0 && this.responseErrorCount != 0) {
+    //             this.alertService.presentAlert('Success', +this.responseSuccessCount + ' records synced and ' + this.responseErrorCount + ' records unsynced successfully');
+    //           }
+
+    //           if (this.responseSuccessCount == 0 && this.responseErrorCount != 0) {
+    //             this.alertService.presentAlert('Success', +this.responseErrorCount + ' records unsynced');
+    //           }
+    //         }
+
+    //       } else if (result["status"] == "auth-fail") {
+    //         this.alertService.presentAlert('Alert', result["message"]);
+    //         this.storage.set("isLogOut", true);
+    //         this.router.navigate(['/login']);
+
+    //       } else if (result["status"] == 'version-failed') {
+
+    //         this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
+
+    //       } else {
+
+    //         this.alertService.presentAlert('Alert', result["message"]);
+    //       }
+    //     }
+
+    //     , (err) => {
+
+    //       this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
+
+    //     }
+    //   );
+    // } else {
+
+    //   this.subListRespSuccessCount = 0;
+    //   this.subListRespErrorCount = 0;
+    //   this.authFailAlertCount = 0;
+    //   this.versionFailAlertCount = 0;
+    //   this.failureAlertCount = 0;
+    //   this.errSyncAllCount = 0;
+
+    //   _.times(this.syncDataCount, () => {
+    //     this.shipmentSubListArray = this.copylocalStorageUnSyncedArray.splice(0, syncDataLimit);
+
+    //     this.syncShipmentsJSON = {
+
+    //       "authToken": this.authToken,
+    //       "appVersion": this.appVersionNumber,
+    //       "syncType": "group",
+    //       "data": this.shipmentSubListArray
+    //     }
+
+    //     console.log(this.syncShipmentsJSON);
+
+    //     this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON).then((result) => {
+
+    //       if (result["status"] == 'success') {
+    //         console.log(result);
+    //         this.resultArray = [];
+    //         this.resultArray.push(result['data']);
+
+    //         this.resultArray[0].forEach((result, index) => {
+
+    //           if (result.status == "success") {
+    //             this.subListRespSuccessCount = this.subListRespSuccessCount + 1;
+
+    //             this.localStorageUnSyncedArray.forEach((localSubUnSynced, index) => {
+
+    //                 if (localSubUnSynced.mapId == result.data.mapId) {
+    //                   let syncedSubShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
+    //                       mapId: result.data.mapId
+    //                     }
+
+    //                   );
+    //                   this.localStorageUnSyncedArray.splice(syncedSubShipmentIndex, 1);
+    //                 }
+    //               }
+
+    //             )
+    //           } else {
+    //             this.subListRespErrorCount = this.subListRespErrorCount + 1;
+    //           }
+    //         })
+
+    //         this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
+    //         this.storage.set("localShipmentForm", this.localShipmentArray);
+
+    //         if ((this.subListRespSuccessCount + this.subListRespErrorCount) == this.totSyncArrayLength) {
+    //           this.getAllShippings();
+
+    //           if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount == 0) {
+    //             this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records synced successfully');
+    //           }
+
+    //           if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount != 0) {
+    //             this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records synced and ' + this.subListRespErrorCount + ' records unsynced successfully');
+    //           }
+
+    //           if (this.subListRespSuccessCount == 0 && this.subListRespErrorCount != 0) {
+    //             this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records unsynced');
+    //           }
+    //         }
+    //       } else if (result["status"] == "auth-fail") {
+
+    //         if (this.authFailAlertCount == 0) {
+    //           this.alertService.presentAlert('Alert', result["message"]);
+    //           this.authFailAlertCount++;
+    //           this.storage.set("isLogOut", true);
+    //           this.router.navigate(['/login']);
+    //         }
+
+    //       } else if (result["status"] == 'version-failed') {
+    //         if (this.versionFailAlertCount == 0) {
+    //           this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
+    //           this.versionFailAlertCount++;
+    //         }
+    //       } else {
+    //         if (this.failureAlertCount == 0) {
+    //           this.alertService.presentAlert('Alert', result["message"]);
+    //           this.failureAlertCount++;
+    //         }
+    //       }
+    //     }, (err) => {
+    //       if (this.errSyncAllCount == 0) {
+    //         this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
+    //         this.errSyncAllCount++;
+    //       }
+    //     });
+    //   })
+    // }
   }
 
   async downloadReport(downloadLink, fileName) {
