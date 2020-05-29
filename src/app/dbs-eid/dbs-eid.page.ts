@@ -19,7 +19,9 @@ import {
   LoaderService,
   AlertService
 } from '../../app/service/providers';
-import { CrudServiceService} from '../../app/service/crud/crud-service.service';
+import {
+  CrudServiceService
+} from '../../app/service/crud/crud-service.service';
 import {
   ErrorStateMatcher
 } from '@angular/material/core';
@@ -104,7 +106,7 @@ export class DbsEidPage implements OnInit {
   dynamicStep = 0;
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
-
+  isValidTestingDate: boolean = false;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -115,7 +117,7 @@ export class DbsEidPage implements OnInit {
     public network: Network,
     public LocalShipmentFormService: LocalShipmentFormService,
     public alertService: AlertService,
-    public loadingCtrl: LoadingController,) {
+    public loadingCtrl: LoadingController, ) {
 
   }
 
@@ -173,7 +175,7 @@ export class DbsEidPage implements OnInit {
         this.showParticipantData = false;
       }
       if (this.eidArray[0].eidData.Heading2.status == true) {
-  
+
         this.showShipmentData = true;
         this.shipmentData['shipmentDate'] = this.eidArray[0].eidData.Heading2.data.shipmentDate;
         this.shipmentData['resultDueDate'] = this.eidArray[0].eidData.Heading2.data.resultDueDate;
@@ -187,10 +189,10 @@ export class DbsEidPage implements OnInit {
         this.shipmentData['detectionExpirationDate'] = this.eidArray[0].eidData.Heading2.data.detectionExpirationDate ? new Date(this.eidArray[0].eidData.Heading2.data.detectionExpirationDate) : '';
         this.shipmentData['extractionAssayDropdown'] = this.eidArray[0].eidData.Heading2.data.extractionAssaySelect;
         this.shipmentData['detectionAssayDropdown'] = this.eidArray[0].eidData.Heading2.data.detectionAssaySelect;
-        this.shipmentData['modeOfReceiptDropdown'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelect ? this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelect:[];
+        this.shipmentData['modeOfReceiptDropdown'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelect ? this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelect : [];
         this.shipmentData['extractionAssay'] = this.eidArray[0].eidData.Heading2.data.extractionAssaySelected;
         this.shipmentData['detectionAssay'] = this.eidArray[0].eidData.Heading2.data.detectionAssaySelected;
-        this.shipmentData['modeOfReceipt'] =this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected ? this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected:'';
+        this.shipmentData['modeOfReceipt'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected ? this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected : '';
         if (this.participantQcAccess == true) {
           if (this.eidArray[0].eidData.Heading2.data.qcData.status == true) {
             this.isQCDoneShow = true;
@@ -234,7 +236,7 @@ export class DbsEidPage implements OnInit {
         this.ptPanelData['sampleTextData'] = this.eidArray[0].eidData.Heading3.data.samples;
         this.ptPanelData['samples'] = this.ptPanelData['sampleTextData'];
         this.ptPanelData['resultsTextData'] = this.eidArray[0].eidData.Heading3.data.resultsText;
-      
+
       } else {
         this.showPTPanelData = false;
       }
@@ -300,13 +302,12 @@ export class DbsEidPage implements OnInit {
     }
   }
   getEIDFormDetails() {
-   
+
     this.storage.get('selectedTestFormArray').then((eidDataObj) => {
-   debugger;
       this.isView = eidDataObj[0].isView;
       if (eidDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
-     
+
           if ((localStorageSelectedFormArray[0].isSynced == eidDataObj[0].isSynced) &&
             (localStorageSelectedFormArray[0].evaluationStatus == eidDataObj[0].evaluationStatus) &&
             (localStorageSelectedFormArray[0].mapId == eidDataObj[0].mapId) &&
@@ -315,14 +316,14 @@ export class DbsEidPage implements OnInit {
             (localStorageSelectedFormArray[0].schemeType == eidDataObj[0].schemeType)) {
 
             this.isView = localStorageSelectedFormArray[0].isView;
-            this.eidArray=[];
+            this.eidArray = [];
             this.eidArray.push(localStorageSelectedFormArray[0]);
             this.bindEIDData();
 
           }
         })
       } else {
-      
+
         this.eidArray = [];
         this.eidArray.push(eidDataObj[0]);
         this.bindEIDData();
@@ -341,7 +342,7 @@ export class DbsEidPage implements OnInit {
       !this.shipmentData['detectionLotNumber'] ||
       !this.shipmentData['detectionExpirationDate'] ||
       (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) ||
-      (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate ) && this.participantQcAccess==true)||
+      (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate) && this.participantQcAccess == true) ||
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
       this.validShipmentDetails = false;
 
@@ -366,7 +367,7 @@ export class DbsEidPage implements OnInit {
     if (this.ptPanelNotTested == false || !this.ptPanelNotTested) {
       this.ptPanelData['sampleTextData'].mandatory.forEach((mandCheck, index) => {
         if (mandCheck == true) {
-          if(this.ptPanelData['samples'].yourResults[index]==''||!this.ptPanelData['samples'].yourResults[index]){
+          if (this.ptPanelData['samples'].yourResults[index] == '' || !this.ptPanelData['samples'].yourResults[index]) {
             this.yourResultCheckArray[index] = 'invalid';
           } else {
             this.yourResultCheckArray[index] = 'valid';
@@ -383,8 +384,8 @@ export class DbsEidPage implements OnInit {
           // }
         } else {
           this.yourResultCheckArray[index] = 'valid';
-        //  this.hivCTODCheckArray[index] = 'valid';
-        //  this.icQsValuesCheckArray[index] = 'valid';
+          //  this.hivCTODCheckArray[index] = 'valid';
+          //  this.icQsValuesCheckArray[index] = 'valid';
         }
       });
 
@@ -409,10 +410,9 @@ export class DbsEidPage implements OnInit {
 
     } else {
       if (!this.ptPanelData['vlNotTestedReason'] ||
-        !this.ptPanelData['ptNotTestedComments'] 
-       // !this.ptPanelData['ptSupportComments']
-       )
-         {
+        !this.ptPanelData['ptNotTestedComments']
+        // !this.ptPanelData['ptSupportComments']
+      ) {
         this.isValidPTPanel = false;
 
       } else {
@@ -480,26 +480,24 @@ export class DbsEidPage implements OnInit {
     this.checkPtPanel('submit');
     if (this.showCustomFieldData == true) {
       this.checkCustFieldPanel('submit');
-    } 
+    }
     this.checkOtherInfoPanel('submit');
     if (this.validShipmentDetails == false) {
       this.setStep(1);
     } else if (this.isValidPTPanel == false) {
       this.setStep(2);
-    }
-     else if (this.showCustomFieldData == true && this.isValidCustField == false) {
+    } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
       this.setStep(4);
     } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
       this.setStep(3);
-    }
-     else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
-     // else if (this.otherInfoValid == false) {
+    } else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
+      // else if (this.otherInfoValid == false) {
       this.setStep(4);
     }
     if (this.qcDone == 'no' || this.qcDone == '') {
       this.qcDate = "";
       this.qcDoneBy = "";
-    
+
     }
     this.isSubmitted = "true";
     if (this.ptPanelNotTested == true) {
@@ -509,7 +507,14 @@ export class DbsEidPage implements OnInit {
     }
     this.updatedStatus = this.eidArray[0].updatedStatus;
     if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.otherInfoValid == true) {
-
+debugger;
+      if (this.shipmentData['shipmentTestingDate']) {
+        if (new Date(this.shipmentData['shipmentTestingDate']) > new Date(this.shipmentData['testReceiptDate'])) {
+          this.isValidTestingDate = true;
+        }
+      } else {
+        this.isValidTestingDate = true;
+      }
       this.EIDJSON = {
         "authToken": this.authToken,
         "appVersion": this.appVersionNumber,
@@ -573,15 +578,15 @@ export class DbsEidPage implements OnInit {
               "data": {
                 "samples": this.ptPanelData['samples'],
                 "resultsText": this.ptPanelData['resultsTextData'],
-                "samplesList":this.ptPanelData['samplesList'],
+                "samplesList": this.ptPanelData['samplesList'],
                 "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
-                "vlNotTestedReasonText":this.ptPanelData['vlNotTestedReasonText'],
+                "vlNotTestedReasonText": this.ptPanelData['vlNotTestedReasonText'],
                 "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
                 "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
-                "ptNotTestedCommentsText":this.ptPanelData['ptNotTestedCommentsText'],
+                "ptNotTestedCommentsText": this.ptPanelData['ptNotTestedCommentsText'],
                 "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
-                "ptSupportCommentsText":this.ptPanelData['ptSupportCommentsText'],
-                "ptSupportComments": this.ptPanelData['ptSupportComments'],               
+                "ptSupportCommentsText": this.ptPanelData['ptSupportCommentsText'],
+                "ptSupportComments": this.ptPanelData['ptSupportComments'],
               }
             },
             "Heading4": {
@@ -615,13 +620,13 @@ export class DbsEidPage implements OnInit {
       }
       const loading = await this.loadingCtrl.create({
         spinner: 'dots',
-        mode:'ios',
+        mode: 'ios',
         message: 'Please wait',
       });
       await loading.present();
-      this.isView='true';
-      this.isShowReviewMsg=true;
-      this.summarizeForm=true;
+      this.isView = 'true';
+      this.isShowReviewMsg = true;
+      this.summarizeForm = true;
       loading.dismiss();
     }
   }
@@ -641,26 +646,24 @@ export class DbsEidPage implements OnInit {
     this.checkPtPanel('submit');
     if (this.showCustomFieldData == true) {
       this.checkCustFieldPanel('submit');
-    } 
+    }
     this.checkOtherInfoPanel('submit');
     if (this.validShipmentDetails == false) {
       this.setStep(1);
     } else if (this.isValidPTPanel == false) {
       this.setStep(2);
-    }
-     else if (this.showCustomFieldData == true && this.isValidCustField == false) {
+    } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
       this.setStep(4);
     } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
       this.setStep(3);
-    }
-     else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
-     // else if (this.otherInfoValid == false) {
+    } else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
+      // else if (this.otherInfoValid == false) {
       this.setStep(4);
     }
     if (this.qcDone == 'no' || this.qcDone == '') {
       this.qcDate = "";
       this.qcDoneBy = "";
-    
+
     }
     this.isSubmitted = "true";
     if (this.ptPanelNotTested == true) {
@@ -734,15 +737,15 @@ export class DbsEidPage implements OnInit {
               "data": {
                 "samples": this.ptPanelData['samples'],
                 "resultsText": this.ptPanelData['resultsTextData'],
-                "samplesList":this.ptPanelData['samplesList'],
+                "samplesList": this.ptPanelData['samplesList'],
                 "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
-                "vlNotTestedReasonText":this.ptPanelData['vlNotTestedReasonText'],
+                "vlNotTestedReasonText": this.ptPanelData['vlNotTestedReasonText'],
                 "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
                 "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
-                "ptNotTestedCommentsText":this.ptPanelData['ptNotTestedCommentsText'],
+                "ptNotTestedCommentsText": this.ptPanelData['ptNotTestedCommentsText'],
                 "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
-                "ptSupportCommentsText":this.ptPanelData['ptSupportCommentsText'],
-                "ptSupportComments": this.ptPanelData['ptSupportComments'],               
+                "ptSupportCommentsText": this.ptPanelData['ptSupportCommentsText'],
+                "ptSupportComments": this.ptPanelData['ptSupportComments'],
               }
             },
             "Heading4": {
@@ -779,34 +782,33 @@ export class DbsEidPage implements OnInit {
         this.EIDJSON['data']['isSynced'] = 'true';
 
         this.CrudServiceService.postData('/api/shipments/save-form', this.EIDJSON).then((result) => {
-            if (result["status"] == 'success') {
-              this.alertService.presentAlert('Success',result['message']);
-              this.router.navigate(['/all-pt-schemes']);
-            }
-            else if (result["status"] == "auth-fail") {
-              this.alertService.presentAlert('Alert', result["message"]);
-              this.storage.set("isLogOut", true);
-              this.router.navigate(['/login']);
-            } else if (result["status"] == 'version-failed') {
-  
-              this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
-  
-            } else {
-  
-              this.alertService.presentAlert('Alert', result["message"]);
-            }
-          }, (err) => {
-            this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
-          });
+          if (result["status"] == 'success') {
+            this.alertService.presentAlert('Success', result['message']);
+            this.router.navigate(['/all-pt-schemes']);
+          } else if (result["status"] == "auth-fail") {
+            this.alertService.presentAlert('Alert', result["message"]);
+            this.storage.set("isLogOut", true);
+            this.router.navigate(['/login']);
+          } else if (result["status"] == 'version-failed') {
+
+            this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
+
+          } else {
+
+            this.alertService.presentAlert('Alert', result["message"]);
+          }
+        }, (err) => {
+          this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+        });
       }
     }
   }
 
 
   editForm() {
-    this.isShowReviewMsg=false;
+    this.isShowReviewMsg = false;
     this.summarizeForm = true;
-    this.isView='false';
+    this.isView = 'false';
   }
 
 
@@ -819,18 +821,18 @@ export class DbsEidPage implements OnInit {
   }
   clearTestingDate() {
 
-    this.shipmentData['shipmentTestingDate']= "";
+    this.shipmentData['shipmentTestingDate'] = "";
   }
-  clearExtAssExpDate(){
-    this.shipmentData['extractionExpirationDate']='';
+  clearExtAssExpDate() {
+    this.shipmentData['extractionExpirationDate'] = '';
   }
-  clearDecAssExpDate(){
-    this.shipmentData['detectionExpirationDate']='';
+  clearDecAssExpDate() {
+    this.shipmentData['detectionExpirationDate'] = '';
   }
   clearResponseDate() {
     this.shipmentData['responseDate'] = ''
   }
-  clearQCDate(){
-    this.qcDate='';
+  clearQCDate() {
+    this.qcDate = '';
   }
 }

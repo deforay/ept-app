@@ -109,7 +109,17 @@ export class LoginPage implements OnInit {
   }
 
   ionViewWillEnter(){
+    
     this.storage.remove('appPin');
+    this.emailFormControl.setValue('');
+    this.emailFormControl.markAsUntouched();
+    this.emailFormControl.setErrors(null);
+    this.pswdFormControl.setValue('');
+    this.pswdFormControl.markAsUntouched();
+    this.pswdFormControl.setErrors(null);
+    this.serverHostFormControl.setValue('');
+    this.serverHostFormControl.markAsUntouched();
+    this.serverHostFormControl.setErrors(null);
   }
 
   login() {
