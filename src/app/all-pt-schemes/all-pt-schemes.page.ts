@@ -21,9 +21,6 @@ import {
 import {
   Events
 } from '@ionic/angular';
-import {
-  syncDataLimit
-} from '../service/constant';
 import * as _ from 'lodash';
 import {
   LoadingController
@@ -52,6 +49,7 @@ import {
   ROOT_DIRECTORY,
   SHIPMENTS_REPORTS_DIRECTORY
 } from '../../app/service/constant';
+import { ModalController } from '@ionic/angular';
 @Component({
     selector: 'app-all-pt-schemes',
     templateUrl: './all-pt-schemes.page.html',
@@ -72,32 +70,19 @@ import {
   formattedDate: string;
   localStorageUnSyncedArray: any = [];
   syncDataLimit: any;
-  syncDataCount: number;
-  syncShipmentsJSON = {};
-  shipmentSubListArray = [];
-  resultArray = [];
-  syncedShipmentIndex: any;
   loginID: any;
   existingLabIndex: any;
   totSyncArrayLength: number;
-  responseSuccessCount: number;
-  responseErrorCount: number;
-  copylocalStorageUnSyncedArray = [];
-  subListRespSuccessCount: number;
-  subListRespErrorCount: number;
   skeltonArray: any = [];
   isViewOnlyAccess: boolean;
   partiDetailsArray: any = [];
-  authFailAlertCount: number = 0;
-  versionFailAlertCount: number = 0;
-  failureAlertCount: number = 0;
-  errSyncAllCount: number = 0;
   showNoData: boolean = false;
   shippingsOriginalArray: any = [];
   NoFilteredData: boolean = false;
   filterJSON: any = [];
   apiUrl: string;
-  
+  shippingsUnsyncedArray: any = [];
+
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public LoaderService: LoaderService,
@@ -109,7 +94,8 @@ import {
     public popoverController: PopoverController,
     private ft: FileTransfer,
     private file: File,
-    private fileOpener: FileOpener) {}
+    private fileOpener: FileOpener,
+    public modalController: ModalController) {}
 
   dateFormat(dateObj) {
     return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
@@ -122,7 +108,7 @@ import {
 
     //comment when take buid start
 
-     //  this.networkType = 'none';
+    //  this.networkType = 'none';
 
     //end...
 
@@ -558,13 +544,20 @@ import {
             localShipmentForm[this.existingLabIndex].shipmentArray.forEach((localShipment, index) => {
               this.shippingsArray.forEach((shipmentAPI, index) => {
 
-                  if (shipmentAPI.mapId == localShipment.mapId) {
-                    shipmentAPI.isSynced = "false";
-                  }
-
+                if (shipmentAPI.mapId == localShipment.mapId) {
+                  shipmentAPI.isSynced = "false";
                 }
 
-              )
+              })
+              this.shippingsOriginalArray.forEach((shipmentAPI, index) => {
+
+                if (shipmentAPI.mapId == localShipment.mapId) {
+                  shipmentAPI.isSynced = "false";
+                }
+
+              })
+
+
             })
 
             console.log(this.localStorageUnSyncedArray);
@@ -610,7 +603,7 @@ import {
 
 
         if (this.TestFormArray) {
-
+          this.storage.set('isFromSyncAll', false);
           this.TestFormArray[0].isView = isView;
           this.storage.set('selectedTestFormArray', this.TestFormArray);
 
@@ -664,31 +657,17 @@ import {
     loading.dismiss();
   }
 
-  async syncShipments(ev: any) {
+  async syncShipments() {
+   
+    this.shippingsUnsyncedArray = this.shippingsOriginalArray.filter(
+      item => item.isSynced == 'false');
+    this.storage.set('shippingsUnsyncedArray', this.shippingsUnsyncedArray);
 
-    const popover = await this.popoverController.create({
+    const modal = await this.modalController.create({
       component: SyncAllShipmentsComponent,
-      event: ev,
-      translucent: true,
-      backdropDismiss: true,
     });
-    popover.onDidDismiss()
-      .then((data) => {
-        if (data['data']) {
-          if (data['data'] == 'reset') {
-            this.filterJSON = [];
-            this.onloadShipment();
-          } else {
-            this.filterJSON = data['data'];
-            if (this.filterJSON.shipmentFilterID == "" && this.filterJSON.participantFliterId == "" && this.filterJSON.schemeTypeFliterID == "") {
-              this.onloadShipment();
-            } else {
-              this.applyFilter(this.filterJSON);
-            }
-          }
-        }
-      });
-    return await popover.present();
+    return await modal.present();
+
     // this.totSyncArrayLength = this.localStorageUnSyncedArray.length;
     // this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
 

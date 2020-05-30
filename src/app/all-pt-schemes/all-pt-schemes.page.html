@@ -294,8 +294,7 @@
   <ion-footer *ngIf="localStorageUnSyncedArray.length!=0 && networkType!='none'">
     <ion-toolbar>
       <ion-button expand="full" class="text-center native-btn syncAll" (click)="syncShipments()">
-        <ion-icon ios="ios-sync" md="md-sync"></ion-icon>
-        Sync All ({{localStorageUnSyncedArray.length}})
+        View Unsynced Shipments ({{localStorageUnSyncedArray.length}})
       </ion-button>
     </ion-toolbar>
   </ion-footer>

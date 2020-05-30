@@ -30,6 +30,7 @@ import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { ShipmentFilterComponent} from '../app/shipment-filter/shipment-filter.component';
 import { SyncAllShipmentsComponent} from '../app/sync-all-shipments/sync-all-shipments.component';
 import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
+
 @NgModule({
   declarations: [
     AppComponent,

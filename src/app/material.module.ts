@@ -23,11 +23,10 @@ import {
   MatListModule,
   MatRadioModule,
   MatProgressSpinnerModule
-
-//  ErrorStateMatcher
 } from "@angular/material";
 import {MatChipsModule} from '@angular/material/chips';
-// import {} from '@angular/material/radio';
+import {MatBadgeModule} from '@angular/material/badge';
+
 @NgModule({
   declarations: [],
   imports: [
@@ -56,9 +55,8 @@ import {MatChipsModule} from '@angular/material/chips';
     MatListModule,
     MatRadioModule,
     MatProgressSpinnerModule,
-    MatChipsModule
-
-   // ErrorStateMatcher
+    MatChipsModule,
+    MatBadgeModule,
   ]
 })
 export class MaterialModule { }

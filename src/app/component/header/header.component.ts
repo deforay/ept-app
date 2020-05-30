@@ -10,6 +10,9 @@ import {
 import {
   Router
 } from '@angular/router';
+import {
+  Storage
+} from '@ionic/storage';
 @Component({
   selector: 'app-header',
   templateUrl: './header.component.html',
@@ -22,19 +25,40 @@ export class HeaderComponent implements OnInit {
   }) routerOutlet: IonRouterOutlet;
   @Input('titleHeader') titleHeader;
   @Input('isMenuOrBackButton') isMenuOrBackButton;
+  isFromSyncAll:any;
+
+  constructor(private router: Router,private storage: Storage,) {}
+
+  ngOnInit() {
+    this.storage.get('isFromSyncAll').then((isFromSyncAll) => {
+      this.isFromSyncAll=isFromSyncAll;
+    })
+  }
 
 
-  constructor(private router: Router) {}
-
-  ngOnInit() {}
 
   goBack(titleHeader) {
+
+    if(this.isFromSyncAll==false){
+
     if (titleHeader == "DTS- HIV Viral Load" ||titleHeader == "DTS - HIV Serology" || titleHeader=="DBS - Early Infant Diagnosis" ||titleHeader == "View DTS- HIV Viral Load" || titleHeader == "View DTS - HIV Serology" || titleHeader == "View DBS - Early Infant Diagnosis") {
-      this.router.navigate(['/all-pt-schemes'], {replaceUrl: true});
+
+     this.router.navigate(['/all-pt-schemes'], {replaceUrl: true});
+     
     }
-    if (titleHeader == "View Shipment Form") {
-      this.routerOutlet.pop();
+  }
+
+    if(this.isFromSyncAll==true){
+      debugger;
+      if (titleHeader == "DTS- HIV Viral Load" ||titleHeader == "DTS - HIV Serology" || titleHeader=="DBS - Early Infant Diagnosis" ||titleHeader == "View DTS- HIV Viral Load" || titleHeader == "View DTS - HIV Serology" || titleHeader == "View DBS - Early Infant Diagnosis") {
+
+      //  this.router.navigate(['/all-pt-schemes'], {replaceUrl: true});
+
+
+          this.routerOutlet.pop();
+       }
     }
+
   }
 
 }
