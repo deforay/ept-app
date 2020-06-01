@@ -158,19 +158,23 @@
         <ion-row>
 
           <ion-col size="6">
-            <ion-button size="small" *ngIf="item.updatedOn!=''"
+            <ion-button size="small" *ngIf="item.updatedOn!=''|| item.isSynced=='false'"
               class="text-center native-btn viewResponse" (click)="goToTestForm(item,'true')">View Response
             </ion-button>
           </ion-col>
 
           <ion-col size="6">
-            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && responseSwitch==on && item.isSynced==''" size="small" class="text-center native-btn enterEdit"
+
+            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && responseSwitch==on && item.is_excluded!='yes' && item.isSynced=='' " size="small" class="text-center native-btn enterEdit"
               (click)="goToTestForm(item)">Enter Response
             </ion-button>
-            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && responseSwitch==on || item.isSynced=='false'" size="small" class="text-center native-btn enterEdit"
+
+            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && responseSwitch==on && item.is_excluded!='yes' || item.isSynced=='false' " size="small" class="text-center native-btn enterEdit"
               (click)="goToTestForm(item)">Edit Response</ion-button>
+
             <ion-button *ngIf="item.status=='finalized' && item.invididualReport!=''" size="small" class="text-center native-btn enterEdit download"
               (click)="downloadReport(item.invididualReport,item.invididualFileName)">Download Report</ion-button>
+          
           </ion-col>
         </ion-row>
 

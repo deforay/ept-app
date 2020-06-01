@@ -19,7 +19,8 @@ import {
   Network
 } from '@ionic-native/network/ngx';
 import {
-  Events
+  Events,
+  IonItem
 } from '@ionic/angular';
 import * as _ from 'lodash';
 import {
@@ -49,7 +50,12 @@ import {
   ROOT_DIRECTORY,
   SHIPMENTS_REPORTS_DIRECTORY
 } from '../../app/service/constant';
-import { ModalController } from '@ionic/angular';
+import {
+  ModalController
+} from '@ionic/angular';
+import {
+  of
+} from 'rxjs';
 @Component({
     selector: 'app-all-pt-schemes',
     templateUrl: './all-pt-schemes.page.html',
@@ -108,7 +114,7 @@ import { ModalController } from '@ionic/angular';
 
     //comment when take buid start
 
-    //  this.networkType = 'none';
+    this.networkType = '4g';
 
     //end...
 
@@ -166,53 +172,55 @@ import { ModalController } from '@ionic/angular';
       mode: 'ios'
     });
     await loading.present();
-    this.shippingsArray = [];
 
+    this.shippingsArray = [];
 
     if (filterJSON.shipmentFilterID && filterJSON.participantFliterId && filterJSON.schemeTypeFliterID) {
 
       if (filterJSON.shipmentFilterID == 'activeNotResp') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.status == 'shipped' && item.updatedOn == '' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID)
+          item => item.status == 'shipped' && item.updatedOn == '' && item.is_excluded != 'yes' && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID)
       } else if (filterJSON.shipmentFilterID == 'activeResp') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
+          item => (((item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.is_excluded != 'yes') || ((item.status == 'shipped' || item.status == 'evaluated') && item.is_excluded != 'yes' && item.isSynced == 'false')) && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
       } else if (filterJSON.shipmentFilterID == 'closed') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.status == 'finalized' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
+          item => item.status == 'finalized' && item.is_excluded != 'yes' && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
       } else if (filterJSON.shipmentFilterID == 'excluded') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.is_excluded == 'yes' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
+          item => item.is_excluded == 'yes' && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
       } else {}
     } else if (filterJSON.shipmentFilterID && filterJSON.participantFliterId == '' && filterJSON.schemeTypeFliterID == '') {
+
       if (filterJSON.shipmentFilterID == 'activeNotResp') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.status == 'shipped' && item.updatedOn == '')
+          item => item.status == 'shipped' && item.updatedOn == '' && item.is_excluded != 'yes' && item.isSynced != 'false')
       } else if (filterJSON.shipmentFilterID == 'activeResp') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '');
+          item => (((item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.is_excluded != 'yes') || ((item.status == 'shipped' || item.status == 'evaluated') && item.is_excluded != 'yes' && item.isSynced == 'false')));
       } else if (filterJSON.shipmentFilterID == 'closed') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.status == 'finalized');
+          item => item.status == 'finalized' && item.is_excluded != 'yes' && item.isSynced != 'false');
       } else if (filterJSON.shipmentFilterID == 'excluded') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.is_excluded == 'yes');
+          item => item.is_excluded == 'yes' && item.isSynced != 'false');
       } else {}
 
     } else if (filterJSON.shipmentFilterID && filterJSON.participantFliterId && filterJSON.schemeTypeFliterID == '') {
 
       if (filterJSON.shipmentFilterID == 'activeNotResp' && filterJSON.participantFliterId) {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.status == 'shipped' && item.updatedOn == '' && item.participantId == filterJSON.participantFliterId)
+          item => (item.status == 'shipped' && item.updatedOn == '') && item.is_excluded != 'yes' && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId)
       } else if (filterJSON.shipmentFilterID == 'activeResp' && filterJSON.participantFliterId) {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.participantId == filterJSON.participantFliterId);
+          item => (((item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.is_excluded != 'yes') || ((item.status == 'shipped' || item.status == 'evaluated') && item.is_excluded != 'yes' && item.isSynced == 'false')) && item.participantId == filterJSON.participantFliterId);
+
       } else if (filterJSON.shipmentFilterID == 'closed' && filterJSON.participantFliterId) {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.status == 'finalized' && item.participantId == filterJSON.participantFliterId);
+          item => item.status == 'finalized' && item.is_excluded != 'yes' && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId);
       } else if (filterJSON.shipmentFilterID == 'excluded' && filterJSON.participantFliterId) {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.is_excluded == 'yes' && item.participantId == filterJSON.participantFliterId);
+          item => item.is_excluded == 'yes' && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId);
       } else {}
     } else if (filterJSON.participantFliterId && filterJSON.shipmentFilterID == '' && filterJSON.schemeTypeFliterID == '') {
       if (filterJSON.participantFliterId) {
@@ -237,30 +245,27 @@ import { ModalController } from '@ionic/angular';
 
       if (filterJSON.shipmentFilterID == 'activeNotResp' && filterJSON.schemeTypeFliterID) {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.status == 'shipped' && item.updatedOn == '' && item.schemeType == filterJSON.schemeTypeFliterID)
+          item => (item.status == 'shipped' && item.updatedOn == '') && item.is_excluded != 'yes' && item.isSynced != 'false' && item.schemeType == filterJSON.schemeTypeFliterID)
       } else if (filterJSON.shipmentFilterID == 'activeResp') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => (item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.schemeType == filterJSON.schemeTypeFliterID);
+          item => (((item.status == 'shipped' || item.status == 'evaluated') && item.updatedOn != '' && item.is_excluded != 'yes') || ((item.status == 'shipped' || item.status == 'evaluated') && item.is_excluded != 'yes' && item.isSynced == 'false')) && item.schemeType == filterJSON.schemeTypeFliterID);
       } else if (filterJSON.shipmentFilterID == 'closed') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.status == 'finalized' && item.schemeType == filterJSON.schemeTypeFliterID);
+          item => item.status == 'finalized' && item.is_excluded != 'yes' && item.isSynced != 'false' && item.isSynced != 'false' && item.schemeType == filterJSON.schemeTypeFliterID);
       } else if (filterJSON.shipmentFilterID == 'excluded') {
         this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.is_excluded == 'yes' && item.schemeType == filterJSON.schemeTypeFliterID);
+          item => item.is_excluded == 'yes' && item.isSynced != 'false' && item.schemeType == filterJSON.schemeTypeFliterID);
       } else {}
 
     }
 
-    console.log(this.shippingsArray);
     if (this.shippingsArray.length == 0) {
       this.showNoData = true;
       this.NoFilteredData = true;
     } else {
-      this.checkIsSynced()
       this.NoFilteredData = false;
     }
     loading.dismiss();
-
   }
   onloadShipment() {
 
@@ -274,7 +279,6 @@ import { ModalController } from '@ionic/angular';
       if (partiLoginResult.authToken) {
         this.authToken = partiLoginResult.authToken;
       }
-
       if (partiLoginResult.id) {
         this.loginID = partiLoginResult.id;
       }
@@ -339,7 +343,7 @@ import { ModalController } from '@ionic/angular';
       this.isViewOnlyAccess = participantLogin.viewOnlyAccess;
     })
 
-    this.checkIsSynced();
+    this.checkIsSynced('onload');
   }
 
   ngOnInit() {}
@@ -393,16 +397,11 @@ import { ModalController } from '@ionic/angular';
 
                       this.shippingsArray = result['data'];
                       this.shippingsOriginalArray = result['data'];
-                      this.shippingsArray = this.shippingsOriginalArray.filter(
-                        item => item.status == 'shipped' && item.updatedOn == '')
-                      this.shippingsArray.sort((a, b) => {
-                        return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
-                      });
-                      console.log(this.shippingsArray);
-                      this.storage.set("shipmentArray", this.shippingsOriginalArray);
+                      this.checkIsSynced('onload');
                       this.skeltonArray = [];
                       this.getAllShipmentForms();
-                      this.checkIsSynced();
+
+
                     } else if (result["status"] == "auth-fail") {
                       this.alertService.presentAlert('Alert', result["message"]);
                       this.storage.set("isLogOut", true);
@@ -524,69 +523,58 @@ import { ModalController } from '@ionic/angular';
     );
   }
 
-  checkIsSynced() {
+  checkIsSynced(param) {
+
     this.storage.get('localShipmentForm').then((localShipmentForm) => {
 
-        this.localStorageUnSyncedArray = [];
+      this.localStorageUnSyncedArray = [];
 
-        if (localShipmentForm.length != 0) {
-          this.localShipmentArray = localShipmentForm;
+      if (localShipmentForm.length != 0) {
+        this.localShipmentArray = localShipmentForm;
 
-          this.existingLabIndex = _.findIndex(localShipmentForm, {
-              loginID: this.loginID
-            }
+        this.existingLabIndex = _.findIndex(localShipmentForm, {
+          loginID: this.loginID
+        });
 
-          );
-
-          if (this.existingLabIndex != -1) {
-            this.localStorageUnSyncedArray = localShipmentForm[this.existingLabIndex].shipmentArray;
-
-            localShipmentForm[this.existingLabIndex].shipmentArray.forEach((localShipment, index) => {
-              this.shippingsArray.forEach((shipmentAPI, index) => {
-
-                if (shipmentAPI.mapId == localShipment.mapId) {
-                  shipmentAPI.isSynced = "false";
-                }
-
-              })
-              this.shippingsOriginalArray.forEach((shipmentAPI, index) => {
-
-                if (shipmentAPI.mapId == localShipment.mapId) {
-                  shipmentAPI.isSynced = "false";
-                }
-
-              })
-
-
+        if (this.existingLabIndex != -1) {
+          this.localStorageUnSyncedArray = localShipmentForm[this.existingLabIndex].shipmentArray;
+          localShipmentForm[this.existingLabIndex].shipmentArray.forEach((localShipment, index) => {
+            this.shippingsArray.forEach((shipmentAPI, index) => {
+              if (shipmentAPI.mapId == localShipment.mapId) {
+                shipmentAPI.isSynced = "false";
+              }
             })
-
-            console.log(this.localStorageUnSyncedArray);
-          } else {}
-
-        }
+            this.shippingsOriginalArray.forEach((shipmentAPI, index) => {
+              if (shipmentAPI.mapId == localShipment.mapId) {
+                shipmentAPI.isSynced = "false";
+              }
+            })
+          })
+        } else {}
+      } else {}
+      if (param == 'onload') {
+        this.shippingsArray = this.shippingsOriginalArray.filter(
+          item => item.status == 'shipped' && item.updatedOn == '' && item.is_excluded != 'yes' && item.isSynced != 'false');
+        this.shippingsArray.sort((a, b) => {
+          return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
+        });
+        console.log(this.shippingsArray);
       }
-
-    )
+    })
   }
 
 
   async goToTestForm(item, isView) {
     const element = await this.loadingCtrl.getTop();
-
     if (element && element.dismiss) {
       element.dismiss();
     }
-
     const loading = await this.loadingCtrl.create({
-        spinner: 'dots',
-        mode: 'ios',
-        message: 'Please wait',
-      }
-
-    );
+      spinner: 'dots',
+      mode: 'ios',
+      message: 'Please wait',
+    });
     await loading.present();
-
-
     if (isView == undefined) {
       isView = "false"
     }
@@ -658,7 +646,7 @@ import { ModalController } from '@ionic/angular';
   }
 
   async syncShipments() {
-   
+
     this.shippingsUnsyncedArray = this.shippingsOriginalArray.filter(
       item => item.isSynced == 'false');
     this.storage.set('shippingsUnsyncedArray', this.shippingsUnsyncedArray);
@@ -666,196 +654,14 @@ import { ModalController } from '@ionic/angular';
     const modal = await this.modalController.create({
       component: SyncAllShipmentsComponent,
     });
+    modal.onDidDismiss()
+      .then((data) => {
+        const user = data['data'];
+        if (user['dismissed'] == true) {
+          this.ionViewWillEnter();
+        }
+      });
     return await modal.present();
-
-    // this.totSyncArrayLength = this.localStorageUnSyncedArray.length;
-    // this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
-
-    // if (this.totSyncArrayLength > syncDataLimit) {
-    //   this.syncDataCount = Math.floor(this.totSyncArrayLength / syncDataLimit) + (this.totSyncArrayLength % syncDataLimit);
-    // } else if (this.totSyncArrayLength <= syncDataLimit) {
-    //   this.syncDataCount = 1;
-    // } else {}
-
-    // if (this.syncDataCount == 1) {
-
-    //   this.responseSuccessCount = 0;
-    //   this.responseErrorCount = 0;
-
-    //   this.syncShipmentsJSON = {
-    //     "authToken": this.authToken,
-    //     "appVersion": this.appVersionNumber,
-    //     "syncType": "group",
-    //     "data": this.localStorageUnSyncedArray
-    //   }
-
-    //   this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON).then((result) => {
-
-    //       console.log(result);
-
-    //       if (result["status"] == 'success') {
-    //         this.resultArray = [];
-    //         this.resultArray.push(result['data']);
-
-    //         this.resultArray[0].forEach((result, index) => {
-    //           if (result.status == "success") {
-    //             this.responseSuccessCount = this.responseSuccessCount + 1;
-
-    //             this.localStorageUnSyncedArray.forEach((localUnSynced, index) => {
-    //                 if (localUnSynced.mapId == result.data.mapId) {
-    //                   this.syncedShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
-    //                       mapId: result.data.mapId
-    //                     }
-
-    //                   );
-    //                   this.localStorageUnSyncedArray.splice(this.syncedShipmentIndex, 1);
-    //                 }
-    //               }
-
-    //             )
-    //           } else {
-    //             this.responseErrorCount = this.responseErrorCount + 1;
-    //           }
-    //         })
-
-    //         this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
-    //         this.storage.set("localShipmentForm", this.localShipmentArray);
-
-    //         if ((this.responseSuccessCount + this.responseErrorCount) == this.totSyncArrayLength) {
-    //           this.getAllShippings();
-
-    //           if (this.responseSuccessCount != 0 && this.responseErrorCount == 0) {
-    //             this.alertService.presentAlert('Success', +this.responseSuccessCount + ' records synced successfully');
-    //           }
-
-    //           if (this.responseSuccessCount != 0 && this.responseErrorCount != 0) {
-    //             this.alertService.presentAlert('Success', +this.responseSuccessCount + ' records synced and ' + this.responseErrorCount + ' records unsynced successfully');
-    //           }
-
-    //           if (this.responseSuccessCount == 0 && this.responseErrorCount != 0) {
-    //             this.alertService.presentAlert('Success', +this.responseErrorCount + ' records unsynced');
-    //           }
-    //         }
-
-    //       } else if (result["status"] == "auth-fail") {
-    //         this.alertService.presentAlert('Alert', result["message"]);
-    //         this.storage.set("isLogOut", true);
-    //         this.router.navigate(['/login']);
-
-    //       } else if (result["status"] == 'version-failed') {
-
-    //         this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
-
-    //       } else {
-
-    //         this.alertService.presentAlert('Alert', result["message"]);
-    //       }
-    //     }
-
-    //     , (err) => {
-
-    //       this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
-
-    //     }
-    //   );
-    // } else {
-
-    //   this.subListRespSuccessCount = 0;
-    //   this.subListRespErrorCount = 0;
-    //   this.authFailAlertCount = 0;
-    //   this.versionFailAlertCount = 0;
-    //   this.failureAlertCount = 0;
-    //   this.errSyncAllCount = 0;
-
-    //   _.times(this.syncDataCount, () => {
-    //     this.shipmentSubListArray = this.copylocalStorageUnSyncedArray.splice(0, syncDataLimit);
-
-    //     this.syncShipmentsJSON = {
-
-    //       "authToken": this.authToken,
-    //       "appVersion": this.appVersionNumber,
-    //       "syncType": "group",
-    //       "data": this.shipmentSubListArray
-    //     }
-
-    //     console.log(this.syncShipmentsJSON);
-
-    //     this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON).then((result) => {
-
-    //       if (result["status"] == 'success') {
-    //         console.log(result);
-    //         this.resultArray = [];
-    //         this.resultArray.push(result['data']);
-
-    //         this.resultArray[0].forEach((result, index) => {
-
-    //           if (result.status == "success") {
-    //             this.subListRespSuccessCount = this.subListRespSuccessCount + 1;
-
-    //             this.localStorageUnSyncedArray.forEach((localSubUnSynced, index) => {
-
-    //                 if (localSubUnSynced.mapId == result.data.mapId) {
-    //                   let syncedSubShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
-    //                       mapId: result.data.mapId
-    //                     }
-
-    //                   );
-    //                   this.localStorageUnSyncedArray.splice(syncedSubShipmentIndex, 1);
-    //                 }
-    //               }
-
-    //             )
-    //           } else {
-    //             this.subListRespErrorCount = this.subListRespErrorCount + 1;
-    //           }
-    //         })
-
-    //         this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
-    //         this.storage.set("localShipmentForm", this.localShipmentArray);
-
-    //         if ((this.subListRespSuccessCount + this.subListRespErrorCount) == this.totSyncArrayLength) {
-    //           this.getAllShippings();
-
-    //           if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount == 0) {
-    //             this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records synced successfully');
-    //           }
-
-    //           if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount != 0) {
-    //             this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records synced and ' + this.subListRespErrorCount + ' records unsynced successfully');
-    //           }
-
-    //           if (this.subListRespSuccessCount == 0 && this.subListRespErrorCount != 0) {
-    //             this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records unsynced');
-    //           }
-    //         }
-    //       } else if (result["status"] == "auth-fail") {
-
-    //         if (this.authFailAlertCount == 0) {
-    //           this.alertService.presentAlert('Alert', result["message"]);
-    //           this.authFailAlertCount++;
-    //           this.storage.set("isLogOut", true);
-    //           this.router.navigate(['/login']);
-    //         }
-
-    //       } else if (result["status"] == 'version-failed') {
-    //         if (this.versionFailAlertCount == 0) {
-    //           this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
-    //           this.versionFailAlertCount++;
-    //         }
-    //       } else {
-    //         if (this.failureAlertCount == 0) {
-    //           this.alertService.presentAlert('Alert', result["message"]);
-    //           this.failureAlertCount++;
-    //         }
-    //       }
-    //     }, (err) => {
-    //       if (this.errSyncAllCount == 0) {
-    //         this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
-    //         this.errSyncAllCount++;
-    //       }
-    //     });
-    //   })
-    // }
   }
 
   async downloadReport(downloadLink, fileName) {

@@ -1024,7 +1024,6 @@ export class DTSHIVSerologyPage implements OnInit {
           }
         }
       }
-      console.log(this.serologyJSON);
   
       if (this.network.type == 'none'|| this.network.type==null) {
         this.serologyJSON['data']['isSynced'] = 'false';

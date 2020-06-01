@@ -12,7 +12,9 @@ import {
 import {
   Router
 } from '@angular/router';
-import { ModalController } from '@ionic/angular';
+import {
+  ModalController
+} from '@ionic/angular';
 import {
   LoaderService,
   AlertService
@@ -51,13 +53,15 @@ export class SyncAllShipmentsComponent implements OnInit {
   subListRespSuccessCount: number;
   subListRespErrorCount: number;
   shipmentSubListArray = [];
-  authToken:any;
-  appVersionNumber:any;
+  authToken: any;
+  appVersionNumber: any;
   TestFormArray: any;
   localStorageSelectedFormArray: any = [];
+  isViewOnlyAccess: boolean;
+  isSyncGoing:boolean=false;
 
-  constructor(private storage: Storage, private router: Router,public modalController: ModalController,
-    public LoaderService: LoaderService,public CrudServiceService: CrudServiceService,public alertService: AlertService,public loadingCtrl: LoadingController) {
+  constructor(private storage: Storage, private router: Router, public modalController: ModalController,
+    public LoaderService: LoaderService, public CrudServiceService: CrudServiceService, public alertService: AlertService, public loadingCtrl: LoadingController) {
 
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.id) {
@@ -66,6 +70,7 @@ export class SyncAllShipmentsComponent implements OnInit {
       if (partiLoginResult.authToken) {
         this.authToken = partiLoginResult.authToken;
       }
+      this.isViewOnlyAccess = partiLoginResult.viewOnlyAccess;
     })
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
@@ -81,47 +86,39 @@ export class SyncAllShipmentsComponent implements OnInit {
       if (shippingsUnsyncedArray) {
         this.shippingsUnsyncedArray = [];
         this.shippingsUnsyncedArray = shippingsUnsyncedArray;
-        console.log(this.shippingsUnsyncedArray);
       }
     })
     this.storage.get('localShipmentForm').then((localShipmentForm) => {
 
-        this.localStorageUnSyncedArray = [];
+      this.localStorageUnSyncedArray = [];
 
-        if (localShipmentForm.length != 0) {
-          this.localShipmentArray = localShipmentForm;
+      if (localShipmentForm.length != 0) {
+        this.localShipmentArray = localShipmentForm;
 
-          this.existingLabIndex = _.findIndex(localShipmentForm, {
-              loginID: this.loginID
-            }
+        this.existingLabIndex = _.findIndex(localShipmentForm, {
+          loginID: this.loginID
+        });
 
-          );
+        if (this.existingLabIndex != -1) {
+          this.localStorageUnSyncedArray = localShipmentForm[this.existingLabIndex].shipmentArray;
 
-          if (this.existingLabIndex != -1) {
-            this.localStorageUnSyncedArray = localShipmentForm[this.existingLabIndex].shipmentArray;
-
-            localShipmentForm[this.existingLabIndex].shipmentArray.forEach((localShipment, index) => {
-              this.localShipmentArray.forEach((shipmentAPI, index) => {
-
-                  if (shipmentAPI.mapId == localShipment.mapId) {
-                    shipmentAPI.isSynced = "false";
-                  }
-
-                }
-
-              )
+          localShipmentForm[this.existingLabIndex].shipmentArray.forEach((localShipment, index) => {
+            this.localShipmentArray.forEach((shipmentAPI, index) => {
+              if (shipmentAPI.mapId == localShipment.mapId) {
+                shipmentAPI.isSynced = "false";
+              }
             })
-
-            console.log(this.localStorageUnSyncedArray);
-          } else {}
-
-        }
+          })
+          console.log(this.localStorageUnSyncedArray);
+        } else {}
       }
-
-    )
+    })
   }
 
-  goBack(){
+  goBack() {
+    if(this.isSyncGoing==true){
+      this.alertService.presentAlertConfirm('Alert','','Are you sure if you press the back button, sync process will stop?','No','Yes','syncProcess');
+    }
     this.modalController.dismiss({
       'dismissed': true
     });
@@ -137,11 +134,11 @@ export class SyncAllShipmentsComponent implements OnInit {
     }
 
     const loading = await this.loadingCtrl.create({
-        spinner: 'dots',
-        mode: 'ios',
-        message: 'Please wait',
-      });
-    
+      spinner: 'dots',
+      mode: 'ios',
+      message: 'Please wait',
+    });
+
     await loading.present();
 
 
@@ -150,7 +147,7 @@ export class SyncAllShipmentsComponent implements OnInit {
     }
     this.storage.get('shipmentFormArray').then((shipmentFormArray) => {
       if (shipmentFormArray) {
-       
+
         this.TestFormArray = shipmentFormArray.filter(i => i.schemeType == item.schemeType && i.shipmentId == item.shipmentId && i.evaluationStatus == item.evaluationStatus && i.participantId == item.participantId && i.mapId == item.mapId);
         this.TestFormArray[0].isSynced = item.isSynced;
 
@@ -218,8 +215,8 @@ export class SyncAllShipmentsComponent implements OnInit {
     loading.dismiss();
   }
 
-  syncShipments(){
-
+  syncShipments() {
+    this.isSyncGoing=true;
     this.totSyncArrayLength = this.localStorageUnSyncedArray.length;
     this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
 
@@ -254,28 +251,26 @@ export class SyncAllShipmentsComponent implements OnInit {
                 this.responseSuccessCount = this.responseSuccessCount + 1;
 
                 this.localStorageUnSyncedArray.forEach((localUnSynced, index) => {
-                    if (localUnSynced.mapId == result.data.mapId) {
-                      this.syncedShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
-                          mapId: result.data.mapId
-                        }
+                  if (localUnSynced.mapId == result.data.mapId) {
+                    this.syncedShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
+                        mapId: result.data.mapId
+                      }
 
-                      );
-                      this.localStorageUnSyncedArray.splice(this.syncedShipmentIndex, 1);
-                    }
-                  })
+                    );
+                    this.localStorageUnSyncedArray.splice(this.syncedShipmentIndex, 1);
+                  }
+                })
 
                 this.shippingsUnsyncedArray.forEach((localSubUnSyncedShippings, index) => {
 
                   if (localSubUnSyncedShippings.mapId == result.data.mapId) {
                     let syncedSubShipmentIndex = _.findIndex(this.shippingsUnsyncedArray, {
-                        mapId: result.data.mapId
-                      })
+                      mapId: result.data.mapId
+                    })
                     this.shippingsUnsyncedArray.splice(syncedSubShipmentIndex, 1);
                   }
                 })
-                this.modalController.dismiss({
-                  'dismissed': true
-                });
+
 
               } else {
                 this.responseErrorCount = this.responseErrorCount + 1;
@@ -298,8 +293,11 @@ export class SyncAllShipmentsComponent implements OnInit {
               if (this.responseSuccessCount == 0 && this.responseErrorCount != 0) {
                 this.alertService.presentAlert('Success', +this.responseErrorCount + ' records unsynced');
               }
+              this.modalController.dismiss({
+                'dismissed': true
+              });
             }
-
+            this.isSyncGoing=false;
           } else if (result["status"] == "auth-fail") {
             this.alertService.presentAlert('Alert', result["message"]);
             this.storage.set("isLogOut", true);
@@ -357,39 +355,35 @@ export class SyncAllShipmentsComponent implements OnInit {
 
                 this.localStorageUnSyncedArray.forEach((localSubUnSynced, index) => {
 
-                    if (localSubUnSynced.mapId == result.data.mapId) {
-                      let syncedSubShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
-                          mapId: result.data.mapId
-                        }
+                  if (localSubUnSynced.mapId == result.data.mapId) {
+                    let syncedSubShipmentIndex = _.findIndex(this.localStorageUnSyncedArray, {
+                        mapId: result.data.mapId
+                      }
 
-                      );
-                      this.localStorageUnSyncedArray.splice(syncedSubShipmentIndex, 1);
-                    }
-                  })
+                    );
+                    this.localStorageUnSyncedArray.splice(syncedSubShipmentIndex, 1);
+                  }
+                })
 
-                  this.shippingsUnsyncedArray.forEach((localSubUnSyncedShippings, index) => {
+                this.shippingsUnsyncedArray.forEach((localSubUnSyncedShippings, index) => {
 
-                    if (localSubUnSyncedShippings.mapId == result.data.mapId) {
-                      let syncedSubShipmentIndex = _.findIndex(this.shippingsUnsyncedArray, {
-                          mapId: result.data.mapId
-                        }
+                  if (localSubUnSyncedShippings.mapId == result.data.mapId) {
+                    let syncedSubShipmentIndex = _.findIndex(this.shippingsUnsyncedArray, {
+                        mapId: result.data.mapId
+                      }
 
-                      );
-                      this.shippingsUnsyncedArray.splice(syncedSubShipmentIndex, 1);
-                    }
-                  })
-                  this.modalController.dismiss({
-                    'dismissed': true
-                  });
-                
+                    );
+                    this.shippingsUnsyncedArray.splice(syncedSubShipmentIndex, 1);
+                  }
+                })
               } else {
                 this.subListRespErrorCount = this.subListRespErrorCount + 1;
               }
             })
-
             this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
             this.storage.set("localShipmentForm", this.localShipmentArray);
             this.storage.set("shippingsUnsyncedArray", this.shippingsUnsyncedArray);
+
             if ((this.subListRespSuccessCount + this.subListRespErrorCount) == this.totSyncArrayLength) {
 
               if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount == 0) {
@@ -403,7 +397,12 @@ export class SyncAllShipmentsComponent implements OnInit {
               if (this.subListRespSuccessCount == 0 && this.subListRespErrorCount != 0) {
                 this.alertService.presentAlert('Success', +this.subListRespSuccessCount + ' records unsynced');
               }
+                  this.modalController.dismiss({
+                    'dismissed': true
+                  });
             }
+            this.isSyncGoing=false;
+
           } else if (result["status"] == "auth-fail") {
 
             if (this.authFailAlertCount == 0) {
@@ -433,4 +432,5 @@ export class SyncAllShipmentsComponent implements OnInit {
       })
     }
   }
+
 }
