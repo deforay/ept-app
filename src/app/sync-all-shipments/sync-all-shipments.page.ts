@@ -25,12 +25,13 @@ import {
 import {
   LoadingController
 } from '@ionic/angular';
+
 @Component({
   selector: 'app-sync-all-shipments',
-  templateUrl: './sync-all-shipments.component.html',
-  styleUrls: ['./sync-all-shipments.component.scss'],
+  templateUrl: './sync-all-shipments.page.html',
+  styleUrls: ['./sync-all-shipments.page.scss'],
 })
-export class SyncAllShipmentsComponent implements OnInit {
+export class SyncAllShipmentsPage implements OnInit {
 
   localStorageShipmentArray: any = [];
   localStorageUnSyncedArray: any = [];
@@ -58,7 +59,7 @@ export class SyncAllShipmentsComponent implements OnInit {
   TestFormArray: any;
   localStorageSelectedFormArray: any = [];
   isViewOnlyAccess: boolean;
-  isSyncGoing:boolean=false;
+
 
   constructor(private storage: Storage, private router: Router, public modalController: ModalController,
     public LoaderService: LoaderService, public CrudServiceService: CrudServiceService, public alertService: AlertService, public loadingCtrl: LoadingController) {
@@ -116,12 +117,7 @@ export class SyncAllShipmentsComponent implements OnInit {
   }
 
   goBack() {
-    if(this.isSyncGoing==true){
-      // this.alertService.presentAlertConfirm('Alert','','Are you sure if you press the back button, sync process will stop?','Leave','Stay','syncProcessGoing');
-    }
-    this.modalController.dismiss({
-      'dismissed': true
-    });
+    this.router.navigate(['/all-pt-schemes']);
   }
 
 
@@ -158,10 +154,7 @@ export class SyncAllShipmentsComponent implements OnInit {
 
 
         if (this.TestFormArray) {
-          this.modalController.dismiss({
-            'dismissed': true
-          });
-          this.storage.set('isFromSyncAll', true);
+        
           this.TestFormArray[0].isView = isView;
           this.storage.set('selectedTestFormArray', this.TestFormArray);
 
@@ -216,8 +209,7 @@ export class SyncAllShipmentsComponent implements OnInit {
   }
 
   async syncShipments() {
-  this.isSyncGoing=true;
-  this.storage.set('isSyncGoing',true);
+    this.storage.set('isSyncGoing',true);
     this.totSyncArrayLength = this.localStorageUnSyncedArray.length;
     this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
 
@@ -240,7 +232,7 @@ export class SyncAllShipmentsComponent implements OnInit {
       }
 
       this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON).then((result) => {
-
+        this.storage.set('isSyncGoing',false);
           console.log(result);
 
           if (result["status"] == 'success') {
@@ -295,7 +287,6 @@ export class SyncAllShipmentsComponent implements OnInit {
               }
           
             }
-            this.storage.set('isSyncGoing',false);
           } else if (result["status"] == "auth-fail") {
             this.alertService.presentAlert('Alert', result["message"]);
             this.storage.set("isLogOut", true);
@@ -310,7 +301,6 @@ export class SyncAllShipmentsComponent implements OnInit {
             this.alertService.presentAlert('Alert', result["message"]);
           }
         }
-
         , (err) => {
 
           this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
@@ -397,8 +387,7 @@ export class SyncAllShipmentsComponent implements OnInit {
               }
     
             }
-            this.isSyncGoing=false;
-
+          
           } else if (result["status"] == "auth-fail") {
 
             if (this.authFailAlertCount == 0) {
@@ -428,5 +417,4 @@ export class SyncAllShipmentsComponent implements OnInit {
       })
     }
   }
-
 }

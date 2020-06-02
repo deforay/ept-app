@@ -19,8 +19,7 @@ import {
   Network
 } from '@ionic-native/network/ngx';
 import {
-  Events,
-  IonItem
+  Events
 } from '@ionic/angular';
 import * as _ from 'lodash';
 import {
@@ -53,9 +52,7 @@ import {
 import {
   ModalController
 } from '@ionic/angular';
-import {
-  of
-} from 'rxjs';
+
 @Component({
     selector: 'app-all-pt-schemes',
     templateUrl: './all-pt-schemes.page.html',
@@ -114,7 +111,7 @@ import {
 
     //comment when take buid start
 
-    this.networkType = '4g';
+   // this.networkType = '4g';
 
     //end...
 
@@ -315,14 +312,10 @@ import {
       this.skeltonArray = [];
 
       if (shipmentArray.length != 0) {
-        this.shippingsArray = shipmentArray;
+        this.shippingsArray=[];
+        //this.shippingsArray = shipmentArray;
         this.shippingsOriginalArray = shipmentArray;
-        this.shippingsArray = this.shippingsOriginalArray.filter(
-          item => item.status == 'shipped' && item.updatedOn == '')
-        this.shippingsArray.sort((a, b) => {
-          return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
-        });
-        console.log(this.shippingsArray);
+        this.checkIsSynced('onload');
         if (this.shippingsArray.length == 0) {
           this.showNoData = true;
         } else {
@@ -342,8 +335,6 @@ import {
     this.storage.get('participantLogin').then((participantLogin) => {
       this.isViewOnlyAccess = participantLogin.viewOnlyAccess;
     })
-
-    this.checkIsSynced('onload');
   }
 
   ngOnInit() {}
@@ -394,7 +385,7 @@ import {
                 this.CrudServiceService.getData('/api/shipments/get/?authToken=' + result['data'].authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
                     if (result["status"] == 'success') {
-
+                      this.shippingsArray=[];
                       this.shippingsArray = result['data'];
                       this.shippingsOriginalArray = result['data'];
                       this.checkIsSynced('onload');
@@ -553,6 +544,7 @@ import {
         } else {}
       } else {}
       if (param == 'onload') {
+        this.shippingsArray=[];
         this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'shipped' && item.updatedOn == '' && item.is_excluded != 'yes' && item.isSynced != 'false');
         this.shippingsArray.sort((a, b) => {
@@ -645,23 +637,25 @@ import {
     loading.dismiss();
   }
 
-  async syncShipments() {
+   syncShipments() {
 
     this.shippingsUnsyncedArray = this.shippingsOriginalArray.filter(
       item => item.isSynced == 'false');
     this.storage.set('shippingsUnsyncedArray', this.shippingsUnsyncedArray);
 
-    const modal = await this.modalController.create({
-      component: SyncAllShipmentsComponent,
-    });
-    modal.onDidDismiss()
-      .then((data) => {
-        const user = data['data'];
-        if (user['dismissed'] == true) {
-          this.ionViewWillEnter();
-        }
-      });
-    return await modal.present();
+    // const modal = await this.modalController.create({
+    //   component: SyncAllShipmentsComponent,
+    // });
+    // modal.onDidDismiss()
+    //   .then((data) => {
+       
+    //     // const user = data['data'];
+    //     // if (user['dismissed'] == true) {
+    //       this.ionViewWillEnter();
+    //     // }
+    //   });
+    // return await modal.present();
+    this.router.navigate(['/sync-all-shipments']);
   }
 
   async downloadReport(downloadLink, fileName) {

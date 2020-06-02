@@ -39,7 +39,10 @@ import {
   File
 } from '@ionic-native/file/ngx';
 import {
-  ROOT_DIRECTORY,INDIVIDUAL_REPORTS_DIRECTORY,SUMMARY_REPORTS_DIRECTORY,SHIPMENTS_REPORTS_DIRECTORY
+  ROOT_DIRECTORY,
+  INDIVIDUAL_REPORTS_DIRECTORY,
+  SUMMARY_REPORTS_DIRECTORY,
+  SHIPMENTS_REPORTS_DIRECTORY
 } from '../app/service/constant';
 @Component({
   selector: 'app-root',
@@ -152,9 +155,9 @@ export class AppComponent {
       }
 
       this.platform.backButton.subscribeWithPriority(0, () => {
-        if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes' || this.router.url === '/individual-report' || this.router.url === '/summary-report' ) {
+        if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes'|| this.router.url === '/individual-report' || this.router.url === '/summary-report') {
 
-          this.alertService.presentAlertConfirm('e-PT', '',"Are you sure want to exit?",'No','Yes','appExitAlert');
+          this.alertService.presentAlertConfirm('e-PT', '', "Are you sure want to exit?", 'No', 'Yes', 'appExitAlert');
 
         } else if (this.router.url === '/dts-hiv-serology' || this.router.url === '/dts-hiv-viralload' ||
           this.router.url === '/dbs-eid') {
@@ -163,6 +166,17 @@ export class AppComponent {
             replaceUrl: true
           });
 
+        } else if (this.router.url === '/sync-all-shipments') {
+          this.storage.get('isSyncGoing').then((isSyncGoing) => {
+            debugger;
+            if (isSyncGoing) {
+              this.alertService.presentAlertConfirm('Alert', "Currently We're syncing the shipment process.Press 'Leave' button to stop the process .Press 'Stay' button to Complete the process.", 'Leave', 'Stay', 'syncProcessGoing');
+            }
+            else{
+              this.alertService.presentAlertConfirm('e-PT', '', "Are you sure want to exit?", 'No', 'Yes', 'appExitAlert');
+            }
+          })
+        
         } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
 
           this.routerOutlet.pop();
@@ -175,8 +189,8 @@ export class AppComponent {
 
     this.storage.get('isLogOut').then((isLogOut) => {
       this.storage.get('appPin').then((appPin) => {
-      
-        if (isLogOut==false && appPin && this.router.url != '/') {
+
+        if (isLogOut == false && appPin && this.router.url != '/') {
           if (this.router.url == '/all-pt-schemes') {
             this.selectedIndex = 0;
             this.router.navigate(['/all-pt-schemes'], {
@@ -197,24 +211,21 @@ export class AppComponent {
             this.router.navigate(['/change-password'], {
               replaceUrl: true
             });
-          }
-          else if (this.router.url == '/profile') {
+          } else if (this.router.url == '/profile') {
             this.selectedIndex = 4;
             this.router.navigate(['/profile'], {
               replaceUrl: true
             });
-          }
-           else if (this.router.url == '/login') {
+          } else if (this.router.url == '/login') {
             this.selectedIndex = 0;
             this.router.navigateByUrl('/app-password');
           } else {
             this.router.navigateByUrl(this.router.url);
           }
-        } else if (isLogOut==false && appPin && this.router.url == '/') {
+        } else if (isLogOut == false && appPin && this.router.url == '/') {
           this.selectedIndex = 0;
           this.router.navigateByUrl('/enter-app-password');
-        } 
-        else if (isLogOut && !appPin) {
+        } else if (isLogOut && !appPin) {
           this.selectedIndex = 0;
           this.router.navigateByUrl('/login');
         } else {
@@ -223,7 +234,7 @@ export class AppComponent {
         }
       })
     })
-    
+
     this.storage.get('participantLogin').then((participantLogin) => {
       this.participantName = participantLogin.name;
     })
@@ -239,14 +250,14 @@ export class AppComponent {
     }
   }
   logout() {
-    this.alertService.presentAlertConfirm('Logout','','Are you sure you want to logout?','No','Yes', 'logoutAlert');
+    this.alertService.presentAlertConfirm('Logout', '', 'Are you sure you want to logout?', 'No', 'Yes', 'logoutAlert');
     this.selectedIndex = 0;
   }
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     if (page.title == 'Log Out') {
-      this.alertService.presentAlertConfirm('Logout','','Are you sure you want to logout?','No','Yes', 'logoutAlert');
+      this.alertService.presentAlertConfirm('Logout', '', 'Are you sure you want to logout?', 'No', 'Yes', 'logoutAlert');
     } else {}
   }
 }

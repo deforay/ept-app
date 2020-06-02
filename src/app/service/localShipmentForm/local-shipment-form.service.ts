@@ -32,16 +32,16 @@ export class LocalShipmentFormService {
 
   constructor(private storage: Storage,
     private router: Router,
-    public alertService:AlertService,
+    public alertService: AlertService,
     public LoaderService: LoaderService,
     public loadingCtrl: LoadingController,
-    ) {
+  ) {
 
-      this.storage.get('localShipmentForm').then((localShipmentForm) => {
-        if (localShipmentForm== null) {
-          this.storage.set('localShipmentForm', []);
-        }
-      })
+    this.storage.get('localShipmentForm').then((localShipmentForm) => {
+      if (localShipmentForm == null) {
+        this.storage.set('localShipmentForm', []);
+      }
+    })
 
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
@@ -59,15 +59,15 @@ export class LocalShipmentFormService {
 
   }
 
-   async offlineStoreShipmentForm(formJSON) {
-     
+  async offlineStoreShipmentForm(formJSON) {
+
     const element = await this.loadingCtrl.getTop();
     if (element && element.dismiss) {
       element.dismiss();
     }
     const loading = await this.loadingCtrl.create({
       spinner: 'dots',
-      mode:'ios',
+      mode: 'ios',
       message: 'Please wait',
     });
     await loading.present();
@@ -119,13 +119,12 @@ export class LocalShipmentFormService {
           this.storage.set("localShipmentForm", this.localShipmentFormArray);
 
           if (this.localShipmentFormArray.length != 0) {
-            this.alertService.presentAlert('Success',"Thank you for submitting your result.<br> Your result is recorded on this device.<br><br>To send the result to PT provider, please click on the sync button once your device is connected to the internet.");
-            this.router.navigate(['/all-pt-schemes']);
+            this.alertService.presentAlert('Success', "Thank you for submitting your result.<br> Your result is recorded on this device.<br><br>To send the result to PT provider, please click on the sync button once your device is connected to the internet.", 'offlineSyncMsg');
           }
         })
       }
     })
     loading.dismiss();
-    
+
   }
 }

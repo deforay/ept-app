@@ -54,6 +54,10 @@ const routes: Routes = [
   {
     path: 'profile',
     loadChildren: () => import('./profile/profile.module').then( m => m.ProfilePageModule)
+  },
+  {
+    path: 'sync-all-shipments',
+    loadChildren: () => import('./sync-all-shipments/sync-all-shipments.module').then( m => m.SyncAllShipmentsPageModule)
   }
 ];
 
