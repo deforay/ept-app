@@ -32,9 +32,6 @@ import {
   ShipmentFilterComponent
 } from '../../app/shipment-filter/shipment-filter.component';
 import {
-  SyncAllShipmentsComponent
-} from '../../app/sync-all-shipments/sync-all-shipments.component';
-import {
   FileTransfer,
   FileUploadOptions,
   FileTransferObject
@@ -111,18 +108,20 @@ import {
 
     //comment when take buid start
 
-   // this.networkType = '4g';
+    //this.networkType = 'none';
 
     //end...
 
     // Offline event
     this.events.subscribe('network:offline', (data) => {
+      this.filterJSON = [];
       this.networkType = this.network.type;
       this.callOfflineFunctions();
     })
 
     // Online event
     this.events.subscribe('network:online', () => {
+      this.filterJSON = [];
       this.networkType = this.network.type;
       this.callOnlineFunctions();
     })
@@ -316,11 +315,6 @@ import {
         //this.shippingsArray = shipmentArray;
         this.shippingsOriginalArray = shipmentArray;
         this.checkIsSynced('onload');
-        if (this.shippingsArray.length == 0) {
-          this.showNoData = true;
-        } else {
-          this.showNoData = false;
-        }
         this.storage.set("shipmentArray", this.shippingsOriginalArray);
         this.skeltonArray = [];
       }
@@ -386,8 +380,8 @@ import {
 
                     if (result["status"] == 'success') {
                       this.shippingsArray=[];
-                      this.shippingsArray = result['data'];
                       this.shippingsOriginalArray = result['data'];
+                      this.storage.set('shipmentArray',this.shippingsOriginalArray)
                       this.checkIsSynced('onload');
                       this.skeltonArray = [];
                       this.getAllShipmentForms();
@@ -412,11 +406,7 @@ import {
                     } else {
                       this.showNoData = false;
                     }
-                    if (this.shippingsArray.length == 0) {
-                      this.showNoData = true;
-                    } else {
-                      this.showNoData = false;
-                    }
+                 
                   }
 
                   , (err) => {
@@ -541,7 +531,9 @@ import {
               }
             })
           })
-        } else {}
+        } else {
+        
+        }
       } else {}
       if (param == 'onload') {
         this.shippingsArray=[];
@@ -551,6 +543,11 @@ import {
           return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
         });
         console.log(this.shippingsArray);
+        if (this.shippingsArray.length == 0) {
+          this.showNoData = true;
+        } else {
+          this.showNoData = false;
+        }
       }
     })
   }
@@ -630,6 +627,19 @@ import {
               }
             }
           }
+
+          if (this.TestFormArray[0].schemeType == 'recency') {
+            if (isView == 'true') {
+              this.router.navigate(['/rapid-hiv-recency-testing']);
+            } else {
+            //  if (this.TestFormArray[0].recencyData.access.status == 'success') {
+                if (this.TestFormArray[0]) {
+                this.router.navigate(['/rapid-hiv-recency-testing']);
+              } else {
+                this.alertService.presentAlert('Alert', this.TestFormArray[0].recencyData.access.message)
+              }
+            }
+          }
         }
       }
     })
@@ -638,23 +648,6 @@ import {
   }
 
    syncShipments() {
-
-    this.shippingsUnsyncedArray = this.shippingsOriginalArray.filter(
-      item => item.isSynced == 'false');
-    this.storage.set('shippingsUnsyncedArray', this.shippingsUnsyncedArray);
-
-    // const modal = await this.modalController.create({
-    //   component: SyncAllShipmentsComponent,
-    // });
-    // modal.onDidDismiss()
-    //   .then((data) => {
-       
-    //     // const user = data['data'];
-    //     // if (user['dismissed'] == true) {
-    //       this.ionViewWillEnter();
-    //     // }
-    //   });
-    // return await modal.present();
     this.router.navigate(['/sync-all-shipments']);
   }
 

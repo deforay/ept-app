@@ -58,6 +58,10 @@ const routes: Routes = [
   {
     path: 'sync-all-shipments',
     loadChildren: () => import('./sync-all-shipments/sync-all-shipments.module').then( m => m.SyncAllShipmentsPageModule)
+  },
+  {
+    path: 'rapid-hiv-recency-testing',
+    loadChildren: () => import('./rapid-hiv-recency-testing/rapid-hiv-recency-testing.module').then( m => m.RapidHIVRecencyTestingPageModule)
   }
 ];
 

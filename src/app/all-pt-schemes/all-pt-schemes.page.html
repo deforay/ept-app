@@ -237,17 +237,17 @@
     </ion-card-content>
   </ion-card>
   <!-- ion-skeleton-text code end -->
-
+<div *ngIf="shippingsArray.length==0">
   <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON==''">
     <ion-card-content class="cardContent">
       <p class="noShipments">
-        No active shipments found. <br>
+        No active shipments found.<br>
         If you would like to see previous shipments, please click on the filter button above and choose an appropriate option.<br>
         Please contact your PT provider if you need support.
       </p>
       </ion-card-content>
   </ion-card>
-
+</div>
 
   <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='activeNotResp'">
     <ion-card-content class="cardContent">

@@ -160,23 +160,12 @@ export class AppComponent {
           this.alertService.presentAlertConfirm('e-PT', '', "Are you sure want to exit?", 'No', 'Yes', 'appExitAlert');
 
         } else if (this.router.url === '/dts-hiv-serology' || this.router.url === '/dts-hiv-viralload' ||
-          this.router.url === '/dbs-eid') {
+          this.router.url === '/dbs-eid' || this.router.url === '/rapid-hiv-recency-testing' ) {
 
           this.router.navigate(['/all-pt-schemes'], {
             replaceUrl: true
           });
 
-        } else if (this.router.url === '/sync-all-shipments') {
-          this.storage.get('isSyncGoing').then((isSyncGoing) => {
-            debugger;
-            if (isSyncGoing) {
-              this.alertService.presentAlertConfirm('Alert', "Currently We're syncing the shipment process.Press 'Leave' button to stop the process .Press 'Stay' button to Complete the process.", 'Leave', 'Stay', 'syncProcessGoing');
-            }
-            else{
-              this.alertService.presentAlertConfirm('e-PT', '', "Are you sure want to exit?", 'No', 'Yes', 'appExitAlert');
-            }
-          })
-        
         } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
 
           this.routerOutlet.pop();

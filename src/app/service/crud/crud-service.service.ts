@@ -50,7 +50,6 @@ export class CrudServiceService {
         spinner: 'dots',
         mode: 'ios',
         message: 'Please wait',
-        backdropDismiss: false
       });
       await loading.present();
       return new Promise((resolve, reject) => {
@@ -62,10 +61,9 @@ export class CrudServiceService {
                 headers: headers
               })
               .subscribe(res => {
-                // if (loading) {
-                //   loading.dismiss();
-                // }
-
+                if (loading) {
+                  loading.dismiss();
+                }
                 //    this.LoaderService.hideLoader();
                 resolve(res);
               }, (err) => {

@@ -59,7 +59,7 @@ export class SyncAllShipmentsPage implements OnInit {
   TestFormArray: any;
   localStorageSelectedFormArray: any = [];
   isViewOnlyAccess: boolean;
-
+  shipmentArray:any=[];
 
   constructor(private storage: Storage, private router: Router, public modalController: ModalController,
     public LoaderService: LoaderService, public CrudServiceService: CrudServiceService, public alertService: AlertService, public loadingCtrl: LoadingController) {
@@ -83,36 +83,39 @@ export class SyncAllShipmentsPage implements OnInit {
   ngOnInit() {}
 
   ionViewWillEnter() {
-    this.storage.get('shippingsUnsyncedArray').then((shippingsUnsyncedArray) => {
-      if (shippingsUnsyncedArray) {
-        this.shippingsUnsyncedArray = [];
-        this.shippingsUnsyncedArray = shippingsUnsyncedArray;
+    this.storage.get('shipmentArray').then((shipmentArray) => {
+   
+      if (shipmentArray.length != 0) {
+        this.shipmentArray = shipmentArray;
       }
-    })
-    this.storage.get('localShipmentForm').then((localShipmentForm) => {
+      this.storage.get('localShipmentForm').then((localShipmentForm) => {
 
-      this.localStorageUnSyncedArray = [];
-
-      if (localShipmentForm.length != 0) {
-        this.localShipmentArray = localShipmentForm;
-
-        this.existingLabIndex = _.findIndex(localShipmentForm, {
-          loginID: this.loginID
-        });
-
-        if (this.existingLabIndex != -1) {
-          this.localStorageUnSyncedArray = localShipmentForm[this.existingLabIndex].shipmentArray;
-
-          localShipmentForm[this.existingLabIndex].shipmentArray.forEach((localShipment, index) => {
-            this.localShipmentArray.forEach((shipmentAPI, index) => {
-              if (shipmentAPI.mapId == localShipment.mapId) {
-                shipmentAPI.isSynced = "false";
-              }
+        this.localStorageUnSyncedArray = [];
+  
+        if (localShipmentForm.length != 0) {
+          this.localShipmentArray = localShipmentForm;
+  
+          this.existingLabIndex = _.findIndex(localShipmentForm, {
+            loginID: this.loginID
+          });
+  
+          if (this.existingLabIndex != -1) {
+            this.localStorageUnSyncedArray = localShipmentForm[this.existingLabIndex].shipmentArray;
+  
+            localShipmentForm[this.existingLabIndex].shipmentArray.forEach((localShipment, index) => {
+              this.shipmentArray.forEach((shipmentAPI, index) => {
+                if (shipmentAPI.mapId == localShipment.mapId) {
+                  shipmentAPI.isSynced = "false";
+                }
+              })
             })
-          })
-          console.log(this.localStorageUnSyncedArray);
-        } else {}
-      }
+            console.log(this.localStorageUnSyncedArray);
+            this.shippingsUnsyncedArray=[];
+            this.shippingsUnsyncedArray = this.shipmentArray.filter(
+              item => item.isSynced == 'false');
+          } else {}
+        }
+      })
     })
   }
 
@@ -209,7 +212,7 @@ export class SyncAllShipmentsPage implements OnInit {
   }
 
   async syncShipments() {
-    this.storage.set('isSyncGoing',true);
+ 
     this.totSyncArrayLength = this.localStorageUnSyncedArray.length;
     this.copylocalStorageUnSyncedArray = Array.from(this.localStorageUnSyncedArray);
 
@@ -232,7 +235,7 @@ export class SyncAllShipmentsPage implements OnInit {
       }
 
       this.CrudServiceService.postData('/api/shipments/save-form', this.syncShipmentsJSON).then((result) => {
-        this.storage.set('isSyncGoing',false);
+      
           console.log(result);
 
           if (result["status"] == 'success') {
