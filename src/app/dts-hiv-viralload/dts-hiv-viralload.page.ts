@@ -221,13 +221,13 @@ export class DtsHivViralloadPage implements OnInit {
       if (this.vlDataArray[0].vlData.access.message) {
         this.viewAccessMessage = this.vlDataArray[0].vlData.access.message;
       }
-      if (this.vlDataArray[0].vlData.Heading1.status == true) {
-        this.partDetailsArray = this.vlDataArray[0].vlData.Heading1.data;
+      if (this.vlDataArray[0].vlData.Section1.status == true) {
+        this.partDetailsArray = this.vlDataArray[0].vlData.Section1.data;
       }
 
-      if (this.vlDataArray[0].vlData.Heading2.status == true) {
+      if (this.vlDataArray[0].vlData.Section2.status == true) {
 
-        this.shipmentsDetailsArray = this.vlDataArray[0].vlData.Heading2.data;
+        this.shipmentsDetailsArray = this.vlDataArray[0].vlData.Section2.data;
         this.testReceiptDate = this.shipmentsDetailsArray['testReceiptDate'] ? new Date(this.shipmentsDetailsArray['testReceiptDate']) : '';
         this.sampleRhdDate = this.shipmentsDetailsArray['sampleRehydrationDate'] ? new Date(this.shipmentsDetailsArray['sampleRehydrationDate']) : '';
         this.testDate = this.shipmentsDetailsArray['testDate'] ? new Date(this.shipmentsDetailsArray['testDate']) : '';
@@ -271,12 +271,12 @@ export class DtsHivViralloadPage implements OnInit {
         this.assayLotNo = this.shipmentsDetailsArray['assayLotNumber'] ? this.shipmentsDetailsArray['assayLotNumber'] : "";
       }
 
-      if (this.vlDataArray[0].vlData.Heading3.status == true) {
+      if (this.vlDataArray[0].vlData.Section3.status == true) {
 
-        this.isPTPerformedRadio = this.vlDataArray[0].vlData.Heading3.data['isPtTestNotPerformedRadio'];
-        this.ptPanelTestArray = this.vlDataArray[0].vlData.Heading3.data['no'];
-        this.ptPanelNotTestArray = this.vlDataArray[0].vlData.Heading3.data['yes'];
-        this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableHeading'];
+        this.isPTPerformedRadio = this.vlDataArray[0].vlData.Section3.data['isPtTestNotPerformedRadio'];
+        this.ptPanelTestArray = this.vlDataArray[0].vlData.Section3.data['no'];
+        this.ptPanelNotTestArray = this.vlDataArray[0].vlData.Section3.data['yes'];
+        this.ptPanelTestData['controlHeads'] = this.ptPanelTestArray['tableSection'];
         this.ptPanelTestData['controlArray'] = this.ptPanelTestArray['tableRowTxt'];
         this.ptPanelTestData['vlResult'] = [...this.ptPanelTestArray['vlResult']];
         this.ptPanelTestData['tndArray'] = [...this.ptPanelTestArray['tndReferenceRadioSelected']];
@@ -313,7 +313,7 @@ export class DtsHivViralloadPage implements OnInit {
           this.ptPanelNotTestData['vlNotTestedReason'] = this.ptPanelNotTestArray.vlNotTestedReasonSelected;
         }
 
-        if (this.vlDataArray[0].vlData.Heading3.data['isPtTestNotPerformedRadio'] == 'no') {
+        if (this.vlDataArray[0].vlData.Section3.data['isPtTestNotPerformedRadio'] == 'no') {
           this.ptPanelTest = false;
         } else {
           this.ptPanelTest = true;
@@ -322,9 +322,9 @@ export class DtsHivViralloadPage implements OnInit {
         ;
       }
 
-      if (this.vlDataArray[0].vlData.Heading4.status == true) {
+      if (this.vlDataArray[0].vlData.Section4.status == true) {
 
-        this.otherInfoArray = this.vlDataArray[0].vlData.Heading4.data;
+        this.otherInfoArray = this.vlDataArray[0].vlData.Section4.data;
         this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
         this.supReview = this.otherInfoArray.supervisorReviewSelected ? this.otherInfoArray.supervisorReviewSelected : "";
         this.supName = this.otherInfoArray.approvalInputText;
@@ -368,8 +368,6 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   nextStepShipmentPanel(isShipmentValid, next) {
-
-    console.log(this.testReceiptDate);
 
     if (this.isView == "true") {
       this.step = 2;
@@ -637,9 +635,9 @@ export class DtsHivViralloadPage implements OnInit {
             "access": {
               "status": this.vlDataArray[0].vlData.access.status
             },
-            "Heading1": {
+            "Section1": {
               //participant details
-              "status": this.vlDataArray[0].vlData.Heading1.status,
+              "status": this.vlDataArray[0].vlData.Section1.status,
               "data": {
                 "participantName": this.partDetailsArray.participantName,
                 "participantCode": this.partDetailsArray.participantCode,
@@ -648,9 +646,9 @@ export class DtsHivViralloadPage implements OnInit {
                 "participantMobile": this.partDetailsArray.mobile,
               }
             },
-            "Heading2": {
+            "Section2": {
               //shipment details vlResultSectionLabel
-              "status": this.vlDataArray[0].vlData.Heading2.status,
+              "status": this.vlDataArray[0].vlData.Section2.status,
               "data": {
                 "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
                 "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
@@ -675,9 +673,9 @@ export class DtsHivViralloadPage implements OnInit {
                 }
               }
             },
-            "Heading3": {
+            "Section3": {
               //PT panel details
-              "status": this.vlDataArray[0].vlData.Heading3.status,
+              "status": this.vlDataArray[0].vlData.Section3.status,
               "data": {
                 "isPtTestNotPerformedRadio": this.isPTPerformedRadio,
                 "no": {
@@ -704,9 +702,9 @@ export class DtsHivViralloadPage implements OnInit {
                 }
               }
             },
-            "Heading4": {
+            "Section4": {
               //other information
-              "status": this.vlDataArray[0].vlData.Heading4.status,
+              "status": this.vlDataArray[0].vlData.Section4.status,
               "data": {
                 "supervisorReview": this.supervisorReviewArray,
                 "approvalLabel": this.approvalLabel,
@@ -798,9 +796,9 @@ export class DtsHivViralloadPage implements OnInit {
             "access": {
               "status": this.vlDataArray[0].vlData.access.status
             },
-            "Heading1": {
+            "Section1": {
               //participant details
-              "status": this.vlDataArray[0].vlData.Heading1.status,
+              "status": this.vlDataArray[0].vlData.Section1.status,
               "data": {
                 "participantName": this.partDetailsArray.participantName,
                 "participantCode": this.partDetailsArray.participantCode,
@@ -809,9 +807,9 @@ export class DtsHivViralloadPage implements OnInit {
                 "participantMobile": this.partDetailsArray.mobile,
               }
             },
-            "Heading2": {
+            "Section2": {
               //shipment details vlResultSectionLabel
-              "status": this.vlDataArray[0].vlData.Heading2.status,
+              "status": this.vlDataArray[0].vlData.Section2.status,
               "data": {
                 "shipmentDate": this.shipmentsDetailsArray.shipmentDate,
                 "resultDueDate": this.shipmentsDetailsArray.resultDueDate,
@@ -836,9 +834,9 @@ export class DtsHivViralloadPage implements OnInit {
                 }
               }
             },
-            "Heading3": {
+            "Section3": {
               //PT panel details
-              "status": this.vlDataArray[0].vlData.Heading3.status,
+              "status": this.vlDataArray[0].vlData.Section3.status,
               "data": {
                 "isPtTestNotPerformedRadio": this.isPTPerformedRadio,
                 "no": {
@@ -865,9 +863,9 @@ export class DtsHivViralloadPage implements OnInit {
                 }
               }
             },
-            "Heading4": {
+            "Section4": {
               //other information
-              "status": this.vlDataArray[0].vlData.Heading4.status,
+              "status": this.vlDataArray[0].vlData.Section4.status,
               "data": {
                 "supervisorReview": this.supervisorReviewArray,
                 "approvalLabel": this.approvalLabel,

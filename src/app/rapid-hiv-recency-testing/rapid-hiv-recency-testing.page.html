@@ -1,5 +1,6 @@
-<app-header [titleHeader]="'RTRI'" [isMenuOrBackButton]="'back'"></app-header>
+<app-header *ngIf="isShowReviewMsg==false"  [titleHeader]="'RTRI'" [isMenuOrBackButton]="'back'"></app-header>
 
+<app-header *ngIf="isShowReviewMsg==true" [titleHeader]="'View RTRI'" [isMenuOrBackButton]="'back'"></app-header>
 <ion-content>
 
   <ion-row>
@@ -8,6 +9,9 @@
     <p *ngIf="isShowReviewMsg==true" class="infoMsg">Please review and verify your result submission</p>
 
   </ion-row>
+  <!-- <mat-chip-list aria-label="Fish selection" class="shipmentCodeList">
+    <mat-chip ><p style="text-align: center;">Shipment Code - REC0620-1</p></mat-chip>
+  </mat-chip-list> -->
   <mat-accordion class="example-headers-align">
  
     <mat-expansion-panel *ngIf="showParticipantData" [expanded]="step === 0" (opened)="setStep(0)">
@@ -355,7 +359,7 @@
         <ion-row>
           <ion-col class="grid-input-col">
             <section class="div-section">
-              <mat-checkbox [(ngModel)]="ptPanelNotTested" name="eidPtPanelTest" #eidPtPanelTest="ngModel" [disabled]="isView=='true'"
+              <mat-checkbox [(ngModel)]="ptPanelNotTested" name="recencyPtPanelTest" #recencyPtPanelTest="ngModel" [disabled]="isView=='true'"
                >PT panel not tested</mat-checkbox>
             </section>
           </ion-col>
@@ -378,60 +382,82 @@
                       {{ptPanelData.resultsTextData[0]}}
                     </p>
                     <mat-form-field class="login-full-width " appearance="outline"
-                      [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.yourResults[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
+                      [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.controlLine[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
                       *ngIf="ptPanelData.samplesList">
                       <mat-label>{{ptPanelData.resultsTextData[1]}}</mat-label>
-                      <mat-select [(ngModel)]="ptPanelData.samples.yourResults[i]" name="yourResult[{{i}}]" #yourResult="ngModel"
-                        [disabled]="isView=='true'" [required]="ptPanelData.sampleTextData.mandatory[i]==true">
-                        <mat-option>--Select--</mat-option>
-                        <mat-option *ngFor="let item of ptPanelData.samplesList[sampleName]['Your-Results']"
-                          [value]="item.value">
-                          {{item.show}}
-                        </mat-option>
-                      </mat-select>
-                      <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.yourResults[i]">Please
+                      <mat-select [(ngModel)]="ptPanelData.samples.controlLine[i]" name="controlLine[{{i}}]" #controlLine="ngModel"
+                      [disabled]="isView=='true'" [required]="ptPanelData.sampleTextData.mandatory[i]==true">
+                      <mat-option>--Select--</mat-option>
+                      <mat-option *ngFor="let item of ptPanelData.samplesList[sampleName]['Control Line']"
+                        [value]="item.value">
+                        {{item.show}}
+                      </mat-option>
+                    </mat-select>
+                      <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.controlLine[i]">Please
                         Enter {{ptPanelData.resultsTextData[1]}}</mat-error>
-
                     </mat-form-field>
                   </ion-col>
                 </ion-row>
 
+               <ion-row>
+                  <ion-col class="grid-input-col">
+                    <mat-form-field class="login-full-width " appearance="outline"
+                    [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.controlLine[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
+                    *ngIf="ptPanelData.samplesList">
+                    <mat-label>{{ptPanelData.resultsTextData[2]}}</mat-label>
+                    <mat-select [(ngModel)]="ptPanelData.samples.diagnosisLine[i]" name="diagnosisLine[{{i}}]" #diagnosisLine="ngModel"
+                    [disabled]="isView=='true'" [required]="ptPanelData.sampleTextData.mandatory[i]==true">
+                    <mat-option>--Select--</mat-option>
+                    <mat-option *ngFor="let item of ptPanelData.samplesList[sampleName]['Diagnosis Line']"
+                      [value]="item.value">
+                      {{item.show}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.diagnosisLine[i]">Please
+                    Enter {{ptPanelData.resultsTextData[2]}}</mat-error>
+                  </mat-form-field>
+                  </ion-col>
+
+                </ion-row> 
                 <ion-row>
                   <ion-col class="grid-input-col">
 
-                    <mat-form-field class="login-full-width grid-col-form"
-                      [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.hivCtOd[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
-                      appearance="outline">
-                      <mat-label>{{ptPanelData.resultsTextData[2]}}</mat-label>
-                      <input matInput [(ngModel)]="ptPanelData.samples.hivCtOd[i]" [disabled]="isView=='true'"
-                        placeholder="Enter HIV CT/OD" name="hivCTOD[{{i}}]" #hivCTOD="ngModel"
-                        >
-                        <!-- [required]="ptPanelData.sampleTextData.mandatory[i]==true" -->
-                      <!-- <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.hivCtOd[i]">Please Enter
-                        {{ptPanelData.resultsTextData[2]}}</mat-error> -->
-
-                    </mat-form-field>
+                    <mat-form-field class="login-full-width " appearance="outline"
+                    [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.longtermLine[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
+                    *ngIf="ptPanelData.samplesList">
+                    <mat-label>{{ptPanelData.resultsTextData[3]}}</mat-label>
+                    <mat-select [(ngModel)]="ptPanelData.samples.longtermLine[i]" name="longtermLine[{{i}}]" #longtermLine="ngModel"
+                    [disabled]="isView=='true'" [required]="ptPanelData.sampleTextData.mandatory[i]==true">
+                    <mat-option>--Select--</mat-option>
+                    <mat-option *ngFor="let item of ptPanelData.samplesList[sampleName]['Longterm Line']"
+                      [value]="item.value">
+                      {{item.show}}
+                    </mat-option>
+                  </mat-select>
+                  <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.longtermLine[i]">Please
+                    Enter {{ptPanelData.resultsTextData[3]}}</mat-error>
+                  </mat-form-field>
                   </ion-col>
 
-                </ion-row>
+                </ion-row> 
                 <ion-row>
                   <ion-col class="grid-input-col">
-
-                    <mat-form-field class="login-full-width grid-col-form"
-                      [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.IcQsValues[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
-                      appearance="outline">
-                      <mat-label>{{ptPanelData.resultsTextData[3]}}</mat-label>
-                      <input matInput [(ngModel)]="ptPanelData.samples.IcQsValues[i]" [disabled]="isView=='true'"
-                        placeholder="Enter IC/QS Values" name="icQsValues[{{i}}]" #icQsValues="ngModel"
-                       >
-                       <!-- [required]="ptPanelData.sampleTextData.mandatory[i]==true" -->
-                      <!-- <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.IcQsValues[i]">Please
-                        Enter {{ptPanelData.resultsTextData[3]}}</mat-error> -->
-
-                    </mat-form-field>
+                    <mat-form-field class="login-full-width " appearance="outline"
+                    [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.yourResults[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
+                    *ngIf="ptPanelData.samplesList">
+                    <mat-label>{{ptPanelData.resultsTextData[4]}}</mat-label>
+                    <mat-select [(ngModel)]="ptPanelData.samples.yourResults[i]" name="yourResults[{{i}}]" #yourResults="ngModel"
+                    [disabled]="isView=='true'">
+                    <mat-option>--Select--</mat-option>
+                    <mat-option *ngFor="let item of ptPanelData.samplesList[sampleName]['Your Result']"
+                      [value]="item.value">
+                      {{item.show}}
+                    </mat-option>
+                  </mat-select>
+                  </mat-form-field>
                   </ion-col>
 
-                </ion-row>
+                </ion-row> 
               </mat-card-content>
             </mat-card>
 
@@ -561,7 +587,7 @@
             <ion-grid class="panelHeading">
               <ion-row>
                 <ion-col size="10" class="grid-readonly-col">
-                  <span class="text-title-color">Other Informations</span>
+                  <span class="text-title-color">Other Information</span>
                 </ion-col>
                 <ion-col size="2" class="grid-readonly-col" *ngIf="otherInfoValid==true">
                   <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
@@ -613,7 +639,7 @@
         <mat-action-row>
           <button mat-button color="primary" (click)="prevStep()">Previous</button>
           <button mat-button color="warn" *ngIf="summarizeForm==false && isView!='true'" type='submit'
-            (click)="submitEID(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>
+            (click)="submitRecency(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>
         </mat-action-row>
       </mat-expansion-panel>
     </form>
@@ -630,7 +656,7 @@
       </ion-col>
       <ion-col size="6">
         <ion-button class="text-center native-btn summarizeButtons confirm"
-        (click)="confirmEID(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Confirm 
+        (click)="confirmRecency(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Confirm 
       </ion-button>
       </ion-col>
     </ion-row>

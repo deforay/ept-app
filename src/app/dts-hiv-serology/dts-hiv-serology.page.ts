@@ -188,32 +188,32 @@ export class DTSHIVSerologyPage implements OnInit {
       if (this.dtsArray[0].dtsData.access.message) {
         this.viewAccessMessage = this.dtsArray[0].dtsData.access.message;
       }
-      if (this.dtsArray[0].dtsData.Heading1.status == true) {
+      if (this.dtsArray[0].dtsData.Section1.status == true) {
         this.showParticipantData = true;
-        this.partiDetailsArray = this.dtsArray[0].dtsData.Heading1.data;
+        this.partiDetailsArray = this.dtsArray[0].dtsData.Section1.data;
       } else {
         this.showParticipantData = false;
       }
 
-      if (this.dtsArray[0].dtsData.Heading2.status == true) {
+      if (this.dtsArray[0].dtsData.Section2.status == true) {
         this.showShipmentData = true;
-        this.shipmentData['shipmentDate'] = this.dtsArray[0].dtsData.Heading2.data.shipmentDate;
-        this.shipmentData['resultDueDate'] = this.dtsArray[0].dtsData.Heading2.data.resultDueDate;
-        this.shipmentData['testReceiptDate'] = this.dtsArray[0].dtsData.Heading2.data.testReceiptDate ? new Date(this.dtsArray[0].dtsData.Heading2.data.testReceiptDate) : '';
-        this.shipmentData['sampleRehydrationDate'] = this.dtsArray[0].dtsData.Heading2.data.sampleRehydrationDate ? new Date(this.dtsArray[0].dtsData.Heading2.data.sampleRehydrationDate) : '';
-        this.shipmentData['responseDate'] = this.dtsArray[0].dtsData.Heading2.data.responseDate ? new Date(this.dtsArray[0].dtsData.Heading2.data.responseDate) : '';
-        this.shipmentData['shipmentTestingDate'] = this.dtsArray[0].dtsData.Heading2.data.testingDate ? new Date(this.dtsArray[0].dtsData.Heading2.data.testingDate) : '';
-        this.shipmentData['modeOfReceiptDropdown'] = this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelect ? this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelect : [];
-        this.shipmentData['modeOfReceipt'] = this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelected ? this.dtsArray[0].dtsData.Heading2.data.modeOfReceiptSelected : '';
-        this.shipmentData['algorithmUsedDropdown'] = this.dtsArray[0].dtsData.Heading2.data.algorithmUsedSelect;
-        this.shipmentData['algorithmUsed'] = this.dtsArray[0].dtsData.Heading2.data.algorithmUsedSelected;
+        this.shipmentData['shipmentDate'] = this.dtsArray[0].dtsData.Section2.data.shipmentDate;
+        this.shipmentData['resultDueDate'] = this.dtsArray[0].dtsData.Section2.data.resultDueDate;
+        this.shipmentData['testReceiptDate'] = this.dtsArray[0].dtsData.Section2.data.testReceiptDate ? new Date(this.dtsArray[0].dtsData.Section2.data.testReceiptDate) : '';
+        this.shipmentData['sampleRehydrationDate'] = this.dtsArray[0].dtsData.Section2.data.sampleRehydrationDate ? new Date(this.dtsArray[0].dtsData.Section2.data.sampleRehydrationDate) : '';
+        this.shipmentData['responseDate'] = this.dtsArray[0].dtsData.Section2.data.responseDate ? new Date(this.dtsArray[0].dtsData.Section2.data.responseDate) : '';
+        this.shipmentData['shipmentTestingDate'] = this.dtsArray[0].dtsData.Section2.data.testingDate ? new Date(this.dtsArray[0].dtsData.Section2.data.testingDate) : '';
+        this.shipmentData['modeOfReceiptDropdown'] = this.dtsArray[0].dtsData.Section2.data.modeOfReceiptSelect ? this.dtsArray[0].dtsData.Section2.data.modeOfReceiptSelect : [];
+        this.shipmentData['modeOfReceipt'] = this.dtsArray[0].dtsData.Section2.data.modeOfReceiptSelected ? this.dtsArray[0].dtsData.Section2.data.modeOfReceiptSelected : '';
+        this.shipmentData['algorithmUsedDropdown'] = this.dtsArray[0].dtsData.Section2.data.algorithmUsedSelect;
+        this.shipmentData['algorithmUsed'] = this.dtsArray[0].dtsData.Section2.data.algorithmUsedSelected;
         if (this.participantQcAccess == true) {
-          if (this.dtsArray[0].dtsData.Heading2.data.qcData.status == true) {
+          if (this.dtsArray[0].dtsData.Section2.data.qcData.status == true) {
             this.isQCDoneShow = true;
-            this.qcRadioArray = this.dtsArray[0].dtsData.Heading2.data.qcData.qcRadio;
-            this.qcDone = this.dtsArray[0].dtsData.Heading2.data.qcData.qcRadioSelected ? this.dtsArray[0].dtsData.Heading2.data.qcData.qcRadioSelected : '';
-            this.qcDate = this.dtsArray[0].dtsData.Heading2.data.qcData.qcDate ? new Date(this.dtsArray[0].dtsData.Heading2.data.qcData.qcDate) : '';
-            this.qcDoneBy = this.dtsArray[0].dtsData.Heading2.data.qcData.qcDoneBy ? this.dtsArray[0].dtsData.Heading2.data.qcData.qcDoneBy : '';
+            this.qcRadioArray = this.dtsArray[0].dtsData.Section2.data.qcData.qcRadio;
+            this.qcDone = this.dtsArray[0].dtsData.Section2.data.qcData.qcRadioSelected ? this.dtsArray[0].dtsData.Section2.data.qcData.qcRadioSelected : '';
+            this.qcDate = this.dtsArray[0].dtsData.Section2.data.qcData.qcDate ? new Date(this.dtsArray[0].dtsData.Section2.data.qcData.qcDate) : '';
+            this.qcDoneBy = this.dtsArray[0].dtsData.Section2.data.qcData.qcDoneBy ? this.dtsArray[0].dtsData.Section2.data.qcData.qcDoneBy : '';
           } else {
             this.isQCDoneShow = false;
             this.qcDone = '';
@@ -232,10 +232,10 @@ export class DTSHIVSerologyPage implements OnInit {
         this.showShipmentData = false;
       }
 
-      if (this.dtsArray[0].dtsData.Heading3.status == true) {
+      if (this.dtsArray[0].dtsData.Section3.status == true) {
 
         this.showTestkitPanel = true;
-        this.testKitDetailsArray = this.dtsArray[0].dtsData.Heading3.data;
+        this.testKitDetailsArray = this.dtsArray[0].dtsData.Section3.data;
         this.testKitModel['kitName'] = [];
         this.testKitModel['kitValue'] = [];
         this.testKitModel['kitOther'] = [];
@@ -286,10 +286,10 @@ export class DTSHIVSerologyPage implements OnInit {
         this.showTestkitPanel = false;
       }
 
-      if (this.dtsArray[0].dtsData.Heading4.status == true) {
+      if (this.dtsArray[0].dtsData.Section4.status == true) {
        
         this.showSampleData = true;
-        this.sampleDetailsArray = this.dtsArray[0].dtsData.Heading4.data;
+        this.sampleDetailsArray = this.dtsArray[0].dtsData.Section4.data;
         console.log(this.sampleDetailsArray);
         this.sampleIndex = this.sampleDetailsArray.samples.label.length;
         this.samplesArray = this.sampleDetailsArray.samples;
@@ -316,9 +316,9 @@ export class DTSHIVSerologyPage implements OnInit {
         this.showSampleData = false;
       }
 
-      if (this.dtsArray[0].dtsData.Heading5.status == true) {
+      if (this.dtsArray[0].dtsData.Section5.status == true) {
         this.showOtherInfoData = true;
-        this.otherInfoArray = this.dtsArray[0].dtsData.Heading5.data;
+        this.otherInfoArray = this.dtsArray[0].dtsData.Section5.data;
         this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
         this.supReview = this.otherInfoArray.supervisorReviewSelected;
         this.comments = this.otherInfoArray.comments;
@@ -720,9 +720,9 @@ export class DTSHIVSerologyPage implements OnInit {
             "access": {
               "status": this.dtsArray[0].dtsData.access.status
             },
-            "Heading1": {
+            "Section1": {
               //participant details
-              "status": this.dtsArray[0].dtsData.Heading1.status,
+              "status": this.dtsArray[0].dtsData.Section1.status,
               "data": {
                 "participantName": this.partiDetailsArray.participantName,
                 "participantCode": this.partiDetailsArray.participantCode,
@@ -731,9 +731,9 @@ export class DTSHIVSerologyPage implements OnInit {
                 "participantMobile": this.partiDetailsArray.mobile,
               }
             },
-            "Heading2": {
+            "Section2": {
               //shipment details
-              "status": this.dtsArray[0].dtsData.Heading2.status,
+              "status": this.dtsArray[0].dtsData.Section2.status,
               "data": {
                 "shipmentDate": this.shipmentData['shipmentDate'],
                 "resultDueDate": this.shipmentData['resultDueDate'],
@@ -754,14 +754,14 @@ export class DTSHIVSerologyPage implements OnInit {
                 }
               }
             },
-            "Heading3": {
+            "Section3": {
               //test details
-              "status": this.dtsArray[0].dtsData.Heading3.status,
+              "status": this.dtsArray[0].dtsData.Section3.status,
               "data": this.testKitModel
             },
-            "Heading4": {
+            "Section4": {
               //sample details
-              "status": this.dtsArray[0].dtsData.Heading4.status,
+              "status": this.dtsArray[0].dtsData.Section4.status,
               "data": {
                 "samples": this.samplesObj,
                 "resultsText": this.resultsTextArray,
@@ -770,9 +770,9 @@ export class DTSHIVSerologyPage implements OnInit {
               }
             },
 
-            "Heading5": {
+            "Section5": {
               //other information
-              "status": this.dtsArray[0].dtsData.Heading5.status,
+              "status": this.dtsArray[0].dtsData.Section5.status,
               "data": {
                 "supervisorReview": this.supervisorReviewArray,
                 "approvalLabel": this.approvalLabel,
@@ -951,9 +951,9 @@ export class DTSHIVSerologyPage implements OnInit {
             "access": {
               "status": this.dtsArray[0].dtsData.access.status
             },
-            "Heading1": {
+            "Section1": {
               //participant details
-              "status": this.dtsArray[0].dtsData.Heading1.status,
+              "status": this.dtsArray[0].dtsData.Section1.status,
               "data": {
                 "participantName": this.partiDetailsArray.participantName,
                 "participantCode": this.partiDetailsArray.participantCode,
@@ -962,9 +962,9 @@ export class DTSHIVSerologyPage implements OnInit {
                 "participantMobile": this.partiDetailsArray.mobile,
               }
             },
-            "Heading2": {
+            "Section2": {
               //shipment details
-              "status": this.dtsArray[0].dtsData.Heading2.status,
+              "status": this.dtsArray[0].dtsData.Section2.status,
               "data": {
                 "shipmentDate": this.shipmentData['shipmentDate'],
                 "resultDueDate": this.shipmentData['resultDueDate'],
@@ -985,14 +985,14 @@ export class DTSHIVSerologyPage implements OnInit {
                 }
               }
             },
-            "Heading3": {
+            "Section3": {
               //test details
-              "status": this.dtsArray[0].dtsData.Heading3.status,
+              "status": this.dtsArray[0].dtsData.Section3.status,
               "data": this.testKitModel
             },
-            "Heading4": {
+            "Section4": {
               //sample details
-              "status": this.dtsArray[0].dtsData.Heading4.status,
+              "status": this.dtsArray[0].dtsData.Section4.status,
               "data": {
                 "samples": this.samplesObj,
                 "resultsText": this.resultsTextArray,
@@ -1001,9 +1001,9 @@ export class DTSHIVSerologyPage implements OnInit {
               }
             },
 
-            "Heading5": {
+            "Section5": {
               //other information
-              "status": this.dtsArray[0].dtsData.Heading5.status,
+              "status": this.dtsArray[0].dtsData.Section5.status,
               "data": {
                 "supervisorReview": this.supervisorReviewArray,
                 "approvalLabel": this.approvalLabel,

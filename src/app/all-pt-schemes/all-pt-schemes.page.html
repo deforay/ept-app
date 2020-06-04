@@ -7,9 +7,11 @@
             All Shipments
           </ion-title>
           <ion-buttons slot="end" (click)="presentPopover($event)" *ngIf="shippingsOriginalArray.length!=0 || NoFilteredData">
-          <span class="eptHeaderTitle">Filter</span>&nbsp;
-          <ion-icon name="funnel" ios="ios-funnel" class="funnelIcon"></ion-icon>
-          </ion-buttons>
+          <button mat-button class="filterButton">
+            <span class="eptHeaderTitle">Filter</span> 
+            <mat-icon class="funnelIcon">filter_list</mat-icon>
+        </button>
+        </ion-buttons>     
   </ion-toolbar>
 </ion-header>
 
@@ -237,7 +239,7 @@
     </ion-card-content>
   </ion-card>
   <!-- ion-skeleton-text code end -->
-<div *ngIf="shippingsArray.length==0">
+
   <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON==''">
     <ion-card-content class="cardContent">
       <p class="noShipments">
@@ -247,7 +249,7 @@
       </p>
       </ion-card-content>
   </ion-card>
-</div>
+
 
   <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='activeNotResp'">
     <ion-card-content class="cardContent">

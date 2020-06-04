@@ -9,6 +9,7 @@ import { RapidHIVRecencyTestingPageRoutingModule } from './rapid-hiv-recency-tes
 import { RapidHIVRecencyTestingPage } from './rapid-hiv-recency-testing.page';
 import { MaterialModule } from '../material.module';
 import { ComponentsModule } from '../component/components.module';
+import { MomentModule } from '../moment.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -17,6 +18,7 @@ import { ComponentsModule } from '../component/components.module';
     MaterialModule,
     ComponentsModule,
     ReactiveFormsModule,
+    MomentModule,
     RapidHIVRecencyTestingPageRoutingModule
   ],
   declarations: [RapidHIVRecencyTestingPage]

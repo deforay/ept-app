@@ -311,7 +311,7 @@ import {
       this.skeltonArray = [];
 
       if (shipmentArray.length != 0) {
-        this.shippingsArray=[];
+        this.shippingsArray = [];
         //this.shippingsArray = shipmentArray;
         this.shippingsOriginalArray = shipmentArray;
         this.checkIsSynced('onload');
@@ -379,9 +379,9 @@ import {
                 this.CrudServiceService.getData('/api/shipments/get/?authToken=' + result['data'].authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
                     if (result["status"] == 'success') {
-                      this.shippingsArray=[];
+                      this.shippingsArray = [];
                       this.shippingsOriginalArray = result['data'];
-                      this.storage.set('shipmentArray',this.shippingsOriginalArray)
+                      this.storage.set('shipmentArray', this.shippingsOriginalArray)
                       this.checkIsSynced('onload');
                       this.skeltonArray = [];
                       this.getAllShipmentForms();
@@ -406,7 +406,7 @@ import {
                     } else {
                       this.showNoData = false;
                     }
-                 
+
                   }
 
                   , (err) => {
@@ -532,17 +532,16 @@ import {
             })
           })
         } else {
-        
+
         }
       } else {}
       if (param == 'onload') {
-        this.shippingsArray=[];
+        this.shippingsArray = [];
         this.shippingsArray = this.shippingsOriginalArray.filter(
           item => item.status == 'shipped' && item.updatedOn == '' && item.is_excluded != 'yes' && item.isSynced != 'false');
         this.shippingsArray.sort((a, b) => {
           return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
         });
-        console.log(this.shippingsArray);
         if (this.shippingsArray.length == 0) {
           this.showNoData = true;
         } else {
@@ -575,12 +574,12 @@ import {
 
 
         if (this.localStorageUnSyncedArray.length != 0) {
-          this.localStorageSelectedFormArray = this.localStorageUnSyncedArray.filter(i => i.schemeType == item.schemeType && i.shipmentId == item.shipmentId && i.evaluationStatus == item.evaluationStatus && i.participantId == item.participantId);
+          this.localStorageSelectedFormArray = this.localStorageUnSyncedArray.filter(i => i.schemeType == item.schemeType && i.shipmentId == item.shipmentId && i.evaluationStatus == item.evaluationStatus && i.participantId == item.participantId && i.mapId == item.mapId);
         }
 
 
         if (this.TestFormArray) {
-          this.storage.set('isFromSyncAll', false);
+        
           this.TestFormArray[0].isView = isView;
           this.storage.set('selectedTestFormArray', this.TestFormArray);
 
@@ -632,8 +631,7 @@ import {
             if (isView == 'true') {
               this.router.navigate(['/rapid-hiv-recency-testing']);
             } else {
-            //  if (this.TestFormArray[0].recencyData.access.status == 'success') {
-                if (this.TestFormArray[0]) {
+              if (this.TestFormArray[0].recencyData.access.status == 'success') {
                 this.router.navigate(['/rapid-hiv-recency-testing']);
               } else {
                 this.alertService.presentAlert('Alert', this.TestFormArray[0].recencyData.access.message)
@@ -647,7 +645,7 @@ import {
     loading.dismiss();
   }
 
-   syncShipments() {
+  syncShipments() {
     this.router.navigate(['/sync-all-shipments']);
   }
 

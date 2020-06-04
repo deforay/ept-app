@@ -163,43 +163,43 @@ export class DbsEidPage implements OnInit {
       if (this.eidArray[0].eidData.access.message) {
         this.viewAccessMessage = this.eidArray[0].eidData.access.message;
       }
-      if (this.eidArray[0].eidData.Heading1.status == true) {
+      if (this.eidArray[0].eidData.Section1.status == true) {
         this.showParticipantData = true;
-        this.participantData['participantName'] = this.eidArray[0].eidData.Heading1.data.participantName;
-        this.participantData['participantCode'] = this.eidArray[0].eidData.Heading1.data.participantCode;
-        this.participantData['affiliation'] = this.eidArray[0].eidData.Heading1.data.affiliation;
-        this.participantData['phone'] = this.eidArray[0].eidData.Heading1.data.phone;
-        this.participantData['mobile'] = this.eidArray[0].eidData.Heading1.data.mobile;
+        this.participantData['participantName'] = this.eidArray[0].eidData.Section1.data.participantName;
+        this.participantData['participantCode'] = this.eidArray[0].eidData.Section1.data.participantCode;
+        this.participantData['affiliation'] = this.eidArray[0].eidData.Section1.data.affiliation;
+        this.participantData['phone'] = this.eidArray[0].eidData.Section1.data.phone;
+        this.participantData['mobile'] = this.eidArray[0].eidData.Section1.data.mobile;
       } else {
         this.participantData = {};
         this.showParticipantData = false;
       }
-      if (this.eidArray[0].eidData.Heading2.status == true) {
+      if (this.eidArray[0].eidData.Section2.status == true) {
 
         this.showShipmentData = true;
-        this.shipmentData['shipmentDate'] = this.eidArray[0].eidData.Heading2.data.shipmentDate;
-        this.shipmentData['resultDueDate'] = this.eidArray[0].eidData.Heading2.data.resultDueDate;
-        this.shipmentData['testReceiptDate'] = this.eidArray[0].eidData.Heading2.data.testReceiptDate ? new Date(this.eidArray[0].eidData.Heading2.data.testReceiptDate) : '';
-        this.shipmentData['sampleRehydrationDate'] = this.eidArray[0].eidData.Heading2.data.sampleRehydrationDate ? new Date(this.eidArray[0].eidData.Heading2.data.sampleRehydrationDate) : '';
-        this.shipmentData['responseDate'] = this.eidArray[0].eidData.Heading2.data.responseDate ? new Date(this.eidArray[0].eidData.Heading2.data.responseDate) : '';
-        this.shipmentData['shipmentTestingDate'] = this.eidArray[0].eidData.Heading2.data.testDate ? new Date(this.eidArray[0].eidData.Heading2.data.testDate) : '';
-        this.shipmentData['extractionLotNumber'] = this.eidArray[0].eidData.Heading2.data.extractionLotNumber;
-        this.shipmentData['detectionLotNumber'] = this.eidArray[0].eidData.Heading2.data.detectionLotNumber;
-        this.shipmentData['extractionExpirationDate'] = this.eidArray[0].eidData.Heading2.data.extractionExpirationDate ? new Date(this.eidArray[0].eidData.Heading2.data.extractionExpirationDate) : '';
-        this.shipmentData['detectionExpirationDate'] = this.eidArray[0].eidData.Heading2.data.detectionExpirationDate ? new Date(this.eidArray[0].eidData.Heading2.data.detectionExpirationDate) : '';
-        this.shipmentData['extractionAssayDropdown'] = this.eidArray[0].eidData.Heading2.data.extractionAssaySelect;
-        this.shipmentData['detectionAssayDropdown'] = this.eidArray[0].eidData.Heading2.data.detectionAssaySelect;
-        this.shipmentData['modeOfReceiptDropdown'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelect ? this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelect : [];
-        this.shipmentData['extractionAssay'] = this.eidArray[0].eidData.Heading2.data.extractionAssaySelected;
-        this.shipmentData['detectionAssay'] = this.eidArray[0].eidData.Heading2.data.detectionAssaySelected;
-        this.shipmentData['modeOfReceipt'] = this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected ? this.eidArray[0].eidData.Heading2.data.modeOfReceiptSelected : '';
+        this.shipmentData['shipmentDate'] = this.eidArray[0].eidData.Section2.data.shipmentDate;
+        this.shipmentData['resultDueDate'] = this.eidArray[0].eidData.Section2.data.resultDueDate;
+        this.shipmentData['testReceiptDate'] = this.eidArray[0].eidData.Section2.data.testReceiptDate ? new Date(this.eidArray[0].eidData.Section2.data.testReceiptDate) : '';
+        this.shipmentData['sampleRehydrationDate'] = this.eidArray[0].eidData.Section2.data.sampleRehydrationDate ? new Date(this.eidArray[0].eidData.Section2.data.sampleRehydrationDate) : '';
+        this.shipmentData['responseDate'] = this.eidArray[0].eidData.Section2.data.responseDate ? new Date(this.eidArray[0].eidData.Section2.data.responseDate) : '';
+        this.shipmentData['shipmentTestingDate'] = this.eidArray[0].eidData.Section2.data.testDate ? new Date(this.eidArray[0].eidData.Section2.data.testDate) : '';
+        this.shipmentData['extractionLotNumber'] = this.eidArray[0].eidData.Section2.data.extractionLotNumber;
+        this.shipmentData['detectionLotNumber'] = this.eidArray[0].eidData.Section2.data.detectionLotNumber;
+        this.shipmentData['extractionExpirationDate'] = this.eidArray[0].eidData.Section2.data.extractionExpirationDate ? new Date(this.eidArray[0].eidData.Section2.data.extractionExpirationDate) : '';
+        this.shipmentData['detectionExpirationDate'] = this.eidArray[0].eidData.Section2.data.detectionExpirationDate ? new Date(this.eidArray[0].eidData.Section2.data.detectionExpirationDate) : '';
+        this.shipmentData['extractionAssayDropdown'] = this.eidArray[0].eidData.Section2.data.extractionAssaySelect;
+        this.shipmentData['detectionAssayDropdown'] = this.eidArray[0].eidData.Section2.data.detectionAssaySelect;
+        this.shipmentData['modeOfReceiptDropdown'] = this.eidArray[0].eidData.Section2.data.modeOfReceiptSelect ? this.eidArray[0].eidData.Section2.data.modeOfReceiptSelect : [];
+        this.shipmentData['extractionAssay'] = this.eidArray[0].eidData.Section2.data.extractionAssaySelected;
+        this.shipmentData['detectionAssay'] = this.eidArray[0].eidData.Section2.data.detectionAssaySelected;
+        this.shipmentData['modeOfReceipt'] = this.eidArray[0].eidData.Section2.data.modeOfReceiptSelected ? this.eidArray[0].eidData.Section2.data.modeOfReceiptSelected : '';
         if (this.participantQcAccess == true) {
-          if (this.eidArray[0].eidData.Heading2.data.qcData.status == true) {
+          if (this.eidArray[0].eidData.Section2.data.qcData.status == true) {
             this.isQCDoneShow = true;
-            this.qcRadioArray = this.eidArray[0].eidData.Heading2.data.qcData.qcRadio;
-            this.qcDone = this.eidArray[0].eidData.Heading2.data.qcData.qcRadioSelected ? this.eidArray[0].eidData.Heading2.data.qcData.qcRadioSelected : '';
-            this.qcDate = this.eidArray[0].eidData.Heading2.data.qcData.qcDate ? new Date(this.eidArray[0].eidData.Heading2.data.qcData.qcDate) : '';
-            this.qcDoneBy = this.eidArray[0].eidData.Heading2.data.qcData.qcDoneBy ? this.eidArray[0].eidData.Heading2.data.qcData.qcDoneBy : '';
+            this.qcRadioArray = this.eidArray[0].eidData.Section2.data.qcData.qcRadio;
+            this.qcDone = this.eidArray[0].eidData.Section2.data.qcData.qcRadioSelected ? this.eidArray[0].eidData.Section2.data.qcData.qcRadioSelected : '';
+            this.qcDate = this.eidArray[0].eidData.Section2.data.qcData.qcDate ? new Date(this.eidArray[0].eidData.Section2.data.qcData.qcDate) : '';
+            this.qcDoneBy = this.eidArray[0].eidData.Section2.data.qcData.qcDoneBy ? this.eidArray[0].eidData.Section2.data.qcData.qcDoneBy : '';
           } else {
             this.isQCDoneShow = false;
             this.qcDone = '';
@@ -216,39 +216,39 @@ export class DbsEidPage implements OnInit {
         this.shipmentData = {};
         this.showShipmentData = false;
       }
-      if (this.eidArray[0].eidData.Heading3.status == true) {
+      if (this.eidArray[0].eidData.Section3.status == true) {
 
         this.showPTPanelData = true;
-        this.ptPanelData['isPtTestNotPerformedRadio'] = this.eidArray[0].eidData.Heading3.data.isPtTestNotPerformedRadio;
+        this.ptPanelData['isPtTestNotPerformedRadio'] = this.eidArray[0].eidData.Section3.data.isPtTestNotPerformedRadio;
         if (this.ptPanelData['isPtTestNotPerformedRadio'] == 'yes') {
           this.ptPanelNotTested = true;
         } else {
           this.ptPanelNotTested = false;
         }
-        this.ptPanelData['ptNotTestedComments'] = this.eidArray[0].eidData.Heading3.data.ptNotTestedComments;
-        this.ptPanelData['ptNotTestedCommentsText'] = this.eidArray[0].eidData.Heading3.data.ptNotTestedCommentsText;
-        this.ptPanelData['ptSupportComments'] = this.eidArray[0].eidData.Heading3.data.ptSupportComments;
-        this.ptPanelData['ptSupportCommentsText'] = this.eidArray[0].eidData.Heading3.data.ptSupportCommentsText;
-        this.ptPanelData['vlNotTestedReasonDropdown'] = this.eidArray[0].eidData.Heading3.data.vlNotTestedReason;
-        this.ptPanelData['vlNotTestedReason'] = this.eidArray[0].eidData.Heading3.data.vlNotTestedReasonSelected;
-        this.ptPanelData['vlNotTestedReasonText'] = this.eidArray[0].eidData.Heading3.data.vlNotTestedReasonText;
-        this.ptPanelData['samplesList'] = this.eidArray[0].eidData.Heading3.data.samplesList;
-        this.ptPanelData['sampleTextData'] = this.eidArray[0].eidData.Heading3.data.samples;
+        this.ptPanelData['ptNotTestedComments'] = this.eidArray[0].eidData.Section3.data.ptNotTestedComments;
+        this.ptPanelData['ptNotTestedCommentsText'] = this.eidArray[0].eidData.Section3.data.ptNotTestedCommentsText;
+        this.ptPanelData['ptSupportComments'] = this.eidArray[0].eidData.Section3.data.ptSupportComments;
+        this.ptPanelData['ptSupportCommentsText'] = this.eidArray[0].eidData.Section3.data.ptSupportCommentsText;
+        this.ptPanelData['vlNotTestedReasonDropdown'] = this.eidArray[0].eidData.Section3.data.vlNotTestedReason;
+        this.ptPanelData['vlNotTestedReason'] = this.eidArray[0].eidData.Section3.data.vlNotTestedReasonSelected;
+        this.ptPanelData['vlNotTestedReasonText'] = this.eidArray[0].eidData.Section3.data.vlNotTestedReasonText;
+        this.ptPanelData['samplesList'] = this.eidArray[0].eidData.Section3.data.samplesList;
+        this.ptPanelData['sampleTextData'] = this.eidArray[0].eidData.Section3.data.samples;
         this.ptPanelData['samples'] = this.ptPanelData['sampleTextData'];
-        this.ptPanelData['resultsTextData'] = this.eidArray[0].eidData.Heading3.data.resultsText;
+        this.ptPanelData['resultsTextData'] = this.eidArray[0].eidData.Section3.data.resultsText;
 
       } else {
         this.showPTPanelData = false;
       }
-      if (this.eidArray[0].eidData.Heading4.status == true) {
+      if (this.eidArray[0].eidData.Section4.status == true) {
         this.showOtherInfoData = true;
-        this.otherInfoData['approvalInputText'] = this.eidArray[0].eidData.Heading4.data.approvalInputText;
-        this.otherInfoData['approvalLabel'] = this.eidArray[0].eidData.Heading4.data.approvalLabel;
-        this.otherInfoData['comments'] = this.eidArray[0].eidData.Heading4.data.comments;
-        this.otherInfoData['supervisorReviewDropdown'] = this.eidArray[0].eidData.Heading4.data.supervisorReview;
-        this.otherInfoData['supervisorReview'] = this.eidArray[0].eidData.Heading4.data.supervisorReviewSelected;
-        this.otherInfoData['supervisorName'] = this.eidArray[0].eidData.Heading4.data.approvalInputText;
-        this.otherInfoData['supervisorLabel'] = this.eidArray[0].eidData.Heading4.data.approvalLabel;
+        this.otherInfoData['approvalInputText'] = this.eidArray[0].eidData.Section4.data.approvalInputText;
+        this.otherInfoData['approvalLabel'] = this.eidArray[0].eidData.Section4.data.approvalLabel;
+        this.otherInfoData['comments'] = this.eidArray[0].eidData.Section4.data.comments;
+        this.otherInfoData['supervisorReviewDropdown'] = this.eidArray[0].eidData.Section4.data.supervisorReview;
+        this.otherInfoData['supervisorReview'] = this.eidArray[0].eidData.Section4.data.supervisorReviewSelected;
+        this.otherInfoData['supervisorName'] = this.eidArray[0].eidData.Section4.data.approvalInputText;
+        this.otherInfoData['supervisorLabel'] = this.eidArray[0].eidData.Section4.data.approvalLabel;
       } else {
         this.showOtherInfoData = false;
       }
@@ -539,7 +539,7 @@ export class DbsEidPage implements OnInit {
               "access": {
                 "status": this.eidArray[0].eidData.access.status
               },
-              "Heading1": {
+              "Section1": {
                 "status": this.showParticipantData,
                 "data": {
                   "participantName": this.participantData['participantName'],
@@ -549,7 +549,7 @@ export class DbsEidPage implements OnInit {
                   "participantMobile": this.participantData['mobile'],
                 }
               },
-              "Heading2": {
+              "Section2": {
                 "status": this.showShipmentData,
                 "data": {
                   "shipmentDate": this.shipmentData['shipmentDate'],
@@ -577,7 +577,7 @@ export class DbsEidPage implements OnInit {
                   }
                 }
               },
-              "Heading3": {
+              "Section3": {
                 //PT panel details
                 "status": this.showPTPanelData,
                 "data": {
@@ -594,7 +594,7 @@ export class DbsEidPage implements OnInit {
                   "ptSupportComments": this.ptPanelData['ptSupportComments'],
                 }
               },
-              "Heading4": {
+              "Section4": {
                 //other information
                 "status": this.showOtherInfoData,
                 "data": {
@@ -710,7 +710,7 @@ export class DbsEidPage implements OnInit {
               "access": {
                 "status": this.eidArray[0].eidData.access.status
               },
-              "Heading1": {
+              "Section1": {
                 "status": this.showParticipantData,
                 "data": {
                   "participantName": this.participantData['participantName'],
@@ -720,7 +720,7 @@ export class DbsEidPage implements OnInit {
                   "participantMobile": this.participantData['mobile'],
                 }
               },
-              "Heading2": {
+              "Section2": {
                 "status": this.showShipmentData,
                 "data": {
                   "shipmentDate": this.shipmentData['shipmentDate'],
@@ -748,7 +748,7 @@ export class DbsEidPage implements OnInit {
                   }
                 }
               },
-              "Heading3": {
+              "Section3": {
                 //PT panel details
                 "status": this.showPTPanelData,
                 "data": {
@@ -765,7 +765,7 @@ export class DbsEidPage implements OnInit {
                   "ptSupportComments": this.ptPanelData['ptSupportComments'],
                 }
               },
-              "Heading4": {
+              "Section4": {
                 //other information
                 "status": this.showOtherInfoData,
                 "data": {

@@ -152,7 +152,7 @@ export class SyncAllShipmentsPage implements OnInit {
 
 
         if (this.localStorageUnSyncedArray.length != 0) {
-          this.localStorageSelectedFormArray = this.localStorageUnSyncedArray.filter(i => i.schemeType == item.schemeType && i.shipmentId == item.shipmentId && i.evaluationStatus == item.evaluationStatus && i.participantId == item.participantId);
+          this.localStorageSelectedFormArray = this.localStorageUnSyncedArray.filter(i => i.schemeType == item.schemeType && i.shipmentId == item.shipmentId && i.evaluationStatus == item.evaluationStatus && i.participantId == item.participantId && i.mapId == item.mapId);
         }
 
 
@@ -201,6 +201,18 @@ export class SyncAllShipmentsPage implements OnInit {
                 this.router.navigate(['/dbs-eid']);
               } else {
                 this.alertService.presentAlert('Alert', this.TestFormArray[0].eidData.access.message)
+              }
+            }
+          }
+
+          if (this.TestFormArray[0].schemeType == 'recency') {
+            if (isView == 'true') {
+              this.router.navigate(['/rapid-hiv-recency-testing']);
+            } else {
+              if (this.TestFormArray[0].recencyData.access.status == 'success') {
+                this.router.navigate(['/rapid-hiv-recency-testing']);
+              } else {
+                this.alertService.presentAlert('Alert', this.TestFormArray[0].recencyData.access.message)
               }
             }
           }

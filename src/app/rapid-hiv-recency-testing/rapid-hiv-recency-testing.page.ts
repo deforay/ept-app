@@ -72,7 +72,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
   ptPanelData = {};
   otherInfoData = {};
   customFieldData = {};
-  EIDJSON = {};
+  recencyJSON = {};
   updatedStatus: any;
   participantQcAccess: any;
   qcRadioArray = [];
@@ -92,12 +92,12 @@ export class RapidHIVRecencyTestingPage implements OnInit {
   yourResultArray = [];
   icQsValuesArray = [];
   hivCTODArray = [];
-  yourResultCheckArray = [];
-  icQsValuesCheckArray = [];
-  hivCTODCheckArray = [];
-  resultArrayCheck = [];
-  isQsArrayCheck = [];
-  hivCTODArrayCheck = [];
+  controlLineCheckArray = [];
+  diagnosisLineCheckArray = [];
+  longtermLineCheckArray = [];
+  controlLineCheck = [];
+  diagnosisLineCheck = [];
+  longtermLineCheck = [];
   isSubmitted: any;
   isPartiEditRespDate: boolean;
   isPartiEditModeRec: boolean;
@@ -163,39 +163,39 @@ export class RapidHIVRecencyTestingPage implements OnInit {
       if (this.recencyArray[0].recencyData.access.message) {
         this.viewAccessMessage = this.recencyArray[0].recencyData.access.message;
       }
-      if (this.recencyArray[0].recencyData.Heading1.status == true) {
+      if (this.recencyArray[0].recencyData.Section1.status == true) {
         this.showParticipantData = true;
-        this.participantData['participantName'] = this.recencyArray[0].recencyData.Heading1.data.participantName;
-        this.participantData['participantCode'] = this.recencyArray[0].recencyData.Heading1.data.participantCode;
-        this.participantData['affiliation'] = this.recencyArray[0].recencyData.Heading1.data.affiliation;
-        this.participantData['phone'] = this.recencyArray[0].recencyData.Heading1.data.phone;
-        this.participantData['mobile'] = this.recencyArray[0].recencyData.Heading1.data.mobile;
+        this.participantData['participantName'] = this.recencyArray[0].recencyData.Section1.data.participantName;
+        this.participantData['participantCode'] = this.recencyArray[0].recencyData.Section1.data.participantCode;
+        this.participantData['affiliation'] = this.recencyArray[0].recencyData.Section1.data.affiliation;
+        this.participantData['phone'] = this.recencyArray[0].recencyData.Section1.data.phone;
+        this.participantData['mobile'] = this.recencyArray[0].recencyData.Section1.data.mobile;
       } else {
         this.participantData = {};
         this.showParticipantData = false;
       }
-      if (this.recencyArray[0].recencyData.Heading2.status == true) {
+      if (this.recencyArray[0].recencyData.Section2.status == true) {
 
         this.showShipmentData = true;
-        this.shipmentData['shipmentDate'] = this.recencyArray[0].recencyData.Heading2.data.shipmentDate;
-        this.shipmentData['resultDueDate'] = this.recencyArray[0].recencyData.Heading2.data.resultDueDate;
-        this.shipmentData['testReceiptDate'] = this.recencyArray[0].recencyData.Heading2.data.testReceiptDate ? new Date(this.recencyArray[0].recencyData.Heading2.data.testReceiptDate) : '';
-        this.shipmentData['sampleRehydrationDate'] = this.recencyArray[0].recencyData.Heading2.data.sampleRehydrationDate ? new Date(this.recencyArray[0].recencyData.Heading2.data.sampleRehydrationDate) : '';
-        this.shipmentData['responseDate'] = this.recencyArray[0].recencyData.Heading2.data.responseDate ? new Date(this.recencyArray[0].recencyData.Heading2.data.responseDate) : '';
-        this.shipmentData['shipmentTestingDate'] = this.recencyArray[0].recencyData.Heading2.data.testDate ? new Date(this.recencyArray[0].recencyData.Heading2.data.testDate) : '';
-        this.shipmentData['assayLotNumber'] = this.recencyArray[0].recencyData.Heading2.data.recencyAssayLotNumber;
-        this.shipmentData['assayExpirationDate'] = this.recencyArray[0].recencyData.Heading2.data.recencyAssayExpirayDate ? new Date(this.recencyArray[0].recencyData.Heading2.data.recencyAssayExpirayDate) : '';
-        this.shipmentData['recencyAssaySelectDropdown'] = this.recencyArray[0].recencyData.Heading2.data.recencyAssaySelect;
-        this.shipmentData['modeOfReceiptDropdown'] = this.recencyArray[0].recencyData.Heading2.data.modeOfReceiptSelect ? this.recencyArray[0].recencyData.Heading2.data.modeOfReceiptSelect : [];
-        this.shipmentData['assayName'] = this.recencyArray[0].recencyData.Heading2.data.recencyAssaySelected;
-        this.shipmentData['modeOfReceipt'] = this.recencyArray[0].recencyData.Heading2.data.modeOfReceiptSelected ? this.recencyArray[0].recencyData.Heading2.data.modeOfReceiptSelected : '';
+        this.shipmentData['shipmentDate'] = this.recencyArray[0].recencyData.Section2.data.shipmentDate;
+        this.shipmentData['resultDueDate'] = this.recencyArray[0].recencyData.Section2.data.resultDueDate;
+        this.shipmentData['testReceiptDate'] = this.recencyArray[0].recencyData.Section2.data.testReceiptDate ? new Date(this.recencyArray[0].recencyData.Section2.data.testReceiptDate) : '';
+        this.shipmentData['sampleRehydrationDate'] = this.recencyArray[0].recencyData.Section2.data.sampleRehydrationDate ? new Date(this.recencyArray[0].recencyData.Section2.data.sampleRehydrationDate) : '';
+        this.shipmentData['responseDate'] = this.recencyArray[0].recencyData.Section2.data.responseDate ? new Date(this.recencyArray[0].recencyData.Section2.data.responseDate) : '';
+        this.shipmentData['shipmentTestingDate'] = this.recencyArray[0].recencyData.Section2.data.testDate ? new Date(this.recencyArray[0].recencyData.Section2.data.testDate) : '';
+        this.shipmentData['assayLotNumber'] = this.recencyArray[0].recencyData.Section2.data.recencyAssayLotNumber;
+        this.shipmentData['assayExpirationDate'] = this.recencyArray[0].recencyData.Section2.data.recencyAssayExpirayDate ? new Date(this.recencyArray[0].recencyData.Section2.data.recencyAssayExpirayDate) : '';
+        this.shipmentData['recencyAssaySelectDropdown'] = this.recencyArray[0].recencyData.Section2.data.recencyAssaySelect;
+        this.shipmentData['modeOfReceiptDropdown'] = this.recencyArray[0].recencyData.Section2.data.modeOfReceiptSelect ? this.recencyArray[0].recencyData.Section2.data.modeOfReceiptSelect : [];
+        this.shipmentData['assayName'] = this.recencyArray[0].recencyData.Section2.data.recencyAssaySelected;
+        this.shipmentData['modeOfReceipt'] = this.recencyArray[0].recencyData.Section2.data.modeOfReceiptSelected ? this.recencyArray[0].recencyData.Section2.data.modeOfReceiptSelected : '';
         if (this.participantQcAccess == true) {
-          if (this.recencyArray[0].recencyData.Heading2.data.qcData.status == true) {
+          if (this.recencyArray[0].recencyData.Section2.data.qcData.status == true) {
             this.isQCDoneShow = true;
-            this.qcRadioArray = this.recencyArray[0].recencyData.Heading2.data.qcData.qcRadio;
-            this.qcDone = this.recencyArray[0].recencyData.Heading2.data.qcData.qcRadioSelected ? this.recencyArray[0].recencyData.Heading2.data.qcData.qcRadioSelected : '';
-            this.qcDate = this.recencyArray[0].recencyData.Heading2.data.qcData.qcDate ? new Date(this.recencyArray[0].recencyData.Heading2.data.qcData.qcDate) : '';
-            this.qcDoneBy = this.recencyArray[0].recencyData.Heading2.data.qcData.qcDoneBy ? this.recencyArray[0].recencyData.Heading2.data.qcData.qcDoneBy : '';
+            this.qcRadioArray = this.recencyArray[0].recencyData.Section2.data.qcData.qcRadio;
+            this.qcDone = this.recencyArray[0].recencyData.Section2.data.qcData.qcRadioSelected ? this.recencyArray[0].recencyData.Section2.data.qcData.qcRadioSelected : '';
+            this.qcDate = this.recencyArray[0].recencyData.Section2.data.qcData.qcDate ? new Date(this.recencyArray[0].recencyData.Section2.data.qcData.qcDate) : '';
+            this.qcDoneBy = this.recencyArray[0].recencyData.Section2.data.qcData.qcDoneBy ? this.recencyArray[0].recencyData.Section2.data.qcData.qcDoneBy : '';
           } else {
             this.isQCDoneShow = false;
             this.qcDone = '';
@@ -212,39 +212,39 @@ export class RapidHIVRecencyTestingPage implements OnInit {
         this.shipmentData = {};
         this.showShipmentData = false;
       }
-      if (this.recencyArray[0].recencyData.Heading3.status == true) {
-debugger;
+      if (this.recencyArray[0].recencyData.Section3.status == true) {
+
         this.showPTPanelData = true;
-        this.ptPanelData['isPtTestNotPerformedRadio'] = this.recencyArray[0].recencyData.Heading3.data.isPtTestNotPerformedRadio;
+        this.ptPanelData['isPtTestNotPerformedRadio'] = this.recencyArray[0].recencyData.Section3.data.isPtTestNotPerformedRadio;
         if (this.ptPanelData['isPtTestNotPerformedRadio'] == 'yes') {
           this.ptPanelNotTested = true;
         } else {
           this.ptPanelNotTested = false;
         }
-        this.ptPanelData['ptNotTestedComments'] = this.recencyArray[0].recencyData.Heading3.data.ptNotTestedComments;
-        this.ptPanelData['ptNotTestedCommentsText'] = this.recencyArray[0].recencyData.Heading3.data.ptNotTestedCommentsText;
-        this.ptPanelData['ptSupportComments'] = this.recencyArray[0].recencyData.Heading3.data.ptSupportComments;
-        this.ptPanelData['ptSupportCommentsText'] = this.recencyArray[0].recencyData.Heading3.data.ptSupportCommentsText;
-        this.ptPanelData['vlNotTestedReasonDropdown'] = this.recencyArray[0].recencyData.Heading3.data.vlNotTestedReason;
-        this.ptPanelData['vlNotTestedReason'] = this.recencyArray[0].recencyData.Heading3.data.vlNotTestedReasonSelected;
-        this.ptPanelData['vlNotTestedReasonText'] = this.recencyArray[0].recencyData.Heading3.data.vlNotTestedReasonText;
-        // this.ptPanelData['samplesList'] = this.recencyArray[0].recencyData.Heading3.data.samplesList;
-        // this.ptPanelData['sampleTextData'] = this.recencyArray[0].recencyData.Heading3.data.samples;
-        // this.ptPanelData['samples'] = this.ptPanelData['sampleTextData'];
-        // this.ptPanelData['resultsTextData'] = this.recencyArray[0].recencyData.Heading3.data.resultsText;
+        this.ptPanelData['ptNotTestedComments'] = this.recencyArray[0].recencyData.Section3.data.ptNotTestedComments;
+        this.ptPanelData['ptNotTestedCommentsText'] = this.recencyArray[0].recencyData.Section3.data.ptNotTestedCommentsText;
+        this.ptPanelData['ptSupportComments'] = this.recencyArray[0].recencyData.Section3.data.ptSupportComments;
+        this.ptPanelData['ptSupportCommentsText'] = this.recencyArray[0].recencyData.Section3.data.ptSupportCommentsText;
+        this.ptPanelData['vlNotTestedReasonDropdown'] = this.recencyArray[0].recencyData.Section3.data.vlNotTestedReason;
+        this.ptPanelData['vlNotTestedReason'] = this.recencyArray[0].recencyData.Section3.data.vlNotTestedReasonSelected;
+        this.ptPanelData['vlNotTestedReasonText'] = this.recencyArray[0].recencyData.Section3.data.vlNotTestedReasonText;
+        this.ptPanelData['samplesList'] = this.recencyArray[0].recencyData.Section3.data.samplesList;
+        this.ptPanelData['sampleTextData'] = this.recencyArray[0].recencyData.Section3.data.samples;
+        this.ptPanelData['samples'] = this.ptPanelData['sampleTextData'];
+        this.ptPanelData['resultsTextData'] = this.recencyArray[0].recencyData.Section3.data.resultsText;
 
       } else {
         this.showPTPanelData = false;
       }
-      if (this.recencyArray[0].recencyData.Heading4.status == true) {
+      if (this.recencyArray[0].recencyData.Section4.status == true) {
         this.showOtherInfoData = true;
-        this.otherInfoData['approvalInputText'] = this.recencyArray[0].recencyData.Heading4.data.approvalInputText;
-        this.otherInfoData['approvalLabel'] = this.recencyArray[0].recencyData.Heading4.data.approvalLabel;
-        this.otherInfoData['comments'] = this.recencyArray[0].recencyData.Heading4.data.comments;
-        this.otherInfoData['supervisorReviewDropdown'] = this.recencyArray[0].recencyData.Heading4.data.supervisorReview;
-        this.otherInfoData['supervisorReview'] = this.recencyArray[0].recencyData.Heading4.data.supervisorReviewSelected;
-        this.otherInfoData['supervisorName'] = this.recencyArray[0].recencyData.Heading4.data.approvalInputText;
-        this.otherInfoData['supervisorLabel'] = this.recencyArray[0].recencyData.Heading4.data.approvalLabel;
+        this.otherInfoData['approvalInputText'] = this.recencyArray[0].recencyData.Section4.data.approvalInputText;
+        this.otherInfoData['approvalLabel'] = this.recencyArray[0].recencyData.Section4.data.approvalLabel;
+        this.otherInfoData['comments'] = this.recencyArray[0].recencyData.Section4.data.comments;
+        this.otherInfoData['supervisorReviewDropdown'] = this.recencyArray[0].recencyData.Section4.data.supervisorReview;
+        this.otherInfoData['supervisorReview'] = this.recencyArray[0].recencyData.Section4.data.supervisorReviewSelected;
+        this.otherInfoData['supervisorName'] = this.recencyArray[0].recencyData.Section4.data.approvalInputText;
+        this.otherInfoData['supervisorLabel'] = this.recencyArray[0].recencyData.Section4.data.approvalLabel;
       } else {
         this.showOtherInfoData = false;
       }
@@ -335,9 +335,8 @@ debugger;
     // }
     if (!this.shipmentData['testReceiptDate'] ||
       !this.shipmentData['sampleRehydrationDate'] ||
-      !this.shipmentData['extractionLotNumber'] ||
-      !this.shipmentData['detectionLotNumber'] ||
-      !this.shipmentData['detectionExpirationDate'] ||
+      !this.shipmentData['assayName'] ||
+      !this.shipmentData['assayLotNumber'] ||
       (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) ||
       (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate) && this.participantQcAccess == true) ||
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
@@ -364,45 +363,45 @@ debugger;
     if (this.ptPanelNotTested == false || !this.ptPanelNotTested) {
       this.ptPanelData['sampleTextData'].mandatory.forEach((mandCheck, index) => {
         if (mandCheck == true) {
-          if (this.ptPanelData['samples'].yourResults[index] == '' || !this.ptPanelData['samples'].yourResults[index]) {
-            this.yourResultCheckArray[index] = 'invalid';
+          if (this.ptPanelData['samples'].controlLine[index] == '' || !this.ptPanelData['samples'].controlLine[index]) {
+            this.controlLineCheckArray[index] = 'invalid';
           } else {
-            this.yourResultCheckArray[index] = 'valid';
+            this.controlLineCheckArray[index] = 'valid';
           }
-          // if(this.ptPanelData['samples'].hivCtOd[index]==''||!this.ptPanelData['samples'].hivCtOd[index]){
-          //   this.icQsValuesCheckArray[index] = 'invalid';
-          // } else {
-          //   this.icQsValuesCheckArray[index] = 'valid';
-          // }
-          // if(this.ptPanelData['samples'].IcQsValues[index]==''||!this.ptPanelData['samples'].IcQsValues[index]){
-          //   this.hivCTODCheckArray[index] = 'invalid';
-          // } else {
-          //   this.hivCTODCheckArray[index] = 'valid';
-          // }
+          if(this.ptPanelData['samples'].diagnosisLine[index]==''||!this.ptPanelData['samples'].diagnosisLine[index]){
+            this.diagnosisLineCheckArray[index] = 'invalid';
+          } else {
+            this.diagnosisLineCheckArray[index] = 'valid';
+          }
+          if(this.ptPanelData['samples'].longtermLine[index]==''||!this.ptPanelData['samples'].longtermLine[index]){
+            this.longtermLineCheckArray[index] = 'invalid';
+          } else {
+            this.longtermLineCheckArray[index] = 'valid';
+          }
         } else {
-          this.yourResultCheckArray[index] = 'valid';
-          //  this.hivCTODCheckArray[index] = 'valid';
-          //  this.icQsValuesCheckArray[index] = 'valid';
+          this.controlLineCheckArray[index] = 'valid';
+            this.diagnosisLineCheckArray[index] = 'valid';
+            this.longtermLineCheckArray[index] = 'valid';
         }
       });
 
-      this.resultArrayCheck = this.yourResultCheckArray.filter(i => i == 'invalid')
-      if (this.resultArrayCheck.length > 0) {
+      this.controlLineCheck = this.controlLineCheckArray.filter(i => i == 'invalid')
+      if (this.controlLineCheck.length > 0) {
         this.isValidPTPanel = false;
       } else {
         this.isValidPTPanel = true;
-        // this.isQsArrayCheck = this.icQsValuesCheckArray.filter(i => i == 'invalid')
-        // if (this.isQsArrayCheck.length > 0) {
-        //   this.isValidPTPanel = false;
-        // } else {
-        //   this.isValidPTPanel = true;
-        //   this.hivCTODArrayCheck = this.hivCTODCheckArray.filter(i => i == 'invalid')
-        //   if (this.hivCTODArrayCheck.length > 0) {
-        //     this.isValidPTPanel = false;
-        //   } else {
-        //     this.isValidPTPanel = true;
-        //   }
-        // }
+        this.diagnosisLineCheck = this.diagnosisLineCheckArray.filter(i => i == 'invalid')
+        if (this.diagnosisLineCheck.length > 0) {
+          this.isValidPTPanel = false;
+        } else {
+          this.isValidPTPanel = true;
+          this.longtermLineCheck = this.longtermLineCheckArray.filter(i => i == 'invalid')
+          if (this.longtermLineCheck.length > 0) {
+            this.isValidPTPanel = false;
+          } else {
+            this.isValidPTPanel = true;
+          }
+        }
       }
 
     } else {
@@ -463,7 +462,7 @@ debugger;
     }
   }
 
-  async submitEID(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
+  async submitRecency(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
 
     shipmentPanelForm.control.markAllAsTouched();
     PTPanelTestForm.control.markAllAsTouched();
@@ -517,7 +516,7 @@ debugger;
         this.isValidTestingDate = true;
       }
       if (this.isValidTestingDate) {
-        this.EIDJSON = {
+        this.recencyJSON = {
           "authToken": this.authToken,
           "appVersion": this.appVersionNumber,
           "syncType": "single",
@@ -536,7 +535,7 @@ debugger;
               "access": {
                 "status": this.recencyArray[0].recencyData.access.status
               },
-              "Heading1": {
+              "Section1": {
                 "status": this.showParticipantData,
                 "data": {
                   "participantName": this.participantData['participantName'],
@@ -546,7 +545,7 @@ debugger;
                   "participantMobile": this.participantData['mobile'],
                 }
               },
-              "Heading2": {
+              "Section2": {
                 "status": this.showShipmentData,
                 "data": {
                   "shipmentDate": this.shipmentData['shipmentDate'],
@@ -554,14 +553,10 @@ debugger;
                   "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
                   "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
                   "testDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
-                  "extractionAssaySelected": this.shipmentData['extractionAssay'],
-                  "extractionAssaySelect": this.shipmentData['extractionAssayDropdown'],
-                  "detectionAssaySelect": this.shipmentData['detectionAssayDropdown'],
-                  "detectionAssaySelected": this.shipmentData['detectionAssay'],
-                  "extractionLotNumber": this.shipmentData['extractionLotNumber'],
-                  "detectionLotNumber": this.shipmentData['detectionLotNumber'],
-                  "extractionExpirationDate": this.shipmentData['extractionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['extractionExpirationDate'])) : this.shipmentData['extractionExpirationDate'],
-                  "detectionExpirationDate": this.shipmentData['detectionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['detectionExpirationDate'])) : this.shipmentData['detectionExpirationDate'],
+                  "recencyAssaySelected": this.shipmentData['assayName'],
+                  "recencyAssaySelect": this.shipmentData['recencyAssaySelectDropdown'],
+                  "recencyAssayLotNumber": this.shipmentData['assayLotNumber'],
+                  "recencyAssayExpirayDate": this.shipmentData['assayExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['assayExpirationDate'])) : this.shipmentData['assayExpirationDate'],
                   "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
                   "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'],
                   "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
@@ -574,7 +569,7 @@ debugger;
                   }
                 }
               },
-              "Heading3": {
+              "Section3": {
                 //PT panel details
                 "status": this.showPTPanelData,
                 "data": {
@@ -591,7 +586,7 @@ debugger;
                   "ptSupportComments": this.ptPanelData['ptSupportComments'],
                 }
               },
-              "Heading4": {
+              "Section4": {
                 //other information
                 "status": this.showOtherInfoData,
                 "data": {
@@ -615,7 +610,7 @@ debugger;
             }
           }
         }
-        console.log(this.EIDJSON);
+        console.log(this.recencyJSON);
         const element = await this.loadingCtrl.getTop();
         if (element && element.dismiss) {
           element.dismiss();
@@ -635,7 +630,7 @@ debugger;
   }
 
 
-  confirmEID(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
+  confirmRecency(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
 
     shipmentPanelForm.control.markAllAsTouched();
     PTPanelTestForm.control.markAllAsTouched();
@@ -676,6 +671,7 @@ debugger;
     }
     this.updatedStatus = this.recencyArray[0].updatedStatus;
     if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.otherInfoValid == true) {
+
       if (this.shipmentData['shipmentTestingDate']) {
         if (new Date(this.shipmentData['shipmentTestingDate']) >= new Date(this.shipmentData['testReceiptDate'])) {
           this.isValidTestingDate = true;
@@ -688,7 +684,7 @@ debugger;
         this.isValidTestingDate = true;
       }
       if (this.isValidTestingDate) {
-        this.EIDJSON = {
+        this.recencyJSON = {
           "authToken": this.authToken,
           "appVersion": this.appVersionNumber,
           "syncType": "single",
@@ -707,7 +703,7 @@ debugger;
               "access": {
                 "status": this.recencyArray[0].recencyData.access.status
               },
-              "Heading1": {
+              "Section1": {
                 "status": this.showParticipantData,
                 "data": {
                   "participantName": this.participantData['participantName'],
@@ -717,7 +713,7 @@ debugger;
                   "participantMobile": this.participantData['mobile'],
                 }
               },
-              "Heading2": {
+              "Section2": {
                 "status": this.showShipmentData,
                 "data": {
                   "shipmentDate": this.shipmentData['shipmentDate'],
@@ -725,14 +721,10 @@ debugger;
                   "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
                   "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
                   "testDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
-                  "extractionAssaySelected": this.shipmentData['extractionAssay'],
-                  "extractionAssaySelect": this.shipmentData['extractionAssayDropdown'],
-                  "detectionAssaySelect": this.shipmentData['detectionAssayDropdown'],
-                  "detectionAssaySelected": this.shipmentData['detectionAssay'],
-                  "extractionLotNumber": this.shipmentData['extractionLotNumber'],
-                  "detectionLotNumber": this.shipmentData['detectionLotNumber'],
-                  "extractionExpirationDate": this.shipmentData['extractionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['extractionExpirationDate'])) : this.shipmentData['extractionExpirationDate'],
-                  "detectionExpirationDate": this.shipmentData['detectionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['detectionExpirationDate'])) : this.shipmentData['detectionExpirationDate'],
+                  "recencyAssaySelected": this.shipmentData['assayName'],
+                  "recencyAssaySelect": this.shipmentData['recencyAssaySelectDropdown'],
+                  "recencyAssayLotNumber": this.shipmentData['assayLotNumber'],
+                  "recencyAssayExpirayDate": this.shipmentData['assayExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['assayExpirationDate'])) : this.shipmentData['assayExpirationDate'],
                   "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
                   "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'],
                   "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
@@ -745,7 +737,7 @@ debugger;
                   }
                 }
               },
-              "Heading3": {
+              "Section3": {
                 //PT panel details
                 "status": this.showPTPanelData,
                 "data": {
@@ -762,7 +754,7 @@ debugger;
                   "ptSupportComments": this.ptPanelData['ptSupportComments'],
                 }
               },
-              "Heading4": {
+              "Section4": {
                 //other information
                 "status": this.showOtherInfoData,
                 "data": {
@@ -786,16 +778,16 @@ debugger;
             }
           }
         }
-        console.log(this.EIDJSON);
-        if (this.network.type == 'none') {
-          this.EIDJSON['data']['isSynced'] = 'false';
-          this.LocalShipmentFormService.offlineStoreShipmentForm(this.EIDJSON);
+        console.log(this.recencyJSON);
+        if (this.network.type == 'none'|| this.network.type == null) {
+          this.recencyJSON['data']['isSynced'] = 'false';
+          this.LocalShipmentFormService.offlineStoreShipmentForm(this.recencyJSON);
 
         } else {
 
-          this.EIDJSON['data']['isSynced'] = 'true';
+          this.recencyJSON['data']['isSynced'] = 'true';
 
-          this.CrudServiceService.postData('/api/shipments/save-form', this.EIDJSON).then((result) => {
+          this.CrudServiceService.postData('/api/shipments/save-form', this.recencyJSON).then((result) => {
             if (result["status"] == 'success') {
               this.alertService.presentAlert('Success', result['message']);
               this.router.navigate(['/all-pt-schemes']);

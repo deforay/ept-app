@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit {
 
   goBack(titleHeader) {
 
-    if (titleHeader == "DTS- HIV Viral Load" ||titleHeader == "DTS - HIV Serology" || titleHeader=="DBS - Early Infant Diagnosis" || titleHeader=="RTRI"  ||titleHeader == "View DTS- HIV Viral Load" || titleHeader == "View DTS - HIV Serology" || titleHeader == "View DBS - Early Infant Diagnosis") {
+    if (titleHeader == "DTS- HIV Viral Load" ||titleHeader == "DTS - HIV Serology" || titleHeader=="DBS - Early Infant Diagnosis" || titleHeader=="RTRI"  ||titleHeader == "View DTS- HIV Viral Load" || titleHeader == "View DTS - HIV Serology" || titleHeader == "View DBS - Early Infant Diagnosis" || titleHeader=="View RTRI") {
 
      this.router.navigate(['/all-pt-schemes'], {replaceUrl: true});
      
