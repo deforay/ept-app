@@ -106,6 +106,8 @@ export class RapidHIVRecencyTestingPage implements OnInit {
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
   isValidTestingDate: boolean = false;
+  schemeName: string;
+  viewSchemeName: string;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -160,6 +162,8 @@ export class RapidHIVRecencyTestingPage implements OnInit {
   bindRecencyData() {
 
     if (this.recencyArray[0].recencyData) {
+     this.schemeName=this.recencyArray[0].schemeName;
+     this.viewSchemeName="View "+this.schemeName;
       if (this.recencyArray[0].recencyData.access.message) {
         this.viewAccessMessage = this.recencyArray[0].recencyData.access.message;
       }
@@ -347,6 +351,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
           this.nextStep();
         } else {
           //do nothing
+         // this.shipmentPanelForm.control.markAllAsTouched();
         }
       }
 
@@ -779,7 +784,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
           }
         }
         console.log(this.recencyJSON);
-        if (this.network.type == 'none'|| this.network.type == null) {
+        if (this.network.type == 'none') {
           this.recencyJSON['data']['isSynced'] = 'false';
           this.LocalShipmentFormService.offlineStoreShipmentForm(this.recencyJSON);
 

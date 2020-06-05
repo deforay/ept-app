@@ -39,7 +39,7 @@ export class CrudServiceService {
   //post service call
   async postData(URL, credentials) {
 
-    if (this.networkType != 'none'|| this.networkType == null) {
+    if (this.networkType != 'none') {
       //   this.LoaderService.showLoader();
       const headers = new HttpHeaders().set('Content-Type', 'application/json');
       const element = await this.loadingCtrl.getTop();
@@ -83,7 +83,7 @@ export class CrudServiceService {
   }
 
   getData(URL) {
-    if (this.networkType != 'none'|| this.networkType == null) {
+    if (this.networkType != 'none') {
     return new Promise((resolve, reject) => {
       this.storage.get('apiUrl').then((url) => {
         if (url) {
@@ -103,7 +103,7 @@ export class CrudServiceService {
   }
 
   getById(URL, id) {
-    if (this.networkType != 'none'|| this.networkType == null) {
+    if (this.networkType != 'none') {
     return new Promise((resolve, reject) => {
       this.storage.get('apiUrl').then((url) => {
         if (url) {

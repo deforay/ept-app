@@ -107,7 +107,8 @@ export class DbsEidPage implements OnInit {
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
   isValidTestingDate: boolean = false;
-
+  schemeName:string;
+  viewSchemeName:string;
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public LoaderService: LoaderService,
@@ -160,6 +161,8 @@ export class DbsEidPage implements OnInit {
   bindEIDData() {
 
     if (this.eidArray[0].eidData) {
+      this.schemeName=this.eidArray[0].schemeName;
+      this.viewSchemeName="View "+this.schemeName;
       if (this.eidArray[0].eidData.access.message) {
         this.viewAccessMessage = this.eidArray[0].eidData.access.message;
       }

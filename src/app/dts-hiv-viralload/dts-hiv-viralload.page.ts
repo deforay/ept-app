@@ -144,7 +144,9 @@ export class DtsHivViralloadPage implements OnInit {
   schemeType;
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
-
+  schemeName:string;
+  viewSchemeName:string;
+  
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public LoaderService: LoaderService,
@@ -218,6 +220,8 @@ export class DtsHivViralloadPage implements OnInit {
   bindVLData() {
 
     if (this.vlDataArray[0].vlData) {
+      this.schemeName=this.vlDataArray[0].schemeName;
+      this.viewSchemeName="View "+this.schemeName;
       if (this.vlDataArray[0].vlData.access.message) {
         this.viewAccessMessage = this.vlDataArray[0].vlData.access.message;
       }

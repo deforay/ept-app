@@ -1,6 +1,6 @@
-<app-header *ngIf="isShowReviewMsg==false"  [titleHeader]="'RTRI'" [isMenuOrBackButton]="'back'"></app-header>
+<app-header *ngIf="isShowReviewMsg==false"  [titleHeader]="schemeName" [isMenuOrBackButton]="'back'"></app-header>
 
-<app-header *ngIf="isShowReviewMsg==true" [titleHeader]="'View RTRI'" [isMenuOrBackButton]="'back'"></app-header>
+<app-header *ngIf="isShowReviewMsg==true" [titleHeader]="viewSchemeName" [isMenuOrBackButton]="'back'"></app-header>
 <ion-content>
 
   <ion-row>
@@ -402,7 +402,7 @@
                <ion-row>
                   <ion-col class="grid-input-col">
                     <mat-form-field class="login-full-width " appearance="outline"
-                    [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.controlLine[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
+                    [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.diagnosisLine[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
                     *ngIf="ptPanelData.samplesList">
                     <mat-label>{{ptPanelData.resultsTextData[2]}}</mat-label>
                     <mat-select [(ngModel)]="ptPanelData.samples.diagnosisLine[i]" name="diagnosisLine[{{i}}]" #diagnosisLine="ngModel"
@@ -442,9 +442,7 @@
                 </ion-row> 
                 <ion-row>
                   <ion-col class="grid-input-col">
-                    <mat-form-field class="login-full-width " appearance="outline"
-                    [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.yourResults[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
-                    *ngIf="ptPanelData.samplesList">
+                    <mat-form-field class="login-full-width " appearance="outline" *ngIf="ptPanelData.samplesList">
                     <mat-label>{{ptPanelData.resultsTextData[4]}}</mat-label>
                     <mat-select [(ngModel)]="ptPanelData.samples.yourResults[i]" name="yourResults[{{i}}]" #yourResults="ngModel"
                     [disabled]="isView=='true'">
@@ -456,7 +454,6 @@
                   </mat-select>
                   </mat-form-field>
                   </ion-col>
-
                 </ion-row> 
               </mat-card-content>
             </mat-card>

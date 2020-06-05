@@ -137,7 +137,9 @@ export class DTSHIVSerologyPage implements OnInit {
   dynamicStep = 0;
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
-
+  schemeName:string;
+  viewSchemeName:string;
+  
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public LoaderService: LoaderService,
@@ -185,6 +187,8 @@ export class DTSHIVSerologyPage implements OnInit {
   bindSerologyData() {
 
     if (this.dtsArray[0].dtsData) {
+      this.schemeName=this.dtsArray[0].schemeName;
+      this.viewSchemeName="View "+this.schemeName;
       if (this.dtsArray[0].dtsData.access.message) {
         this.viewAccessMessage = this.dtsArray[0].dtsData.access.message;
       }
@@ -1025,7 +1029,7 @@ export class DTSHIVSerologyPage implements OnInit {
         }
       }
   
-      if (this.network.type == 'none'|| this.network.type==null) {
+      if (this.network.type == 'none') {
         this.serologyJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
 

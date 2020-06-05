@@ -33,14 +33,12 @@ export class HeaderComponent implements OnInit {
    
   }
 
-  goBack(titleHeader) {
+  goBack() {
+    if (this.router.url == '/rapid-hiv-recency-testing' || this.router.url == '/dts-hiv-serology' || this.router.url == '/dts-hiv-viralload' || this.router.url == '/dbs-eid') {
 
-    if (titleHeader == "DTS- HIV Viral Load" ||titleHeader == "DTS - HIV Serology" || titleHeader=="DBS - Early Infant Diagnosis" || titleHeader=="RTRI"  ||titleHeader == "View DTS- HIV Viral Load" || titleHeader == "View DTS - HIV Serology" || titleHeader == "View DBS - Early Infant Diagnosis" || titleHeader=="View RTRI") {
-
-     this.router.navigate(['/all-pt-schemes'], {replaceUrl: true});
-     
+      this.router.navigate(['/all-pt-schemes'], {replaceUrl: true});
+      
     }
   }
   
-
 }

@@ -101,9 +101,19 @@ import {
     return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
   }
 
-  ionViewWillEnter() {
+  ionViewWillEnter(param) {
 
-    this.filterJSON = [];
+    if(this.filterJSON.length!=0 && param!='pulled'){
+    this.applyFilter(this.filterJSON);
+    }
+    else if(param=='pulled'){
+      this.filterJSON=[];
+      this.onloadShipment();
+    }
+    else{
+      this.filterJSON=[];
+      this.onloadShipment();
+    }
     this.networkType = this.network.type;
 
     //comment when take buid start
@@ -116,17 +126,36 @@ import {
     this.events.subscribe('network:offline', (data) => {
       this.filterJSON = [];
       this.networkType = this.network.type;
-      this.callOfflineFunctions();
+      if(this.filterJSON.length!=0 && param!='pulled'){
+        this.applyFilter(this.filterJSON);
+        }
+        else if(param=='pulled'){
+          this.filterJSON=[];
+          this.callOfflineFunctions();
+        }
+        else{
+          this.filterJSON=[];
+          this.callOfflineFunctions();
+        }
     })
 
     // Online event
     this.events.subscribe('network:online', () => {
       this.filterJSON = [];
       this.networkType = this.network.type;
-      this.callOnlineFunctions();
+      if(this.filterJSON.length!=0 && param!='pulled'){
+        this.applyFilter(this.filterJSON);
+        }
+        else if(param=='pulled'){
+          this.filterJSON=[];
+          this.callOnlineFunctions();
+        }
+        else{
+          this.filterJSON=[];
+          this.callOnlineFunctions();
+        }
     })
 
-    this.onloadShipment();
   }
 
   async presentPopover(ev: any) {
@@ -311,8 +340,6 @@ import {
       this.skeltonArray = [];
 
       if (shipmentArray.length != 0) {
-        this.shippingsArray = [];
-        //this.shippingsArray = shipmentArray;
         this.shippingsOriginalArray = shipmentArray;
         this.checkIsSynced('onload');
         this.storage.set("shipmentArray", this.shippingsOriginalArray);
@@ -458,6 +485,7 @@ import {
 
     this.storage.get('participantLogin').then((partiLoginResult) => {
         if (partiLoginResult.authToken) {
+          if (this.networkType != 'none'){
           this.CrudServiceService.getData('/api/shipments/get-shipment-form/?authToken=' + partiLoginResult.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 
               if (result["status"] == 'success') {
@@ -496,12 +524,10 @@ import {
               if (this.networkType != 'none') {
                 this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
               }
-            }
-          );
+            });
+          }
         }
-      }
-
-    );
+      });
   }
 
   checkIsSynced(param) {
@@ -681,7 +707,7 @@ import {
 
   doRefresh(event) {
     setTimeout(() => {
-      this.ionViewWillEnter();
+      this.ionViewWillEnter('pulled');
       event.target.complete();
     }, 2000);
   }

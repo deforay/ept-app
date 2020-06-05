@@ -1,6 +1,6 @@
-<app-header *ngIf="isShowReviewMsg==false"  [titleHeader]="'DBS - Early Infant Diagnosis'" [isMenuOrBackButton]="'back'"></app-header>
+<app-header *ngIf="isShowReviewMsg==false"  [titleHeader]="schemeName" [isMenuOrBackButton]="'back'"></app-header>
 
-<app-header *ngIf="isShowReviewMsg==true" [titleHeader]="'View DBS - Early Infant Diagnosis'" [isMenuOrBackButton]="'back'"></app-header>
+<app-header *ngIf="isShowReviewMsg==true" [titleHeader]="viewSchemeName" [isMenuOrBackButton]="'back'"></app-header>
 
 <ion-content>
   <ion-row>
