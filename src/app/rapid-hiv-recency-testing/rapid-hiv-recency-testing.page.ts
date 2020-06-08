@@ -39,7 +39,6 @@ import {
 import {
   LoadingController
 } from '@ionic/angular';
-
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -108,6 +107,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
   isValidTestingDate: boolean = false;
   schemeName: string;
   viewSchemeName: string;
+  shipmentPanelForm: NgForm;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -118,12 +118,14 @@ export class RapidHIVRecencyTestingPage implements OnInit {
     public network: Network,
     public LocalShipmentFormService: LocalShipmentFormService,
     public alertService: AlertService,
-    public loadingCtrl: LoadingController, ) {
+    public loadingCtrl: LoadingController,
+  ) {
 
   }
 
+
   ionViewWillEnter() {
-  
+
     this.summarizeForm = false;
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
@@ -138,7 +140,6 @@ export class RapidHIVRecencyTestingPage implements OnInit {
         this.participantQcAccess = participantLogin.qcAccess;
         this.isPartiEditRespDate = participantLogin.enableAddingTestResponseDate;
         this.isPartiEditModeRec = participantLogin.enableChoosingModeOfReceipt;
-
         this.getRecencyFormDetails();
       }
     })
@@ -162,8 +163,8 @@ export class RapidHIVRecencyTestingPage implements OnInit {
   bindRecencyData() {
 
     if (this.recencyArray[0].recencyData) {
-     this.schemeName=this.recencyArray[0].schemeName;
-     this.viewSchemeName="View "+this.schemeName;
+      this.schemeName = this.recencyArray[0].schemeName;
+      this.viewSchemeName = "View " + this.schemeName;
       if (this.recencyArray[0].recencyData.access.message) {
         this.viewAccessMessage = this.recencyArray[0].recencyData.access.message;
       }
@@ -266,26 +267,26 @@ export class RapidHIVRecencyTestingPage implements OnInit {
       this.checkShipmentPanel('onload');
       this.checkPtPanel('onload');
       if (this.showCustomFieldData == true) {
-        this.dynamicStep = 1;
+        //   this.dynamicStep = 1;
         this.checkCustFieldPanel('onload');
       } else {
-        this.dynamicStep = 0;
+        // this.dynamicStep = 0;
       }
       this.checkOtherInfoPanel('onload');
 
-      if (this.validShipmentDetails == false) {
-        this.setStep(1); // Expand Shipment Details panel
-      } else if (this.isValidPTPanel == false) {
-        this.setStep(2); // Expand PT Panel panel       
-      } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
-        this.setStep(3); // Expand Custom Fields panel
-      } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
-        this.setStep(3); // Expand Other Information panel
-      } else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
-        this.setStep(4); // Expand Other Information panel
-      } else {
-        this.setStep(0); // Expand Participant Details Panel
-      }
+      // if (this.validShipmentDetails == false) {
+      //   this.setStep(1); // Expand Shipment Details panel
+      // } else if (this.isValidPTPanel == false) {
+      //   this.setStep(2); // Expand PT Panel panel       
+      // } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
+      //   this.setStep(3); // Expand Custom Fields panel
+      // } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
+      //   this.setStep(3); // Expand Other Information panel
+      // } else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
+      //   this.setStep(4); // Expand Other Information panel
+      // } else {
+      //   this.setStep(0); // Expand Participant Details Panel
+      // }
 
     }
     if (this.recencyArray[0].recencyData.access.status == "fail") {
@@ -305,7 +306,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
 
     this.storage.get('selectedTestFormArray').then((recencyDataObj) => {
       this.isView = recencyDataObj[0].isView;
-    
+
       if (recencyDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
 
@@ -333,10 +334,12 @@ export class RapidHIVRecencyTestingPage implements OnInit {
 
     })
   }
+
   checkShipmentPanel(param) {
     // if (this.isView == "true") {
     //   this.setStep(2);
     // }
+
     if (!this.shipmentData['testReceiptDate'] ||
       !this.shipmentData['sampleRehydrationDate'] ||
       !this.shipmentData['assayName'] ||
@@ -346,15 +349,31 @@ export class RapidHIVRecencyTestingPage implements OnInit {
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
       this.validShipmentDetails = false;
 
-      if (param == 'next') {
+      if (param != 'onload') {
         if (this.isView == "true") {
           this.nextStep();
         } else {
-          //do nothing
-         // this.shipmentPanelForm.control.markAllAsTouched();
+          if (!this.shipmentData['testReceiptDate']) {
+            this.alertService.presentAlert('Alert', document.getElementById('shipmentReceiptDate').getAttribute('data-alert'));
+          } else if (!this.shipmentData['sampleRehydrationDate']) {
+            this.alertService.presentAlert('Alert', document.getElementById('sampleRehydrationDate').getAttribute('data-alert'));
+          } else if (!this.shipmentData['assayName']) {
+            this.alertService.presentAlert('Alert', document.getElementById('assayName').getAttribute('data-alert'));
+          } else if (!this.shipmentData['assayLotNumber']) {
+            this.alertService.presentAlert('Alert', document.getElementById('assayLotNumber').getAttribute('data-alert'));
+          } else if (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) {
+            this.alertService.presentAlert('Alert', document.getElementById('responseDate').getAttribute('data-alert'));
+          } else if (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true) {
+            this.alertService.presentAlert('Alert', document.getElementById('modeOfReceipt').getAttribute('data-alert'));
+          } else if (!this.qcDate && this.participantQcAccess == true && this.qcDone == 'yes') {
+            this.alertService.presentAlert('Alert', document.getElementById('qcDate').getAttribute('data-alert'));
+          } else if (!this.qcDoneBy && this.participantQcAccess == true && this.qcDone == 'yes') {
+            this.alertService.presentAlert('Alert', document.getElementById('qcDoneBy').getAttribute('data-alert'));
+          } else {
+
+          }
         }
       }
-
     } else {
       this.validShipmentDetails = true;
       if (param == 'next') {
@@ -373,26 +392,27 @@ export class RapidHIVRecencyTestingPage implements OnInit {
           } else {
             this.controlLineCheckArray[index] = 'valid';
           }
-          if(this.ptPanelData['samples'].diagnosisLine[index]==''||!this.ptPanelData['samples'].diagnosisLine[index]){
+          if (this.ptPanelData['samples'].diagnosisLine[index] == '' || !this.ptPanelData['samples'].diagnosisLine[index]) {
             this.diagnosisLineCheckArray[index] = 'invalid';
           } else {
             this.diagnosisLineCheckArray[index] = 'valid';
           }
-          if(this.ptPanelData['samples'].longtermLine[index]==''||!this.ptPanelData['samples'].longtermLine[index]){
+          if (this.ptPanelData['samples'].longtermLine[index] == '' || !this.ptPanelData['samples'].longtermLine[index]) {
             this.longtermLineCheckArray[index] = 'invalid';
           } else {
             this.longtermLineCheckArray[index] = 'valid';
           }
         } else {
           this.controlLineCheckArray[index] = 'valid';
-            this.diagnosisLineCheckArray[index] = 'valid';
-            this.longtermLineCheckArray[index] = 'valid';
+          this.diagnosisLineCheckArray[index] = 'valid';
+          this.longtermLineCheckArray[index] = 'valid';
         }
       });
 
       this.controlLineCheck = this.controlLineCheckArray.filter(i => i == 'invalid')
       if (this.controlLineCheck.length > 0) {
         this.isValidPTPanel = false;
+
       } else {
         this.isValidPTPanel = true;
         this.diagnosisLineCheck = this.diagnosisLineCheckArray.filter(i => i == 'invalid')
@@ -408,13 +428,48 @@ export class RapidHIVRecencyTestingPage implements OnInit {
           }
         }
       }
-
+      if (params == 'next' || (params=='submit' && this.validShipmentDetails)) {
+        var BreakException = {};
+        try {
+          this.ptPanelData['sampleTextData'].label.forEach((elementLabel, index) => {
+            if (this.ptPanelData['sampleTextData'].controlLine[index] == "" && this.ptPanelData['sampleTextData'].mandatory[index] == true) {
+              this.alertService.presentAlert('Alert', 'Please select the control line for the sample ' + elementLabel);
+              throw BreakException;
+            }
+            if (this.ptPanelData['sampleTextData'].diagnosisLine[index] == "" && this.ptPanelData['sampleTextData'].mandatory[index] == true) {
+              this.alertService.presentAlert('Alert', 'Please select the diagnosis line for the sample ' + elementLabel);
+              throw BreakException;
+            }
+            if (this.ptPanelData['sampleTextData'].longtermLine[index] == "" && this.ptPanelData['sampleTextData'].mandatory[index] == true) {
+              this.alertService.presentAlert('Alert', 'Please select the long term line for the sample ' + elementLabel);
+              throw BreakException;
+            }
+          })
+        } catch (e) {
+          if (e !== BreakException) throw e;
+        }
+      }
     } else {
       if (!this.ptPanelData['vlNotTestedReason'] ||
         !this.ptPanelData['ptNotTestedComments']
         // !this.ptPanelData['ptSupportComments']
       ) {
+        if (params == 'next' || (params=='submit' && this.validShipmentDetails)) {
         this.isValidPTPanel = false;
+        if (!this.ptPanelData['vlNotTestedReason']) {
+          this.alertService.presentAlert('Alert',"Please choose the " +this.ptPanelData['vlNotTestedReasonText']);
+         }
+         else if (!this.ptPanelData['ptNotTestedComments']) {
+           this.alertService.presentAlert('Alert',"Please choose the" +this.ptPanelData['ptNotTestedComments']);
+          }
+          else{
+
+          }
+        }
+
+         // else if (!this.shipmentData['sampleRehydrationDate']) {
+        //   this.alertService.presentAlert('Alert', document.getElementById('sampleRehydrationDate').getAttribute('data-alert'));
+        // } 
 
       } else {
         this.isValidPTPanel = true;
@@ -461,10 +516,21 @@ export class RapidHIVRecencyTestingPage implements OnInit {
     if ((this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName']) ||
       this.otherInfoData['supervisorReview'] == '') {
       this.otherInfoValid = false;
-      //this.setStep(this.dynamicStep+3);
+      if (params == 'next' || (params=='submit' && this.validShipmentDetails && this.isValidPTPanel)) {
+      if(!this.otherInfoData['supervisorReview']){
+        this.alertService.presentAlert('Alert',"Please choose the Supervisor Review");
+      }
+      else if(this.otherInfoData['supervisorReview']=='yes' && !this.otherInfoData['supervisorName']){
+        this.alertService.presentAlert('Alert',"Please enter the Supervisor Name");
+      }
+      this.setStep(4);
+    }
+  
     } else {
       this.otherInfoValid = true;
+      this.setStep(4);
     }
+  
   }
 
   async submitRecency(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {

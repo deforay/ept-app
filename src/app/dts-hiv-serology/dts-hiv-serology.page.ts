@@ -243,7 +243,6 @@ export class DTSHIVSerologyPage implements OnInit {
         this.testKitModel['kitName'] = [];
         this.testKitModel['kitValue'] = [];
         this.testKitModel['kitOther'] = [];
-        //  this.testKitModel['testKitTextArray'] = [];
         this.testKitModel['kitNameDropdown'] = [];
         this.testKitModel['lot'] = [];
         this.testKitModel['expDate'] = [];
@@ -255,9 +254,6 @@ export class DTSHIVSerologyPage implements OnInit {
         this.testKitModel['kitText'] = [...this.testKitTextArray];
 
         this.testKitTextArray.forEach((element) => {
-          //  this.testKitModel['kitName'].push(this.testKitDetailsArray.kitSelected[element].kitName);
-          //  this.testKitModel['kitValue'].push(this.testKitDetailsArray.kitSelected[element].kitValue);
-          // this.testKitModel['kitOther'].push("");
           if (this.testKitNameArray[element].status == true) {
             this.testKitIndex = this.testKitIndex + 1;
           }
@@ -357,30 +353,30 @@ export class DTSHIVSerologyPage implements OnInit {
         this.checkSampleDetailPanel('onload', index)
       });
       if (this.showCustomFieldData == true) {
-        this.dynamicStep = 1;
+       // this.dynamicStep = 1;
         this.checkCustFieldPanel('onload');
       } else {
-        this.dynamicStep = 0;
+      //  this.dynamicStep = 0;
       }
       this.checkOtherInfoPanel('onload');
-      let checkTestKitIndex = this.isValidTestKitDetails.findIndex(index => index == false);
+      // let checkTestKitIndex = this.isValidTestKitDetails.findIndex(index => index == false);
 
-      let checkSampleIndex = this.isValidSampleDetails.findIndex(valid => valid == false);
+      // let checkSampleIndex = this.isValidSampleDetails.findIndex(valid => valid == false);
 
 
-      if (this.isValidShipmentDetails == false) {
-        this.setStep(1);
-      } else if (checkTestKitIndex >= 0) {
-        this.setStep(checkTestKitIndex + 2);
-      } else if (checkSampleIndex >= 0) {
-        this.setStep(this.testKitIndex + checkSampleIndex + 2);
-      } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
-        this.setStep(this.testKitIndex + this.sampleIndex + 2);
-      } else if (this.isValidOtherInfoPanel == false) {
-        this.setStep(this.testKitIndex + this.sampleIndex + this.dynamicStep + 2);
-      } else {
-        this.setStep(0);
-      }
+      // if (this.isValidShipmentDetails == false) {
+      //   this.setStep(1);
+      // } else if (checkTestKitIndex >= 0) {
+      //   this.setStep(checkTestKitIndex + 2);
+      // } else if (checkSampleIndex >= 0) {
+      //   this.setStep(this.testKitIndex + checkSampleIndex + 2);
+      // } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
+      //   this.setStep(this.testKitIndex + this.sampleIndex + 2);
+      // } else if (this.isValidOtherInfoPanel == false) {
+      //   this.setStep(this.testKitIndex + this.sampleIndex + this.dynamicStep + 2);
+      // } else {
+      //   this.setStep(0);
+      // }
     }
 
     if (this.dtsArray[0].dtsData.access.status == "fail") {

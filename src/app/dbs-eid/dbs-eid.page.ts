@@ -269,26 +269,26 @@ export class DbsEidPage implements OnInit {
       this.checkShipmentPanel('onload');
       this.checkPtPanel('onload');
       if (this.showCustomFieldData == true) {
-        this.dynamicStep = 1;
+    //    this.dynamicStep = 1;
         this.checkCustFieldPanel('onload');
       } else {
-        this.dynamicStep = 0;
+     //   this.dynamicStep = 0;
       }
       this.checkOtherInfoPanel('onload');
 
-      if (this.validShipmentDetails == false) {
-        this.setStep(1); // Expand Shipment Details panel
-      } else if (this.isValidPTPanel == false) {
-        this.setStep(2); // Expand PT Panel panel       
-      } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
-        this.setStep(3); // Expand Custom Fields panel
-      } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
-        this.setStep(3); // Expand Other Information panel
-      } else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
-        this.setStep(4); // Expand Other Information panel
-      } else {
-        this.setStep(0); // Expand Participant Details Panel
-      }
+      // if (this.validShipmentDetails == false) {
+      //   this.setStep(1); // Expand Shipment Details panel
+      // } else if (this.isValidPTPanel == false) {
+      //   this.setStep(2); // Expand PT Panel panel       
+      // } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
+      //   this.setStep(3); // Expand Custom Fields panel
+      // } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
+      //   this.setStep(3); // Expand Other Information panel
+      // } else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
+      //   this.setStep(4); // Expand Other Information panel
+      // } else {
+      //   this.setStep(0); // Expand Participant Details Panel
+      // }
 
     }
     if (this.eidArray[0].eidData.access.status == "fail") {

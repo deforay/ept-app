@@ -343,7 +343,6 @@ import {
         this.shippingsOriginalArray = shipmentArray;
         this.checkIsSynced('onload');
         this.storage.set("shipmentArray", this.shippingsOriginalArray);
-        this.skeltonArray = [];
       }
     })
 
@@ -410,7 +409,6 @@ import {
                       this.shippingsOriginalArray = result['data'];
                       this.storage.set('shipmentArray', this.shippingsOriginalArray)
                       this.checkIsSynced('onload');
-                      this.skeltonArray = [];
                       this.getAllShipmentForms();
 
 
@@ -573,6 +571,7 @@ import {
         } else {
           this.showNoData = false;
         }
+        this.skeltonArray = [];
       }
     })
   }
