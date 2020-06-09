@@ -460,7 +460,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
           this.alertService.presentAlert('Alert',"Please choose the " +this.ptPanelData['vlNotTestedReasonText']);
          }
          else if (!this.ptPanelData['ptNotTestedComments']) {
-           this.alertService.presentAlert('Alert',"Please choose the" +this.ptPanelData['ptNotTestedComments']);
+           this.alertService.presentAlert('Alert',"Please enter the" +this.ptPanelData['ptNotTestedCommentsText']);
           }
           else{
 
@@ -523,12 +523,12 @@ export class RapidHIVRecencyTestingPage implements OnInit {
       else if(this.otherInfoData['supervisorReview']=='yes' && !this.otherInfoData['supervisorName']){
         this.alertService.presentAlert('Alert',"Please enter the Supervisor Name");
       }
-      this.setStep(4);
+     // this.setStep(3+this.dynamicStep);
     }
   
     } else {
       this.otherInfoValid = true;
-      this.setStep(4);
+    //  this.setStep(3+this.dynamicStep);
     }
   
   }
