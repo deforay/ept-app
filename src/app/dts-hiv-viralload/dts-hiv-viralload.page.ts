@@ -144,9 +144,10 @@ export class DtsHivViralloadPage implements OnInit {
   schemeType;
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
-  schemeName:string;
-  viewSchemeName:string;
-  
+  schemeName: string;
+  viewSchemeName: string;
+  dynamicStep = 0;
+
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public LoaderService: LoaderService,
@@ -199,15 +200,15 @@ export class DtsHivViralloadPage implements OnInit {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
 
           if ((localStorageSelectedFormArray[0].isSynced == vlDataObj[0].isSynced) && (localStorageSelectedFormArray[0].evaluationStatus == vlDataObj[0].evaluationStatus) && (localStorageSelectedFormArray[0].mapId == vlDataObj[0].mapId) && (localStorageSelectedFormArray[0].participantId == vlDataObj[0].participantId) && (localStorageSelectedFormArray[0].shipmentId == vlDataObj[0].shipmentId) && (localStorageSelectedFormArray[0].schemeType == vlDataObj[0].schemeType)) {
-          
+
             this.isView = localStorageSelectedFormArray[0].isView;
             this.vlDataArray = [];
             this.vlDataArray.push(localStorageSelectedFormArray[0]);
             this.bindVLData();
           }
         })
-      }  else {
-       
+      } else {
+
         this.vlDataArray = [];
         this.vlDataArray.push(vlDataObj[0]);
         this.bindVLData();
@@ -220,8 +221,8 @@ export class DtsHivViralloadPage implements OnInit {
   bindVLData() {
 
     if (this.vlDataArray[0].vlData) {
-      this.schemeName=this.vlDataArray[0].schemeName;
-      this.viewSchemeName="View "+this.schemeName;
+      this.schemeName = this.vlDataArray[0].schemeName;
+      this.viewSchemeName = "View " + this.schemeName;
       if (this.vlDataArray[0].vlData.access.message) {
         this.viewAccessMessage = this.vlDataArray[0].vlData.access.message;
       }
@@ -350,10 +351,14 @@ export class DtsHivViralloadPage implements OnInit {
           this.showCustomFieldData = false;
         }
       }
-
+      if (this.showCustomFieldData == true) {
+        this.dynamicStep = 1;
+        this.checkCustFieldPanel('onload');
+      } else {
+        this.dynamicStep = 0;
+      }
       this.nextStepShipmentPanel('', 'onload');
       this.nextStepPTPanelTest('onload', this.ptPanelTest);
-      this.checkCustFieldPanel('onload');
       this.nextStepOtherInfoPanel('onload');
 
     }
@@ -376,7 +381,7 @@ export class DtsHivViralloadPage implements OnInit {
     if (this.isView == "true") {
       this.step = 2;
     }
-    if (next == 'onload' && this.isView == "false" || this.isView == "true") {
+    if (this.isView == "false" || this.isView == "true") {
 
       this.validVlAssay = "";
       this.validQC = "";
@@ -431,11 +436,38 @@ export class DtsHivViralloadPage implements OnInit {
       }
       this.openInvalidPanel();
     }
+    if (next != 'onload' && this.isView == "false") {
+      if (this.validShipmentDetails == false) {
+        if (!this.testReceiptDate) {
+          this.alertService.presentAlert("Alert", "Please choose the Test Receipt Date");
+        } else if (!this.sampleRhdDate) {
+          this.alertService.presentAlert("Alert", "Please choose the Sample Rehydration Date");
+        } else if (!this.testDate) {
+          this.alertService.presentAlert("Alert", "Please choose the Testing Date");
+        } else if (!this.vlassay) {
+          this.alertService.presentAlert("Alert", "Please select the Viral Load Assay");
+        } else if (this.isSelectedOther && !this.othervlassay) {
+          this.alertService.presentAlert("Alert", "Please specify Other Assay Name");
+        } else if (!this.assayExpDate) {
+          this.alertService.presentAlert("Alert", "Please choose the Assay Expiration Date");
+        } else if (!this.assayLotNo) {
+          this.alertService.presentAlert("Alert", "Please enter Assay Lot Number");
+        } else if (this.validResponseDate == false) {
+          this.alertService.presentAlert("Alert", "Please choose the Response Date");
+        } else if (this.validModeOfRec == false) {
+          this.alertService.presentAlert("Alert", "Please select the Mode of Receipt");
+        } else if (this.isQCDoneShow && !this.qcDate) {
+          this.alertService.presentAlert("Alert", "Please choose the QC Date");
+        } else if (this.isQCDoneShow && !this.qcDoneBy) {
+          this.alertService.presentAlert("Alert", "Please enter QC Done By");
+        } else {
 
+        }
+      }
+    }
   }
 
   openInvalidPanel() {
-
     if (this.validOtherInfo == false) {
       this.step = 4;
     }
@@ -465,24 +497,35 @@ export class DtsHivViralloadPage implements OnInit {
     this.isValidPTPanel = false;
 
     if (ptPanelTest == false) {
-
-      this.ptPanelTestData['vlResult'].forEach((element, index) => {
-
-        this.VlFloat = parseFloat(element);
-        if (next != 'onload') {
-          if (this.VlFloat > 7) {
-            this.alertService.presentAlert("Alert", "VL Result should be between 1 and 7");
-            throw false;
+      var BreakException = {};
+      try {
+        this.ptPanelTestData['vlResult'].forEach((element, index) => {
+          this.VlFloat = parseFloat(element);
+          if (next != 'onload') {
+            if (this.VlFloat > 7) {
+              this.alertService.presentAlert("Alert", "VL Result should be between 1 and 7");
+              throw false;
+            }
           }
-        }
-        if ((element || element == '0') && (this.mandatoryArray[index] == true) && this.VlFloat <= 7) {
-          this.validMandVLResultCount = this.validMandVLResultCount + 1;
-        }
-        if ((element || element == '0') && this.VlFloat <= 7) {
-          this.validFloatVLResultCount = this.validFloatVLResultCount + 1;
-        }
-      });
+          if ((element || element == '0') && (this.mandatoryArray[index] == true) && this.VlFloat <= 7) {
+            this.validMandVLResultCount = this.validMandVLResultCount + 1;
+          }
+          if ((element || element == '0') && this.VlFloat <= 7) {
+            this.validFloatVLResultCount = this.validFloatVLResultCount + 1;
+          }
 
+          if ((next == 'next') || (next == 'submit' && this.validShipmentDetails)) {
+            if (!element && (this.mandatoryArray[index] == true)) {
+              this.isValidPTPanel = false;
+              this.alertService.presentAlert("Alert", "Please enter the viral load for the sample " + this.ptPanelTestData['controlArray'].label[index]);
+              // break;
+              throw BreakException;
+            }
+          }
+        })
+      } catch (e) {
+        if (e !== BreakException) throw e;
+      }
       this.validVlCount = this.ptPanelTestData['vlResult'].filter(vl => vl != "" || vl == '0');
 
       if (this.mandatoryTrueArray.length <= this.validMandVLResultCount && this.validFloatVLResultCount == this.validVlCount.length) {
@@ -494,6 +537,16 @@ export class DtsHivViralloadPage implements OnInit {
     } else {
       if (this.ptPanelNotTestData['vlNotTestedReason'] && this.ptPanelNotTestData['ptNotTestedComments']) {
         this.isValidPTPanel = true;
+      } else {
+        if (next != 'onload' || (next == 'submit' && this.validShipmentDetails)) {
+          if (!this.ptPanelNotTestData['vlNotTestedReason']) {
+            this.alertService.presentAlert('Alert', "Please choose the " + this.ptPanelNotTestData['ptNotTestedReasonLabel']);
+          } else if (!this.ptPanelNotTestData['ptNotTestedComments']) {
+            this.alertService.presentAlert('Alert', "Please enter " + this.ptPanelNotTestData['ptNotTestedCommentsLabel']);
+          } else {
+
+          }
+        }
       }
     }
 
@@ -514,7 +567,15 @@ export class DtsHivViralloadPage implements OnInit {
 
     if (this.supReview && (this.supReview == "no") || (this.supReview == 'yes' && this.supName)) {
       this.validOtherInfo = true;
+
     } else {
+      if (event == 'next' || (event == 'submit' && this.validShipmentDetails && this.isValidPTPanel)) {
+        if (!this.supReview) {
+          this.alertService.presentAlert('Alert', "Please choose the Supervisor Review");
+        } else if (this.supReview == 'yes' && !this.supName) {
+          this.alertService.presentAlert('Alert', "Please enter the Supervisor Name");
+        }
+      }
       this.validOtherInfo = false;
     }
     if (event == 'onload') {
@@ -736,13 +797,13 @@ export class DtsHivViralloadPage implements OnInit {
       }
       const loading = await this.loadingCtrl.create({
         spinner: 'dots',
-        mode:'ios',
+        mode: 'ios',
         message: 'Please wait',
       });
       await loading.present();
-      this.isView='true';
-      this.isShowReviewMsg=true;
-      this.summarizeForm=true;
+      this.isView = 'true';
+      this.isShowReviewMsg = true;
+      this.summarizeForm = true;
       loading.dismiss();
     }
   }
@@ -903,7 +964,7 @@ export class DtsHivViralloadPage implements OnInit {
         this.CrudServiceService.postData('/api/shipments/save-form', this.viralLoadJSON).then((result) => {
 
           if (result["status"] == 'success') {
-            this.alertService.presentAlert('Success',result['message']);
+            this.alertService.presentAlert('Success', result['message']);
             this.router.navigate(['/all-pt-schemes']);
           } else if (result["status"] == "auth-fail") {
             this.alertService.presentAlert('Alert', result["message"]);
@@ -925,9 +986,9 @@ export class DtsHivViralloadPage implements OnInit {
   }
 
   editForm() {
-    this.isShowReviewMsg=false;
+    this.isShowReviewMsg = false;
     this.summarizeForm = true;
-    this.isView='false';
+    this.isView = 'false';
   }
 
   clearTestReceiptDate() {

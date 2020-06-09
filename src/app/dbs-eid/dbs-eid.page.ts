@@ -269,10 +269,10 @@ export class DbsEidPage implements OnInit {
       this.checkShipmentPanel('onload');
       this.checkPtPanel('onload');
       if (this.showCustomFieldData == true) {
-    //    this.dynamicStep = 1;
+        this.dynamicStep = 1;
         this.checkCustFieldPanel('onload');
       } else {
-     //   this.dynamicStep = 0;
+        this.dynamicStep = 0;
       }
       this.checkOtherInfoPanel('onload');
 
@@ -349,11 +349,31 @@ export class DbsEidPage implements OnInit {
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
       this.validShipmentDetails = false;
 
-      if (param == 'next') {
+      if (param != 'onload') {
         if (this.isView == "true") {
           this.nextStep();
         } else {
-          //do nothing
+          if (!this.shipmentData['testReceiptDate']) {
+            this.alertService.presentAlert('Alert', document.getElementById('testReceiptDate').getAttribute('data-alert'));
+          } else if (!this.shipmentData['sampleRehydrationDate']) {
+            this.alertService.presentAlert('Alert', document.getElementById('sampleRehydrationDate').getAttribute('data-alert'));
+          } else if (!this.shipmentData['extractionLotNumber']) {
+            this.alertService.presentAlert('Alert', document.getElementById('extractionLotNumber').getAttribute('data-alert'));
+          } else if (!this.shipmentData['detectionLotNumber']) {
+            this.alertService.presentAlert('Alert', document.getElementById('detectionLotNumber').getAttribute('data-alert'));
+          } else if (!this.shipmentData['detectionExpirationDate']) {
+            this.alertService.presentAlert('Alert', document.getElementById('detectionExpirationDate').getAttribute('data-alert'));
+          } else if (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) {
+            this.alertService.presentAlert('Alert', document.getElementById('responseDate').getAttribute('data-alert'));
+          } else if (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true) {
+            this.alertService.presentAlert('Alert', document.getElementById('modeOfReceipt').getAttribute('data-alert'));
+          } else if (!this.qcDate && this.participantQcAccess == true && this.qcDone == 'yes') {
+            this.alertService.presentAlert('Alert', document.getElementById('qcDate').getAttribute('data-alert'));
+          } else if (!this.qcDoneBy && this.participantQcAccess == true && this.qcDone == 'yes') {
+            this.alertService.presentAlert('Alert', document.getElementById('qcDoneBy').getAttribute('data-alert'));
+          } else {
+
+          }
         }
       }
 
@@ -410,14 +430,35 @@ export class DbsEidPage implements OnInit {
         //   }
         // }
       }
+      if (params == 'next' || (params == 'submit' && this.validShipmentDetails)) {
+        var BreakException = {};
+        try {
+          this.ptPanelData['sampleTextData'].label.forEach((elementLabel, index) => {
+            if (this.ptPanelData['sampleTextData'].yourResults[index] == "" && this.ptPanelData['sampleTextData'].mandatory[index] == true) {
+              this.alertService.presentAlert('Alert', 'Please select your result for the sample ' + elementLabel);
+              throw BreakException;
+            }
+          })
+        } catch (e) {
+          if (e !== BreakException) throw e;
+        }
+      }
 
-    } else {
+    } else  {
       if (!this.ptPanelData['vlNotTestedReason'] ||
         !this.ptPanelData['ptNotTestedComments']
         // !this.ptPanelData['ptSupportComments']
       ) {
-        this.isValidPTPanel = false;
+        if (params == 'next' || (params == 'submit' && this.validShipmentDetails)) {
+          this.isValidPTPanel = false;
+          if (!this.ptPanelData['vlNotTestedReason']) {
+            this.alertService.presentAlert('Alert', "Please choose the " + this.ptPanelData['vlNotTestedReasonText']);
+          } else if (!this.ptPanelData['ptNotTestedComments']) {
+            this.alertService.presentAlert('Alert', "Please enter " + this.ptPanelData['ptNotTestedCommentsText']);
+          } else {
 
+          }
+        }
       } else {
         this.isValidPTPanel = true;
       }
@@ -463,9 +504,18 @@ export class DbsEidPage implements OnInit {
     if ((this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName']) ||
       this.otherInfoData['supervisorReview'] == '') {
       this.otherInfoValid = false;
-      //this.setStep(this.dynamicStep+3);
+      if (params == 'next' || (params == 'submit' && this.validShipmentDetails && this.isValidPTPanel)) {
+        if (!this.otherInfoData['supervisorReview']) {
+          this.alertService.presentAlert('Alert', "Please choose the Supervisor Review");
+        } else if (this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName']) {
+          this.alertService.presentAlert('Alert', "Please enter the Supervisor Name");
+        }
+      }
     } else {
       this.otherInfoValid = true;
+    }
+    if (params != 'onload') {
+      this.setStep(3 + this.dynamicStep);
     }
   }
 

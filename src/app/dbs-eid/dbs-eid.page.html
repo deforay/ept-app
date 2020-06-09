@@ -180,7 +180,7 @@
                  </mat-label>
                 <input matInput [matDatepicker]="testReceiptPicker"  class="datepicker-input"
                   [(ngModel)]="shipmentData.testReceiptDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" [readonly]="isView!='true'" [disabled]="isView=='true'" #eidTestRecieptDate="ngModel"
-                  name="eidTestRecieptDate" placeholder="Choose Shipment Receipt Date" required>
+                  name="eidTestRecieptDate" placeholder="Choose Shipment Receipt Date" required data-alert="Please choose Shipment Receipt Date" id="testReceiptDate">
                 <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
                 <ion-icon name="close"  *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearTestReceiptDate()"></ion-icon>
                 <mat-datepicker #testReceiptPicker [disabled]="isView=='true'"></mat-datepicker>
@@ -193,7 +193,7 @@
                 <mat-label>Sample Rehydration Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [matDatepicker]="sampleRhdPicker" #eidSampleRehydrationDate="ngModel"
                   name="eidSampleRehydrationDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" [(ngModel)]="shipmentData.sampleRehydrationDate"
-                  placeholder="Choose Sample Rehydration Date" [readonly]="isView!='true'" [disabled]="isView=='true'"  required>
+                  placeholder="Choose Sample Rehydration Date" [readonly]="isView!='true'" [disabled]="isView=='true'"  required data-alert="Please choose Sample Rehydration Date" id="sampleRehydrationDate">
                 <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
                 <ion-icon name="close"  *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearSampleRehydDate()"></ion-icon>
                 <mat-datepicker #sampleRhdPicker [disabled]="isView=='true'"></mat-datepicker>
@@ -233,7 +233,7 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Detection Assay </mat-label>
                 <mat-select [(ngModel)]="shipmentData.detectionAssay" #detAssay="ngModel" name="detAssay"
-                  [disabled]="isView=='true'">
+                  [disabled]="isView=='true'" >
                   <mat-option>--Select--</mat-option>
                   <mat-option *ngFor="let vl of shipmentData.detectionAssayDropdown" [value]="vl.value">
                     {{vl.show}}
@@ -254,7 +254,7 @@
                 <mat-label>Extraction Assay Lot No. <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [(ngModel)]="shipmentData.extractionLotNumber"
                   placeholder="Enter Extraction Assay Lot No." #extLotNo="ngModel" name="extLotNo" required
-                  [disabled]="isView=='true'">
+                  [disabled]="isView=='true'" data-alert="Please enter Extraction Assay Lot No." id="extractionLotNumber">
                 <mat-error *ngIf="!shipmentData.extractionLotNumber">
                   Extraction Assay Lot No is required
                 </mat-error>
@@ -267,7 +267,7 @@
                 <mat-label>Detection Assay Lot No. <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [(ngModel)]="shipmentData.detectionLotNumber"
                   placeholder="Enter Detection Assay Lot No." #detLotNo="ngModel" name="detLotNo" required
-                  [disabled]="isView=='true'">
+                  [disabled]="isView=='true'" data-alert="Please enter Detection Assay Lot No." id="detectionLotNumber">
                 <mat-error
                   *ngIf="!shipmentData.detectionLotNumber || (!shipmentData.detectionLotNumber  && isSubmitted)">
                   Detection Assay Lot No is required
@@ -295,7 +295,7 @@
                 <mat-label>Detection Assay Expiration Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [matDatepicker]="detAssayExpiryDate" #detExpDate="ngModel" name="detExpDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   [(ngModel)]="shipmentData.detectionExpirationDate" placeholder="Choose Detection Assay Expiration Date" required
-                  [readonly]="isView!='true'" [disabled]="isView=='true'" >
+                  [readonly]="isView!='true'" [disabled]="isView=='true'" data-alert="Please choose Detection Assay Expiration Date" id="detectionExpirationDate"  >
                 <mat-datepicker-toggle matSuffix [for]="detAssayExpiryDate"></mat-datepicker-toggle>
                 <ion-icon name="close"  *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearDecAssExpDate()"></ion-icon>
                 <mat-datepicker #detAssayExpiryDate [disabled]="isView=='true'"></mat-datepicker>
@@ -311,7 +311,7 @@
                 <mat-label>Response Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [matDatepicker]="respDate" placeholder="Choose Response Date"  #eidrespDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   name="eidrespDate" [(ngModel)]="shipmentData.responseDate" [required]="isPartiEditRespDate"
-                  [readonly]="isView!='true'" [disabled]="isView=='true'" >
+                  [readonly]="isView!='true'" [disabled]="isView=='true'" data-alert="Please choose Response Date" id="responseDate">
                 <mat-datepicker-toggle matSuffix [for]="respDate"></mat-datepicker-toggle>
                 <ion-icon name="close"  *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearResponseDate()"></ion-icon>
                 <mat-datepicker #respDate [disabled]="isView=='true'"></mat-datepicker>
@@ -323,7 +323,7 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Mode of Receipt <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <mat-select [(ngModel)]="shipmentData.modeOfReceipt" #receiptmode="ngModel" name="receiptmode"
-                  [required]="isPartiEditModeRec" [disabled]="isView=='true'">
+                  [required]="isPartiEditModeRec" [disabled]="isView=='true'" data-alert="Please select Mode Of Receipt" id="modeOfReceipt">
                   <mat-option>--Select--</mat-option>
                   <mat-option *ngFor="let item of shipmentData.modeOfReceiptDropdown" [value]="item.value">
                     {{item.show}}
@@ -354,7 +354,7 @@
                 <mat-label>QC Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" placeholder="Choose QC Date" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   [required]="isQCDoneShow && qcDone=='yes'" name="eidQcDate" #eidQcDate="ngModel"
-                  [readonly]="isView!='true'" [disabled]="isView=='true'" >
+                  [readonly]="isView!='true'" [disabled]="isView=='true'" data-alert="Please choose QC Date" id="qcDate">
                 <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
                 <ion-icon name="close" *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearQCDate()"></ion-icon>
                 <mat-datepicker #qcDatePicker [disabled]="isView=='true'"></mat-datepicker>
@@ -365,7 +365,7 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>QC Done By <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [(ngModel)]="qcDoneBy" name="eidqcDoneBy" #eidqcDoneBy="ngModel"
-                  placeholder="Enter QC Done by" [required]="isQCDoneShow && qcDone=='yes'" [disabled]="isView=='true'">
+                  placeholder="Enter QC Done by" [required]="isQCDoneShow && qcDone=='yes'" [disabled]="isView=='true'" data-alert="Please enter QC Done By" id="qcDoneBy">
                 <mat-error *ngIf="!qcDoneBy">Please enter QC done by</mat-error>
               </mat-form-field>
             </ion-col>

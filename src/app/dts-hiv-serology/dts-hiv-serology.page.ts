@@ -353,10 +353,10 @@ export class DTSHIVSerologyPage implements OnInit {
         this.checkSampleDetailPanel('onload', index)
       });
       if (this.showCustomFieldData == true) {
-       // this.dynamicStep = 1;
+        this.dynamicStep = 1;
         this.checkCustFieldPanel('onload');
       } else {
-      //  this.dynamicStep = 0;
+       this.dynamicStep = 0;
       }
       this.checkOtherInfoPanel('onload');
       // let checkTestKitIndex = this.isValidTestKitDetails.findIndex(index => index == false);
@@ -463,9 +463,29 @@ export class DTSHIVSerologyPage implements OnInit {
       (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate) && this.participantQcAccess == true) ||
       (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
       this.isValidShipmentDetails = false;
-      if (param == 'next') {
+      if (param != 'onload') {
         if (this.isView == "true") {
           this.nextStep();
+        } else {
+          if (!this.shipmentData['testReceiptDate']) {
+            this.alertService.presentAlert('Alert', document.getElementById('testReceiptDate').getAttribute('data-alert'));
+          } else if (!this.shipmentData['sampleRehydrationDate']) {
+            this.alertService.presentAlert('Alert', document.getElementById('sampleRehydrationDate').getAttribute('data-alert'));
+          } else if (!this.shipmentData['shipmentTestingDate']) {
+            this.alertService.presentAlert('Alert', document.getElementById('shipmentTestingDate').getAttribute('data-alert'));
+          } else if (!this.shipmentData['algorithmUsed']) {
+            this.alertService.presentAlert('Alert', document.getElementById('algorithmUsed').getAttribute('data-alert'));
+          } else if (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) {
+            this.alertService.presentAlert('Alert', document.getElementById('responseDate').getAttribute('data-alert'));
+          } else if (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true) {
+            this.alertService.presentAlert('Alert', document.getElementById('modeOfReceipt').getAttribute('data-alert'));
+          } else if (!this.qcDate && this.participantQcAccess == true && this.qcDone == 'yes') {
+            this.alertService.presentAlert('Alert', document.getElementById('qcDate').getAttribute('data-alert'));
+          } else if (!this.qcDoneBy && this.participantQcAccess == true && this.qcDone == 'yes') {
+            this.alertService.presentAlert('Alert', document.getElementById('qcDoneBy').getAttribute('data-alert'));
+          } else {
+
+          }
         }
       }
 
@@ -570,6 +590,13 @@ export class DTSHIVSerologyPage implements OnInit {
   checkOtherInfoPanel(param) {
     if ((this.supReview == 'yes' && !this.supervisorName) || (this.supReview == ''||this.supReview==undefined)) {
       this.isValidOtherInfoPanel = false;
+      if (param== 'next' || (param == 'submit' && this.isValidShipmentDetails)) {
+        if (!this.supReview) {
+          this.alertService.presentAlert('Alert', "Please choose the Supervisor Review");
+        } else if (this.supReview == 'yes' && !this.supervisorName) {
+          this.alertService.presentAlert('Alert', "Please enter the Supervisor Name");
+        }
+      }
     } else {
       this.isValidOtherInfoPanel = true;
     }
@@ -577,8 +604,6 @@ export class DTSHIVSerologyPage implements OnInit {
   prevStep() {
     this.step--;
   }
-
-
 
   async submitSerologyForm(shipmentPanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
 

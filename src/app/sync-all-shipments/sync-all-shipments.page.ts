@@ -269,16 +269,6 @@ export class SyncAllShipmentsPage implements OnInit {
                   }
                 })
 
-                this.shippingsUnsyncedArray.forEach((localSubUnSyncedShippings, index) => {
-
-                  if (localSubUnSyncedShippings.mapId == result.data.mapId) {
-                    let syncedSubShipmentIndex = _.findIndex(this.shippingsUnsyncedArray, {
-                      mapId: result.data.mapId
-                    })
-                    this.shippingsUnsyncedArray.splice(syncedSubShipmentIndex, 1);
-                  }
-                })
-
               } else {
                 this.responseErrorCount = this.responseErrorCount + 1;
               }
@@ -286,7 +276,7 @@ export class SyncAllShipmentsPage implements OnInit {
 
             this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
             this.storage.set("localShipmentForm", this.localShipmentArray);
-            this.storage.set("shippingsUnsyncedArray", this.shippingsUnsyncedArray);
+    
             if ((this.responseSuccessCount + this.responseErrorCount) == this.totSyncArrayLength) {
 
               if (this.responseSuccessCount != 0 && this.responseErrorCount == 0) {
@@ -367,26 +357,13 @@ export class SyncAllShipmentsPage implements OnInit {
                     this.localStorageUnSyncedArray.splice(syncedSubShipmentIndex, 1);
                   }
                 })
-
-                this.shippingsUnsyncedArray.forEach((localSubUnSyncedShippings, index) => {
-
-                  if (localSubUnSyncedShippings.mapId == result.data.mapId) {
-                    let syncedSubShipmentIndex = _.findIndex(this.shippingsUnsyncedArray, {
-                        mapId: result.data.mapId
-                      }
-
-                    );
-                    this.shippingsUnsyncedArray.splice(syncedSubShipmentIndex, 1);
-                  }
-                })
               } else {
                 this.subListRespErrorCount = this.subListRespErrorCount + 1;
               }
             })
             this.localShipmentArray[this.existingLabIndex].shipmentArray = this.localStorageUnSyncedArray;
             this.storage.set("localShipmentForm", this.localShipmentArray);
-            this.storage.set("shippingsUnsyncedArray", this.shippingsUnsyncedArray);
-
+      
             if ((this.subListRespSuccessCount + this.subListRespErrorCount) == this.totSyncArrayLength) {
 
               if (this.subListRespSuccessCount != 0 && this.subListRespErrorCount == 0) {

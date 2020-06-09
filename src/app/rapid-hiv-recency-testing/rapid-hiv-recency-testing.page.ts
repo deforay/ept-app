@@ -267,10 +267,10 @@ export class RapidHIVRecencyTestingPage implements OnInit {
       this.checkShipmentPanel('onload');
       this.checkPtPanel('onload');
       if (this.showCustomFieldData == true) {
-        //   this.dynamicStep = 1;
+        this.dynamicStep = 1;
         this.checkCustFieldPanel('onload');
       } else {
-        // this.dynamicStep = 0;
+        this.dynamicStep = 0;
       }
       this.checkOtherInfoPanel('onload');
 
@@ -354,7 +354,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
           this.nextStep();
         } else {
           if (!this.shipmentData['testReceiptDate']) {
-            this.alertService.presentAlert('Alert', document.getElementById('shipmentReceiptDate').getAttribute('data-alert'));
+            this.alertService.presentAlert('Alert', document.getElementById('testReceiptDate').getAttribute('data-alert'));
           } else if (!this.shipmentData['sampleRehydrationDate']) {
             this.alertService.presentAlert('Alert', document.getElementById('sampleRehydrationDate').getAttribute('data-alert'));
           } else if (!this.shipmentData['assayName']) {
@@ -428,7 +428,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
           }
         }
       }
-      if (params == 'next' || (params=='submit' && this.validShipmentDetails)) {
+      if (params == 'next' || (params == 'submit' && this.validShipmentDetails)) {
         var BreakException = {};
         try {
           this.ptPanelData['sampleTextData'].label.forEach((elementLabel, index) => {
@@ -454,23 +454,16 @@ export class RapidHIVRecencyTestingPage implements OnInit {
         !this.ptPanelData['ptNotTestedComments']
         // !this.ptPanelData['ptSupportComments']
       ) {
-        if (params == 'next' || (params=='submit' && this.validShipmentDetails)) {
-        this.isValidPTPanel = false;
-        if (!this.ptPanelData['vlNotTestedReason']) {
-          this.alertService.presentAlert('Alert',"Please choose the " +this.ptPanelData['vlNotTestedReasonText']);
-         }
-         else if (!this.ptPanelData['ptNotTestedComments']) {
-           this.alertService.presentAlert('Alert',"Please enter the" +this.ptPanelData['ptNotTestedCommentsText']);
-          }
-          else{
+        if (params == 'next' || (params == 'submit' && this.validShipmentDetails)) {
+          this.isValidPTPanel = false;
+          if (!this.ptPanelData['vlNotTestedReason']) {
+            this.alertService.presentAlert('Alert', "Please choose the " + this.ptPanelData['vlNotTestedReasonText']);
+          } else if (!this.ptPanelData['ptNotTestedComments']) {
+            this.alertService.presentAlert('Alert', "Please enter " + this.ptPanelData['ptNotTestedCommentsText']);
+          } else {
 
           }
         }
-
-         // else if (!this.shipmentData['sampleRehydrationDate']) {
-        //   this.alertService.presentAlert('Alert', document.getElementById('sampleRehydrationDate').getAttribute('data-alert'));
-        // } 
-
       } else {
         this.isValidPTPanel = true;
       }
@@ -516,21 +509,19 @@ export class RapidHIVRecencyTestingPage implements OnInit {
     if ((this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName']) ||
       this.otherInfoData['supervisorReview'] == '') {
       this.otherInfoValid = false;
-      if (params == 'next' || (params=='submit' && this.validShipmentDetails && this.isValidPTPanel)) {
-      if(!this.otherInfoData['supervisorReview']){
-        this.alertService.presentAlert('Alert',"Please choose the Supervisor Review");
+      if (params == 'next' || (params == 'submit' && this.validShipmentDetails && this.isValidPTPanel)) {
+        if (!this.otherInfoData['supervisorReview']) {
+          this.alertService.presentAlert('Alert', "Please choose the Supervisor Review");
+        } else if (this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName']) {
+          this.alertService.presentAlert('Alert', "Please enter the Supervisor Name");
+        }
       }
-      else if(this.otherInfoData['supervisorReview']=='yes' && !this.otherInfoData['supervisorName']){
-        this.alertService.presentAlert('Alert',"Please enter the Supervisor Name");
-      }
-     // this.setStep(3+this.dynamicStep);
-    }
-  
     } else {
       this.otherInfoValid = true;
-    //  this.setStep(3+this.dynamicStep);
     }
-  
+    if (params != 'onload') {
+      this.setStep(3 + this.dynamicStep);
+    }
   }
 
   async submitRecency(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {

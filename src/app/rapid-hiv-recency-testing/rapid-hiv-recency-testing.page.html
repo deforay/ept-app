@@ -183,7 +183,7 @@
                  </mat-label>
                 <input matInput [matDatepicker]="testReceiptPicker"  class="datepicker-input"
                   [(ngModel)]="shipmentData.testReceiptDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" [readonly]="isView!='true'" [disabled]="isView=='true'" #eidTestRecieptDate="ngModel"
-                  name="eidTestRecieptDate" placeholder="Choose Shipment Receipt Date" data-alert="Please choose Shipment Receipt Date" id="shipmentReceiptDate" required>
+                  name="eidTestRecieptDate" placeholder="Choose Shipment Receipt Date" data-alert="Please choose Shipment Receipt Date" id="testReceiptDate" required>
                 <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
                 <ion-icon name="close"  *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearTestReceiptDate()"></ion-icon>
                 <mat-datepicker #testReceiptPicker [disabled]="isView=='true'"></mat-datepicker>
