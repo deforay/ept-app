@@ -109,6 +109,7 @@ export class DbsEidPage implements OnInit {
   isValidTestingDate: boolean = false;
   schemeName:string;
   viewSchemeName:string;
+  shipmentCode: any;
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public LoaderService: LoaderService,
@@ -163,6 +164,7 @@ export class DbsEidPage implements OnInit {
     if (this.eidArray[0].eidData) {
       this.schemeName=this.eidArray[0].schemeName;
       this.viewSchemeName="View "+this.schemeName;
+      this.shipmentCode=this.eidArray[0].shipmentCode;
       if (this.eidArray[0].eidData.access.message) {
         this.viewAccessMessage = this.eidArray[0].eidData.access.message;
       }
@@ -234,6 +236,12 @@ export class DbsEidPage implements OnInit {
         this.ptPanelData['ptSupportCommentsText'] = this.eidArray[0].eidData.Section3.data.ptSupportCommentsText;
         this.ptPanelData['vlNotTestedReasonDropdown'] = this.eidArray[0].eidData.Section3.data.vlNotTestedReason;
         this.ptPanelData['vlNotTestedReason'] = this.eidArray[0].eidData.Section3.data.vlNotTestedReasonSelected;
+        if(this.eidArray[0].eidData.Section3.data.vlNotTestedReasonSelected=="0"){
+          this.ptPanelData['vlNotTestedReason']="";
+        }
+        else{
+          this.ptPanelData['vlNotTestedReason']= this.eidArray[0].eidData.Section3.data.vlNotTestedReasonSelected;
+        }
         this.ptPanelData['vlNotTestedReasonText'] = this.eidArray[0].eidData.Section3.data.vlNotTestedReasonText;
         this.ptPanelData['samplesList'] = this.eidArray[0].eidData.Section3.data.samplesList;
         this.ptPanelData['sampleTextData'] = this.eidArray[0].eidData.Section3.data.samples;

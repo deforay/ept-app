@@ -139,6 +139,7 @@ export class DTSHIVSerologyPage implements OnInit {
   isShowReviewMsg: boolean = false;
   schemeName:string;
   viewSchemeName:string;
+  shipmentCode: any;
   
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -189,6 +190,7 @@ export class DTSHIVSerologyPage implements OnInit {
     if (this.dtsArray[0].dtsData) {
       this.schemeName=this.dtsArray[0].schemeName;
       this.viewSchemeName="View "+this.schemeName;
+      this.shipmentCode=this.dtsArray[0].shipmentCode;
       if (this.dtsArray[0].dtsData.access.message) {
         this.viewAccessMessage = this.dtsArray[0].dtsData.access.message;
       }

@@ -147,6 +147,7 @@ export class DtsHivViralloadPage implements OnInit {
   schemeName: string;
   viewSchemeName: string;
   dynamicStep = 0;
+  shipmentCode: any;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -223,6 +224,7 @@ export class DtsHivViralloadPage implements OnInit {
     if (this.vlDataArray[0].vlData) {
       this.schemeName = this.vlDataArray[0].schemeName;
       this.viewSchemeName = "View " + this.schemeName;
+      this.shipmentCode=this.vlDataArray[0].shipmentCode;
       if (this.vlDataArray[0].vlData.access.message) {
         this.viewAccessMessage = this.vlDataArray[0].vlData.access.message;
       }

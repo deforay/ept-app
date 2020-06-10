@@ -108,6 +108,8 @@ export class RapidHIVRecencyTestingPage implements OnInit {
   schemeName: string;
   viewSchemeName: string;
   shipmentPanelForm: NgForm;
+  shipmentCode:string;
+
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -165,6 +167,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
     if (this.recencyArray[0].recencyData) {
       this.schemeName = this.recencyArray[0].schemeName;
       this.viewSchemeName = "View " + this.schemeName;
+      this.shipmentCode=this.recencyArray[0].shipmentCode;
       if (this.recencyArray[0].recencyData.access.message) {
         this.viewAccessMessage = this.recencyArray[0].recencyData.access.message;
       }
