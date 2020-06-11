@@ -40,7 +40,8 @@ export class ShipmentFilterComponent implements OnInit {
   shipmentStatusFliterName: any;
   participantFliterName: any;
   networkType: string;
-
+  participantFliterObj;
+  schemeTypeFliterObj;
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public popoverController: PopoverController,
@@ -59,6 +60,7 @@ export class ShipmentFilterComponent implements OnInit {
   ngOnInit() {}
 
   ionViewWillEnter() {
+
     this.shipmentStatusFliter = "activeNotResp";
 
     this.networkType = this.network.type;
@@ -78,6 +80,16 @@ export class ShipmentFilterComponent implements OnInit {
     } else {
       this.getFilterDetailsAPI();
     }
+
+    this.storage.get('bindLocalFilterJSON').then((bindLocalFilterJSON) => {
+      if (bindLocalFilterJSON) {
+        this.shipmentStatusFliter = bindLocalFilterJSON.shipmentStatusFliter ? bindLocalFilterJSON.shipmentStatusFliter:"activeNotResp";
+        this.participantFliter = bindLocalFilterJSON.participantFliter.participant_id ? bindLocalFilterJSON.participantFliter.participant_id:'';
+        this.participantFliterObj = bindLocalFilterJSON.participantFliter ? bindLocalFilterJSON.participantFliter:'';
+        this.schemeTypeFliter = bindLocalFilterJSON.schemeTypeFliter.scheme_id ? bindLocalFilterJSON.schemeTypeFliter.scheme_id:'';
+        this.schemeTypeFliterObj = bindLocalFilterJSON.schemeTypeFliter?bindLocalFilterJSON.schemeTypeFliter:'';
+      }
+    })
   }
 
   getLocalFilterDetails() {
@@ -98,8 +110,7 @@ export class ShipmentFilterComponent implements OnInit {
             this.storage.set('filterDetails', result['data']);
             this.participantsArray = result['data']['participants'];
             this.shipmentsArray = result['data']['shipments'];
-          }
-          else if (result["status"] == "auth-fail") {
+          } else if (result["status"] == "auth-fail") {
             this.alertService.presentAlert('Alert', result["message"]);
             this.storage.set("isLogOut", true);
             this.router.navigate(['/login']);
@@ -110,17 +121,26 @@ export class ShipmentFilterComponent implements OnInit {
 
           } else {
             if (this.networkType != 'none') {
-            this.alertService.presentAlert('Alert', result["message"]);
+              this.alertService.presentAlert('Alert', result["message"]);
             }
           }
-          }
-          , (err) => {
-            if (this.networkType != 'none') {
+        }, (err) => {
+          if (this.networkType != 'none') {
             this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
-            }
-          })
-        }
+          }
+        })
+      }
     })
+  }
+
+  selectedParticipantObj(participantFliter) {
+
+    this.participantFliterObj = participantFliter;
+  }
+
+  selectedSchemeObj(schemeTypeFliter) {
+
+    this.schemeTypeFliterObj = schemeTypeFliter;
   }
 
   applyFilter() {
@@ -134,18 +154,24 @@ export class ShipmentFilterComponent implements OnInit {
     } else if (this.shipmentStatusFliter == 'excluded') {
       this.shipmentStatusFliterName = "Delayed/Excluded";
     }
-    if (this.participantFliter != undefined) {
-      this.participantFliterName = this.participantFliter.first_name.concat(this.participantFliter.last_name ? this.participantFliter.last_name : '');
+    if (this.participantFliterObj) {
+      this.participantFliterName = this.participantFliterObj.first_name.concat(this.participantFliterObj.last_name ? this.participantFliterObj.last_name : '');
     }
-    let filterJSON = {
+    let filterValuesJSON = {
       shipmentFilterID: this.shipmentStatusFliter ? this.shipmentStatusFliter : '',
-      participantFliterId: this.participantFliter ? this.participantFliter.participant_id : '',
+      participantFliterId: this.participantFliterObj ? this.participantFliterObj.participant_id : '',
       participantFliterName: this.participantFliterName ? this.participantFliterName : '',
-      schemeTypeFliterID: this.schemeTypeFliter ? this.schemeTypeFliter.scheme_id : '',
-      schemeTypeFliterName: this.schemeTypeFliter ? this.schemeTypeFliter.scheme_name : '',
+      schemeTypeFliterID: this.schemeTypeFliterObj ? this.schemeTypeFliterObj.scheme_id : '',
+      schemeTypeFliterName: this.schemeTypeFliterObj ? this.schemeTypeFliterObj.scheme_name : '',
       shipmentFilterName: this.shipmentStatusFliterName ? this.shipmentStatusFliterName : '',
     }
-    this.popoverController.dismiss(filterJSON);
+    let bindLocalFilterJSON = {
+      "shipmentStatusFliter": this.shipmentStatusFliter ? this.shipmentStatusFliter:'',
+      "participantFliter": this.participantFliterObj ? this.participantFliterObj:'',
+      "schemeTypeFliter": this.schemeTypeFliterObj? this.schemeTypeFliterObj:''
+    }
+    this.storage.set('bindLocalFilterJSON', bindLocalFilterJSON);
+    this.storage.set('filterValuesJSON', filterValuesJSON);
     this.popoverController.dismiss({
       'dismissed': true
     });
@@ -153,10 +179,21 @@ export class ShipmentFilterComponent implements OnInit {
   }
 
   resetFilter() {
-
+    this.storage.remove('bindLocalFilterJSON');
+    this.storage.remove('filterValuesJSON');
     this.popoverController.dismiss('reset');
     this.popoverController.dismiss({
       'dismissed': true
     });
   }
+
+  //fn to bind selected value
+  public objCompFnParticipants = function (option, value): boolean {
+    return option.participant_id === value;
+  }
+
+  public objCompFnSchemeType = function (option, value): boolean {
+    return option.scheme_id === value;
+  }
+
 }

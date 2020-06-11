@@ -115,7 +115,8 @@ export class AppComponent {
       //  this.statusBar.styleDefault();
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
-
+      this.storage.remove('bindLocalFilterJSON');
+      this.storage.remove('filterValuesJSON');
       this.appVersion.getVersionNumber().then((version) => {
         if (version) {
           this.appVersionNumber = version;
@@ -231,12 +232,12 @@ export class AppComponent {
     this.events.subscribe('loggedPartiName', (result) => {
       this.participantName = result;
     })
-    // if (!this.appVersionNumber) {
-    //   //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-    //   this.appVersionNumber = "0.0.1";
-    //   this.storage.set('appVersionNumber', this.appVersionNumber);
-    //   //end
-    // }
+    if (!this.appVersionNumber) {
+      //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
+      this.appVersionNumber = "0.0.1";
+      this.storage.set('appVersionNumber', this.appVersionNumber);
+      //end
+    }
   }
   logout() {
     this.alertService.presentAlertConfirm('Logout', '', 'Are you sure you want to logout?', 'No', 'Yes', 'logoutAlert');

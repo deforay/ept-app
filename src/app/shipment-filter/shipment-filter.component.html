@@ -4,7 +4,7 @@
     <ion-col size="12" class="grid-input-col">
       <mat-form-field class="login-full-width grid-col-form" appearance="outline">
         <mat-label>Shipment Status</mat-label>
-        <mat-select [(ngModel)]="shipmentStatusFliter" name="shipmentStatus" #shipmentStatus="ngModel">
+        <mat-select [(ngModel)]="shipmentStatusFliter" name="shipmentStatus" #shipmentStatus="ngModel" >
           <mat-option>--Select--</mat-option>
           <mat-option value="activeNotResp">Active and Not Responded</mat-option>
           <mat-option value="activeResp">Active and Responded</mat-option>
@@ -18,7 +18,7 @@
     <ion-col size="12" class="grid-input-col">
     <mat-form-field class="login-full-width grid-col-form" appearance="outline">
       <mat-label>Participants</mat-label>
-      <mat-select [(ngModel)]="participantFliter" name="participant" #participant="ngModel">
+      <mat-select [(ngModel)]="participantFliter" name="participant" #participant="ngModel"  [compareWith]="objCompFnParticipants" (selectionChange)="selectedParticipantObj(participantFliter)">
         <mat-option>--Select--</mat-option>
         <mat-option *ngFor="let item of participantsArray" [value]="item">
           {{item.first_name + item.last_name}}
@@ -31,7 +31,7 @@
     <ion-col size="12"  class="grid-input-col">
       <mat-form-field class="login-full-width grid-col-form" appearance="outline">
         <mat-label>Scheme Type</mat-label>
-        <mat-select [(ngModel)]="schemeTypeFliter" name="schemeType" #schemeType="ngModel">
+        <mat-select [(ngModel)]="schemeTypeFliter" name="schemeType" #schemeType="ngModel" [compareWith]="objCompFnSchemeType" (selectionChange)="selectedSchemeObj(schemeTypeFliter)">
           <mat-option>--Select--</mat-option>
           <mat-option *ngFor="let item of shipmentsArray" [value]="item">
             {{item.scheme_name}}

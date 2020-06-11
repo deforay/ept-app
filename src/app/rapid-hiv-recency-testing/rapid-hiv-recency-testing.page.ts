@@ -234,7 +234,12 @@ export class RapidHIVRecencyTestingPage implements OnInit {
         this.ptPanelData['ptSupportComments'] = this.recencyArray[0].recencyData.Section3.data.ptSupportComments;
         this.ptPanelData['ptSupportCommentsText'] = this.recencyArray[0].recencyData.Section3.data.ptSupportCommentsText;
         this.ptPanelData['vlNotTestedReasonDropdown'] = this.recencyArray[0].recencyData.Section3.data.vlNotTestedReason;
-        this.ptPanelData['vlNotTestedReason'] = this.recencyArray[0].recencyData.Section3.data.vlNotTestedReasonSelected;
+        if(this.recencyArray[0].recencyData.Section3.data.vlNotTestedReasonSelected=="0"){
+          this.ptPanelData['vlNotTestedReason']="";
+        }
+        else{
+          this.ptPanelData['vlNotTestedReason']= this.recencyArray[0].recencyData.Section3.data.vlNotTestedReasonSelected;
+        }
         this.ptPanelData['vlNotTestedReasonText'] = this.recencyArray[0].recencyData.Section3.data.vlNotTestedReasonText;
         this.ptPanelData['samplesList'] = this.recencyArray[0].recencyData.Section3.data.samplesList;
         this.ptPanelData['sampleTextData'] = this.recencyArray[0].recencyData.Section3.data.samples;

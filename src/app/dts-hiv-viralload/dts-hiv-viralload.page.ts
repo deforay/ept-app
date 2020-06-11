@@ -313,7 +313,6 @@ export class DtsHivViralloadPage implements OnInit {
         this.ptPanelNotTestData['ptNotTestedReasonArray'] = this.ptPanelNotTestArray.vlNotTestedReasonSelect;
         this.ptPanelNotTestData['ptSupportComments'] = this.ptPanelNotTestArray.supportTextArea;
         this.ptPanelNotTestData['ptNotTestedComments'] = this.ptPanelNotTestArray.commentsTextArea;
-
         if (this.ptPanelNotTestArray.vlNotTestedReasonSelected == "0" || this.ptPanelNotTestArray.vlNotTestedReasonSelected == "") {
           this.ptPanelNotTestData['vlNotTestedReason'] = "";
         } else {

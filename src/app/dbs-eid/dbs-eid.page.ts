@@ -235,7 +235,6 @@ export class DbsEidPage implements OnInit {
         this.ptPanelData['ptSupportComments'] = this.eidArray[0].eidData.Section3.data.ptSupportComments;
         this.ptPanelData['ptSupportCommentsText'] = this.eidArray[0].eidData.Section3.data.ptSupportCommentsText;
         this.ptPanelData['vlNotTestedReasonDropdown'] = this.eidArray[0].eidData.Section3.data.vlNotTestedReason;
-        this.ptPanelData['vlNotTestedReason'] = this.eidArray[0].eidData.Section3.data.vlNotTestedReasonSelected;
         if(this.eidArray[0].eidData.Section3.data.vlNotTestedReasonSelected=="0"){
           this.ptPanelData['vlNotTestedReason']="";
         }
