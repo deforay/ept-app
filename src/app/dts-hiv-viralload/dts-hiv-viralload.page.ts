@@ -655,7 +655,9 @@ export class DtsHivViralloadPage implements OnInit {
     PTPanelTestForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
     this.nextStepOtherInfoPanel('submit');
-    this.checkCustFieldPanel('submit');
+    if (this.showCustomFieldData == true) {
+      this.checkCustFieldPanel('submit');
+    }
     this.nextStepPTPanelTest('submit', this.ptPanelTest);
     this.nextStepShipmentPanel(shipmentPanelForm.valid, 'submit');
 
@@ -691,7 +693,8 @@ export class DtsHivViralloadPage implements OnInit {
           "participantId": this.vlDataArray[0].participantId,
           "schemeType": this.vlDataArray[0].schemeType,
           "shipmentId": this.vlDataArray[0].shipmentId,
-          //  "shipmentCode":
+          "schemeName":this.vlDataArray[0].schemeName,
+          "shipmentCode":this.vlDataArray[0].shipmentCode,
           "mapId": this.vlDataArray[0].mapId,
           "isSynced": true,
           "createdOn": this.vlDataArray[0].createdOn ? this.vlDataArray[0].createdOn : "",
@@ -816,7 +819,9 @@ export class DtsHivViralloadPage implements OnInit {
     PTPanelTestForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
     this.nextStepOtherInfoPanel('submit');
-    this.checkCustFieldPanel('submit');
+    if (this.showCustomFieldData == true) {
+      this.checkCustFieldPanel('submit');
+    }
     this.nextStepPTPanelTest('submit', this.ptPanelTest);
     this.nextStepShipmentPanel(shipmentPanelForm.valid, 'submit');
 
@@ -852,7 +857,8 @@ export class DtsHivViralloadPage implements OnInit {
           "participantId": this.vlDataArray[0].participantId,
           "schemeType": this.vlDataArray[0].schemeType,
           "shipmentId": this.vlDataArray[0].shipmentId,
-          //  "shipmentCode":
+          "schemeName":this.vlDataArray[0].schemeName,
+          "shipmentCode":this.vlDataArray[0].shipmentCode,
           "mapId": this.vlDataArray[0].mapId,
           "isSynced": true,
           "createdOn": this.vlDataArray[0].createdOn ? this.vlDataArray[0].createdOn : "",
@@ -957,11 +963,9 @@ export class DtsHivViralloadPage implements OnInit {
       if (this.network.type == 'none') {
         this.viralLoadJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.viralLoadJSON);
-        this.storage.remove('localFormToSubmit');
       } else {
 
         this.viralLoadJSON['data']['isSynced'] = 'true';
-        this.storage.remove('localFormToSubmit');
         this.CrudServiceService.postData('/api/shipments/save-form', this.viralLoadJSON).then((result) => {
 
           if (result["status"] == 'success') {

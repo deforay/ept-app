@@ -589,7 +589,8 @@ export class DbsEidPage implements OnInit {
             "participantId": this.eidArray[0].participantId,
             "schemeType": this.eidArray[0].schemeType,
             "shipmentId": this.eidArray[0].shipmentId,
-            //  "shipmentCode":
+            "schemeName":this.eidArray[0].schemeName,
+            "shipmentCode":this.eidArray[0].shipmentCode,
             "mapId": this.eidArray[0].mapId,
             "isSynced": true,
             "createdOn": this.eidArray[0].createdOn ? this.eidArray[0].createdOn : "",
@@ -760,7 +761,8 @@ export class DbsEidPage implements OnInit {
             "participantId": this.eidArray[0].participantId,
             "schemeType": this.eidArray[0].schemeType,
             "shipmentId": this.eidArray[0].shipmentId,
-            //  "shipmentCode":
+            "schemeName":this.eidArray[0].schemeName,
+            "shipmentCode":this.eidArray[0].shipmentCode,
             "mapId": this.eidArray[0].mapId,
             "isSynced": true,
             "createdOn": this.eidArray[0].createdOn ? this.eidArray[0].createdOn : "",

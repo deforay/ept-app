@@ -156,6 +156,8 @@ export class AppPasswordPage implements OnInit {
       setTimeout(() => {
         loading.dismiss();
         this.alertService.presentAlert('Success',"App PIN number created successfully");
+        this.storage.set('bindLocalFilterJSON',[]);
+        this.storage.set('filterValuesJSON',[]);
         this.router.navigate(['/all-pt-schemes'],{replaceUrl:true});
         this.createAppPin = '';
         this.ngCreatePinInput.setValue('');

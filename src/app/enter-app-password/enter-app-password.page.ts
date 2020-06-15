@@ -143,6 +143,8 @@ export class EnterAppPasswordPage implements OnInit {
               loading.dismiss();
             
               this.toastService.presentToastWithOptions("Pin verified successfully");
+              this.storage.set('bindLocalFilterJSON',[]);
+              this.storage.set('filterValuesJSON',[]);
               this.storage.get('participantLogin').then((participantLogin) => {
                
                 this.forceProfileCheck = participantLogin.forceProfileCheck;

@@ -160,7 +160,7 @@ export class SyncAllShipmentsPage implements OnInit {
         
           this.TestFormArray[0].isView = isView;
           this.storage.set('selectedTestFormArray', this.TestFormArray);
-
+          this.storage.set('isFromSyncAll', true);
           if (this.TestFormArray[0].isSynced == "false") {
             this.localStorageSelectedFormArray[0].isView = isView;
             this.storage.set('localStorageSelectedFormArray', this.localStorageSelectedFormArray);

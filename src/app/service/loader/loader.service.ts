@@ -19,7 +19,7 @@ export class LoaderService {
 
     const loading = await this.loadingController.create({
       spinner: 'dots',
-      mode:'ios',
+      mode: 'ios',
       message: 'Please wait',
     });
     await loading.present();
@@ -28,15 +28,15 @@ export class LoaderService {
   async Loading(load) {
     const loading = await this.loadingController.create({
       spinner: 'dots',
-      mode:'ios',
+      mode: 'ios',
       message: 'Please wait',
     });
     if (load == 'present') {
       await loading.present();
 
     } else {
-   //   const {role,data } = await loading.onDidDismiss();
- await loading.dismiss();
+      //   const {role,data } = await loading.onDidDismiss();
+      await loading.dismiss();
       console.log('Loading dismissed!');
     }
   }
@@ -52,9 +52,9 @@ export class LoaderService {
     //   role,
     //   data
     // } = await loading.onDidDismiss();
-  this.loadingController.dismiss();
-  //  await this.loadingController.dismiss();
-   
+    this.loadingController.dismiss();
+    //  await this.loadingController.dismiss();
+
   }
 
 }

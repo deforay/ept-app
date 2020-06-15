@@ -214,10 +214,15 @@ export class LoginPage implements OnInit {
         this.storage.set('filterDetails',result['data']);
       }
     })
+    this.CrudServiceService.getData('/api/participant/get-profile-check/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber)
+    .then(result => {
+      if (result["status"] == 'success') {
+        this.storage.set('profileDetails', result['data']);
+      }
+    })
   }
   
   forgotPassword(){
     this.router.navigate(['/forgot-password']);
-
   }
 }

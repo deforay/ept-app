@@ -67,12 +67,9 @@ import {
   localShipmentArray: any = [];
   localStorageSelectedFormArray: any = [];
   networkType: string;
-  formattedDate: string;
   localStorageUnSyncedArray: any = [];
-  syncDataLimit: any;
   loginID: any;
   existingLabIndex: any;
-  totSyncArrayLength: number;
   skeltonArray: any = [];
   isViewOnlyAccess: boolean;
   partiDetailsArray: any = [];
@@ -81,7 +78,6 @@ import {
   NoFilteredData: boolean = false;
   filterJSON: any = [];
   apiUrl: string;
-  shippingsUnsyncedArray: any = [];
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -97,24 +93,36 @@ import {
     private fileOpener: FileOpener,
     public modalController: ModalController) {}
 
-  dateFormat(dateObj) {
-    return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
-  }
 
   ionViewWillEnter(param) {
 
+    this.filterJSON = [];
+    this.shippingsArray = [];
     this.networkType = this.network.type;
+    this.storage.set('isFromSyncAll', false);
+    this.storage.get('filterValuesJSON').then((filterValuesJSON) => {
+        this.filterJSON = [];
+        this.filterJSON = filterValuesJSON;
+        if (this.filterJSON.length!=0 && param != 'pulled') {
+          this.applyFilter(this.filterJSON);
+        } else if (param == 'pulled') {
+          this.filterJSON={
+            "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
+            "participantFliterId":"",  "participantFliterName":"",
+            "schemeTypeFliterID":"", "schemeTypeFliterName":""
+           };
+          this.shippingsArray = [];
+          this.onloadShipment();
+        } else {
+         this.filterJSON={
+           "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
+           "participantFliterId":"",  "participantFliterName":"",
+           "schemeTypeFliterID":"", "schemeTypeFliterName":""
+          };
+          this.onloadShipment();
+        }
+    })
 
-    if (this.filterJSON.length != 0 && param != 'pulled') {
-      this.applyFilter(this.filterJSON);
-    } else if (param == 'pulled') {
-      this.filterJSON = [];
-      this.onloadShipment();
-    } else {
-      this.filterJSON = [];
-      this.onloadShipment();
-    }
-  
     //comment when take buid start
 
     //this.networkType = 'none';
@@ -127,10 +135,18 @@ import {
       if (this.filterJSON.length != 0 && param != 'pulled') {
         this.applyFilter(this.filterJSON);
       } else if (param == 'pulled') {
-        this.filterJSON = [];
+        this.filterJSON={
+          "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
+          "participantFliterId":"",  "participantFliterName":"",
+          "schemeTypeFliterID":"", "schemeTypeFliterName":""
+         };
         this.callOfflineFunctions();
       } else {
-        this.filterJSON = [];
+        this.filterJSON={
+          "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
+          "participantFliterId":"",  "participantFliterName":"",
+          "schemeTypeFliterID":"", "schemeTypeFliterName":""
+         };
         this.callOfflineFunctions();
       }
     })
@@ -141,10 +157,18 @@ import {
       if (this.filterJSON.length != 0 && param != 'pulled') {
         this.applyFilter(this.filterJSON);
       } else if (param == 'pulled') {
-        this.filterJSON = [];
+        this.filterJSON={
+          "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
+          "participantFliterId":"",  "participantFliterName":"",
+          "schemeTypeFliterID":"", "schemeTypeFliterName":""
+         };
         this.getAllShippings();
       } else {
-        this.filterJSON = [];
+        this.filterJSON={
+          "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
+          "participantFliterId":"",  "participantFliterName":"",
+          "schemeTypeFliterID":"", "schemeTypeFliterName":""
+         };
         this.getAllShippings();
       }
     })
@@ -162,7 +186,11 @@ import {
       .then((data) => {
         if (data['data']) {
           if (data['data'] == 'reset') {
-            this.filterJSON = [];
+            this.filterJSON={
+              "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
+              "participantFliterId":"",  "participantFliterName":"",
+              "schemeTypeFliterID":"", "schemeTypeFliterName":""
+             };
             this.onloadShipment();
           } else {
             this.storage.get('filterValuesJSON').then((filterValuesJSON) => {
@@ -182,7 +210,7 @@ import {
   }
 
   async applyFilter(filterJSON) {
-
+    this.shippingsArray = [];
     this.filterJSON = filterJSON;
     this.onloadShipment(); //will call filter function after calling shipment API, shipment form API and checkIsSynced fn synchronously...
   }
@@ -211,7 +239,6 @@ import {
     })
 
     if (this.networkType == 'none') {
-      debugger;
       this.callOfflineFunctions();
     } else {
       this.getAllShippings(); //will call getAllShippings,getAllShipmentForms,checkIsSynced function and filter (if applied) synchronously
@@ -243,8 +270,6 @@ import {
       }
     })
 
-  
-
     this.storage.get('participantLogin').then((participantLogin) => {
       this.isViewOnlyAccess = participantLogin.viewOnlyAccess;
     })
@@ -255,9 +280,6 @@ import {
   getAllShippings() {
 
     this.skeltonArray = [{}, {}, {}, {}];
-
-    this.shippingsArray = [];
-
     this.storage.get('participantLogin').then((partiLoginResult) => {
         if (partiLoginResult.authToken) {
 
@@ -299,7 +321,6 @@ import {
 
                     if (result["status"] == 'success') {
 
-                      this.shippingsArray = [];
                       this.shippingsOriginalArray = result['data'];
                       this.storage.set('shipmentArray', this.shippingsOriginalArray)
                       //calling ShipmentForms API();
@@ -326,17 +347,6 @@ import {
                                 } else {
 
                                   this.alertService.presentAlert('Alert', result["message"]);
-                                }
-                                if (result["status"] != 'success') {
-                                  this.skeltonArray = [];
-                                  this.showNoData = true;
-                                } else {
-                                  this.showNoData = false;
-                                }
-                                if (this.shippingsArray.length == 0) {
-                                  this.showNoData = true;
-                                } else {
-                                  this.showNoData = false;
                                 }
                               }
 
@@ -419,10 +429,9 @@ import {
 
   async callCheckIsSyncedWithFilter() {
 
-    const value = await this.checkIsSynced('onload');
-
+    const value = await this.checkIsSynced();
     //filter function when applied 
-    if (value == 'finished_checkIsSynced' && ((this.filterJSON.shipmentFilterID != "" || this.filterJSON.participantFliterId != "" || this.filterJSON.schemeTypeFliterID != "") && (this.filterJSON.length!=0))) {
+    if (value == 'finished_checkIsSynced') {
 
       this.shippingsArray = [];
       let filterJSON = this.filterJSON;
@@ -514,13 +523,17 @@ import {
         this.showNoData = true;
         this.NoFilteredData = true;
       } else {
+        this.showNoData = false;
         this.NoFilteredData = false;
+        this.shippingsArray.sort((a, b) => {
+          return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
+        });
       }
     }
 
   }
 
-  async checkIsSynced(param) {
+  async checkIsSynced() {
     return new Promise(resolve => {
 
       this.storage.get('localShipmentForm').then((localShipmentForm) => {
@@ -552,23 +565,25 @@ import {
 
           }
         } else {}
-        if (param == 'onload') {
-          debugger;
-          this.shippingsArray = [];
-          this.shippingsArray = this.shippingsOriginalArray.filter(
-            item => item.status == 'shipped' && item.updatedOn == '' && item.is_excluded != 'yes' && item.isSynced != 'false');
-          this.shippingsArray.sort((a, b) => {
-            return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
-          });
-          if (this.shippingsArray.length == 0) {
-            this.showNoData = true;
-          } else {
-            this.showNoData = false;
-          }
-          this.skeltonArray = [];
-          resolve("finished_checkIsSynced");
-          //finished calling shipment API, shipment form API and checkIsSynced fn synchronously
-        }
+        // if (param == 'onload') {
+
+        //   this.shippingsArray = [];
+        //   this.shippingsArray = this.shippingsOriginalArray.filter(
+        //     item => item.status == 'shipped' && item.updatedOn == '' && item.is_excluded != 'yes' && item.isSynced != 'false');
+        //   this.shippingsArray.sort((a, b) => {
+        //     return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
+        //   });
+        //   if (this.shippingsArray.length == 0) {
+        //     this.showNoData = true;
+        //   } else {
+        //     this.showNoData = false;
+        //   }
+        //  
+      
+        // }
+        this.skeltonArray = [];
+        resolve("finished_checkIsSynced");
+        //finished calling shipment API, shipment form API and checkIsSynced fn synchronously
       })
     });
   }
@@ -704,8 +719,8 @@ import {
   doRefresh(event) {
     setTimeout(() => {
       this.ionViewWillEnter('pulled');
-      this.storage.remove('bindLocalFilterJSON');
-      this.storage.remove('filterValuesJSON');
+      this.storage.set('bindLocalFilterJSON',[]);
+      this.storage.set('filterValuesJSON',[]);
       event.target.complete();
     }, 2000);
   }

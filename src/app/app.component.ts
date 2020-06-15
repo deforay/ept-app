@@ -58,7 +58,7 @@ export class AppComponent {
 
   appVersionNumber: any;
   public selectedIndex = 0;
-
+  isFromSyncAll:boolean;
   public appPages = [{
       title: 'All Shipments',
       url: '/all-pt-schemes',
@@ -115,8 +115,6 @@ export class AppComponent {
       //  this.statusBar.styleDefault();
       this.statusBar.styleLightContent();
       this.splashScreen.hide();
-      this.storage.remove('bindLocalFilterJSON');
-      this.storage.remove('filterValuesJSON');
       this.appVersion.getVersionNumber().then((version) => {
         if (version) {
           this.appVersionNumber = version;
@@ -124,6 +122,7 @@ export class AppComponent {
         }
       }, (err) => {});
 
+    
       //Create Directory for EPT REPORTS
       this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
 
@@ -156,17 +155,26 @@ export class AppComponent {
       }
 
       this.platform.backButton.subscribeWithPriority(0, () => {
-        if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes'|| this.router.url === '/individual-report' || this.router.url === '/summary-report') {
+     
+        if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes'|| this.router.url === '/individual-report' || this.router.url === '/summary-report' || this.router.url === '/profile') {
 
           this.alertService.presentAlertConfirm('e-PT', '', "Are you sure want to exit?", 'No', 'Yes', 'appExitAlert');
 
         } else if (this.router.url === '/dts-hiv-serology' || this.router.url === '/dts-hiv-viralload' ||
           this.router.url === '/dbs-eid' || this.router.url === '/rapid-hiv-recency-testing' ) {
-
-          this.router.navigate(['/all-pt-schemes'], {
-            replaceUrl: true
-          });
-
+            
+            this.storage.get('isFromSyncAll').then((isFromSyncAll) => {
+              this.isFromSyncAll = isFromSyncAll;
+              if (this.isFromSyncAll == true) {
+                this.router.navigate(['/sync-all-shipments'], {
+                  replaceUrl: true
+                });
+              } else {
+                this.router.navigate(['/all-pt-schemes'], {
+                  replaceUrl: true
+                });
+              }
+            })
         } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
 
           this.routerOutlet.pop();
@@ -232,17 +240,19 @@ export class AppComponent {
     this.events.subscribe('loggedPartiName', (result) => {
       this.participantName = result;
     })
-    if (!this.appVersionNumber) {
-      //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-      this.appVersionNumber = "0.0.1";
-      this.storage.set('appVersionNumber', this.appVersionNumber);
-      //end
-    }
+    // if (!this.appVersionNumber) {
+    //   //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
+    //   this.appVersionNumber = "0.0.1";
+    //   this.storage.set('appVersionNumber', this.appVersionNumber);
+    //   //end
+    // }
   }
+
   logout() {
     this.alertService.presentAlertConfirm('Logout', '', 'Are you sure you want to logout?', 'No', 'Yes', 'logoutAlert');
     this.selectedIndex = 0;
   }
+
   openPage(page) {
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario

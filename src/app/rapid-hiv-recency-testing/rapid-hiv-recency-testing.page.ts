@@ -595,7 +595,8 @@ export class RapidHIVRecencyTestingPage implements OnInit {
             "participantId": this.recencyArray[0].participantId,
             "schemeType": this.recencyArray[0].schemeType,
             "shipmentId": this.recencyArray[0].shipmentId,
-            //  "shipmentCode":
+            "schemeName":this.recencyArray[0].schemeName,
+            "shipmentCode":this.recencyArray[0].shipmentCode,
             "mapId": this.recencyArray[0].mapId,
             "isSynced": true,
             "createdOn": this.recencyArray[0].createdOn ? this.recencyArray[0].createdOn : "",
@@ -763,7 +764,8 @@ export class RapidHIVRecencyTestingPage implements OnInit {
             "participantId": this.recencyArray[0].participantId,
             "schemeType": this.recencyArray[0].schemeType,
             "shipmentId": this.recencyArray[0].shipmentId,
-            //  "shipmentCode":
+            "schemeName":this.recencyArray[0].schemeName,
+            "shipmentCode":this.recencyArray[0].shipmentCode,
             "mapId": this.recencyArray[0].mapId,
             "isSynced": true,
             "createdOn": this.recencyArray[0].createdOn ? this.recencyArray[0].createdOn : "",

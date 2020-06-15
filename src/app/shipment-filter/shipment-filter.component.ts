@@ -82,7 +82,7 @@ export class ShipmentFilterComponent implements OnInit {
     }
 
     this.storage.get('bindLocalFilterJSON').then((bindLocalFilterJSON) => {
-      if (bindLocalFilterJSON) {
+      if (bindLocalFilterJSON.length!=0) {
         this.shipmentStatusFliter = bindLocalFilterJSON.shipmentStatusFliter ? bindLocalFilterJSON.shipmentStatusFliter:"activeNotResp";
         this.participantFliter = bindLocalFilterJSON.participantFliter.participant_id ? bindLocalFilterJSON.participantFliter.participant_id:'';
         this.participantFliterObj = bindLocalFilterJSON.participantFliter ? bindLocalFilterJSON.participantFliter:'';
@@ -159,11 +159,11 @@ export class ShipmentFilterComponent implements OnInit {
     }
     let filterValuesJSON = {
       shipmentFilterID: this.shipmentStatusFliter ? this.shipmentStatusFliter : '',
+      shipmentFilterName: this.shipmentStatusFliterName ? this.shipmentStatusFliterName : '',
       participantFliterId: this.participantFliterObj ? this.participantFliterObj.participant_id : '',
       participantFliterName: this.participantFliterName ? this.participantFliterName : '',
       schemeTypeFliterID: this.schemeTypeFliterObj ? this.schemeTypeFliterObj.scheme_id : '',
       schemeTypeFliterName: this.schemeTypeFliterObj ? this.schemeTypeFliterObj.scheme_name : '',
-      shipmentFilterName: this.shipmentStatusFliterName ? this.shipmentStatusFliterName : '',
     }
     let bindLocalFilterJSON = {
       "shipmentStatusFliter": this.shipmentStatusFliter ? this.shipmentStatusFliter:'',
@@ -179,8 +179,8 @@ export class ShipmentFilterComponent implements OnInit {
   }
 
   resetFilter() {
-    this.storage.remove('bindLocalFilterJSON');
-    this.storage.remove('filterValuesJSON');
+    this.storage.set('bindLocalFilterJSON',[]);
+    this.storage.set('filterValuesJSON',[]);
     this.popoverController.dismiss('reset');
     this.popoverController.dismiss({
       'dismissed': true

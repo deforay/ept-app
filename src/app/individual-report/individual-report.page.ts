@@ -88,7 +88,7 @@ export class IndividualReportPage {
     fileTransfer.download(downloadUrl, path + fileName).then((entry) => {
       console.log('download complete: ' + entry.toURL());
       let url = entry.toURL();
-      loading.dismiss();
+      loading.dismiss();  this.storage.remove('localFormToSubmit');
 
       this.fileOpener.open(url, 'application/pdf');
     }, (error) => {

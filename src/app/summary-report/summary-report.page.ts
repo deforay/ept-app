@@ -136,8 +136,7 @@ export class SummaryReportPage implements OnInit {
 
   ionViewWillEnter() {
     this.networkType = this.network.type;
-    // this.networkType = 'none';
-
+    
     this.events.subscribe('network:offline', (data) => {
       this.networkType = this.network.type;
       if (this.router.url == '/summary-report') {

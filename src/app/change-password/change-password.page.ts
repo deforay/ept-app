@@ -123,6 +123,7 @@ export class ChangePasswordPage implements OnInit {
 
             this.CrudServiceService.postData('/api/login/change-password', changePswdJson)
               .then(result => {
+                debugger;
                 if (result["status"] == 'success') {
 
                   this.alertService.presentAlert('Success',result["message"]);
