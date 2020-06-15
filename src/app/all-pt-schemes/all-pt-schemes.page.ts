@@ -565,22 +565,6 @@ import {
 
           }
         } else {}
-        // if (param == 'onload') {
-
-        //   this.shippingsArray = [];
-        //   this.shippingsArray = this.shippingsOriginalArray.filter(
-        //     item => item.status == 'shipped' && item.updatedOn == '' && item.is_excluded != 'yes' && item.isSynced != 'false');
-        //   this.shippingsArray.sort((a, b) => {
-        //     return <any > new Date(b.resultDueDate) - < any > new Date(a.resultDueDate);
-        //   });
-        //   if (this.shippingsArray.length == 0) {
-        //     this.showNoData = true;
-        //   } else {
-        //     this.showNoData = false;
-        //   }
-        //  
-      
-        // }
         this.skeltonArray = [];
         resolve("finished_checkIsSynced");
         //finished calling shipment API, shipment form API and checkIsSynced fn synchronously
