@@ -460,16 +460,16 @@
                 <ion-row>
                   <ion-col class="grid-input-col">
 
-                    <mat-form-field class="login-full-width grid-col-form"
-                      [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.hivCtOd[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}"
-                      appearance="outline">
+                    <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                       <mat-label>{{ptPanelData.resultsTextData[2]}}</mat-label>
                       <input matInput [(ngModel)]="ptPanelData.samples.hivCtOd[i]" [disabled]="isView=='true'"
                         placeholder="Enter HIV CT/OD" name="hivCTOD[{{i}}]" #hivCTOD="ngModel"
                         >
                         <!-- [required]="ptPanelData.sampleTextData.mandatory[i]==true" -->
                       <!-- <mat-error *ngIf="ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.hivCtOd[i]">Please Enter
-                        {{ptPanelData.resultsTextData[2]}}</mat-error> -->
+                        {{ptPanelData.resultsTextData[2]}}</mat-error>
+                      
+                          [ngClass]="{ 'mat-form-field-invalid':ptPanelData.sampleTextData.mandatory[i]==true && !ptPanelData.samples.hivCtOd[i],'mat-form-field-valid': ptPanelData.sampleTextData.mandatory[i]==false}" -->
 
                     </mat-form-field>
                   </ion-col>

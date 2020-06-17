@@ -29,7 +29,7 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { ShipmentFilterComponent} from '../app/shipment-filter/shipment-filter.component';
 import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
-
+import { FCM } from '@ionic-native/fcm/ngx';
 @NgModule({
   declarations: [
     AppComponent,
@@ -50,6 +50,7 @@ import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
     IonicStorageModule.forRoot(),
   ],
   providers: [
+    FCM,
     StatusBar,
     SplashScreen,
     CrudServiceService,
@@ -70,6 +71,7 @@ import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
     InAppBrowser,
     FileOpener,
     NgForm,
+   
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

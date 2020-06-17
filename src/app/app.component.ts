@@ -44,6 +44,8 @@ import {
   SUMMARY_REPORTS_DIRECTORY,
   SHIPMENTS_REPORTS_DIRECTORY
 } from '../app/service/constant';
+import { FCM } from '@ionic-native/fcm/ngx';
+
 @Component({
   selector: 'app-root',
   templateUrl: 'app.component.html',
@@ -91,7 +93,7 @@ export class AppComponent {
     },
   ];
   participantName: any;
-
+  
   constructor(
     private platform: Platform,
     private splashScreen: SplashScreen,
@@ -106,6 +108,7 @@ export class AppComponent {
     public events: Events,
     public ToastService: ToastService,
     private router: Router,
+    private fcm: FCM
   ) {
     this.initializeApp();
   }
@@ -122,6 +125,8 @@ export class AppComponent {
         }
       }, (err) => {});
 
+
+      this.fcmPushNotification();
     
       //Create Directory for EPT REPORTS
       this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
@@ -240,12 +245,44 @@ export class AppComponent {
     this.events.subscribe('loggedPartiName', (result) => {
       this.participantName = result;
     })
-    // if (!this.appVersionNumber) {
-    //   //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-    //   this.appVersionNumber = "0.0.1";
-    //   this.storage.set('appVersionNumber', this.appVersionNumber);
-    //   //end
-    // }
+    if (!this.appVersionNumber) {
+      //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
+      this.appVersionNumber = "1.0.0";
+      this.storage.set('appVersionNumber', this.appVersionNumber);
+      //end
+    }
+  }
+
+
+  fcmPushNotification(){
+    this.fcm.onNotification().subscribe(data => {
+      if (data.wasTapped) {
+        console.log("Received in background");
+      } else {
+        console.log("Received in foreground");
+      };
+    });
+
+    this.fcm.onTokenRefresh().subscribe(token => {
+      console.log("token",token);
+      // Register your new token in your back-end if you want
+      // backend.registerToken(token);
+    });
+
+  }
+
+  subscribeToTopic() {
+    this.fcm.subscribeToTopic('enappd');
+  }
+  getToken() {
+    this.fcm.getToken().then(token => {
+      console.log("token",token);
+      // Register your new token in your back-end if you want
+      // backend.registerToken(token);
+    });
+  }
+  unsubscribeFromTopic() {
+    this.fcm.unsubscribeFromTopic('enappd');
   }
 
   logout() {

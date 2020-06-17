@@ -1,0 +1,40 @@
+{
+  "project_info": {
+    "project_number": "679234009987",
+    "firebase_url": "https://e-pt-a1c0d.firebaseio.com",
+    "project_id": "e-pt-a1c0d",
+    "storage_bucket": "e-pt-a1c0d.appspot.com"
+  },
+  "client": [
+    {
+      "client_info": {
+        "mobilesdk_app_id": "1:679234009987:android:3973efb1b807975f56d4b6",
+        "android_client_info": {
+          "package_name": "com.deforay.ept"
+        }
+      },
+      "oauth_client": [
+        {
+          "client_id": "679234009987-mn58c27470nbi7ufbsnqqg78ma46ppsv.apps.googleusercontent.com",
+          "client_type": 3
+        }
+      ],
+      "api_key": [
+        {
+          "current_key": "AIzaSyCT2ejgxCth45meaipaAKvF7RY-uU1OTFU"
+        }
+      ],
+      "services": {
+        "appinvite_service": {
+          "other_platform_oauth_client": [
+            {
+              "client_id": "679234009987-mn58c27470nbi7ufbsnqqg78ma46ppsv.apps.googleusercontent.com",
+              "client_type": 3
+            }
+          ]
+        }
+      }
+    }
+  ],
+  "configuration_version": "1"
+}
