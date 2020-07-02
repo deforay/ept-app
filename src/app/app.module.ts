@@ -16,8 +16,6 @@ import { IonicStorageModule } from '@ionic/storage';
 import { AppVersion } from '@ionic-native/app-version/ngx';
 import { Market } from '@ionic-native/market/ngx';
 import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-import { Geolocation } from '@ionic-native/geolocation/ngx';
-import { LocationAccuracy } from '@ionic-native/location-accuracy/ngx';
 import { Network } from '@ionic-native/network/ngx';
 import { NetworkService} from '../app/service/network.service';
 import { CrudServiceService} from '../app/service/crud/crud-service.service';
@@ -29,7 +27,19 @@ import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
 import { FileOpener } from '@ionic-native/file-opener/ngx';
 import { ShipmentFilterComponent} from '../app/shipment-filter/shipment-filter.component';
 import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
-import { FCM } from '@ionic-native/fcm/ngx';
+// import { FCM } from '@ionic-native/fcm/ngx';
+import { FcmService } from '../app/fcm.service';
+import { AngularFireModule } from 'angularfire2';
+import { AngularFirestoreModule } from 'angularfire2/firestore';
+import { Firebase } from '@ionic-native/firebase/ngx';
+const config = {
+  apiKey: "AIzaSyBBj7JGprrS_cswOVDqFNvUHPfkzIwAavc",
+  authDomain: "e-pt-a1c0d.firebaseapp.com",
+  databaseURL: "https://e-pt-a1c0d.firebaseio.com",
+  projectId: "e-pt-a1c0d",
+  storageBucket: "e-pt-a1c0d.appspot.com",
+  messagingSenderId: "679234009987"
+};
 @NgModule({
   declarations: [
     AppComponent,
@@ -47,10 +57,12 @@ import { FCM } from '@ionic-native/fcm/ngx';
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
+    AngularFireModule.initializeApp(config),
+    AngularFirestoreModule,
     IonicStorageModule.forRoot(),
   ],
   providers: [
-    FCM,
+  //  FCM,
     StatusBar,
     SplashScreen,
     CrudServiceService,
@@ -61,8 +73,6 @@ import { FCM } from '@ionic-native/fcm/ngx';
     AppVersion,
     Market,
     AndroidPermissions,
-    Geolocation,
-    LocationAccuracy,
     Network,
     LocalShipmentFormService,
     Platform,
@@ -71,7 +81,8 @@ import { FCM } from '@ionic-native/fcm/ngx';
     InAppBrowser,
     FileOpener,
     NgForm,
-   
+    FcmService,
+    Firebase,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

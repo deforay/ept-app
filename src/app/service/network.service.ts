@@ -46,7 +46,6 @@ export class NetworkService {
   public initializeNetworkEvents(): void {
 
     this.network.onDisconnect().subscribe(() => {
-      console.log("Offline");
       this.eventOffline = true;
       this.storage.set('networkConnectivity', false);
       this.eventCtrl.publish('network:offline');
@@ -74,14 +73,12 @@ export class NetworkService {
 
 
     this.platform.resume.subscribe((e) => {
-      console.trace("resume called");
       this.appResumed = true;
       this.storage.set("appResumed", true);
     })
 
 
     this.network.onConnect().subscribe(() => {
-      console.log("online");
       this.eventOnline = true;
       this.storage.get('appResumed').then((result) => {
         if (result == true) {

@@ -79,7 +79,8 @@ import {
   filterJSON: any = [];
   apiUrl: string;
 
-  constructor(public CrudServiceService: CrudServiceService,
+  constructor(
+    public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public LoaderService: LoaderService,
     private router: Router,
@@ -91,7 +92,8 @@ import {
     private ft: FileTransfer,
     private file: File,
     private fileOpener: FileOpener,
-    public modalController: ModalController) {}
+    public modalController: ModalController
+  ) {}
 
 
   ionViewWillEnter(param) {
@@ -101,26 +103,32 @@ import {
     this.networkType = this.network.type;
     this.storage.set('isFromSyncAll', false);
     this.storage.get('filterValuesJSON').then((filterValuesJSON) => {
-        this.filterJSON = [];
-        this.filterJSON = filterValuesJSON;
-        if (this.filterJSON.length!=0 && param != 'pulled') {
-          this.applyFilter(this.filterJSON);
-        } else if (param == 'pulled') {
-          this.filterJSON={
-            "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
-            "participantFliterId":"",  "participantFliterName":"",
-            "schemeTypeFliterID":"", "schemeTypeFliterName":""
-           };
-          this.shippingsArray = [];
-          this.onloadShipment();
-        } else {
-         this.filterJSON={
-           "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
-           "participantFliterId":"",  "participantFliterName":"",
-           "schemeTypeFliterID":"", "schemeTypeFliterName":""
-          };
-          this.onloadShipment();
-        }
+      this.filterJSON = [];
+      this.filterJSON = filterValuesJSON;
+      if (this.filterJSON.length != 0 && param != 'pulled') {
+        this.applyFilter(this.filterJSON);
+      } else if (param == 'pulled') {
+        this.filterJSON = {
+          "shipmentFilterID": "activeNotResp",
+          "shipmentFilterName": "Active and Not Responded",
+          "participantFliterId": "",
+          "participantFliterName": "",
+          "schemeTypeFliterID": "",
+          "schemeTypeFliterName": ""
+        };
+        this.shippingsArray = [];
+        this.onloadShipment();
+      } else {
+        this.filterJSON = {
+          "shipmentFilterID": "activeNotResp",
+          "shipmentFilterName": "Active and Not Responded",
+          "participantFliterId": "",
+          "participantFliterName": "",
+          "schemeTypeFliterID": "",
+          "schemeTypeFliterName": ""
+        };
+        this.onloadShipment();
+      }
     })
 
     //comment when take buid start
@@ -135,18 +143,24 @@ import {
       if (this.filterJSON.length != 0 && param != 'pulled') {
         this.applyFilter(this.filterJSON);
       } else if (param == 'pulled') {
-        this.filterJSON={
-          "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
-          "participantFliterId":"",  "participantFliterName":"",
-          "schemeTypeFliterID":"", "schemeTypeFliterName":""
-         };
+        this.filterJSON = {
+          "shipmentFilterID": "activeNotResp",
+          "shipmentFilterName": "Active and Not Responded",
+          "participantFliterId": "",
+          "participantFliterName": "",
+          "schemeTypeFliterID": "",
+          "schemeTypeFliterName": ""
+        };
         this.callOfflineFunctions();
       } else {
-        this.filterJSON={
-          "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
-          "participantFliterId":"",  "participantFliterName":"",
-          "schemeTypeFliterID":"", "schemeTypeFliterName":""
-         };
+        this.filterJSON = {
+          "shipmentFilterID": "activeNotResp",
+          "shipmentFilterName": "Active and Not Responded",
+          "participantFliterId": "",
+          "participantFliterName": "",
+          "schemeTypeFliterID": "",
+          "schemeTypeFliterName": ""
+        };
         this.callOfflineFunctions();
       }
     })
@@ -157,18 +171,24 @@ import {
       if (this.filterJSON.length != 0 && param != 'pulled') {
         this.applyFilter(this.filterJSON);
       } else if (param == 'pulled') {
-        this.filterJSON={
-          "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
-          "participantFliterId":"",  "participantFliterName":"",
-          "schemeTypeFliterID":"", "schemeTypeFliterName":""
-         };
+        this.filterJSON = {
+          "shipmentFilterID": "activeNotResp",
+          "shipmentFilterName": "Active and Not Responded",
+          "participantFliterId": "",
+          "participantFliterName": "",
+          "schemeTypeFliterID": "",
+          "schemeTypeFliterName": ""
+        };
         this.getAllShippings();
       } else {
-        this.filterJSON={
-          "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
-          "participantFliterId":"",  "participantFliterName":"",
-          "schemeTypeFliterID":"", "schemeTypeFliterName":""
-         };
+        this.filterJSON = {
+          "shipmentFilterID": "activeNotResp",
+          "shipmentFilterName": "Active and Not Responded",
+          "participantFliterId": "",
+          "participantFliterName": "",
+          "schemeTypeFliterID": "",
+          "schemeTypeFliterName": ""
+        };
         this.getAllShippings();
       }
     })
@@ -186,11 +206,14 @@ import {
       .then((data) => {
         if (data['data']) {
           if (data['data'] == 'reset') {
-            this.filterJSON={
-              "shipmentFilterID" :"activeNotResp", "shipmentFilterName":"Active and Not Responded",
-              "participantFliterId":"",  "participantFliterName":"",
-              "schemeTypeFliterID":"", "schemeTypeFliterName":""
-             };
+            this.filterJSON = {
+              "shipmentFilterID": "activeNotResp",
+              "shipmentFilterName": "Active and Not Responded",
+              "participantFliterId": "",
+              "participantFliterName": "",
+              "schemeTypeFliterID": "",
+              "schemeTypeFliterName": ""
+            };
             this.onloadShipment();
           } else {
             this.storage.get('filterValuesJSON').then((filterValuesJSON) => {
@@ -703,8 +726,8 @@ import {
   doRefresh(event) {
     setTimeout(() => {
       this.ionViewWillEnter('pulled');
-      this.storage.set('bindLocalFilterJSON',[]);
-      this.storage.set('filterValuesJSON',[]);
+      this.storage.set('bindLocalFilterJSON', []);
+      this.storage.set('filterValuesJSON', []);
       event.target.complete();
     }, 2000);
   }
