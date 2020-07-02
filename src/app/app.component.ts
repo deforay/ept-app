@@ -1,101 +1,115 @@
 import {
   Component,
   ViewChild
-} from '@angular/core';
+}from '@angular/core';
 import {
   Platform,
-  IonRouterOutlet
-} from '@ionic/angular';
+  IonRouterOutlet,
+}from '@ionic/angular';
 import {
   SplashScreen
-} from '@ionic-native/splash-screen/ngx';
+}from '@ionic-native/splash-screen/ngx';
 import {
   StatusBar
-} from '@ionic-native/status-bar/ngx';
+}from '@ionic-native/status-bar/ngx';
 import {
   AppVersion
-} from '@ionic-native/app-version/ngx';
+}from '@ionic-native/app-version/ngx';
 import {
   Storage
-} from '@ionic/storage';
+}from '@ionic/storage';
 import {
   AlertService,
   ToastService,
   CommonService
-} from '../app/service/providers';
+}from '../app/service/providers';
 import {
   Network
-} from '@ionic-native/network/ngx';
+}from '@ionic-native/network/ngx';
 import {
   Events
-} from '@ionic/angular';
+}from '@ionic/angular';
 import {
   NetworkService
-} from '../app/service/network.service';
+}from '../app/service/network.service';
 import {
   Router
-} from '@angular/router';
+}from '@angular/router';
 import {
   File
-} from '@ionic-native/file/ngx';
+}from '@ionic-native/file/ngx';
 import {
   ROOT_DIRECTORY,
   INDIVIDUAL_REPORTS_DIRECTORY,
   SUMMARY_REPORTS_DIRECTORY,
   SHIPMENTS_REPORTS_DIRECTORY
-} from '../app/service/constant';
-import { FCM } from '@ionic-native/fcm/ngx';
-
+}from '../app/service/constant';
+import {
+  FcmService
+}from '../app/fcm.service';
+import {
+  ToastController
+}from '@ionic/angular';
 @Component({
-  selector: 'app-root',
-  templateUrl: 'app.component.html',
-  styleUrls: ['app.component.scss']
+    selector: 'app-root',
+    templateUrl: 'app.component.html',
+    styleUrls: ['app.component.scss']
 })
-
 export class AppComponent {
-
-  @ViewChild(IonRouterOutlet, {
-    static: true
-  }) routerOutlet: IonRouterOutlet;
+@ViewChild(IonRouterOutlet, {
+      static: true
+    }) routerOutlet: IonRouterOutlet;
 
   appVersionNumber: any;
   public selectedIndex = 0;
-  isFromSyncAll:boolean;
+  isFromSyncAll: boolean;
+
   public appPages = [{
       title: 'All Shipments',
       url: '/all-pt-schemes',
       icon: 'shipment'
-    },
+    }
+
+    ,
     {
       title: 'Individual Reports',
       url: '/individual-report',
       icon: 'singlereport'
-    },
+    }
+
+    ,
     {
       title: 'Summary Reports',
       url: '/summary-report',
       icon: 'summaryreport'
-    },
+    }
+
+    ,
     {
       title: 'Change Password',
       url: '/change-password',
       icon: 'password'
-    },
+    }
+
+    ,
     {
       title: 'My Profile',
       url: '/profile',
       icon: 'user'
-    },
+    }
+
+    ,
     {
       title: 'Logout',
       url: '/login',
       icon: 'logout'
-    },
+    }
+
+    ,
   ];
   participantName: any;
-  
-  constructor(
-    private platform: Platform,
+
+  constructor(private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
     private appVersion: AppVersion,
@@ -108,136 +122,179 @@ export class AppComponent {
     public events: Events,
     public ToastService: ToastService,
     private router: Router,
-    private fcm: FCM
+    private FcmService: FcmService,
+    public toastController: ToastController,
   ) {
     this.initializeApp();
   }
 
+  private async presentToast(message) {
+    const toast = await this.toastController.create({
+        message,
+        duration: 3000
+      }
+    );
+    toast.present();
+  }
+
   initializeApp() {
     this.platform.ready().then(() => {
-      //  this.statusBar.styleDefault();
-      this.statusBar.styleLightContent();
-      this.splashScreen.hide();
-      this.appVersion.getVersionNumber().then((version) => {
-        if (version) {
-          this.appVersionNumber = version;
-          this.storage.set('appVersionNumber', this.appVersionNumber);
+        this.fcmPushNotification();
+        //  this.statusBar.styleDefault();
+        this.statusBar.styleLightContent();
+        this.splashScreen.hide();
+
+        this.appVersion.getVersionNumber().then((version) => {
+            if (version) {
+              this.appVersionNumber = version;
+              this.storage.set('appVersionNumber', this.appVersionNumber);
+            }
+          }
+          , (err) => {}
+        );
+
+        //Create Directory for EPT REPORTS
+        this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
+
+        let newdir = this.file.externalRootDirectory + ROOT_DIRECTORY + '/';
+        console.log(newdir);
+
+        setTimeout(function () {
+            this.directoryProvider.createDirectory(newdir, INDIVIDUAL_REPORTS_DIRECTORY);
+          }
+
+          , 4000);
+
+        setTimeout(function () {
+            this.directoryProvider.createDirectory(newdir, SUMMARY_REPORTS_DIRECTORY);
+          }
+
+          , 6000);
+
+        setTimeout(function () {
+            this.directoryProvider.createDirectory(newdir, SHIPMENTS_REPORTS_DIRECTORY);
+          }
+
+          , 8000);
+
+        this.NetworkService.initializeNetworkEvents();
+
+        if (this.network.type == 'none') {
+          console.log("None");
+          let networkconnectivity = false;
+          this.events.publish('network:offline', networkconnectivity);
+          this.ToastService.presentToastWithOptions("You are in offline");
+          this.storage.set('networkConnectivity', networkconnectivity);
+        } else {
+
+          //  this.ToastService.presentToastWithOptions("You are in online");
+
         }
-      }, (err) => {});
 
+        this.platform.backButton.subscribeWithPriority(0, () => {
 
-      this.fcmPushNotification();
-    
-      //Create Directory for EPT REPORTS
-      this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
+            if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes' || this.router.url === '/individual-report' || this.router.url === '/summary-report' || this.router.url === '/profile') {
 
-      let newdir = this.file.externalRootDirectory + ROOT_DIRECTORY + '/';
-      console.log(newdir);
+              this.alertService.presentAlertConfirm('e-PT', '', "Are you sure want to exit?", 'No', 'Yes', 'appExitAlert');
 
-      setTimeout(function () {
-        this.directoryProvider.createDirectory(newdir, INDIVIDUAL_REPORTS_DIRECTORY);
-      }, 4000);
+            } else if (this.router.url === '/dts-hiv-serology' || this.router.url === '/dts-hiv-viralload' || this.router.url === '/dbs-eid' || this.router.url === '/rapid-hiv-recency-testing') {
 
-      setTimeout(function () {
-        this.directoryProvider.createDirectory(newdir, SUMMARY_REPORTS_DIRECTORY);
-      }, 6000);
+              this.storage.get('isFromSyncAll').then((isFromSyncAll) => {
+                  this.isFromSyncAll = isFromSyncAll;
 
-      setTimeout(function () {
-        this.directoryProvider.createDirectory(newdir, SHIPMENTS_REPORTS_DIRECTORY);
-      }, 8000);
+                  if (this.isFromSyncAll == true) {
+                    this.router.navigate(['/sync-all-shipments'], {
+                        replaceUrl: true
+                      }
 
-      this.NetworkService.initializeNetworkEvents();
-      if (this.network.type == 'none') {
-        console.log("None");
-        let networkconnectivity = false;
-        this.events.publish('network:offline', networkconnectivity);
-        this.ToastService.presentToastWithOptions("You are in offline");
-        this.storage.set('networkConnectivity', networkconnectivity);
-      } else {
+                    );
+                  } else {
+                    this.router.navigate(['/all-pt-schemes'], {
+                        replaceUrl: true
+                      }
 
-        //  this.ToastService.presentToastWithOptions("You are in online");
+                    );
+                  }
+                }
+              )
+            } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
 
+              this.routerOutlet.pop();
+
+            } else {}
+          }
+
+        );
       }
 
-      this.platform.backButton.subscribeWithPriority(0, () => {
-     
-        if (this.router.url === '/login' || this.router.url === '/change-password' || this.router.url === '/all-pt-schemes'|| this.router.url === '/individual-report' || this.router.url === '/summary-report' || this.router.url === '/profile') {
-
-          this.alertService.presentAlertConfirm('e-PT', '', "Are you sure want to exit?", 'No', 'Yes', 'appExitAlert');
-
-        } else if (this.router.url === '/dts-hiv-serology' || this.router.url === '/dts-hiv-viralload' ||
-          this.router.url === '/dbs-eid' || this.router.url === '/rapid-hiv-recency-testing' ) {
-            
-            this.storage.get('isFromSyncAll').then((isFromSyncAll) => {
-              this.isFromSyncAll = isFromSyncAll;
-              if (this.isFromSyncAll == true) {
-                this.router.navigate(['/sync-all-shipments'], {
-                  replaceUrl: true
-                });
-              } else {
-                this.router.navigate(['/all-pt-schemes'], {
-                  replaceUrl: true
-                });
-              }
-            })
-        } else if (this.routerOutlet && this.routerOutlet.canGoBack()) {
-
-          this.routerOutlet.pop();
-
-        } else {
-
-        }
-      });
-    });
+    );
 
     this.storage.get('isLogOut').then((isLogOut) => {
-      this.storage.get('appPin').then((appPin) => {
+        this.storage.get('appPin').then((appPin) => {
 
-        if (isLogOut == false && appPin && this.router.url != '/') {
-          if (this.router.url == '/all-pt-schemes') {
-            this.selectedIndex = 0;
-            this.router.navigate(['/all-pt-schemes'], {
-              replaceUrl: true
-            });
-          } else if (this.router.url == '/individual-report') {
-            this.selectedIndex = 1;
-            this.router.navigate(['/individual-report'], {
-              replaceUrl: true
-            });
-          } else if (this.router.url == '/summary-report') {
-            this.selectedIndex = 2;
-            this.router.navigate(['/summary-report'], {
-              replaceUrl: true
-            });
-          } else if (this.router.url == '/change-password') {
-            this.selectedIndex = 3;
-            this.router.navigate(['/change-password'], {
-              replaceUrl: true
-            });
-          } else if (this.router.url == '/profile') {
-            this.selectedIndex = 4;
-            this.router.navigate(['/profile'], {
-              replaceUrl: true
-            });
-          } else if (this.router.url == '/login') {
-            this.selectedIndex = 0;
-            this.router.navigateByUrl('/app-password');
-          } else {
-            this.router.navigateByUrl(this.router.url);
+            if (isLogOut == false && appPin && this.router.url != '/') {
+              if (this.router.url == '/all-pt-schemes') {
+                this.selectedIndex = 0;
+
+                this.router.navigate(['/all-pt-schemes'], {
+                    replaceUrl: true
+                  }
+
+                );
+              } else if (this.router.url == '/individual-report') {
+                this.selectedIndex = 1;
+
+                this.router.navigate(['/individual-report'], {
+                    replaceUrl: true
+                  }
+
+                );
+              } else if (this.router.url == '/summary-report') {
+                this.selectedIndex = 2;
+
+                this.router.navigate(['/summary-report'], {
+                    replaceUrl: true
+                  }
+
+                );
+              } else if (this.router.url == '/change-password') {
+                this.selectedIndex = 3;
+
+                this.router.navigate(['/change-password'], {
+                    replaceUrl: true
+                  }
+
+                );
+              } else if (this.router.url == '/profile') {
+                this.selectedIndex = 4;
+
+                this.router.navigate(['/profile'], {
+                    replaceUrl: true
+                  }
+
+                );
+              } else if (this.router.url == '/login') {
+                this.selectedIndex = 0;
+                this.router.navigateByUrl('/app-password');
+              } else {
+                this.router.navigateByUrl(this.router.url);
+              }
+            } else if (isLogOut == false && appPin && this.router.url == '/') {
+              this.selectedIndex = 0;
+              this.router.navigateByUrl('/enter-app-password');
+            } else if (isLogOut && !appPin) {
+              this.selectedIndex = 0;
+              this.router.navigateByUrl('/login');
+            } else {
+              this.selectedIndex = 0;
+              this.router.navigateByUrl('/login');
+            }
           }
-        } else if (isLogOut == false && appPin && this.router.url == '/') {
-          this.selectedIndex = 0;
-          this.router.navigateByUrl('/enter-app-password');
-        } else if (isLogOut && !appPin) {
-          this.selectedIndex = 0;
-          this.router.navigateByUrl('/login');
-        } else {
-          this.selectedIndex = 0;
-          this.router.navigateByUrl('/login');
-        }
-      })
-    })
 
+        )
+      }
+
+    )
     this.storage.get('participantLogin').then((participantLogin) => {
       this.participantName = participantLogin.name;
     })
@@ -253,36 +310,15 @@ export class AppComponent {
     }
   }
 
-
-  fcmPushNotification(){
-    this.fcm.onNotification().subscribe(data => {
-      if (data.wasTapped) {
-        console.log("Received in background");
-      } else {
-        console.log("Received in foreground");
-      };
-    });
-
-    this.fcm.onTokenRefresh().subscribe(token => {
-      console.log("token",token);
-      // Register your new token in your back-end if you want
-      // backend.registerToken(token);
-    });
-
-  }
-
-  subscribeToTopic() {
-    this.fcm.subscribeToTopic('enappd');
-  }
-  getToken() {
-    this.fcm.getToken().then(token => {
-      console.log("token",token);
-      // Register your new token in your back-end if you want
-      // backend.registerToken(token);
-    });
-  }
-  unsubscribeFromTopic() {
-    this.fcm.unsubscribeFromTopic('enappd');
+  private fcmPushNotification() {
+    this.FcmService.getToken();
+    this.FcmService.onNotifications().subscribe((msg) => {
+        if (this.platform.is('android')) {
+          this.presentToast(msg.aps.alert);
+        } else {
+          this.presentToast(msg.body);
+        }
+      });
   }
 
   logout() {
@@ -291,6 +327,7 @@ export class AppComponent {
   }
 
   openPage(page) {
+
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     if (page.title == 'Log Out') {

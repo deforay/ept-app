@@ -88,8 +88,7 @@ export class IndividualReportPage {
     fileTransfer.download(downloadUrl, path + fileName).then((entry) => {
       console.log('download complete: ' + entry.toURL());
       let url = entry.toURL();
-      loading.dismiss();  this.storage.remove('localFormToSubmit');
-
+      loading.dismiss();
       this.fileOpener.open(url, 'application/pdf');
     }, (error) => {
       loading.dismiss();
@@ -141,7 +140,7 @@ export class IndividualReportPage {
   ionViewWillEnter() {
 
     this.networkType = this.network.type;
-    console.log(this.networkType);
+  
     //  this.networkType = 'none';
 
     this.events.subscribe('network:offline', (data) => {
