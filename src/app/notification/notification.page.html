@@ -1,0 +1,24 @@
+<app-header [titleHeader]="'Notification'" [isMenuOrBackButton]="'menu'"></app-header>
+
+<ion-content>
+  <div class="notifyDiv">
+  <ion-grid *ngFor="let item of notificationsArray" class="notificationGrid">
+    <ion-row>
+      <ion-col size="12">
+        <p text-wrap class="notifyPara">
+          <span class="text-title-color">e-PT reports</span>
+        </p>
+      </ion-col>
+      <ion-col size="12">
+        <p text-wrap class="notifyPara">
+          <span class="notificationContent">{{item.content}}</span>
+        </p>
+        <p text-wrap class="notifyPara">
+          <span class="notifyTime">1m ago</span>
+          </p>
+      </ion-col>
+    </ion-row>
+  <mat-divider></mat-divider>
+</ion-grid>
+</div>
+</ion-content>

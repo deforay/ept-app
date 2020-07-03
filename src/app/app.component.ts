@@ -100,6 +100,13 @@ export class AppComponent {
 
     ,
     {
+      title: 'Notification',
+      url: '/notification',
+      icon: 'user'
+    }
+
+    ,
+    {
       title: 'Logout',
       url: '/login',
       icon: 'logout'
