@@ -11,10 +11,10 @@
       </ion-col>
       <ion-col size="12">
         <p text-wrap class="notifyPara">
-          <span class="notificationContent">{{item.content}}</span>
+          <span class="notificationContent">{{item.notification[body]}}</span>
         </p>
         <p text-wrap class="notifyPara">
-          <span class="notifyTime">1m ago</span>
+          <span class="notifyTime">{{item.createdOn}}</span>
           </p>
       </ion-col>
     </ion-row>

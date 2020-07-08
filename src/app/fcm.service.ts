@@ -41,7 +41,7 @@ export class FcmService {
 
   async getToken() {
     let token;
-
+  
     if (this.platform.is('android')) {
       token = await this.firebase.getToken();
       console.log('token', token);
@@ -52,8 +52,12 @@ export class FcmService {
       await this.firebase.grantPermission();
     }
 
-    this.saveToken(token);
+    //  this.saveToken(token);
+
+
     this.postToken(token);
+
+
   }
 
   postToken(token) {
@@ -63,42 +67,51 @@ export class FcmService {
         this.appVersionNumber = appVersionNumber;
       }
     })
-    this.storage.get('participantLogin').then((participantLogin) => {
-      if (participantLogin) {
-        this.authToken = participantLogin.authToken;
-        let tokenJSON = {
-          "appVersion": this.appVersionNumber,
-          "authToken": this.authToken,
-          "token": token
-        }
-        console.log(tokenJSON);
-        this.CrudServiceService.postData('/api/participant/push-token', tokenJSON).then((result) => {
-          debugger;
-          console.log(result);
+    this.storage.get('participantLogin').then((partiLoginResult) => {
+      if (partiLoginResult.authToken) {
+        this.authToken = partiLoginResult.authToken;
+
+        this.CrudServiceService.getData('/api/login/login-details/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
           if (result["status"] == 'success') {
-    
-    
+            let tokenJSON = {
+              "appVersion": this.appVersionNumber,
+              "authToken": result['data'].authToken,
+              "token": token
+            }
+            console.log(tokenJSON);
+            this.CrudServiceService.postData('/api/participant/push-token', tokenJSON).then((result) => {
+              console.log(result);
+              if (result["status"] == 'success') {
+                this.storage.set('pushNotificationToken', token);
+              }
+            }, (err) => {
+
+            });
           }
-        }, (err) => {
-    
-        });
+        })
       }
     })
-  
-
   }
 
-  private saveToken(token) {
-    if (!token) return;
+  // private saveToken(token) {
+  //   if (!token) return;
 
-    const devicesRef = this.afs.collection('devices');
+  //   const devicesRef = this.afs.collection('devices');
 
-    const data = {
-      token,
-      userId: 'testUserId'
-    };
+  //   const data = {
+  //     token,
+  //     userId: 'testUserId'
+  //   };
 
-    return devicesRef.doc(token).set(data);
+  //   return devicesRef.doc(token).set(data);
+  // }
+
+  public onTokenRefresh() {
+    this.firebase.onTokenRefresh().subscribe(token => {
+      this.postToken(token);
+      // Register your new token in your back-end if you want
+      // backend.registerToken(token);
+    });
   }
 
   onNotifications() {
