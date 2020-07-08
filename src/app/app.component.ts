@@ -102,7 +102,7 @@ export class AppComponent {
     {
       title: 'Notification',
       url: '/notification',
-      icon: 'user'
+      icon: 'notifications-bell'
     }
 
     ,
@@ -319,11 +319,15 @@ export class AppComponent {
 
   private fcmPushNotification() {
     this.FcmService.getToken();
+    this.FcmService.onTokenRefresh();
     this.FcmService.onNotifications().subscribe((msg) => {
         if (this.platform.is('android')) {
           this.presentToast(msg.aps.alert);
         } else {
           this.presentToast(msg.body);
+        }
+        if (msg.wasTapped) {
+          this.router.navigate(['/notification']);
         }
       });
   }
