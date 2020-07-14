@@ -49,7 +49,9 @@ import {
 import {
   ModalController
 } from '@ionic/angular';
-
+import {
+  FcmService
+}from '../../app/fcm.service';
 @Component({
     selector: 'app-all-pt-schemes',
     templateUrl: './all-pt-schemes.page.html',
@@ -92,7 +94,8 @@ import {
     private ft: FileTransfer,
     private file: File,
     private fileOpener: FileOpener,
-    public modalController: ModalController
+    public modalController: ModalController,
+    private FcmService: FcmService,
   ) {}
 
 
@@ -339,6 +342,10 @@ import {
 
                 this.isViewOnlyAccess = result['data'].viewOnlyAccess;
                 this.storage.set('participantLogin', this.partiDetailsArray);
+
+                if(result['data'].pushStatus=='not-send'){
+                  this.FcmService.onTokenRefresh();
+                }
                 //calling Shipment API();
                 this.CrudServiceService.getData('/api/shipments/get/?authToken=' + result['data'].authToken + '&appVersion=' + this.appVersionNumber).then(result => {
 

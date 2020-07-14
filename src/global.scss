@@ -352,6 +352,22 @@ ion-toast{
 mat-chip-list.shipmentCodeList>.mat-chip-list-wrapper{
     display: block!important;
 }
+p,
+span,
+h1,
+h2,
+h3,
+h4,
+h5,
+h6,
+div,
+ion-label,
+ion-icon,
+ion-tab-group,
+mat-card {
+    font-family: roboto, sans-serif !important;
+    text-transform: capitalize;
+}
 /* Global CSS Changes Ends */
 
 

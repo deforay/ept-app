@@ -16,6 +16,7 @@ import {
 import {
   Storage
 } from '@ionic/storage';
+
 @Injectable()
 export class FcmService {
 
@@ -41,27 +42,21 @@ export class FcmService {
 
   async getToken() {
     let token;
-  
     if (this.platform.is('android')) {
       token = await this.firebase.getToken();
       console.log('token', token);
     }
-
     if (this.platform.is('ios')) {
       token = await this.firebase.getToken();
       await this.firebase.grantPermission();
     }
-
     //  this.saveToken(token);
-
-
     this.postToken(token);
-
-
   }
 
   postToken(token) {
 
+ 
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
@@ -70,27 +65,23 @@ export class FcmService {
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
         this.authToken = partiLoginResult.authToken;
-
-        this.CrudServiceService.getData('/api/login/login-details/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
-          if (result["status"] == 'success') {
+debugger;
             let tokenJSON = {
               "appVersion": this.appVersionNumber,
-              "authToken": result['data'].authToken,
+              "authToken": this.authToken,
               "token": token
             }
             console.log(tokenJSON);
             this.CrudServiceService.postData('/api/participant/push-token', tokenJSON).then((result) => {
               console.log(result);
+              debugger;
               if (result["status"] == 'success') {
-                this.storage.set('pushNotificationToken', token);
               }
             }, (err) => {
 
             });
           }
         })
-      }
-    })
   }
 
   // private saveToken(token) {
@@ -108,6 +99,7 @@ export class FcmService {
 
   public onTokenRefresh() {
     this.firebase.onTokenRefresh().subscribe(token => {
+      debugger;
       this.postToken(token);
       // Register your new token in your back-end if you want
       // backend.registerToken(token);
