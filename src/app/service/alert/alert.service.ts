@@ -13,13 +13,18 @@ import {
 import {
   Storage
 } from '@ionic/storage';
-
+import {
+  Events
+} from '@ionic/angular';
 @Injectable({
   providedIn: 'root'
 })
 export class AlertService {
 
-  constructor(public alertController: AlertController, private router: Router, private market: Market, private storage: Storage) {}
+  appVersionNumber: any;
+  authToken: any;
+  constructor(public alertController: AlertController, private router: Router, private market: Market, private storage: Storage,
+    public eventCtrl: Events, ) {}
 
   async presentAlertConfirm(headerMessage: string, subtitle: string, contentMessage: string, rightSideButtonText: string, leftSideButtonText: string, alertName ? : any) {
     const element = await this.alertController.getTop();
@@ -45,6 +50,7 @@ export class AlertService {
           if (alertName == 'logoutAlert') {
             this.router.navigate(['/enter-app-password']);
             this.storage.set("isLogOut", false);
+            this.eventCtrl.publish('setLoggedOutFCM:true');
           }
           if (alertName == 'playStoreAlert') {
             this.market.open('com.deforay.ept');

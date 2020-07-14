@@ -42,7 +42,9 @@ import {
 import {
   Events
 } from '@ionic/angular';
-
+import {
+  FcmService
+}from '../../app/fcm.service';
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -87,6 +89,7 @@ export class LoginPage implements OnInit {
     public alertService: AlertService,
     public network: Network,
     public loadingController: LoadingController,
+    private FcmService: FcmService,
     public events: Events) {
 
   }
@@ -149,6 +152,7 @@ export class LoginPage implements OnInit {
               }
               this.CrudServiceService.postData('/api/login', loginJSON)
                 .then((result) => {
+                  debugger;
                   if (result["status"] == 'success') {
                     this.authToken = result['data'].authToken;
                     this.storage.set("isLogOut", false);
@@ -176,7 +180,9 @@ export class LoginPage implements OnInit {
                     this.storage.set('participantLogin', result['data']);
                     this.router.navigate(['/app-password']);
                     this.getAllShipmentsAPI();
-
+                    if(result['data'].pushStatus=='not-send'){
+                      this.FcmService.onTokenRefresh();
+                    }
                   } else if (result["status"] == 'version-failed') {
 
                     this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
@@ -184,6 +190,7 @@ export class LoginPage implements OnInit {
                   } else {
                     this.alertService.presentAlert('Alert', result["message"], '');
                   }
+
                 }, (err) => {
                   this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
                 });

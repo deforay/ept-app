@@ -21,8 +21,11 @@ import {
 import {
   AlertService,
   ToastService,
-  CommonService
+  CommonService, 
 }from '../app/service/providers';
+import {
+  CrudServiceService
+} from '../app/service/crud/crud-service.service';
 import {
   Network
 }from '@ionic-native/network/ngx';
@@ -56,6 +59,7 @@ import {
     styleUrls: ['app.component.scss']
 })
 export class AppComponent {
+ 
 @ViewChild(IonRouterOutlet, {
       static: true
     }) routerOutlet: IonRouterOutlet;
@@ -115,7 +119,7 @@ export class AppComponent {
     ,
   ];
   participantName: any;
-
+  authToken:any;
   constructor(private platform: Platform,
     private splashScreen: SplashScreen,
     private statusBar: StatusBar,
@@ -131,6 +135,7 @@ export class AppComponent {
     private router: Router,
     private FcmService: FcmService,
     public toastController: ToastController,
+    public CrudServiceService: CrudServiceService,
   ) {
     this.initializeApp();
   }
@@ -315,20 +320,51 @@ export class AppComponent {
       this.storage.set('appVersionNumber', this.appVersionNumber);
       //end
     }
+
+    this.events.subscribe('setLoggedOutFCM:true', (data) => {
+      this.storage.get('appVersionNumber').then((appVersionNumber) => {
+        if (appVersionNumber) {
+          this.appVersionNumber = appVersionNumber;
+        }
+      })
+      this.storage.get('participantLogin').then((partiLoginResult) => {
+        if (partiLoginResult.authToken) {
+          this.authToken = partiLoginResult.authToken;
+              let tokenJSON = {
+                "appVersion": this.appVersionNumber,
+                "authToken": this.authToken,
+                "token": "loggedOut"
+              }
+              console.log(tokenJSON);
+              this.CrudServiceService.postData('/api/participant/push-token', tokenJSON).then((result) => {
+                console.log(result);
+                if (result["status"] == 'success') {
+              
+                }
+              }, (err) => {
+  
+              });
+            }
+          })
+
+    })
   }
 
   private fcmPushNotification() {
-    this.FcmService.getToken();
-    this.FcmService.onTokenRefresh();
+ //   this.FcmService.getToken();
+  //  this.FcmService.onTokenRefresh();
     this.FcmService.onNotifications().subscribe((msg) => {
+      console.log("onNotifications called");
+      if (msg.wasTapped) {
+        debugger;
+        this.router.navigate(['/notification']);
+      }
         if (this.platform.is('android')) {
           this.presentToast(msg.aps.alert);
         } else {
           this.presentToast(msg.body);
         }
-        if (msg.wasTapped) {
-          this.router.navigate(['/notification']);
-        }
+   
       });
   }
 
