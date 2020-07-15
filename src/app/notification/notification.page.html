@@ -1,125 +1,108 @@
 <app-header [titleHeader]="'Notification'" [isMenuOrBackButton]="'menu'"></app-header>
 
 <ion-content>
-  <!-- <div class="notifyDiv">
-  <ion-grid *ngFor="let item of notificationsArray" class="notificationGrid">
-    <ion-row>
-      <ion-col size="12">
-        <p text-wrap class="notifyPara">
-          <span class="text-title-color">{{item.notification['title']}}</span>
-        </p>
-      </ion-col>
-      <ion-col size="12">
-        <p text-wrap class="notifyPara">
-          <span class="notificationContent">{{item.notification['body']}}</span>
-        </p>
-        <p text-wrap class="notifyPara">
-          <span class="notifyTime">{{item.createdOn}}</span>
-          </p>
-      </ion-col>
-    </ion-row>
-  <mat-divider></mat-divider>
-</ion-grid> -->
+  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="networkType!='none'">
+    <ion-refresher-content></ion-refresher-content>
+  </ion-refresher>
+  <div class="notifyDiv">
+    <ion-card class="eptNotificationCard" *ngFor="let item of notificationsArray">
+      <ion-card-header class="notifyHeader"
+        [ngStyle]="{'background-color':item.markAsRead === false ? '#f5f5f5' : 'white' }">
+        <ion-grid class="notifyGrid">
+          <ion-row>
+            <ion-col size="10" class="grid-readonly-col">
+              <p text-wrap class="schemeName"
+                [ngStyle]="{'color':item.markAsRead === false ? 'rgb(19, 18, 18)' : '#544e4e' }">
+                {{item.notification['title']}}
+              </p>
+            </ion-col>
+            <ion-col size="2" class="markAsReadCol">
+              <mat-icon class="tickIcon" *ngIf="item.markAsRead==true">done</mat-icon>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-header>
+      <ion-card-content class="cardContent"
+        [ngStyle]="{'background-color':item.markAsRead === false ? '#f5f5f5' : 'white' }">
+        <ion-grid class="notifyGrid">
+          <ion-row>
+            <ion-col size="12">
+              <p text-wrap class="notifyPara" [ngStyle]="{'font-weight':item.markAsRead === false ? '600' : '400' }">
+                <span class="notificationContent">
+                  {{item.notification['body']}}
+                </span>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="7">
+              <p text-wrap class="notifyPara" [ngStyle]="{'font-weight':item.markAsRead === false ? '600' : '400' }">
+                <span class="notifyTime">{{item.createdOn}}</span>
+              </p>
+            </ion-col>
+            <ion-col size="5" class="markAsReadCol">
+              <button mat-stroked-button class="markAsReadButton" *ngIf="item.markAsRead==false"
+                (click)="markAsRead(item)">
+                <span class="markAsReadText">Mark As Read</span></button>
+              <button mat-stroked-button class="markAsReadButton" *ngIf="item.markAsRead==true"
+                (click)="markAsUnread(item)">
+                <span class="markAsReadText">Mark As Unread</span></button>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
 
-  <!-- ion-skeleton-text code start -->
-  <!-- <ion-card *ngFor="let item of skeltonArray" class="eptCard">
-    <ion-card-header class="CardHeader">
-      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-    </ion-card-header>
-
-    <ion-card-content class="cardContent">
-      <ion-grid class="shipmentGrid">
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p text-wrap>
-              <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p text-wrap>
-              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p text-wrap>
-              <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p text-wrap>
+    <!-- ion-skeleton-text code start -->
+    <ion-card *ngFor="let item of skeltonArray" class="eptNotificationCard">
+      <ion-card-header class="notifyHeader">
+        <ion-grid class="notifyGrid">
+          <ion-row>
+            <ion-col size="12" class="grid-readonly-col">
+              <p text-wrap class="schemeName">
               <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
             </p>
-          </ion-col>
-        </ion-row>
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p text-wrap>
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p text-wrap>
-              <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
-            </p>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card> -->
-  <!-- ion-skeleton-text code end
- </div> -->
-
-
-  <ion-card class="eptCard" *ngFor="let item of notificationsArray" >
-    <ion-card-header class="notifyHeader" [ngStyle]="{'background-color':item.markAsRead === true ? '#f5f5f5' : 'white' }">
-      <ion-grid class="notifyGrid">
-        <ion-row>
-          <ion-col size="10" class="grid-readonly-col">
-            <p text-wrap class="schemeName" [ngStyle]="{'color':item.markAsRead === true ? '#000000' : '#544e4e' }">
-              {{item.notification['title']}}
-            </p>
-          </ion-col>
-          <ion-col size="2" class="markAsReadCol">
-              <mat-icon class="tickIcon" *ngIf="item.markAsRead==false">done</mat-icon>
-          </ion-col>
+            </ion-col>
           </ion-row>
-          </ion-grid>
-    </ion-card-header>
-    <ion-card-content class="cardContent" [ngStyle]="{'background-color':item.markAsRead === true ? '#f5f5f5' : 'white' }">
+        </ion-grid>
+      </ion-card-header>
+      <ion-card-content class="cardContent">
       <ion-grid class="notifyGrid">
-        <ion-row>
-          <ion-col size="12">
-            <p text-wrap class="notifyPara" [ngStyle]="{'font-weight':item.markAsRead === true ? '500' : '400' }">
-              <span class="notificationContent">
-                {{item.notification['body']}}
-              </span>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row>
-          <ion-col size="7">
-            <p text-wrap class="notifyPara" [ngStyle]="{'font-weight':item.markAsRead === true ? '500' : '400' }">
-              <span class="notifyTime">{{item.createdOn}}</span>
-            </p>
-          </ion-col>
-          <ion-col size="5" class="markAsReadCol">
-            <button mat-stroked-button class="markAsReadButton" *ngIf="item.markAsRead==true"
-              (click)="markAsRead(item)">
-              <span class="markAsReadText">Mark As Read</span></button>
-            <button mat-stroked-button class="markAsReadButton" *ngIf="item.markAsRead==false"
-              (click)="markAsUnread(item)">
-              <span class="markAsReadText">Mark As Unread</span></button>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
+          <ion-row>
+            <ion-col size="12">
+              <p text-wrap>
+                <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+              </p>
+              <p text-wrap>
+                <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+              </p>
+              <p text-wrap>
+                <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row>
+            <ion-col size="7">
+              <p text-wrap class="notifyPara" >
+                <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+            <ion-col size="5">
+              <p text-wrap class="notifyPara" >
+                <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+    <!-- ion-skeleton-text code end -->
+    <ion-card class="eptCard noNotification" *ngIf="showNoData">
+      <ion-card-content class="cardContent">
+      <p class="noNotification">
+       No notification available
+      </p>
+        </ion-card-content>
+    </ion-card>
+  </div>
 </ion-content>
