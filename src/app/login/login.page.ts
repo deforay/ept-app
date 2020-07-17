@@ -181,7 +181,7 @@ export class LoginPage implements OnInit {
                     this.router.navigate(['/app-password']);
                     this.getAllShipmentsAPI();
                     if(result['data'].pushStatus=='not-send'){
-                      this.FcmService.onTokenRefresh();
+                      this.FcmService.getToken();
                     }
                   } else if (result["status"] == 'version-failed') {
 

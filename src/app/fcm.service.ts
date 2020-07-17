@@ -107,6 +107,8 @@ debugger;
   }
 
   onNotifications() {
+    debugger;
     return this.firebase.onNotificationOpen();
   }
+  
 }

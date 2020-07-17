@@ -344,7 +344,7 @@ import {
                 this.storage.set('participantLogin', this.partiDetailsArray);
 
                 if(result['data'].pushStatus=='not-send'){
-                  this.FcmService.onTokenRefresh();
+                  this.FcmService.getToken();
                 }
                 //calling Shipment API();
                 this.CrudServiceService.getData('/api/shipments/get/?authToken=' + result['data'].authToken + '&appVersion=' + this.appVersionNumber).then(result => {
