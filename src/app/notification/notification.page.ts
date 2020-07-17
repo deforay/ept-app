@@ -90,17 +90,17 @@ export class NotificationPage implements OnInit {
   }
 
   markAsRead(item) {
-    debugger;
+ 
     let markAsReadJSON = {
       "appVersion": this.appVersionNumber,
       "authToken": this.authToken,
       "notifyId": item.notifyId,
-      "read": true
+      "markAsRead": true
     }
     this.CrudServiceService.postData('/api/participant/push-read', markAsReadJSON).then((result) => {
-debugger;
-      if (result["status"] == 'success') {
 
+      if (result["status"] == 'success') {
+        this.ionViewWillEnter();
       }
     }, (err) => {
       this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
@@ -112,12 +112,12 @@ debugger;
       "appVersion": this.appVersionNumber,
       "authToken": this.authToken,
       "notifyId": item.notifyId,
-      "read": false
+      "markAsRead": false
     }
     this.CrudServiceService.postData('/api/participant/push-read', markAsReadJSON).then((result) => {
-debugger;
-      if (result["status"] == 'success') {
 
+      if (result["status"] == 'success') {
+        this.ionViewWillEnter();
       }
     }, (err) => {
       this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');

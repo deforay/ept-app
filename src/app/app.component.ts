@@ -354,17 +354,31 @@ export class AppComponent {
  //   this.FcmService.getToken();
   //  this.FcmService.onTokenRefresh();
     this.FcmService.onNotifications().subscribe((msg) => {
+      debugger;
       console.log("onNotifications called");
-      if (msg.wasTapped) {
-        debugger;
-        this.router.navigate(['/notification']);
-      }
-        if (this.platform.is('android')) {
-          this.presentToast(msg.aps.alert);
-        } else {
-          this.presentToast(msg.body);
+      // debugger;
+      //   if (this.platform.is('android')) {
+      //     debugger;
+      //     if (msg.wasTapped) {
+      //       debugger;
+      //       this.router.navigate(['/notification']);
+      //     }
+      //     this.presentToast(msg.aps.alert);
+      //   } else {
+      //     this.presentToast(msg.body);
+      //   }
+        try {
+          debugger;
+          console.log(`Notification received - ${msg}`);
+          if (msg.wasTapped) {
+            debugger;
+            this.router.navigate(['/notification']);
+          }
         }
-   
+        catch (error) {
+          debugger;
+          console.error('error notification receive', msg);
+        }
       });
   }
 
