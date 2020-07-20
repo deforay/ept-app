@@ -12,14 +12,14 @@ import {
   Storage
 } from '@ionic/storage';
 import {
-  bgColors
-} from '../service/constant';
-import {
   Router
 } from '@angular/router';
 import {
   Network
 } from '@ionic-native/network/ngx';
+import {
+  stripcolor
+} from '../service/constant';
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.page.html',
@@ -33,11 +33,11 @@ export class NotificationPage implements OnInit {
   skeltonArray: any = [];
   showNoData: boolean = false;
   networkType: string;
+  borderColorArr: any = [];
   constructor(public CrudServiceService: CrudServiceService,
     public alertService: AlertService, private storage: Storage,
     private router: Router, public network: Network) {
-
-
+    
   }
 
   ngOnInit() {}
@@ -60,17 +60,17 @@ export class NotificationPage implements OnInit {
         this.CrudServiceService.getData('/api/participant/get-notifications/?appVersion=' + this.appVersionNumber + '&authToken=' + partiLoginResult.authToken)
           .then(result => {
             this.skeltonArray = [];
+            this.borderColorArr=[];
             console.log(result);
             if (result["status"] == 'success') {
               this.notificationsArray = result['data'];
+              this.borderColorArr = this.CrudServiceService.getColorPalette(this.notificationsArray.length,stripcolor.length,this.notificationsArray);
             } else if (result["status"] == "auth-fail") {
               this.alertService.presentAlert('Alert', result["message"]);
               this.storage.set("isLogOut", true);
               this.router.navigate(['/login']);
             } else if (result["status"] == 'version-failed') {
-
               this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert')
-
             } else {
               this.alertService.presentAlert('Alert', result["message"]);
             }

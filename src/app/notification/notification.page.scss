@@ -28,7 +28,8 @@
     padding: 10px;
 }
 .notifyDiv {
-    padding: 5px;
+    padding-left: 5px;
+    padding-right: 5px;
 }
 .notifyTime {
     color: grey;
@@ -36,9 +37,9 @@
 }
 .eptNotificationCard {
     box-shadow: 0 0 4px rgba(0,0,0,0.2);
-    border: 0.7px solid rgba(0, 0, 0, .2) !important;
+    border-left: 3px solid rgba(0, 0, 0, .2);
     background-color: #fffefe !important;
-    border-left: 3px solid var(--ion-color-medium-purple) !important;
+    margin-bottom: 15px;
 }
 .notifyGrid {
     padding: 0px;

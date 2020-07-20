@@ -50,13 +50,11 @@ export class FcmService {
       token = await this.firebase.getToken();
       await this.firebase.grantPermission();
     }
-    //  this.saveToken(token);
     this.postToken(token);
   }
 
   postToken(token) {
 
- 
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
@@ -65,7 +63,6 @@ export class FcmService {
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
         this.authToken = partiLoginResult.authToken;
-debugger;
             let tokenJSON = {
               "appVersion": this.appVersionNumber,
               "authToken": this.authToken,
@@ -74,7 +71,6 @@ debugger;
             console.log(tokenJSON);
             this.CrudServiceService.postData('/api/participant/push-token', tokenJSON).then((result) => {
               console.log(result);
-              debugger;
               if (result["status"] == 'success') {
               }
             }, (err) => {
@@ -99,7 +95,6 @@ debugger;
 
   public onTokenRefresh() {
     this.firebase.onTokenRefresh().subscribe(token => {
-      debugger;
       this.postToken(token);
       // Register your new token in your back-end if you want
       // backend.registerToken(token);
@@ -107,7 +102,6 @@ debugger;
   }
 
   onNotifications() {
-    debugger;
     return this.firebase.onNotificationOpen();
   }
   
