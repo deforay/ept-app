@@ -48,6 +48,7 @@
     "cordova-plugin-file": "^6.0.2",
     "cordova-plugin-file-opener2": "^3.0.2",
     "cordova-plugin-file-transfer": "^1.7.1",
+    "cordova-plugin-firebase": "^2.0.5",
     "cordova-plugin-firebasex": "^10.1.0-cli",
     "cordova-plugin-inappbrowser": "3.2.0",
     "cordova-plugin-network-information": "2.0.2",

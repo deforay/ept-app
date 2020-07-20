@@ -24,7 +24,9 @@ import {
 import {
   Events
 } from '@ionic/angular';
-
+import {
+  FcmService
+}from '../../app/fcm.service';
 @Component({
   selector: 'app-enter-app-password',
   templateUrl: './enter-app-password.page.html',
@@ -65,7 +67,8 @@ export class EnterAppPasswordPage implements OnInit {
     public menu: MenuController,
     public loadingCtrl: LoadingController,
     public events: Events,
-    public toastService:ToastService
+    public toastService:ToastService,
+    private FcmService: FcmService,
   ) {
 
   }
@@ -139,14 +142,12 @@ export class EnterAppPasswordPage implements OnInit {
           if (pin.length == 4 && this.appPin == pinNumber) {
             loading.present();
             setTimeout(() => {
-              
               loading.dismiss();
-            
               this.toastService.presentToastWithOptions("Pin verified successfully");
+              this.FcmService.onTokenRefresh();
               this.storage.set('bindLocalFilterJSON',[]);
               this.storage.set('filterValuesJSON',[]);
               this.storage.get('participantLogin').then((participantLogin) => {
-               
                 this.forceProfileCheck = participantLogin.forceProfileCheck;
                 if(this.forceProfileCheck=='yes'){
                   this.router.navigate(['/profile'], {

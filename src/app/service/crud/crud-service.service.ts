@@ -17,6 +17,9 @@ import {
 import {
   AlertService
 } from '../../../app/service/providers';
+import {
+  stripcolor
+} from '../../service/constant';
 
 ///import 'rxjs/add/operator/map';
 
@@ -123,5 +126,30 @@ export class CrudServiceService {
       })
     });
   }
+  }
+
+  getColorPalette(totLen:number,colorLen:number,bindingArr:Array<any>){
+    let borderColorArr = [];
+    if ( totLen > colorLen) {
+      let calcLoop = Math.floor(totLen / colorLen);
+      let remainingLen = totLen % colorLen;
+      if (remainingLen > 0) {
+        calcLoop = calcLoop + 1;
+      }
+      for (let i = 0; i < calcLoop; i++) {
+        stripcolor.forEach((element, index) => {
+          borderColorArr.push(element);
+        });
+      }
+      return borderColorArr;
+    } else if (totLen < colorLen) {
+      bindingArr.forEach((element, index) => {
+        borderColorArr.push(stripcolor[index]);
+      });
+      return borderColorArr;
+    } else {
+      borderColorArr = [];
+      return borderColorArr;
+    }
   }
 }

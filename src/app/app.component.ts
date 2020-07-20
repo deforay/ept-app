@@ -354,13 +354,9 @@ export class AppComponent {
  //   this.FcmService.getToken();
   //  this.FcmService.onTokenRefresh();
     this.FcmService.onNotifications().subscribe((msg) => {
-      debugger;
-      console.log("onNotifications called");
-      // debugger;
+      console.log("onNotifications called");   
       //   if (this.platform.is('android')) {
-      //     debugger;
       //     if (msg.wasTapped) {
-      //       debugger;
       //       this.router.navigate(['/notification']);
       //     }
       //     this.presentToast(msg.aps.alert);
@@ -368,15 +364,12 @@ export class AppComponent {
       //     this.presentToast(msg.body);
       //   }
         try {
-          debugger;
           console.log(`Notification received - ${msg}`);
           if (msg.wasTapped) {
-            debugger;
             this.router.navigate(['/notification']);
           }
         }
         catch (error) {
-          debugger;
           console.error('error notification receive', msg);
         }
       });
@@ -388,7 +381,6 @@ export class AppComponent {
   }
 
   openPage(page) {
-
     // Reset the content nav to have just this page
     // we wouldn't want the back button to show in this scenario
     if (page.title == 'Log Out') {

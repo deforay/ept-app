@@ -152,7 +152,6 @@ export class LoginPage implements OnInit {
               }
               this.CrudServiceService.postData('/api/login', loginJSON)
                 .then((result) => {
-                  debugger;
                   if (result["status"] == 'success') {
                     this.authToken = result['data'].authToken;
                     this.storage.set("isLogOut", false);
@@ -181,7 +180,7 @@ export class LoginPage implements OnInit {
                     this.router.navigate(['/app-password']);
                     this.getAllShipmentsAPI();
                     if(result['data'].pushStatus=='not-send'){
-                      this.FcmService.getToken();
+                      this.FcmService.onTokenRefresh();
                     }
                   } else if (result["status"] == 'version-failed') {
 
