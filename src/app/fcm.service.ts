@@ -16,7 +16,7 @@ import {
 import {
   Storage
 } from '@ionic/storage';
-
+import { Observable } from 'rxjs';
 @Injectable()
 export class FcmService {
 
@@ -63,21 +63,20 @@ export class FcmService {
     this.storage.get('participantLogin').then((partiLoginResult) => {
       if (partiLoginResult.authToken) {
         this.authToken = partiLoginResult.authToken;
-            let tokenJSON = {
-              "appVersion": this.appVersionNumber,
-              "authToken": this.authToken,
-              "token": token
-            }
-            console.log(tokenJSON);
-            this.CrudServiceService.postData('/api/participant/push-token', tokenJSON).then((result) => {
-              console.log(result);
-              if (result["status"] == 'success') {
-              }
-            }, (err) => {
+        let tokenJSON = {
+          "appVersion": this.appVersionNumber,
+          "authToken": this.authToken,
+          "token": token
+        }
+        console.log(tokenJSON);
+        this.CrudServiceService.postData('/api/participant/push-token', tokenJSON).then((result) => {
+          console.log(result);
+          if (result["status"] == 'success') {}
+        }, (err) => {
 
-            });
-          }
-        })
+        });
+      }
+    })
   }
 
   // private saveToken(token) {
@@ -102,7 +101,15 @@ export class FcmService {
   }
 
   onNotifications() {
-    return this.firebase.onNotificationOpen();
+    debugger;
+    //return this.firebase.onNotificationOpen();
+    return new Observable(observer => {
+      debugger;
+      (window as any).firebase.onMessageReceived((response) => {
+        observer.next(response);
+        console.log("onnotifuications",response);
+      });
+    });
   }
-  
+
 }

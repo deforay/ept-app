@@ -43,7 +43,6 @@ export class CrudServiceService {
   async postData(URL, credentials) {
 
     if (this.networkType != 'none') {
-      //   this.LoaderService.showLoader();
       const headers = new HttpHeaders().set('Content-Type', 'application/json');
       const element = await this.loadingCtrl.getTop();
       if (element && element.dismiss) {
@@ -67,70 +66,90 @@ export class CrudServiceService {
                 if (loading) {
                   loading.dismiss();
                 }
-                //    this.LoaderService.hideLoader();
                 resolve(res);
               }, (err) => {
                 if (loading) {
                   loading.dismiss();
                 }
-                //     this.LoaderService.hideLoader();
                 reject(err);
               });
           } else {
             return false;
           }
         })
+      });
+    }
+  }
 
+  async postDataWithoutLoader(URL, credentials) {
+    if (this.networkType != 'none') {
+      const headers = new HttpHeaders().set('Content-Type', 'application/json');
+      return new Promise((resolve, reject) => {
+        this.storage.get('apiUrl').then((url) => {
+          if (url) {
+            var apiurl = url;
+            this.http.post(apiurl + URL, JSON.stringify(credentials), {
+                headers: headers
+              })
+              .subscribe(res => {
+                resolve(res);
+              }, (err) => {
+                reject(err);
+              });
+          } else {
+            return false;
+          }
+        })
       });
     }
   }
 
   getData(URL) {
     if (this.networkType != 'none') {
-    return new Promise((resolve, reject) => {
-      this.storage.get('apiUrl').then((url) => {
-        if (url) {
-          var apiurl = url;
-          this.http.get(apiurl + URL)
-            .subscribe(res => {
-              resolve(res);
-            }, (err) => {
-              reject(err);
-            });
-        } else {
-          return false;
-        }
-      })
-    });
-  }
+      return new Promise((resolve, reject) => {
+        this.storage.get('apiUrl').then((url) => {
+          if (url) {
+            var apiurl = url;
+            this.http.get(apiurl + URL)
+              .subscribe(res => {
+                resolve(res);
+              }, (err) => {
+                reject(err);
+              });
+          } else {
+            return false;
+          }
+        })
+      });
+    }
   }
 
   getById(URL, id) {
     if (this.networkType != 'none') {
-    return new Promise((resolve, reject) => {
-      this.storage.get('apiUrl').then((url) => {
-        if (url) {
-          var apiurl = url;
-          this.http.get(apiurl + URL + id)
-            .subscribe(res => {
+      return new Promise((resolve, reject) => {
+        this.storage.get('apiUrl').then((url) => {
+          if (url) {
+            var apiurl = url;
+            this.http.get(apiurl + URL + id)
+              .subscribe(res => {
 
-              resolve(res);
+                resolve(res);
 
-            }, (err) => {
+              }, (err) => {
 
-              reject(err);
-            });
-        } else {
-          return false;
-        }
-      })
-    });
+                reject(err);
+              });
+          } else {
+            return false;
+          }
+        })
+      });
+    }
   }
-  }
 
-  getColorPalette(totLen:number,colorLen:number,bindingArr:Array<any>){
+  getColorPalette(totLen: number, colorLen: number, bindingArr: Array < any > ) {
     let borderColorArr = [];
-    if ( totLen > colorLen) {
+    if (totLen > colorLen) {
       let calcLoop = Math.floor(totLen / colorLen);
       let remainingLen = totLen % colorLen;
       if (remainingLen > 0) {
