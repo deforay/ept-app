@@ -1,9 +1,11 @@
 <app-header [titleHeader]="'Notification'" [isMenuOrBackButton]="'menu'"></app-header>
 
 <ion-content>
+
   <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="networkType!='none'">
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
+
   <div class="notifyDiv" *ngFor="let item of notificationsArray;let i = index">
     <ion-card class="eptNotificationCard" [ngStyle]="{'border-left-color': borderColorArr[i]}">
       <ion-card-header class="notifyHeader"
@@ -42,17 +44,17 @@
             </ion-col>
             <ion-col size="5" class="markAsReadCol">
               <button mat-stroked-button class="markAsReadButton" *ngIf="item.markAsRead==false"
-                (click)="markAsRead(item)">
+                (click)="markAsRead(item)" [disabled]="item.disableMarkAsRead==true">
                 <span class="markAsReadText">Mark As Read</span></button>
               <button mat-stroked-button class="markAsReadButton" *ngIf="item.markAsRead==true"
-                (click)="markAsUnread(item)">
+                (click)="markAsUnread(item)" [disabled]="item.disableMarkAsUnRead==true">
                 <span class="markAsReadText">Mark As Unread</span></button>
             </ion-col>
           </ion-row>
         </ion-grid>
       </ion-card-content>
     </ion-card>
-
+  </div>
     <!-- ion-skeleton-text code start -->
     <ion-card *ngFor="let item of skeltonArray" class="eptNotificationCard">
       <ion-card-header class="notifyHeader">
@@ -104,5 +106,5 @@
       </p>
         </ion-card-content>
     </ion-card>
-  </div>
+ 
 </ion-content>
