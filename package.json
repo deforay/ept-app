@@ -52,6 +52,8 @@
     "cordova-plugin-firebasex": "^10.1.0-cli",
     "cordova-plugin-inappbrowser": "3.2.0",
     "cordova-plugin-network-information": "2.0.2",
+    "cordova-support-android-plugin": "^1.0.2",
+    "cordova-support-google-services": "^1.4.1",
     "core-js": "^2.5.4",
     "firebase": "^7.15.5",
     "hammerjs": "^2.0.8",

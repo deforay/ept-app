@@ -376,7 +376,7 @@ export class AppComponent {
     //     // }
     //   });
     this.FcmService.onNotifications().subscribe((msg) => {
-      console.log("onNotifications called",msg);   
+      console.log("onNotifications called",msg);  
     });
 
   }
