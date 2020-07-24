@@ -46,6 +46,7 @@ export class NotificationPage implements OnInit {
 
   ionViewWillEnter() {
     this.networkType = this.network.type;
+    this.notificationsArray=[];
     this.onLoadNotifications('onload');
   }
 
