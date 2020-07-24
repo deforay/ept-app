@@ -137,6 +137,7 @@ export class FcmService {
 
           } else if (data.notifyType == 'reports') {
 
+            this.router.navigate(['/individual-report']);
           }
           else{
             this.router.navigate(['/notification']);
