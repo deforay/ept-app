@@ -351,34 +351,8 @@ export class AppComponent {
   }
 
   private fcmPushNotification() {
- //   this.FcmService.getToken();
-  //  this.FcmService.onTokenRefresh();
-    // this.FcmService.onNotifications().subscribe((msg) => {
-    //   console.log("onNotifications called");   
-    //     if (this.platform.is('android')) {
-    //       debugger;
-    //       if (msg.wasTapped) {
-    //         console.log('notification tapped')
-    //         this.router.navigate(['/notification']);
-    //       }
-    //       this.presentToast(msg.aps.alert);
-    //     } else {
-    //       this.presentToast(msg.body);
-    //     }
-    //     // try {
-    //     //   console.log('Notification received', msg);
-    //     //   if (msg.wasTapped) {
-    //     //     this.router.navigate(['/notification']);
-    //     //   }
-    //     // }
-    //     // catch (error) {
-    //     //   console.error('error notification receive', msg);
-    //     // }
-    //   });
     this.FcmService.onNotifications().subscribe((msg) => {
-      console.log("onNotifications called",msg);  
     });
-
   }
 
   logout() {

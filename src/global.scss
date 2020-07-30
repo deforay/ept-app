@@ -28,6 +28,13 @@
 //@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 
+@font-face {
+    font-family: 'Mallanna';
+    src: url('../src/fonts/Mallanna-Regular.ttf');
+    font-weight: 400;
+    font-style: normal;
+}
+
 /* Global CSS Changes Starts */
 .text-center {
     text-align: center;
@@ -237,7 +244,7 @@ ion-toast {
 }
 
 input.mat-input-element {
-    font-size: 13px;
+    font-size: 15px;
 }
 
 .toolbar-background {
@@ -352,6 +359,12 @@ ion-toast{
 mat-chip-list.shipmentCodeList>.mat-chip-list-wrapper{
     display: block!important;
 }
+.text-center.native-btn{
+    font-size: 10.5px!important;
+}
+.checkMarkIcon{
+    margin-top: 5px!important;
+}
 p,
 span,
 h1,
@@ -362,11 +375,14 @@ h5,
 h6,
 div,
 ion-label,
-ion-icon,
 ion-tab-group,
-mat-card {
-    font-family: roboto, sans-serif !important;
+mat-card,
+ion-title {
+    font-family: 'Mallanna', sans-serif !important;
+    font-size: 14.9px!important;
 }
+
+
 /* Global CSS Changes Ends */
 
 
@@ -591,7 +607,7 @@ mat-card {
         font-weight: 400 !important;
         border-top-left-radius: inherit;
         border-top-right-radius: inherit;
-        padding: 7px 15px !important;
+        padding: 2px 15px !important;
     }
 }
 
@@ -602,7 +618,7 @@ mat-card {
 }
 
 .mat-standard-chip {
-    font-size: 12px !important;
+    font-size: 14px !important;
     min-height: 25px !important;
     color: rgba(0, 0, 0, .87) !important;
 }

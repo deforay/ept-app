@@ -4,6 +4,9 @@
 .eptHeaderTitle{
     color: white;
 }
+.title{
+    font-size: 17px!important;
+}
 ion-menu-button{
     --color:white !important;
      color:white !important;
@@ -13,7 +16,8 @@ ion-back-button{
      color:white !important;  
 }
 .backIcon{
-font-size: 24px;
-color: white;
-padding: 11px;
+    font-size: 25px!important;
+    color: white;
+    padding: 11px;
+    // margin-top: -30px;
 }

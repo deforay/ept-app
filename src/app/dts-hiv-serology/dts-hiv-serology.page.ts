@@ -213,6 +213,8 @@ export class DTSHIVSerologyPage implements OnInit {
         this.shipmentData['modeOfReceipt'] = this.dtsArray[0].dtsData.Section2.data.modeOfReceiptSelected ? this.dtsArray[0].dtsData.Section2.data.modeOfReceiptSelected : '';
         this.shipmentData['algorithmUsedDropdown'] = this.dtsArray[0].dtsData.Section2.data.algorithmUsedSelect;
         this.shipmentData['algorithmUsed'] = this.dtsArray[0].dtsData.Section2.data.algorithmUsedSelected;
+        this.shipmentData['sampleType'] = this.dtsArray[0].dtsData.Section2.data.sampleType;
+        this.shipmentData['screeningTest'] = this.dtsArray[0].dtsData.Section2.data.screeningTest;
         if (this.participantQcAccess == true) {
           if (this.dtsArray[0].dtsData.Section2.data.qcData.status == true) {
             this.isQCDoneShow = true;
@@ -289,7 +291,7 @@ export class DTSHIVSerologyPage implements OnInit {
       }
 
       if (this.dtsArray[0].dtsData.Section4.status == true) {
-       
+  
         this.showSampleData = true;
         this.sampleDetailsArray = this.dtsArray[0].dtsData.Section4.data;
         console.log(this.sampleDetailsArray);
