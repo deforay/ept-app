@@ -213,7 +213,7 @@
                   Test Receipt Date is required</mat-error>
               </mat-form-field>
             </ion-col>
-            <ion-col size="12"  class="grid-input-col">
+            <ion-col size="12"  class="grid-input-col" *ngIf="shipmentData['sampleType']=='dried'">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Sample Rehydration Date  <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [matDatepicker]="sampleRhdPicker" name="seroSampleRhdDate" #seroSampleRhdDate="ngModel"  [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
@@ -347,8 +347,8 @@
       <mat-card-content>
     <form #testKitPanelForm="ngForm" novalidate> 
       <div *ngFor="let kitTextItem of testKitTextArray;let i = index;">
-        <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="(shipmentData.algorithmUsed !='myanmarNationalDtsAlgo' && testKitNameArray[kitTextItem].status==true) ||
-        (shipmentData.algorithmUsed =='myanmarNationalDtsAlgo' && kitTextItem =='Test-3')|| (shipmentData.algorithmUsed =='myanmarNationalDtsAlgo' && kitTextItem !='Test-3'&& testKitNameArray[kitTextItem].status==true)">
+        <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="(shipmentData['screeningTest']=='no' && ((shipmentData.algorithmUsed !='myanmarNationalDtsAlgo' && testKitNameArray[kitTextItem].status==true) ||
+        (shipmentData.algorithmUsed =='myanmarNationalDtsAlgo' && kitTextItem =='Test-3')|| (shipmentData.algorithmUsed =='myanmarNationalDtsAlgo' && kitTextItem !='Test-3'&& testKitNameArray[kitTextItem].status==true))) || (shipmentData['screeningTest']=='yes' && kitTextItem =='Test-1') ">
 
          <!-- <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="(shipmentData.algorithmUsed !='myanmarNationalDtsAlgo' && testKitNameArray[kitTextItem].status==true) ||
          (shipmentData.algorithmUsed =='myanmarNationalDtsAlgo' && kitTextItem =='Test-3' || kitTextItem =='Test-1' && testKitNameArray[kitTextItem].status==true || kitTextItem =='Test-2' && testKitNameArray[kitTextItem].status==true)"> -->
@@ -488,7 +488,7 @@
           
             <!-- <ion-row *ngIf="sampleDetailsArray.resultStatus[2]"> -->
 
-              <ion-row *ngIf="(sampleDetailsArray.resultStatus[2] && shipmentData.algorithmUsed !='myanmarNationalDtsAlgo') || (shipmentData.algorithmUsed =='myanmarNationalDtsAlgo')">
+              <ion-row *ngIf="((shipmentData['screeningTest']=='no' && (sampleDetailsArray.resultStatus[2] && shipmentData.algorithmUsed !='myanmarNationalDtsAlgo') || (shipmentData.algorithmUsed =='myanmarNationalDtsAlgo')) || (shipmentData['screeningTest']=='yes' && sampleDetailsArray.resultStatus[2]))">
                     <!--  [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
                  !result3Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
              <ion-col  size="12" class="grid-readonly-col">

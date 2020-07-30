@@ -7,9 +7,6 @@
 .text-normal{
     color:black;
 }
-.text-center.native-btn{
-    font-size: 11.8px!important;
-    }
 ion-button.text-center.native-btn{
     --background:#3c8dbc !important;
     background:#3c8dbc !important;
@@ -48,4 +45,7 @@ ion-grid ion-row ion-col{
     }
     .topDiv{
         margin-top: -15px;
+    }
+    .text-center.native-btn{
+        margin-left: 8px;
     }

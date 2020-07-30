@@ -1,12 +1,12 @@
 .notificationTitle {
     color: black;
-    font-size: 15px;
+    font-size: 16px!important;
     font-weight: 500;
 }
 
 .notificationContent {
     color: #424242;
-    font-size: 12.75px
+    font-size: 14.5px!important;
 }
 .notificationGrid {
     padding-top: 0px;
@@ -15,9 +15,10 @@
     padding-right: 3px;
 }
 .schemeName{
-    font-size: 13.75px;
+    font-size: 16px!important;
     text-transform: inherit;
     font-weight: 600;
+    line-height: 1.2em;
 }
 .notifyPara {
     margin-top: -5px;
@@ -33,7 +34,7 @@
 }
 .notifyTime {
     color: grey;
-    font-size: 11px
+    font-size: 12px!important;
 }
 .eptNotificationCard {
     box-shadow: 0 0 4px rgba(0,0,0,0.2);

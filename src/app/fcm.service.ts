@@ -31,7 +31,6 @@ export class FcmService {
   appVersionNumber: any;
   authToken: any;
   constructor(private firebase: Firebase,
-    private afs: AngularFirestore,
     private platform: Platform,
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -90,19 +89,6 @@ export class FcmService {
     })
   }
 
-  // private saveToken(token) {
-  //   if (!token) return;
-
-  //   const devicesRef = this.afs.collection('devices');
-
-  //   const data = {
-  //     token,
-  //     userId: 'testUserId'
-  //   };
-
-  //   return devicesRef.doc(token).set(data);
-  // }
-
   public onTokenRefresh() {
     this.firebase.onTokenRefresh().subscribe(token => {
       this.postToken(token);
@@ -112,21 +98,14 @@ export class FcmService {
   }
 
   onNotifications() {
-    //  debugger;
     //return this.firebase.onNotificationOpen();
     return new Observable(observer => {
-      //   debugger;
       (window as any).FirebasePlugin.onMessageReceived((data) => {
         observer.next(data);
-        //   debugger;
-        console.log("onMessageReceived ", data);
-        // if (response.wasTapped) {
-        //   console.log('notification tapped')
-        //   this.router.navigate(['/notification']);
-        // } 
+        
         if (data.tap == 'background') {
           //Notification was received on device tray and tapped by the user.
-          console.log("data_background", data);
+     
           if (data.notifyType == 'announcement') {
 
             this.router.navigate(['/notification']);
@@ -135,21 +114,22 @@ export class FcmService {
 
             this.router.navigate(['/all-pt-schemes']);
 
-          } else if (data.notifyType == 'reports') {
+          } else if (data.notifyType == 'individual_reports') {
 
             this.router.navigate(['/individual-report']);
+          }
+          else if (data.notifyType == 'summary_reports') {
+
+            this.router.navigate(['/summary-report']);
           }
           else{
             this.router.navigate(['/notification']);
           }
 
-
         } else {
           //Notification was received in foreground. Maybe the user needs to be notified.*/
-          console.log('foreground', data);
-          this.router.navigate(['/notification']);
           this.alertService.presentAlert(data.title, data.body);
-        }
+         }
       });
     })
   }
