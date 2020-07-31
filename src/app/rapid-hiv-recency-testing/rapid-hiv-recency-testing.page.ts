@@ -109,7 +109,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
   viewSchemeName: string;
   shipmentPanelForm: NgForm;
   shipmentCode:string;
-
+  isViewPage:boolean;
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -314,7 +314,10 @@ export class RapidHIVRecencyTestingPage implements OnInit {
 
     this.storage.get('selectedTestFormArray').then((recencyDataObj) => {
       this.isView = recencyDataObj[0].isView;
-
+      if(this.isView=='true'){
+        this.isShowReviewMsg = true;
+        this.isViewPage=true;
+      }
       if (recencyDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
 
@@ -694,6 +697,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
         await loading.present();
         this.isView = 'true';
         this.isShowReviewMsg = true;
+        this.isViewPage=false;
         this.summarizeForm = true;
         loading.dismiss();
       }
@@ -885,6 +889,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
 
   editForm() {
     this.isShowReviewMsg = false;
+    this.isViewPage= true;
     this.summarizeForm = true;
     this.isView = 'false';
   }

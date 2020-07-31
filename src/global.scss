@@ -128,8 +128,7 @@
 ion-header ion-toolbar ion-title {
     font-size: 15px;
     padding: 0px;
-    margin-top: -8px;
-    ;
+    margin-top: -15px;
 }
 
 ion-header ion-toolbar ion-buttons {
@@ -300,13 +299,18 @@ input.mat-input-element {
     color: #f44336;
     text-align: center;
     font-size: 14.5px;
+    margin-top: 5px;
+    margin-bottom: 0px;
 }
 
 .infoMsg {
     color: black;
     text-align: center;
     font-size: 14.5px;
-    margin: 15px;
+    margin-top: 0px;
+    margin-bottom: 0px;
+    margin-left: 15px;
+    margin-right: 15px;
 }
 
 .checkMarkIcon {
@@ -525,7 +529,8 @@ ion-title {
 
 .mat-error {
     margin-left: -6px;
-
+    font-size: 13px;
+    margin-top: 2px;
     strong {
         font-weight: 500;
     }

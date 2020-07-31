@@ -6,7 +6,7 @@
   
     <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
 
-    <p *ngIf="isShowReviewMsg==true" class="infoMsg">Please review and verify your result submission</p>
+    <p *ngIf="isViewPage==false"  class="infoMsg">Please review and verify your result submission</p>
 
   <mat-accordion>
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
@@ -487,8 +487,7 @@
       
           
             <!-- <ion-row *ngIf="sampleDetailsArray.resultStatus[2]"> -->
-
-              <ion-row *ngIf="((shipmentData['screeningTest']=='no' && (sampleDetailsArray.resultStatus[2] && shipmentData.algorithmUsed !='myanmarNationalDtsAlgo') || (shipmentData.algorithmUsed =='myanmarNationalDtsAlgo')) || (shipmentData['screeningTest']=='yes' && sampleDetailsArray.resultStatus[2]))">
+              <ion-row *ngIf="((shipmentData['screeningTest']=='no' && ((sampleDetailsArray.resultStatus[2] && shipmentData.algorithmUsed !='myanmarNationalDtsAlgo') || (shipmentData.algorithmUsed =='myanmarNationalDtsAlgo'))) || (shipmentData['screeningTest']=='yes' && sampleDetailsArray.resultStatus[2]==true))">
                     <!--  [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
                  !result3Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
              <ion-col  size="12" class="grid-readonly-col">
@@ -506,7 +505,7 @@
               </ion-col>
             </ion-row>
       
-            <ion-row *ngIf="sampleDetailsArray.resultStatus[3]">
+            <ion-row *ngIf="sampleDetailsArray.resultStatus[3]"> 
               <!--    [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
                  !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
               <ion-col  size="12" class="grid-readonly-col">
