@@ -67,7 +67,6 @@ export class DTSHIVSerologyPage implements OnInit {
   testKitNameArray = [];
   testKitTextArray = [];
   resultsTextArray: any;
-
   exp = [];
   expDateObj: any = [];
   testKitModel = {};
@@ -140,6 +139,7 @@ export class DTSHIVSerologyPage implements OnInit {
   schemeName:string;
   viewSchemeName:string;
   shipmentCode: any;
+  isViewPage:boolean;
   
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -294,7 +294,6 @@ export class DTSHIVSerologyPage implements OnInit {
   
         this.showSampleData = true;
         this.sampleDetailsArray = this.dtsArray[0].dtsData.Section4.data;
-        console.log(this.sampleDetailsArray);
         this.sampleIndex = this.sampleDetailsArray.samples.label.length;
         this.samplesArray = this.sampleDetailsArray.samples;
         this.samplesNameArr = this.sampleDetailsArray.samples.label;
@@ -396,8 +395,7 @@ export class DTSHIVSerologyPage implements OnInit {
     })
   }
   onSelectedAlgorithm(algValue) {
-    console.log(this.testKitNameArray);
-
+   
     if (algValue == 'threeTestsDtsAlgo') {
       console.log(this.testKitNameArray);
       this.testKitIndex = this.testKitTextArray.length;
@@ -419,11 +417,12 @@ export class DTSHIVSerologyPage implements OnInit {
   }
 
   getSerologyDetails() {
-
-
     this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
-
       this.isView = dtsDataObj[0].isView;
+      if(this.isView=='true'){
+        this.isShowReviewMsg = true;
+        this.isViewPage=true;
+      }
       if (dtsDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
           if ((localStorageSelectedFormArray[0].isSynced == dtsDataObj[0].isSynced) &&
@@ -838,6 +837,7 @@ export class DTSHIVSerologyPage implements OnInit {
       await loading.present();
       this.isView = 'true';
       this.isShowReviewMsg = true;
+      this.isViewPage=false;
       this.summarizeForm = true;
       loading.dismiss();
     }
@@ -1089,6 +1089,7 @@ export class DTSHIVSerologyPage implements OnInit {
   }
   editForm() {
     this.isShowReviewMsg = false;
+    this.isViewPage= true;
     this.summarizeForm = true;
     this.isView = 'false';
   }

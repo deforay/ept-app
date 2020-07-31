@@ -110,6 +110,7 @@ export class DbsEidPage implements OnInit {
   schemeName:string;
   viewSchemeName:string;
   shipmentCode: any;
+  isViewPage:boolean;
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public LoaderService: LoaderService,
@@ -315,6 +316,10 @@ export class DbsEidPage implements OnInit {
 
     this.storage.get('selectedTestFormArray').then((eidDataObj) => {
       this.isView = eidDataObj[0].isView;
+      if(this.isView=='true'){
+        this.isShowReviewMsg = true;
+        this.isViewPage=true;
+      }
       if (eidDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
 
@@ -692,6 +697,7 @@ export class DbsEidPage implements OnInit {
         await loading.present();
         this.isView = 'true';
         this.isShowReviewMsg = true;
+        this.isViewPage=false;
         this.summarizeForm = true;
         loading.dismiss();
       }
@@ -887,6 +893,7 @@ export class DbsEidPage implements OnInit {
 
   editForm() {
     this.isShowReviewMsg = false;
+    this.isViewPage= true;
     this.summarizeForm = true;
     this.isView = 'false';
   }

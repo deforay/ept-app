@@ -148,6 +148,8 @@ export class DtsHivViralloadPage implements OnInit {
   viewSchemeName: string;
   dynamicStep = 0;
   shipmentCode: any;
+  isViewPage:boolean;
+
 
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -196,7 +198,10 @@ export class DtsHivViralloadPage implements OnInit {
     this.storage.get('selectedTestFormArray').then((vlDataObj) => {
 
       this.isView = vlDataObj[0].isView;
-
+      if(this.isView=='true'){
+        this.isShowReviewMsg = true;
+        this.isViewPage=true;
+      }
       if (vlDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
 
@@ -807,6 +812,7 @@ export class DtsHivViralloadPage implements OnInit {
       await loading.present();
       this.isView = 'true';
       this.isShowReviewMsg = true;
+      this.isViewPage=false;
       this.summarizeForm = true;
       loading.dismiss();
     }
@@ -992,6 +998,7 @@ export class DtsHivViralloadPage implements OnInit {
 
   editForm() {
     this.isShowReviewMsg = false;
+    this.isViewPage= true;
     this.summarizeForm = true;
     this.isView = 'false';
   }
