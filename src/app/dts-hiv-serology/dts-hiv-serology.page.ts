@@ -136,11 +136,13 @@ export class DTSHIVSerologyPage implements OnInit {
   dynamicStep = 0;
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
-  schemeName:string;
-  viewSchemeName:string;
+  schemeName: string;
+  viewSchemeName: string;
   shipmentCode: any;
-  isViewPage:boolean;
-  
+  isViewPage: boolean;
+  isSampleRehydDateMandatory: boolean;
+
+
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public LoaderService: LoaderService,
@@ -188,9 +190,9 @@ export class DTSHIVSerologyPage implements OnInit {
   bindSerologyData() {
 
     if (this.dtsArray[0].dtsData) {
-      this.schemeName=this.dtsArray[0].schemeName;
-      this.viewSchemeName="View "+this.schemeName;
-      this.shipmentCode=this.dtsArray[0].shipmentCode;
+      this.schemeName = this.dtsArray[0].schemeName;
+      this.viewSchemeName = "View " + this.schemeName;
+      this.shipmentCode = this.dtsArray[0].shipmentCode;
       if (this.dtsArray[0].dtsData.access.message) {
         this.viewAccessMessage = this.dtsArray[0].dtsData.access.message;
       }
@@ -214,6 +216,12 @@ export class DTSHIVSerologyPage implements OnInit {
         this.shipmentData['algorithmUsedDropdown'] = this.dtsArray[0].dtsData.Section2.data.algorithmUsedSelect;
         this.shipmentData['algorithmUsed'] = this.dtsArray[0].dtsData.Section2.data.algorithmUsedSelected;
         this.shipmentData['sampleType'] = this.dtsArray[0].dtsData.Section2.data.sampleType;
+        if(this.shipmentData['sampleType']=='dried'){
+              this.isSampleRehydDateMandatory=true;
+        }
+        else{
+          this.isSampleRehydDateMandatory=false;
+        }
         this.shipmentData['screeningTest'] = this.dtsArray[0].dtsData.Section2.data.screeningTest;
         if (this.participantQcAccess == true) {
           if (this.dtsArray[0].dtsData.Section2.data.qcData.status == true) {
@@ -291,7 +299,7 @@ export class DTSHIVSerologyPage implements OnInit {
       }
 
       if (this.dtsArray[0].dtsData.Section4.status == true) {
-  
+
         this.showSampleData = true;
         this.sampleDetailsArray = this.dtsArray[0].dtsData.Section4.data;
         this.sampleIndex = this.sampleDetailsArray.samples.label.length;
@@ -310,11 +318,8 @@ export class DTSHIVSerologyPage implements OnInit {
         this.sampleDetailsArray.samples.label.forEach((element, index) => {
           this.isValidSampleDetails.push(false);
         });
-
-        this.resultsTextArray = this.sampleDetailsArray.resultsText;
+        this.sampleDetailsArray.resultsText;
         this.resultsTextPushArray.push(this.sampleDetailsArray.resultsText);
-
-
       } else {
         this.showSampleData = false;
       }
@@ -359,7 +364,7 @@ export class DTSHIVSerologyPage implements OnInit {
         this.dynamicStep = 1;
         this.checkCustFieldPanel('onload');
       } else {
-       this.dynamicStep = 0;
+        this.dynamicStep = 0;
       }
       this.checkOtherInfoPanel('onload');
       // let checkTestKitIndex = this.isValidTestKitDetails.findIndex(index => index == false);
@@ -395,7 +400,7 @@ export class DTSHIVSerologyPage implements OnInit {
     })
   }
   onSelectedAlgorithm(algValue) {
-   
+
     if (algValue == 'threeTestsDtsAlgo') {
       console.log(this.testKitNameArray);
       this.testKitIndex = this.testKitTextArray.length;
@@ -419,9 +424,9 @@ export class DTSHIVSerologyPage implements OnInit {
   getSerologyDetails() {
     this.storage.get('selectedTestFormArray').then((dtsDataObj) => {
       this.isView = dtsDataObj[0].isView;
-      if(this.isView=='true'){
+      if (this.isView == 'true') {
         this.isShowReviewMsg = true;
-        this.isViewPage=true;
+        this.isViewPage = true;
       }
       if (dtsDataObj[0].isSynced == 'false') {
         this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
@@ -459,7 +464,7 @@ export class DTSHIVSerologyPage implements OnInit {
   checkShipmentPanel(param) {
 
     if (!this.shipmentData['testReceiptDate'] ||
-      !this.shipmentData['sampleRehydrationDate'] ||
+      (!this.shipmentData['sampleRehydrationDate'] && this.shipmentData['sampleType']=='dried')||
       !this.shipmentData['shipmentTestingDate'] ||
       !this.shipmentData['algorithmUsed'] ||
       (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) ||
@@ -472,8 +477,10 @@ export class DTSHIVSerologyPage implements OnInit {
         } else {
           if (!this.shipmentData['testReceiptDate']) {
             this.alertService.presentAlert('Alert', document.getElementById('testReceiptDate').getAttribute('data-alert'));
-          } else if (!this.shipmentData['sampleRehydrationDate']) {
-            this.alertService.presentAlert('Alert', document.getElementById('sampleRehydrationDate').getAttribute('data-alert'));
+          } else if (this.shipmentData['sampleType']=='dried') {
+            if (!this.shipmentData['sampleRehydrationDate']) {
+              this.alertService.presentAlert('Alert', document.getElementById('sampleRehydrationDate').getAttribute('data-alert'));
+            }
           } else if (!this.shipmentData['shipmentTestingDate']) {
             this.alertService.presentAlert('Alert', document.getElementById('shipmentTestingDate').getAttribute('data-alert'));
           } else if (!this.shipmentData['algorithmUsed']) {
@@ -591,9 +598,9 @@ export class DTSHIVSerologyPage implements OnInit {
   }
 
   checkOtherInfoPanel(param) {
-    if ((this.supReview == 'yes' && !this.supervisorName) || (this.supReview == ''||this.supReview==undefined)) {
+    if ((this.supReview == 'yes' && !this.supervisorName) || (this.supReview == '' || this.supReview == undefined)) {
       this.isValidOtherInfoPanel = false;
-      if (param== 'next' || (param == 'submit' && this.isValidShipmentDetails)) {
+      if (param == 'next' || (param == 'submit' && this.isValidShipmentDetails)) {
         if (!this.supReview) {
           this.alertService.presentAlert('Alert', "Please choose the Supervisor Review");
         } else if (this.supReview == 'yes' && !this.supervisorName) {
@@ -645,8 +652,8 @@ export class DTSHIVSerologyPage implements OnInit {
     //   this.setStep(this.testKitIndex+this.sampleIndex+this.dynamicStep+2)
     // }
     else if (this.isValidOtherInfoPanel == false) {
-      this.setStep(this.testKitIndex +this.sampleIndex+ this.dynamicStep + 2)
-     // this.setStep(this.testKitIndex +this.dynamicStep + 2)
+      this.setStep(this.testKitIndex + this.sampleIndex + this.dynamicStep + 2)
+      // this.setStep(this.testKitIndex +this.dynamicStep + 2)
     }
 
 
@@ -725,7 +732,7 @@ export class DTSHIVSerologyPage implements OnInit {
       this.qcDate = "";
       this.qcDoneBy = "";
     }
-  
+
     // (checkSampleIndex== undefined || checkSampleIndex==-1)
     if (this.isValidShipmentDetails == true && this.isValidOtherInfoPanel == true) {
 
@@ -738,8 +745,8 @@ export class DTSHIVSerologyPage implements OnInit {
           "evaluationStatus": this.dtsArray[0].evaluationStatus,
           "participantId": this.dtsArray[0].participantId,
           "schemeType": this.dtsArray[0].schemeType,
-          "schemeName":this.dtsArray[0].schemeName,
-          "shipmentCode":this.dtsArray[0].shipmentCode,
+          "schemeName": this.dtsArray[0].schemeName,
+          "shipmentCode": this.dtsArray[0].shipmentCode,
           "shipmentId": this.dtsArray[0].shipmentId,
           "mapId": this.dtsArray[0].mapId,
           "isSynced": true,
@@ -775,6 +782,8 @@ export class DTSHIVSerologyPage implements OnInit {
                 "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
                 "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'] ? this.shipmentData['modeOfReceipt'] : '',
                 "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
+                "sampleType": this.shipmentData['sampleType'],
+                "screeningTest": this.shipmentData['screeningTest'],
                 "qcData": {
                   "qcRadioSelected": this.qcDone,
                   "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
@@ -824,20 +833,20 @@ export class DTSHIVSerologyPage implements OnInit {
         }
       }
       console.log(this.serologyJSON);
-  
+
       const element = await this.loadingCtrl.getTop();
       if (element && element.dismiss) {
         element.dismiss();
       }
       const loading = await this.loadingCtrl.create({
         spinner: 'dots',
-        mode:'ios',
+        mode: 'ios',
         message: 'Please wait',
       });
       await loading.present();
       this.isView = 'true';
       this.isShowReviewMsg = true;
-      this.isViewPage=false;
+      this.isViewPage = false;
       this.summarizeForm = true;
       loading.dismiss();
     }
@@ -880,8 +889,8 @@ export class DTSHIVSerologyPage implements OnInit {
     //   this.setStep(this.testKitIndex+this.sampleIndex+this.dynamicStep+2)
     // }
     else if (this.isValidOtherInfoPanel == false) {
-     // this.setStep(this.testKitIndex + this.dynamicStep + 2)
-       this.setStep(this.testKitIndex +this.sampleIndex+ this.dynamicStep + 2)
+      // this.setStep(this.testKitIndex + this.dynamicStep + 2)
+      this.setStep(this.testKitIndex + this.sampleIndex + this.dynamicStep + 2)
     }
 
 
@@ -972,8 +981,8 @@ export class DTSHIVSerologyPage implements OnInit {
           "evaluationStatus": this.dtsArray[0].evaluationStatus,
           "participantId": this.dtsArray[0].participantId,
           "schemeType": this.dtsArray[0].schemeType,
-          "schemeName":this.dtsArray[0].schemeName,
-          "shipmentCode":this.dtsArray[0].shipmentCode,
+          "schemeName": this.dtsArray[0].schemeName,
+          "shipmentCode": this.dtsArray[0].shipmentCode,
           "shipmentId": this.dtsArray[0].shipmentId,
           "mapId": this.dtsArray[0].mapId,
           "isSynced": true,
@@ -1009,6 +1018,8 @@ export class DTSHIVSerologyPage implements OnInit {
                 "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
                 "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'] ? this.shipmentData['modeOfReceipt'] : '',
                 "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
+                "sampleType": this.shipmentData['sampleType'],
+                "screeningTest": this.shipmentData['screeningTest'],
                 "qcData": {
                   "qcRadioSelected": this.qcDone,
                   "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
@@ -1057,8 +1068,8 @@ export class DTSHIVSerologyPage implements OnInit {
           }
         }
       }
-  
-      if (this.network.type == 'none') {
+
+      if (this.network.type == 'none' || this.network.type == null) {
         this.serologyJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
 
@@ -1089,7 +1100,7 @@ export class DTSHIVSerologyPage implements OnInit {
   }
   editForm() {
     this.isShowReviewMsg = false;
-    this.isViewPage= true;
+    this.isViewPage = true;
     this.summarizeForm = true;
     this.isView = 'false';
   }

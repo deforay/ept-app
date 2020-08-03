@@ -6,6 +6,9 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
+  <p *ngIf="networkType=='none'" class="accessMsg">You are in offline</p>
+
+
   <div class="notifyDiv" *ngFor="let item of notificationsArray;let i = index">
     <ion-card class="eptNotificationCard" [ngStyle]="{'border-left-color': borderColorArr[i]}">
       <ion-card-header class="notifyHeader"
@@ -42,7 +45,7 @@
                 <span class="notifyTime">{{item.createdOn}}</span>
               </p>
             </ion-col>
-            <ion-col size="5" class="markAsReadCol">
+            <ion-col size="5" class="markAsReadCol" *ngIf="networkType!='none'">
               <button mat-stroked-button class="markAsReadButton" *ngIf="item.markAsRead==false"
                 (click)="markAsRead(item)" [disabled]="item.disableMarkAsRead==true">
                 <span class="markAsReadText">Mark As Read</span></button>

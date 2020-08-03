@@ -213,12 +213,13 @@
                   Test Receipt Date is required</mat-error>
               </mat-form-field>
             </ion-col>
+    
             <ion-col size="12"  class="grid-input-col" *ngIf="shipmentData['sampleType']=='dried'">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Sample Rehydration Date  <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [matDatepicker]="sampleRhdPicker" name="seroSampleRhdDate" #seroSampleRhdDate="ngModel"  [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   [(ngModel)]="shipmentData.sampleRehydrationDate" placeholder="Choose Sample Rehydration Date" 
-                  required [readonly]="isView!='true'" [disabled]="isView=='true'" data-alert="Please choose Sample Rehydration Date" id="sampleRehydrationDate" >
+                  [required]="isSampleRehydDateMandatory" [readonly]="isView!='true'" [disabled]="isView=='true'" data-alert="Please choose Sample Rehydration Date" id="sampleRehydrationDate" >
                 <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
                 <ion-icon name="close" *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearSampleRehydDate()"></ion-icon>
                 <mat-datepicker #sampleRhdPicker  [disabled]="isView=='true'"></mat-datepicker>
