@@ -20,6 +20,9 @@ import {
 import {
   stripcolor
 } from '../service/constant';
+import {
+  Events
+} from '@ionic/angular';
 @Component({
   selector: 'app-notification',
   templateUrl: './notification.page.html',
@@ -34,20 +37,55 @@ export class NotificationPage implements OnInit {
   showNoData: boolean = false;
   networkType: string;
   borderColorArr: any = [];
+  localNotificationsArray: any = [];
  
-
   constructor(public CrudServiceService: CrudServiceService,
-    public alertService: AlertService, private storage: Storage,
-    private router: Router, public network: Network) {
+    public alertService: AlertService,
+     private storage: Storage,
+    private router: Router, 
+    public network: Network,
+    public events: Events,) {
 
   }
 
   ngOnInit() {}
 
   ionViewWillEnter() {
+   
     this.networkType = this.network.type;
+   // this.networkType='none';
     this.notificationsArray=[];
-    this.onLoadNotifications('onload');
+
+    this.events.subscribe('network:offline', (data) => {
+      this.networkType = this.network.type;
+      if (this.router.url == '/notification') {
+        this.storage.get('localNotificationsArray').then((localNotificationsArray) => {
+          if (localNotificationsArray) {
+            this.notificationsArray = localNotificationsArray;
+            this.borderColorArr = this.CrudServiceService.getColorPalette(this.notificationsArray.length, stripcolor.length, this.notificationsArray);
+          }
+        })
+      }
+    })
+
+    // Online event
+    this.events.subscribe('network:online', () => {
+      this.networkType = this.network.type;
+      if (this.router.url == '/notification') {
+        this.onLoadNotifications('onload');
+      }
+    })
+    if (this.networkType == "none" || this.networkType==null) {
+      this.storage.get('localNotificationsArray').then((localNotificationsArray) => {
+        if (localNotificationsArray) {
+          this.notificationsArray = localNotificationsArray;
+          this.borderColorArr = this.CrudServiceService.getColorPalette(this.notificationsArray.length, stripcolor.length, this.notificationsArray);
+        }
+      })
+    } else {
+      this.onLoadNotifications('onload');
+    }
+   
   }
 
   onLoadNotifications(params) {
@@ -74,6 +112,8 @@ export class NotificationPage implements OnInit {
 
               this.notificationsArray = result['data'];
               this.borderColorArr = this.CrudServiceService.getColorPalette(this.notificationsArray.length, stripcolor.length, this.notificationsArray);
+              this.localNotificationsArray = result['data'].slice(0,20);
+              this.storage.set('localNotificationsArray',this.localNotificationsArray);
 
             } else if (result["status"] == "auth-fail") {
 

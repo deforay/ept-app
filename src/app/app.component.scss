@@ -61,6 +61,7 @@ ion-menu ion-content {
   ion-menu.md ion-item ion-label {
     font-size: 14px;
     margin-left: 20px;
+    margin-top: 0px;
   }
   
   ion-menu.md ion-item ion-icon {
@@ -132,8 +133,8 @@ ion-menu ion-content {
   }
   .partiName{
     margin-top: -25px;
-    font-weight: 400;
-    color: black;
+    font-weight: 600;
+    color: #424242;
     text-transform: capitalize;
     font-size:18px!important;
   }
