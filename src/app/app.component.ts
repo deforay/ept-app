@@ -195,11 +195,11 @@ export class AppComponent {
           console.log("None");
           let networkconnectivity = false;
           this.events.publish('network:offline', networkconnectivity);
-          this.ToastService.presentToastWithOptions("You are in offline");
+          this.ToastService.presentToastWithOptions("You are offline");
           this.storage.set('networkConnectivity', networkconnectivity);
         } else {
 
-          //  this.ToastService.presentToastWithOptions("You are in online");
+          //  this.ToastService.presentToastWithOptions("You are online");
 
         }
 

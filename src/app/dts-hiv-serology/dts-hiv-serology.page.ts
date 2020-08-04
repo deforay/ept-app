@@ -318,7 +318,7 @@ export class DTSHIVSerologyPage implements OnInit {
         this.sampleDetailsArray.samples.label.forEach((element, index) => {
           this.isValidSampleDetails.push(false);
         });
-        this.sampleDetailsArray.resultsText;
+        this.resultsTextArray = this.sampleDetailsArray.resultsText;
         this.resultsTextPushArray.push(this.sampleDetailsArray.resultsText);
       } else {
         this.showSampleData = false;
@@ -1069,7 +1069,7 @@ export class DTSHIVSerologyPage implements OnInit {
         }
       }
 
-      if (this.network.type == 'none' || this.network.type == null) {
+      if (this.network.type == 'none') {
         this.serologyJSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.serologyJSON);
 

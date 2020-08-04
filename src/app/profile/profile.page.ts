@@ -148,7 +148,7 @@ export class ProfilePage implements OnInit {
 
   updateProfile(profilePageForm: NgForm) {
     if (this.network.type == 'none') {
-      this.alertService.presentAlert('Alert', "You are in offline.Please connect with online");
+      this.alertService.presentAlert('Alert', "You are offline.Please connect with online");
     } else {
       if (profilePageForm.valid) {
 

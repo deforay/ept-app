@@ -78,7 +78,7 @@ export class ForgotPasswordPage implements OnInit {
 
   forgotPassword() {
     if (this.network.type == 'none') {
-      this.alertService.presentAlert("Alert", "You are in offline.Please connect with online");
+      this.alertService.presentAlert("Alert", "You are offline.Please connect with online");
     } else {
       this.storage.get('appVersionNumber').then((appVersionNumber) => {
         if (appVersionNumber) {
