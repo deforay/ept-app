@@ -66,7 +66,7 @@ export class NetworkService {
       if (this.appResumed == false && this.eventOffline) {
         const onlineRouters = ['/summary-report', '/individual-report'];
         if (!onlineRouters.includes(this.router.url)) {
-          this.ToastService.presentToastWithOptions("You are in offline");
+          this.ToastService.presentToastWithOptions("You are offline");
         }
       }
     })
@@ -97,7 +97,7 @@ export class NetworkService {
 
     this.eventCtrl.subscribe('network:online', (data) => {
       if (this.appResumed == false && this.eventOnline) {
-          this.ToastService.presentToastWithOptions("You are in online");
+          this.ToastService.presentToastWithOptions("You are online");
       }
     })
   }

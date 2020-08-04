@@ -45,7 +45,17 @@ export class NotificationPage implements OnInit {
     private router: Router, 
     public network: Network,
     public events: Events,) {
+      this.storage.get('appVersionNumber').then((appVersionNumber) => {
+        if (appVersionNumber) {
+          this.appVersionNumber = appVersionNumber;
+        }
+      })
 
+      this.storage.get('participantLogin').then((partiLoginResult) => {
+        if (partiLoginResult.authToken) {
+          this.authToken = partiLoginResult.authToken;
+        }
+      })
   }
 
   ngOnInit() {}
@@ -53,14 +63,17 @@ export class NotificationPage implements OnInit {
   ionViewWillEnter() {
    
     this.networkType = this.network.type;
-   // this.networkType='none';
+
     this.notificationsArray=[];
 
     this.events.subscribe('network:offline', (data) => {
       this.networkType = this.network.type;
       if (this.router.url == '/notification') {
+        this.notificationsArray =[];
+        this.skeltonArray = [{}, {}, {}, {}, {}, {}];
         this.storage.get('localNotificationsArray').then((localNotificationsArray) => {
           if (localNotificationsArray) {
+            this.skeltonArray = [];
             this.notificationsArray = localNotificationsArray;
             this.borderColorArr = this.CrudServiceService.getColorPalette(this.notificationsArray.length, stripcolor.length, this.notificationsArray);
           }
@@ -75,9 +88,12 @@ export class NotificationPage implements OnInit {
         this.onLoadNotifications('onload');
       }
     })
-    if (this.networkType == "none" || this.networkType==null) {
+    if (this.networkType == "none") {
+      this.notificationsArray =[];
+      this.skeltonArray = [{}, {}, {}, {}, {}, {}];
       this.storage.get('localNotificationsArray').then((localNotificationsArray) => {
         if (localNotificationsArray) {
+          this.skeltonArray = [];
           this.notificationsArray = localNotificationsArray;
           this.borderColorArr = this.CrudServiceService.getColorPalette(this.notificationsArray.length, stripcolor.length, this.notificationsArray);
         }
@@ -89,6 +105,9 @@ export class NotificationPage implements OnInit {
   }
 
   onLoadNotifications(params) {
+    if (params == 'onload') {
+    this.notificationsArray=[];
+    }
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
@@ -103,11 +122,12 @@ export class NotificationPage implements OnInit {
         }
         this.CrudServiceService.getData('/api/participant/get-notifications/?appVersion=' + this.appVersionNumber + '&authToken=' + partiLoginResult.authToken)
           .then(result => {
+            console.log(result);
             if (params == 'onload') {
               this.skeltonArray = [];
             }
             this.borderColorArr = [];
-            console.log(result);
+           
             if (result["status"] == 'success') {
 
               this.notificationsArray = result['data'];
@@ -135,7 +155,9 @@ export class NotificationPage implements OnInit {
           }, (err) => {
             this.skeltonArray = [];
             this.showNoData = true;
+            if(this.networkType!='none'){
             this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+            }
           });
       }
     })
@@ -165,11 +187,13 @@ export class NotificationPage implements OnInit {
         this.alertService.presentAlert('Alert', result["message"]);
       }
     }, (err) => {
+
       this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
     });
   }
 
   markAsUnread(item) {
+  
     item.disableMarkAsUnRead = true;
     let markAsReadJSON = {
       "appVersion": this.appVersionNumber,
