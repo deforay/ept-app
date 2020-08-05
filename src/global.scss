@@ -355,6 +355,7 @@ input.mat-input-element {
 ion-toast{
     --background: rgba(0,0,0,.7);
     color: #fafafa;
+    --height:40px;
 }
 .loading-wrapper.sc-ion-loading-ios{
     height: 70px;
@@ -367,7 +368,7 @@ mat-chip-list.shipmentCodeList>.mat-chip-list-wrapper{
     display: block!important;
 }
 .text-center.native-btn{
-    font-size: 11px!important;
+    font-size: 12px!important;
 }
 .checkMarkIcon{
     margin-top: 5px!important;
@@ -384,7 +385,10 @@ div,
 ion-label,
 ion-tab-group,
 mat-card,
-ion-title {
+ion-title,
+ion-button    
+// ion-toast
+{
     font-family: 'Mallanna', sans-serif !important;
     font-size: 14.9px!important;
 }
