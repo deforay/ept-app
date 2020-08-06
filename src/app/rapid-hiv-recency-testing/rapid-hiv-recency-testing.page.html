@@ -2,15 +2,11 @@
 
 <app-header *ngIf="isShowReviewMsg==true" [titleHeader]="viewSchemeName" [isMenuOrBackButton]="'back'"></app-header>
 <ion-content>
-  <ion-row>
+
     <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
 
     <p *ngIf="isViewPage==false"  class="infoMsg">Please review and verify your result submission</p>
 
-  </ion-row>
-  <!-- <mat-chip-list aria-label="Fish selection" class="shipmentCodeList">
-    <mat-chip ><p style="text-align: center;">Shipment Code - REC0620-1</p></mat-chip>
-  </mat-chip-list> -->
   <mat-accordion class="example-headers-align">
  
     <mat-expansion-panel *ngIf="showParticipantData" [expanded]="step === 0" (opened)="setStep(0)">

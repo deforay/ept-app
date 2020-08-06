@@ -38,38 +38,44 @@ export class NotificationPage implements OnInit {
   networkType: string;
   borderColorArr: any = [];
   localNotificationsArray: any = [];
- 
+
   constructor(public CrudServiceService: CrudServiceService,
     public alertService: AlertService,
-     private storage: Storage,
-    private router: Router, 
+    private storage: Storage,
+    private router: Router,
     public network: Network,
-    public events: Events,) {
-      this.storage.get('appVersionNumber').then((appVersionNumber) => {
-        if (appVersionNumber) {
-          this.appVersionNumber = appVersionNumber;
-        }
-      })
+    public events: Events, ) {
+    this.storage.get('appVersionNumber').then((appVersionNumber) => {
+      if (appVersionNumber) {
+        this.appVersionNumber = appVersionNumber;
+      }
+    })
 
-      this.storage.get('participantLogin').then((partiLoginResult) => {
-        if (partiLoginResult.authToken) {
-          this.authToken = partiLoginResult.authToken;
-        }
-      })
+    this.storage.get('participantLogin').then((partiLoginResult) => {
+      if (partiLoginResult.authToken) {
+        this.authToken = partiLoginResult.authToken;
+      }
+    })
+
+    this.onLoadNotifications();
   }
 
-  ngOnInit() {}
+  ngOnInit() { }
 
   ionViewWillEnter() {
-   
+    this.onLoadNotifications();
+  }
+
+  onLoadNotifications() {
+
     this.networkType = this.network.type;
 
-    this.notificationsArray=[];
+    this.notificationsArray = [];
 
     this.events.subscribe('network:offline', (data) => {
       this.networkType = this.network.type;
       if (this.router.url == '/notification') {
-        this.notificationsArray =[];
+        this.notificationsArray = [];
         this.skeltonArray = [{}, {}, {}, {}, {}, {}];
         this.storage.get('localNotificationsArray').then((localNotificationsArray) => {
           if (localNotificationsArray) {
@@ -85,11 +91,11 @@ export class NotificationPage implements OnInit {
     this.events.subscribe('network:online', () => {
       this.networkType = this.network.type;
       if (this.router.url == '/notification') {
-        this.onLoadNotifications('onload');
+        this.getAllNotificationsAPI('onload');
       }
     })
     if (this.networkType == "none") {
-      this.notificationsArray =[];
+      this.notificationsArray = [];
       this.skeltonArray = [{}, {}, {}, {}, {}, {}];
       this.storage.get('localNotificationsArray').then((localNotificationsArray) => {
         if (localNotificationsArray) {
@@ -99,14 +105,14 @@ export class NotificationPage implements OnInit {
         }
       })
     } else {
-      this.onLoadNotifications('onload');
+      this.getAllNotificationsAPI('onload');
     }
-   
+
   }
 
-  onLoadNotifications(params) {
+  getAllNotificationsAPI(params) {
     if (params == 'onload') {
-    this.notificationsArray=[];
+      this.notificationsArray = [];
     }
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
@@ -127,13 +133,13 @@ export class NotificationPage implements OnInit {
               this.skeltonArray = [];
             }
             this.borderColorArr = [];
-           
+
             if (result["status"] == 'success') {
 
               this.notificationsArray = result['data'];
               this.borderColorArr = this.CrudServiceService.getColorPalette(this.notificationsArray.length, stripcolor.length, this.notificationsArray);
-              this.localNotificationsArray = result['data'].slice(0,20);
-              this.storage.set('localNotificationsArray',this.localNotificationsArray);
+              this.localNotificationsArray = result['data'].slice(0, 20);
+              this.storage.set('localNotificationsArray', this.localNotificationsArray);
 
             } else if (result["status"] == "auth-fail") {
 
@@ -155,8 +161,8 @@ export class NotificationPage implements OnInit {
           }, (err) => {
             this.skeltonArray = [];
             this.showNoData = true;
-            if(this.networkType!='none'){
-            this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+            if (this.networkType != 'none') {
+              this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
             }
           });
       }
@@ -174,7 +180,7 @@ export class NotificationPage implements OnInit {
     this.CrudServiceService.postDataWithoutLoader('/api/participant/push-read', markAsReadJSON).then((result) => {
       item.disableMarkAsRead = false;
       if (result["status"] == 'success') {
-        this.onLoadNotifications('refresh');
+        this.getAllNotificationsAPI('refresh');
       } else if (result["status"] == "auth-fail") {
 
         this.alertService.presentAlert('Alert', result["message"]);
@@ -193,7 +199,7 @@ export class NotificationPage implements OnInit {
   }
 
   markAsUnread(item) {
-  
+
     item.disableMarkAsUnRead = true;
     let markAsReadJSON = {
       "appVersion": this.appVersionNumber,
@@ -204,7 +210,7 @@ export class NotificationPage implements OnInit {
     this.CrudServiceService.postDataWithoutLoader('/api/participant/push-read', markAsReadJSON).then((result) => {
       item.disableMarkAsUnRead = false;
       if (result["status"] == 'success') {
-        this.onLoadNotifications('refresh');
+        this.getAllNotificationsAPI('refresh');
       } else if (result["status"] == "auth-fail") {
 
         this.alertService.presentAlert('Alert', result["message"]);

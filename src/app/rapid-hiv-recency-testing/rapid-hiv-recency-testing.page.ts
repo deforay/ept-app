@@ -341,7 +341,7 @@ export class RapidHIVRecencyTestingPage implements OnInit {
         this.recencyArray.push(recencyDataObj[0]);
         this.bindRecencyData();
       }
-      console.log(this.recencyArray)
+    
 
     })
   }
@@ -684,7 +684,6 @@ export class RapidHIVRecencyTestingPage implements OnInit {
             }
           }
         }
-        console.log(this.recencyJSON);
         const element = await this.loadingCtrl.getTop();
         if (element && element.dismiss) {
           element.dismiss();
