@@ -8,9 +8,6 @@ import {
   Platform
 } from '@ionic/angular';
 import {
-  AngularFirestore
-} from 'angularfire2/firestore';
-import {
   CrudServiceService
 } from '../app/service/crud/crud-service.service';
 import {

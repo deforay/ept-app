@@ -3,12 +3,11 @@
 <app-header *ngIf="isShowReviewMsg==true" [titleHeader]="viewSchemeName" [isMenuOrBackButton]="'back'"></app-header>
 
 <ion-content>
-  <ion-row>
+
     <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
 
     <p *ngIf="isViewPage==false"  class="infoMsg">Please review and verify your result submission</p>
 
-  </ion-row>
   <mat-accordion class="example-headers-align">
     <mat-expansion-panel *ngIf="showParticipantData" [expanded]="step === 0" (opened)="setStep(0)">
       <mat-expansion-panel-header>

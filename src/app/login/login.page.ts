@@ -42,9 +42,8 @@ import {
 import {
   Events
 } from '@ionic/angular';
-import {
-  FcmService
-}from '../../app/fcm.service';
+import { FcmService } from '../../app/fcm.service';
+import { AngularFireModule } from '../../../node_modules/@angular/fire/firebase.app.module';
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -90,7 +89,8 @@ export class LoginPage implements OnInit {
     public network: Network,
     public loadingController: LoadingController,
     private FcmService: FcmService,
-    public events: Events) {
+    public events: Events,
+    public AngularFireModule:AngularFireModule) {
 
   }
   ngOnInit() {
@@ -153,6 +153,7 @@ export class LoginPage implements OnInit {
               this.CrudServiceService.postData('/api/login', loginJSON)
                 .then((result) => {
                   if (result["status"] == 'success') {
+
                     this.authToken = result['data'].authToken;
                     this.storage.set("isLogOut", false);
                     this.events.publish("loggedPartiName", result['data'].name);
@@ -179,7 +180,8 @@ export class LoginPage implements OnInit {
                     this.storage.set('participantLogin', result['data']);
                     this.router.navigate(['/app-password']);
                     this.getAllShipmentsAPI();
-                    if(result['data'].pushStatus=='not-send'){
+                    if(result['data'].pushStatus=='not-send'){          
+                      AngularFireModule.initializeApp(result['data'].fcm);
                       this.FcmService.onTokenRefresh();
                     }
                   } else if (result["status"] == 'version-failed') {
