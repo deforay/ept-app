@@ -29,7 +29,9 @@ import {
   LoaderService,
   AlertService
 } from '../../app/service/providers';
-import { CrudServiceService} from '../../app/service/crud/crud-service.service';
+import {
+  CrudServiceService
+} from '../../app/service/crud/crud-service.service';
 import {
   Storage
 } from '@ionic/storage';
@@ -42,8 +44,16 @@ import {
 import {
   Events
 } from '@ionic/angular';
-import { FcmService } from '../../app/fcm.service';
-import { AngularFireModule } from '../../../node_modules/@angular/fire/firebase.app.module';
+import {
+  FcmService
+} from '../../app/fcm.service';
+import {
+  AngularFireModule
+} from '../../../node_modules/@angular/fire/firebase.app.module';
+import * as googleServiceJSON from '../../../google-services.json';
+import {
+  File
+} from '@ionic-native/file/ngx';
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -77,8 +87,10 @@ export class LoginPage implements OnInit {
   pswdhide = true;
   emailFormControlValue;
   shippingsArray = [];
-  shipmentFormArray=[];
+  shipmentFormArray = [];
   authToken;
+  stringToInsert: any;
+  blob: any;
   constructor(
     public menu: MenuController,
     private router: Router,
@@ -90,11 +102,12 @@ export class LoginPage implements OnInit {
     public loadingController: LoadingController,
     private FcmService: FcmService,
     public events: Events,
-    public AngularFireModule:AngularFireModule) {
+    public AngularFireModule: AngularFireModule,
+    private file: File, ) {
 
   }
   ngOnInit() {
-
+    console.log(googleServiceJSON['default']);
   }
 
   trimEmailFormControl() {
@@ -120,10 +133,55 @@ export class LoginPage implements OnInit {
     this.serverHostFormControl.setErrors(null);
   }
 
-  ionViewWillEnter(){
+  ionViewWillEnter() {
     this.storage.remove('appPin');
+    this.file.copyFile(this.file.applicationDirectory + 'src/assets/', 'msg-list.json', this.file.applicationStorageDirectory, 'msg-list.json').then(((result) => {
+      debugger;
+      console.log(result);
+    })).catch((err) => {
+        debugger;
+        console.log(err);
+    })
+    var jsonString = JSON.stringify({
+      ID: "Q1",
+      Result1: "Yes",
+      Result2: "No"});  
+     var fileDir =this.file.dataDirectory; 
+    var filename = "msg-list.json";
+    this.file.writeFile(fileDir, filename, jsonString, {replace: true}).then(((result) => {
+      debugger;
+      console.log(result);
+    })).catch((err) => {
+        debugger;
+        console.log(err);
+    })
+    
+    this.someEventFunc();
   }
+  createAccessLogFileAndWrite(text: string) {
+    this.file.checkFile('../../../google-services.json', 'access.log')
+    .then(doesExist => {
+      debugger;
+        console.log("doesExist : " + doesExist);
+        return this.writeToAccessLogFile(text);
+    }).catch(err => {
+        return this.file.createFile('../../../google-services.json', 'access.log', false)
+            .then(FileEntry => this.writeToAccessLogFile(text))
+            .catch(err => console.log('Couldnt create file'));
+    });
+}
 
+writeToAccessLogFile(text: string) {
+  debugger;
+    this.file.writeExistingFile(this.file.dataDirectory, 'access.log', text)
+}
+
+someEventFunc() {
+  debugger;
+  // This is an example usage of the above functions
+  // This function is your code where you want to write to access.log file
+  this.createAccessLogFileAndWrite("Hello World - someEventFunc was called");
+}
   login() {
 
     if (this.network.type == 'none') {
@@ -180,13 +238,17 @@ export class LoginPage implements OnInit {
                     this.storage.set('participantLogin', result['data']);
                     this.router.navigate(['/app-password']);
                     this.getAllShipmentsAPI();
-                    if(result['data'].pushStatus=='not-send'){          
+                    if (result['data'].pushStatus == 'not-send') {
                       AngularFireModule.initializeApp(result['data'].fcm);
+                      // export var stripcolor: any = ['#FF0000', '#AB72C0','#CB9B42', '#2B580C','#F35B04', '#B96B9F', '#E44985', '#B19A1D',  '#FF6473', '#E3B505', '#CC59D2', '#A6A867', '#688E26', '#807182', '#EF476F'];
+
+                      //  googleServiceJSON=result['data'].fcm;
+
                       this.FcmService.onTokenRefresh();
                     }
                   } else if (result["status"] == 'version-failed') {
 
-                    this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
+                    this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
 
                   } else {
                     this.alertService.presentAlert('Alert', result["message"], '');
@@ -219,18 +281,24 @@ export class LoginPage implements OnInit {
     })
     this.CrudServiceService.getData('/api/participant/get-filter/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber).then(result => {
       if (result["status"] == 'success') {
-        this.storage.set('filterDetails',result['data']);
+        this.storage.set('filterDetails', result['data']);
       }
     })
     this.CrudServiceService.getData('/api/participant/get-profile-check/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber)
-    .then(result => {
-      if (result["status"] == 'success') {
-        this.storage.set('profileDetails', result['data']);
-      }
-    })
+      .then(result => {
+        if (result["status"] == 'success') {
+          this.storage.set('profileDetails', result['data']);
+        }
+      })
   }
-  
-  forgotPassword(){
+
+  forgotPassword() {
     this.router.navigate(['/forgot-password']);
   }
+}
+
+export interface IWriteOptions {
+  replace?: boolean;
+  append?: boolean;
+  truncate?: number; // if present, number of bytes to truncate file to before writing
 }
