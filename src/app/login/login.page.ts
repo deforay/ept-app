@@ -91,6 +91,7 @@ export class LoginPage implements OnInit {
   authToken;
   stringToInsert: any;
   blob: any;
+
   constructor(
     public menu: MenuController,
     private router: Router,
@@ -107,9 +108,50 @@ export class LoginPage implements OnInit {
 
   }
   ngOnInit() {
-    console.log(googleServiceJSON['default']);
-  }
 
+   
+
+    //   "project_info": {
+    //     "project_number": "",
+    //     "firebase_url": "https://e-pt-a1c0d.firebaseio.com",
+    //     "project_id": "e-pt-a1c0d",
+    //     "storage_bucket": "e-pt-a1c0d.appspot.com"
+    //   },
+    //   "client": [
+    //     {
+    //       "client_info": {
+    //         "mobilesdk_app_id": "1:679234009987:android:3973efb1b807975f56d4b6",
+    //         "android_client_info": {
+    //           "package_name": "com.deforay.ept"
+    //         }
+    //       },
+    //       "oauth_client": [
+    //         {
+    //           "client_id": "679234009987-mn58c27470nbi7ufbsnqqg78ma46ppsv.apps.googleusercontent.com",
+    //           "client_type": 3
+    //         }
+    //       ],
+    //       "api_key": [
+    //         {
+    //           "current_key": "AIzaSyCT2ejgxCth45meaipaAKvF7RY-uU1OTFU"
+    //         }
+    //       ],
+    //       "services": {
+    //         "appinvite_service": {
+    //           "other_platform_oauth_client": [
+    //             {
+    //               "client_id": "679234009987-mn58c27470nbi7ufbsnqqg78ma46ppsv.apps.googleusercontent.com",
+    //               "client_type": 3
+    //             }
+    //           ]
+    //         }
+    //       }
+    //     }
+    //   ],
+    //   "configuration_version": "1"
+    // }
+
+  }
   trimEmailFormControl() {
     this.emailFormControl.setValue(this.emailFormControl.value.trim());
   }
@@ -135,27 +177,22 @@ export class LoginPage implements OnInit {
 
   ionViewWillEnter() {
     this.storage.remove('appPin');
-    this.file.copyFile(this.file.applicationDirectory + 'src/assets/', 'msg-list.json', this.file.applicationStorageDirectory, 'msg-list.json').then(((result) => {
-      debugger;
-      console.log(result);
-    })).catch((err) => {
-        debugger;
-        console.log(err);
-    })
+  
     var jsonString = JSON.stringify({
       ID: "Q1",
       Result1: "Yes",
       Result2: "No"});  
-     var fileDir =this.file.dataDirectory; 
+    var fileDir =this.file.dataDirectory; 
     var filename = "msg-list.json";
-    this.file.writeFile(fileDir, filename, jsonString, {replace: true}).then(((result) => {
+    this.file.writeFile(fileDir, filename, jsonString, { append: false, replace: true}).then(((result) => {
       debugger;
       console.log(result);
     })).catch((err) => {
         debugger;
         console.log(err);
     })
-    
+    this.file.writeFile('config.json',jsonString, null);
+
     this.someEventFunc();
   }
   createAccessLogFileAndWrite(text: string) {
@@ -239,7 +276,22 @@ someEventFunc() {
                     this.router.navigate(['/app-password']);
                     this.getAllShipmentsAPI();
                     if (result['data'].pushStatus == 'not-send') {
+                      googleServiceJSON['default'].project_info.project_number="679234009987";
+                      googleServiceJSON['default'].project_info.firebase_url="https://e-pt-a1c0d.firebaseio.com";
+                      googleServiceJSON['default'].project_info.project_id="e-pt-a1c0d";
+                      googleServiceJSON['default'].project_info.storage_bucket="e-pt-a1c0d.appspot.com";
+                      googleServiceJSON['default'].client[0].client_info.mobilesdk_app_id="1:679234009987:android:3973efb1b807975f56d4b6";
+                      googleServiceJSON['default'].client[0].client_info.android_client_info.package_name="com.deforay.ept";
+                      googleServiceJSON['default'].client[0].oauth_client[0].client_id="679234009987-mn58c27470nbi7ufbsnqqg78ma46ppsv.apps.googleusercontent.com";
+                      googleServiceJSON['default'].client[0].oauth_client[0].client_type=3;
+                      googleServiceJSON['default'].client[0].api_key[0].current_key="AIzaSyCT2ejgxCth45meaipaAKvF7RY-uU1OTFU";
+                      googleServiceJSON['default'].client[0].services.appinvite_service.other_platform_oauth_client[0].client_id="679234009987-mn58c27470nbi7ufbsnqqg78ma46ppsv.apps.googleusercontent.com";
+                      googleServiceJSON['default'].client[0].services.appinvite_service.other_platform_oauth_client[0].client_type=3;
+                      googleServiceJSON['default'].client[0].services.appinvite_service.other_platform_oauth_client[0].client_type=3;
+                      googleServiceJSON['default'].configuration_version="1"
+                      console.log(googleServiceJSON['default']);
                       AngularFireModule.initializeApp(result['data'].fcm);
+                      
                       // export var stripcolor: any = ['#FF0000', '#AB72C0','#CB9B42', '#2B580C','#F35B04', '#B96B9F', '#E44985', '#B19A1D',  '#FF6473', '#E3B505', '#CC59D2', '#A6A867', '#688E26', '#807182', '#EF476F'];
 
                       //  googleServiceJSON=result['data'].fcm;
