@@ -53,15 +53,6 @@ import {
 import {
   ToastController
 }from '@ionic/angular';
-import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-import {
-  FileTransfer,
-  FileUploadOptions,
-  FileTransferObject
-} from '@ionic-native/file-transfer/ngx';
-import {
-  FileOpener
-} from '@ionic-native/file-opener/ngx';
 @Component({
     selector: 'app-root',
     templateUrl: 'app.component.html',
@@ -145,26 +136,13 @@ export class AppComponent {
     private FcmService: FcmService,
     public toastController: ToastController,
     public CrudServiceService: CrudServiceService,
-    private androidPermissions: AndroidPermissions,
-    private fileTransfer: FileTransfer,
-    private fileOpener: FileOpener,
   ) {
     this.initializeApp();
-  }
-
-  private async presentToast(message) {
-    const toast = await this.toastController.create({
-        message,
-        duration: 3000
-      }
-    );
-    toast.present();
   }
 
   initializeApp() {
     this.platform.ready().then(() => {
         this.fcmPushNotification();
-        this.getPermission();
         //  this.statusBar.styleDefault();
         this.statusBar.styleLightContent();
         this.splashScreen.hide();
@@ -370,57 +348,6 @@ export class AppComponent {
     this.FcmService.onNotifications().subscribe((msg) => {
     });
   }
-
-
-  async downloadFile() {
-
-     const fileTransfer: FileTransferObject = this.fileTransfer.create();
-     let downloadUrl ="https://caribbeanept.deforay.in/api/participant/download/SCwz8YZwt/Mjc3Nw==";
-     let path = this.file.dataDirectory ;
-     fileTransfer.download(downloadUrl, path + "DTS2020-01-2777.pdf").then((entry) => {
-       console.log('download complete: ' + entry.toURL());
-       let url = entry.toURL();
-   
-       this.fileOpener.open(url, 'application/pdf');
-     }, (error) => {
-       
-       this.alertService.presentAlert('Alert','Something went wrong.Please try again later.');
-       console.log(error);
-     });
-debugger;
-     var theData = {
-      foo: "bar"
-    };
-    var theJSON = JSON.stringify(theData);
-    var uri = "data:application/json;charset=UTF-8," + encodeURIComponent(theJSON);
-    
-    var a = document.createElement('a');
-    console.log(a);
-    
-    a.href = uri;
-    a.innerHTML = "Right-click and choose 'save as...'";
-    document.body.appendChild(a);
-   }
-
-
- 
-  getPermission() {
-    this.androidPermissions.hasPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
-      .then(status => {
-        if (status.hasPermission) {
-          this.downloadFile();
-        } 
-        else {
-          this.androidPermissions.requestPermission(this.androidPermissions.PERMISSION.READ_EXTERNAL_STORAGE)
-            .then(status => {
-              if(status.hasPermission) {
-                this.downloadFile();
-              }
-            });
-        }
-      });
-  }
-
 
   logout() {
     this.alertService.presentAlertConfirm('Logout', '', 'Are you sure you want to logout?', 'No', 'Yes', 'logoutAlert');
