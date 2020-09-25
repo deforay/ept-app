@@ -12,7 +12,9 @@ import {
 import {
   LoadingController
 } from '@ionic/angular';
-import { CrudServiceService} from '../../app/service/crud/crud-service.service';
+import {
+  CrudServiceService
+} from '../../app/service/crud/crud-service.service';
 import {
   Storage
 } from '@ionic/storage';
@@ -31,7 +33,8 @@ import {
   FileOpener
 } from '@ionic-native/file-opener/ngx';
 import {
-  ROOT_DIRECTORY,INDIVIDUAL_REPORTS_DIRECTORY
+  ROOT_DIRECTORY,
+  INDIVIDUAL_REPORTS_DIRECTORY
 } from '../../app/service/constant';
 import {
   Network
@@ -51,7 +54,7 @@ export class IndividualReportPage {
   apiUrl: string;
   networkType: string;
   skeltonArray: any = [];
-  showNoData: boolean= false;
+  showNoData: boolean = false;
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -65,26 +68,26 @@ export class IndividualReportPage {
     public network: Network,
     public events: Events,
     public loadingCtrl: LoadingController,
-     ) {
+  ) {
 
   }
 
   async downloadReport(downloadLink, fileName) {
 
-   const element = await this.loadingCtrl.getTop();
-   if (element && element.dismiss) {
-     element.dismiss();
-   }
-   const loading = await this.loadingCtrl.create({
-     spinner: 'dots',
-     mode:'ios',
-     message: 'Please wait',
-   });
-   await loading.present();
+    const element = await this.loadingCtrl.getTop();
+    if (element && element.dismiss) {
+      element.dismiss();
+    }
+    const loading = await this.loadingCtrl.create({
+      spinner: 'dots',
+      mode: 'ios',
+      message: 'Please wait',
+    });
+    await loading.present();
 
     const fileTransfer: FileTransferObject = this.ft.create();
     let downloadUrl = this.apiUrl + downloadLink;
-    let path = this.file.externalRootDirectory + ROOT_DIRECTORY + '/' +INDIVIDUAL_REPORTS_DIRECTORY;
+    let path = this.file.externalRootDirectory + ROOT_DIRECTORY + '/' + INDIVIDUAL_REPORTS_DIRECTORY;
     fileTransfer.download(downloadUrl, path + fileName).then((entry) => {
       console.log('download complete: ' + entry.toURL());
       let url = entry.toURL();
@@ -92,7 +95,7 @@ export class IndividualReportPage {
       this.fileOpener.open(url, 'application/pdf');
     }, (error) => {
       loading.dismiss();
-      this.alertService.presentAlert('Alert','Something went wrong.Please try again later.');
+      this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later.');
       console.log(error);
     });
   }
@@ -109,18 +112,16 @@ export class IndividualReportPage {
               this.individualReports.sort((a, b) => {
                 return <any > new Date(b.statusUpdatedOn) - < any > new Date(a.statusUpdatedOn);
               });
-            } 
-            else if (result["status"] == "auth-fail") {
-              this.alertService.presentAlert('Alert',result["message"]);
+            } else if (result["status"] == "auth-fail") {
+              this.alertService.presentAlert('Alert', result["message"]);
               this.storage.set("isLogOut", true);
               this.router.navigate(['/login']);
-            } 
-            else if (result["status"] == 'version-failed') {
+            } else if (result["status"] == 'version-failed') {
 
-              this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert')
-  
-            }else {
-              this.alertService.presentAlert('Alert',result["message"]);
+              this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert')
+
+            } else {
+              this.alertService.presentAlert('Alert', result["message"]);
             }
             if (result["status"] != 'success') {
               this.skeltonArray = [];
@@ -130,7 +131,7 @@ export class IndividualReportPage {
             }
           }, (err) => {
             this.skeltonArray = [];
-            this.showNoData=true;
+            this.showNoData = true;
             this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
           });
       }
@@ -140,7 +141,7 @@ export class IndividualReportPage {
   ionViewWillEnter() {
 
     this.networkType = this.network.type;
-  
+
     //  this.networkType = 'none';
 
     this.events.subscribe('network:offline', (data) => {
@@ -148,13 +149,13 @@ export class IndividualReportPage {
       if (this.router.url == '/individual-report') {
         this.storage.set("individualrepALert", true);
         setTimeout(() => {
-        this.storage.get('individualrepALert').then((result) => {
-          if (result == true) {
-            this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "individualReportAlert");
-            this.storage.set("individualrepALert", false); 
-          }
-        })
-      }, 2000);
+          this.storage.get('individualrepALert').then((result) => {
+            if (result == true) {
+              this.alertService.presentAlert("Alert", "Your device is not connected to internet. Please turn on mobile data/ connect to wifi to view report.", "individualReportAlert");
+              this.storage.set("individualrepALert", false);
+            }
+          })
+        }, 2000);
       }
     })
 
