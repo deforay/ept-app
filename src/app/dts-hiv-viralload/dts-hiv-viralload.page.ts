@@ -981,11 +981,8 @@ export class DtsHivViralloadPage implements OnInit {
             this.alertService.presentAlert('Alert', result["message"]);
             this.storage.set("isLogOut", true);
             this.router.navigate(['/login']);
-          } else if (result["status"] == 'version-failed') {
-
-            this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert')
-
-          } else {
+          }
+           else {
 
             this.alertService.presentAlert('Alert', result["message"]);
           }

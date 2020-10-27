@@ -308,12 +308,12 @@ export class AppComponent {
     this.events.subscribe('loggedPartiName', (result) => {
       this.participantName = result;
     })
-    if (!this.appVersionNumber) {
-      //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-      this.appVersionNumber = "2.0.0";
-      this.storage.set('appVersionNumber', this.appVersionNumber);
-      //end
-    }
+    // if (!this.appVersionNumber) {
+    //   //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
+    //   this.appVersionNumber = "2.1.0";
+    //   this.storage.set('appVersionNumber', this.appVersionNumber);
+    //   //end
+    // }
 
     this.events.subscribe('setLoggedOutFCM:true', (data) => {
       this.storage.get('appVersionNumber').then((appVersionNumber) => {
@@ -350,7 +350,8 @@ export class AppComponent {
   }
 
   logout() {
-    this.alertService.presentAlertConfirm('Logout', '', 'Are you sure you want to logout?', 'No', 'Yes', 'logoutAlert');
+    // this.alertService.presentAlertConfirm('Logout', '', 'Are you sure you want to logout?', 'Server Logout', 'Close App', 'logoutAlert');
+    this.alertService.presentAlertMultipleButtons('Logout', '', 'Are you sure you want to logout?', 'Cancel',' Yes (requires internet to login again)', 'No, just exit app', 'logoutAlert');
     this.selectedIndex = 0;
   }
 
