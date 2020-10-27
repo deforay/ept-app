@@ -41,17 +41,11 @@ export class AlertService {
         role: 'cancel',
         cssClass: 'secondary',
         handler: () => {
-
         }
       }, {
         text: leftSideButtonText,
         cssClass: 'primary',
         handler: () => {
-          if (alertName == 'logoutAlert') {
-            this.router.navigate(['/enter-app-password']);
-            this.storage.set("isLogOut", false);
-            this.eventCtrl.publish('setLoggedOutFCM:true');
-          }
           if (alertName == 'playStoreAlert') {
             this.market.open('com.deforay.ept');
           }
@@ -72,6 +66,47 @@ export class AlertService {
 
     await alert.present();
   }
+
+  async presentAlertMultipleButtons(headerMessage: string, subtitle: string, contentMessage: string, firstButtonText: string, secondButtonText: string, thirdButtonText: string, alertName ? : any) {
+    const alert = await this.alertController.create({
+      header: headerMessage,
+      subHeader: subtitle,
+      message: contentMessage,
+      mode: "ios",
+      buttons: [{
+        text: firstButtonText,
+        role: 'cancel',
+        handler: () => {
+        }
+      },
+      {
+        text: secondButtonText,
+        cssClass: 'secondary',
+        handler: () => {
+          if (alertName == 'logoutAlert') {
+            this.router.navigate(['/login'], {replaceUrl: true});
+            this.storage.set("isLogOut", false);
+            this.eventCtrl.publish('setLoggedOutFCM:true');
+          }
+        }
+      },
+      {
+        text: thirdButtonText,
+        cssClass: 'secondary',
+        handler: () => {
+          if (alertName == 'logoutAlert') {
+            this.router.navigate(['/enter-app-password']);
+            this.storage.set("isLogOut", false);
+            this.eventCtrl.publish('setLoggedOutFCM:true');
+          }
+        }
+      },
+    ]
+    });
+
+    await alert.present();
+  }
+
 
   async presentAlert(headerMessage: string, contentMessage: string, alertName ? : any) {
     const element = await this.alertController.getTop();

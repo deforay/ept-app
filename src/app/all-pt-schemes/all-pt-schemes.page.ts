@@ -348,7 +348,7 @@ import {
                 }
                 //calling Shipment API();
                 this.CrudServiceService.getData('/api/shipments/get/?authToken=' + result['data'].authToken + '&appVersion=' + this.appVersionNumber).then(result => {
-
+                 
                     if (result["status"] == 'success') {
 
                       this.shippingsOriginalArray = result['data'];
@@ -370,17 +370,15 @@ import {
                                   this.alertService.presentAlert('Alert', result["message"]);
                                   this.storage.set("isLogOut", true);
                                   this.router.navigate(['/login']);
-
-                                } else if (result["status"] == 'version-failed') {
-
-                                  this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
-                                } else {
+                                }
+                                 else {
 
                                   this.alertService.presentAlert('Alert', result["message"]);
                                 }
                               }
 
                               , (err) => {
+                               
                                 this.showNoData = true;
                                 this.skeltonArray = [];
                                 if (this.networkType != 'none') {
@@ -395,12 +393,8 @@ import {
                       this.alertService.presentAlert('Alert', result["message"]);
                       this.storage.set("isLogOut", true);
                       this.router.navigate(['/login']);
-
-                    } else if (result["status"] == 'version-failed') {
-
-                      this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
-
-                    } else {
+                    }
+                     else {
 
                       this.alertService.presentAlert('Alert', result["message"]);
                     }
@@ -414,6 +408,7 @@ import {
                   }
 
                   , (err) => {
+                  
                     this.showNoData = true;
                     this.skeltonArray = [];
                     if (this.networkType != 'none') {
@@ -426,12 +421,9 @@ import {
                 this.alertService.presentAlert('Alert', result["message"]);
                 this.storage.set("isLogOut", true);
                 this.router.navigate(['/login']);
-
-              } else if (result["status"] == 'version-failed') {
-
-                this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
-
-              } else {
+              }
+      
+              else {
 
                 this.alertService.presentAlert('Alert', result["message"]);
               }

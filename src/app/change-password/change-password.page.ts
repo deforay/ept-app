@@ -138,11 +138,8 @@ export class ChangePasswordPage implements OnInit {
                     replaceUrl: true
                   });
 
-                } else if (result["status"] == 'version-failed') {
-
-                  this.alertService.presentAlertConfirm('Alert','',result["message"],'No','Yes','playStoreAlert');
-
-                } else {
+                }
+                 else {
                   this.alertService.presentAlert("Alert", result["message"]);
                 }
               }, (err) => {

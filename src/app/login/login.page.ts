@@ -86,8 +86,6 @@ export class LoginPage implements OnInit {
   shippingsArray = [];
   shipmentFormArray = [];
   authToken;
-  stringToInsert: any;
-  blob: any;
 
   constructor(
     public menu: MenuController,
@@ -163,6 +161,7 @@ export class LoginPage implements OnInit {
               }
               this.CrudServiceService.postData('/api/login', loginJSON)
                 .then((result) => {
+                 
                   if (result["status"] == 'success') {
 
                     this.authToken = result['data'].authToken;
@@ -201,11 +200,8 @@ export class LoginPage implements OnInit {
 
                       this.FcmService.onTokenRefresh();
                     }
-                  } else if (result["status"] == 'version-failed') {
-
-                    this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
-
-                  } else {
+                  }
+                   else {
                     this.alertService.presentAlert('Alert', result["message"], '');
                   }
 

@@ -115,10 +115,6 @@ export class ShipmentFilterComponent implements OnInit {
             this.storage.set("isLogOut", true);
             this.router.navigate(['/login']);
 
-          } else if (result["status"] == 'version-failed') {
-
-            this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
-
           } else {
             if (this.networkType != 'none') {
               this.alertService.presentAlert('Alert', result["message"]);

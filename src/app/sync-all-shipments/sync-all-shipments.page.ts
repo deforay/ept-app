@@ -297,10 +297,6 @@ export class SyncAllShipmentsPage implements OnInit {
             this.storage.set("isLogOut", true);
             this.router.navigate(['/login']);
 
-          } else if (result["status"] == 'version-failed') {
-
-            this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
-
           } else {
 
             this.alertService.presentAlert('Alert', result["message"]);
@@ -389,11 +385,6 @@ export class SyncAllShipmentsPage implements OnInit {
               this.router.navigate(['/login']);
             }
 
-          } else if (result["status"] == 'version-failed') {
-            if (this.versionFailAlertCount == 0) {
-              this.alertService.presentAlertConfirm('Alert', '', result["message"], 'No', 'Yes', 'playStoreAlert');
-              this.versionFailAlertCount++;
-            }
           } else {
             if (this.failureAlertCount == 0) {
               this.alertService.presentAlert('Alert', result["message"]);
