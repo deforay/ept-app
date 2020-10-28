@@ -59,6 +59,9 @@ export class AlertService {
               replaceUrl: true
             });
           }
+          if (alertName == 'primaryEmailAlert') {
+            this.eventCtrl.publish('isChangedPrimaryEmail:true');
+          }
         }
       }],
       backdropDismiss: false
@@ -126,6 +129,9 @@ export class AlertService {
           }
           if (alertName == 'offlineSyncMsg') {
             this.router.navigate(['/all-pt-schemes']);
+          }
+          if (alertName == 'resendMailAlert') {
+            this.eventCtrl.publish('resendMail:true');
           }
         }
       }],
