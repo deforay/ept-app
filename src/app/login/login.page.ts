@@ -163,7 +163,7 @@ export class LoginPage implements OnInit {
                 .then((result) => {
                  
                   if (result["status"] == 'success') {
-
+                 
                     this.authToken = result['data'].authToken;
                     this.storage.set("isLogOut", false);
                     this.events.publish("loggedPartiName", result['data'].name);
@@ -200,10 +200,29 @@ export class LoginPage implements OnInit {
 
                       this.FcmService.onTokenRefresh();
                     }
+                    if(result['data'].resendMail){
+
+                      this.alertService.presentAlert('Alert', result["message"], 'resendMailAlert');
+                     
+                    }
+                    this.events.subscribe('resendMail:true', (data) => {
+                      this.CrudServiceService.getData(result['data'].resendMail).then(result => {
+                        if (result["status"] == 'success') {
+                          this.alertService.presentAlert('Success', result["message"], '');
+                        }
+                        else {
+                          this.alertService.presentAlert('Alert', result["message"]);
+                        }
+                      }, (err) => {
+                        this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+                      });
+                    })
                   }
                    else {
                     this.alertService.presentAlert('Alert', result["message"], '');
                   }
+
+                 
 
                 }, (err) => {
                   this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');

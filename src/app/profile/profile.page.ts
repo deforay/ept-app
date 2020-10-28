@@ -51,12 +51,13 @@ export class ProfilePage implements OnInit {
   authToken: any;
   profileDetailsArray: any = [];
   primaryEmail;
+  oldPrimaryEmail;
   firstName;
   lastName;
   secEmailAddress;
   cellPhoneNo;
   phoneNo;
-  networkType:string;
+  networkType: string;
 
   constructor(
     public LoaderService: LoaderService,
@@ -90,10 +91,10 @@ export class ProfilePage implements OnInit {
     } else {
       this.getProfileDetailsAPI();
     }
-  
+
   }
 
-  getLocalProfileDetails(){
+  getLocalProfileDetails() {
 
     this.storage.get('profileDetails').then((profileDetails) => {
       if (profileDetails) {
@@ -108,7 +109,7 @@ export class ProfilePage implements OnInit {
     })
   }
 
-  getProfileDetailsAPI(){
+  getProfileDetailsAPI() {
     this.storage.get('appVersionNumber').then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
@@ -117,15 +118,19 @@ export class ProfilePage implements OnInit {
             this.authToken = partiLoginResult.authToken;
             this.CrudServiceService.getData('/api/participant/get-profile-check/?authToken=' + this.authToken + '&appVersion=' + this.appVersionNumber)
               .then(result => {
+
                 if (result["status"] == 'success') {
+
                   this.profileDetailsArray = result['data'];
                   this.storage.set('profileDetails', result['data']);
                   this.primaryEmail = this.profileDetailsArray.primaryEmail;
+                  this.oldPrimaryEmail = this.profileDetailsArray.primaryEmail;
                   this.firstName = this.profileDetailsArray.firstName;
                   this.lastName = this.profileDetailsArray.lastName;
                   this.secEmailAddress = this.profileDetailsArray.secondaryEmail;
                   this.cellPhoneNo = this.profileDetailsArray.mobile;
                   this.phoneNo = this.profileDetailsArray.phone;
+
                 } else if (result["status"] == "auth-fail") {
                   this.alertService.presentAlert('Alert', result["message"]);
                   this.storage.set("isLogOut", true);
@@ -133,6 +138,7 @@ export class ProfilePage implements OnInit {
                 } else {
                   this.alertService.presentAlert('Alert', result["message"]);
                 }
+
               }, (err) => {
                 this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
               });
@@ -148,43 +154,55 @@ export class ProfilePage implements OnInit {
     } else {
       if (profilePageForm.valid) {
 
-        let profileJSON = {
-          "authToken": this.authToken,
-          "appVersion": this.appVersionNumber,
-          "dmId": this.profileDetailsArray.dmId,
-          "primaryEmail": this.primaryEmail,
-          "firstName": this.firstName,
-          "lastName": this.lastName,
-          "secondaryEmail": this.secEmailAddress,
-          "mobile": this.cellPhoneNo,
-          "phone": this.phoneNo
+        if (this.primaryEmail != this.oldPrimaryEmail) {
+
+          this.alertService.presentAlertConfirm('Alert', '', "Please note that your primary email is used to login to ePT. If you change and verify it, the new email id will become your login id", 'No', 'Yes', 'primaryEmailAlert');
+
+        } else {
+          this.updateProfileAPI();
+        };
+        if (this.router.url == '/profile') {
+          this.events.subscribe('isChangedPrimaryEmail:true', (data) => {
+            this.updateProfileAPI();
+          })
         }
-        this.CrudServiceService.postData('/api/participant/update-profile', profileJSON).then((result) => {
-
-          if (result["status"] == 'success') {
-            this.events.publish("loggedPartiName", this.firstName.concat(' ' + this.lastName));
-            this.alertService.presentAlert('Success', result['message']);
-            this.router.navigate(['/all-pt-schemes'], {
-              replaceUrl: true
-            });
-          } else if (result["status"] == "force-login") {
-            this.alertService.presentAlert('Success', result["message"]);
-            this.router.navigate(['/login'], {
-              replaceUrl: true
-            });
-          } else if (result["status"] == "auth-fail") {
-            this.alertService.presentAlert('Alert', result["message"]);
-            this.storage.set("isLogOut", true);
-            this.router.navigate(['/login']);
-          } else {
-
-            this.alertService.presentAlert('Alert', result["message"]);
-          }
-        }, (err) => {
-          this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
-        });
       }
     }
+  }
+
+  updateProfileAPI() {
+
+    let profileJSON = {
+      "authToken": this.authToken,
+      "appVersion": this.appVersionNumber,
+      "dmId": this.profileDetailsArray.dmId,
+      "primaryEmail": this.primaryEmail,
+      "firstName": this.firstName,
+      "lastName": this.lastName,
+      "secondaryEmail": this.secEmailAddress,
+      "mobile": this.cellPhoneNo,
+      "phone": this.phoneNo
+    }
+    this.CrudServiceService.postData('/api/participant/update-profile', profileJSON).then((result) => {
+
+      if (result["status"] == 'success') {
+        this.events.publish("loggedPartiName", this.firstName.concat(' ' + this.lastName));
+        this.alertService.presentAlert('Success', result['message']);
+        this.router.navigate(['/all-pt-schemes'], {
+          replaceUrl: true
+        });
+      } else if (result["status"] == "auth-fail") {
+        this.alertService.presentAlert('Alert', result["message"]);
+        this.storage.set("isLogOut", true);
+        this.router.navigate(['/login']);
+      } else {
+
+        this.alertService.presentAlert('Alert', result["message"]);
+      }
+    }, (err) => {
+      this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+    });
+
   }
 
   back() {
