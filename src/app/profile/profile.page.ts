@@ -30,6 +30,9 @@ import {
 import {
   Network
 } from '@ionic-native/network/ngx';
+import {
+  AlertController
+} from '@ionic/angular';
 /** Error when invalid control is dirty, touched, or submitted. */
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
@@ -66,7 +69,8 @@ export class ProfilePage implements OnInit {
     private router: Router,
     public CrudServiceService: CrudServiceService,
     public events: Events,
-    public network: Network) {
+    public network: Network,
+    public alertController: AlertController,) {
 
   }
 
@@ -148,24 +152,38 @@ export class ProfilePage implements OnInit {
     })
   }
 
-  updateProfile(profilePageForm: NgForm) {
+  async updateProfile(profilePageForm: NgForm) {
     if (this.network.type == 'none') {
       this.alertService.presentAlert('Alert', "You are offline.Please connect with online");
     } else {
       if (profilePageForm.valid) {
 
         if (this.primaryEmail != this.oldPrimaryEmail) {
-
-          this.alertService.presentAlertConfirm('Alert', '', "Please note that your primary email is used to login to ePT. If you change and verify it, the new email id will become your login id", 'No', 'Yes', 'primaryEmailAlert');
-
+         
+          const alert = await this.alertController.create({
+            header: "Alert",
+            subHeader: "Please note that your primary email is used to login to ePT. If you change and verify it, the new email id will become your login id",
+            message: "",
+            mode: "ios",
+            buttons: [{
+              text: 'No',
+              role: 'cancel',
+              cssClass: 'secondary',
+              handler: () => {
+              }
+            }, {
+              text: 'Yes',
+              cssClass: 'primary',
+              handler: () => {
+                this.updateProfileAPI();
+              }
+            }],
+            backdropDismiss: false
+          });
+          await alert.present();
         } else {
           this.updateProfileAPI();
         };
-        if (this.router.url == '/profile') {
-          this.events.subscribe('isChangedPrimaryEmail:true', (data) => {
-            this.updateProfileAPI();
-          })
-        }
       }
     }
   }

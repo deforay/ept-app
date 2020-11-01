@@ -51,6 +51,9 @@ import {
   AngularFireModule
 } from '../../../node_modules/@angular/fire/firebase.app.module';
 import * as googleServiceJSON from '../../../google-services.json';
+import {
+  AlertController
+} from '@ionic/angular';
 /** Error when invalid control is dirty, touched, or submitted. */
 
 export class MyErrorStateMatcher implements ErrorStateMatcher {
@@ -86,6 +89,8 @@ export class LoginPage implements OnInit {
   shippingsArray = [];
   shipmentFormArray = [];
   authToken;
+  resendEmailLink;
+  resendEmailMessage;
 
   constructor(
     public menu: MenuController,
@@ -99,7 +104,8 @@ export class LoginPage implements OnInit {
     private FcmService: FcmService,
     public events: Events,
     public AngularFireModule: AngularFireModule,
-   ) {
+    public alertController: AlertController
+  ) {
 
   }
   ngOnInit() {
@@ -133,7 +139,7 @@ export class LoginPage implements OnInit {
     this.storage.remove('appPin');
   }
 
-  login() {
+  async login() {
 
     if (this.network.type == 'none') {
       this.alertService.presentAlert('Alert', "You are offline.Please connect with online");
@@ -160,10 +166,15 @@ export class LoginPage implements OnInit {
                 "appVersion": this.appVersionNumber
               }
               this.CrudServiceService.postData('/api/login', loginJSON)
-                .then((result) => {
+                .then(async (result) => {
                  
+                  if(result['data']){
+                  this.resendEmailLink = result['data'].resendMail ? result['data'].resendMail : '';
+                  }
+                  this.resendEmailMessage = result["message"] ? result["message"]:'';
+
                   if (result["status"] == 'success') {
-                 
+
                     this.authToken = result['data'].authToken;
                     this.storage.set("isLogOut", false);
                     this.events.publish("loggedPartiName", result['data'].name);
@@ -190,40 +201,35 @@ export class LoginPage implements OnInit {
                     this.storage.set('participantLogin', result['data']);
                     this.router.navigate(['/app-password']);
                     this.getAllShipmentsAPI();
+
                     if (result['data'].pushStatus == 'not-send') {
-                   
-                      googleServiceJSON['default']= result['data'].fcmJsonFile;
+
+                      googleServiceJSON['default'] = result['data'].fcmJsonFile;
 
                       console.log(googleServiceJSON['default']);
-                  
+
                       AngularFireModule.initializeApp(result['data'].fcm);
 
                       this.FcmService.onTokenRefresh();
                     }
-                    if(result['data'].resendMail){
+                    if (result['data'].resendMail) {
 
-                      this.alertService.presentAlert('Alert', result["message"], 'resendMailAlert');
-                     
+                      this.resendAlert();
                     }
-                    this.events.subscribe('resendMail:true', (data) => {
-                      this.CrudServiceService.getData(result['data'].resendMail).then(result => {
-                        if (result["status"] == 'success') {
-                          this.alertService.presentAlert('Success', result["message"], '');
-                        }
-                        else {
-                          this.alertService.presentAlert('Alert', result["message"]);
-                        }
-                      }, (err) => {
-                        this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
-                      });
-                    })
-                  }
-                   else {
-                    this.alertService.presentAlert('Alert', result["message"], '');
-                  }
 
-                 
+                  } else {
 
+                    if (result['data']) {
+                    if (result['data'].resendMail) {
+
+                      this.resendAlert();
+
+                    }
+                   } else {
+                      this.alertService.presentAlert('Alert', result["message"], '');
+                    }
+
+                  }
                 }, (err) => {
                   this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
                 });
@@ -234,6 +240,36 @@ export class LoginPage implements OnInit {
         })
       }
     }
+
+  }
+
+
+  resendEmailAPI() {
+    this.CrudServiceService.getData(this.resendEmailLink).then(result => {
+      if (result["status"] == 'success') {
+        this.alertService.presentAlert('Success', result["message"], '');
+      } else {
+        this.alertService.presentAlert('Alert', result["message"]);
+      }
+    }, (err) => {
+      this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+    });
+  }
+
+  async resendAlert() {
+    const alert = await this.alertController.create({
+      header: "Alert",
+      message: this.resendEmailMessage,
+      mode: "ios",
+      buttons: [{
+        text: 'OK',
+        handler: () => {
+          this.resendEmailAPI();
+        }
+      }],
+      backdropDismiss: false
+    });
+    await alert.present();
   }
 
   getAllShipmentsAPI() {
@@ -268,7 +304,7 @@ export class LoginPage implements OnInit {
 }
 
 export interface IWriteOptions {
-  replace?: boolean;
-  append?: boolean;
-  truncate?: number; // if present, number of bytes to truncate file to before writing
+  replace ? : boolean;
+  append ? : boolean;
+  truncate ? : number; // if present, number of bytes to truncate file to before writing
 }
