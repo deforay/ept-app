@@ -308,12 +308,12 @@ export class AppComponent {
     this.events.subscribe('loggedPartiName', (result) => {
       this.participantName = result;
     })
-    if (!this.appVersionNumber) {
-      //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
-      this.appVersionNumber = "2.0.0";
-      this.storage.set('appVersionNumber', this.appVersionNumber);
-      //end
-    }
+    // if (!this.appVersionNumber) {
+    //   //start....need to comment this code while taking build since app version works in mobile.To check in browser we hardcoded...
+    //   this.appVersionNumber = "2.1.0";
+    //   this.storage.set('appVersionNumber', this.appVersionNumber);
+    //   //end
+    // }
 
     this.events.subscribe('setLoggedOutFCM:true', (data) => {
       this.storage.get('appVersionNumber').then((appVersionNumber) => {
