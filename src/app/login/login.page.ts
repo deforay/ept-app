@@ -262,7 +262,13 @@ export class LoginPage implements OnInit {
       message: this.resendEmailMessage,
       mode: "ios",
       buttons: [{
-        text: 'OK',
+        text: 'Cancel',
+        role: 'cancel',
+        cssClass: 'secondary',
+        handler: () => {
+        }
+      },{
+        text: 'Resend Verification Link',
         handler: () => {
           this.resendEmailAPI();
         }

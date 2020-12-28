@@ -31,14 +31,6 @@ import { FcmService } from '../app/fcm.service';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { Firebase } from '@ionic-native/firebase/ngx';
-const config = {
-  apiKey: "AIzaSyBBj7JGprrS_cswOVDqFNvUHPfkzIwAavc",
-  authDomain: "e-pt-a1c0d.firebaseapp.com",
-  databaseURL: "https://e-pt-a1c0d.firebaseio.com",
-  projectId: "e-pt-a1c0d",
-  storageBucket: "e-pt-a1c0d.appspot.com",
-  messagingSenderId: "679234009987"
-};
 @NgModule({
   declarations: [
     AppComponent,
@@ -56,10 +48,8 @@ const config = {
     HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-  //  AngularFireModule,
-    //AngularFirestoreModule,
+    AngularFireModule,
     AngularFirestoreModule,
-    AngularFireModule.initializeApp(config),
     IonicStorageModule.forRoot(),
   ],
   providers: [
