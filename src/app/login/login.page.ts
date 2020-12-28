@@ -133,6 +133,7 @@ export class LoginPage implements OnInit {
     this.serverHostFormControl.setValue('');
     this.serverHostFormControl.markAsUntouched();
     this.serverHostFormControl.setErrors(null);
+    
   }
 
   ionViewWillEnter() {
