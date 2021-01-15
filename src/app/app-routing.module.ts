@@ -64,6 +64,10 @@ const routes: Routes = [
     loadChildren: () => import('./rapid-hiv-recency-testing/rapid-hiv-recency-testing.module').then( m => m.RapidHIVRecencyTestingPageModule)
   },
   {
+    path: 'covid-19',
+    loadChildren: () => import('./covid-19/covid-19.module').then( m => m.covid19PageModule)
+  },
+  {
     path: 'notification',
     loadChildren: () => import('./notification/notification.module').then( m => m.NotificationPageModule)
   }

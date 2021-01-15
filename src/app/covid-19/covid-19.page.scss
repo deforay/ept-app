@@ -1,0 +1,68 @@
+/* CSS Changes in DTS - HIV Serology Page */
+
+ion-row {
+    p.accessMsg{
+        color: #f44336;
+    text-align: center;
+    font-size: 14.5px;
+    width: 100%;
+    margin-bottom: 0px;
+    }
+}
+ion-grid ion-row ion-col{
+        p{
+        margin:5px;
+    }
+} 
+.resultAbbreviation{
+    float: right;
+    margin: -18px !important;
+    margin-top: 1px!important;
+    color: black;
+    font-size: 14px;
+}
+ion-grid ion-row ion-col.grid-readonly-col p{
+   margin: 0px!important;
+}
+ion-grid ion-row ion-col:nth-child(3n){
+    text-align: right;
+} 
+.card-div{
+    width: calc(100% - 20px) !important;
+    margin: auto !important;
+}
+.card-div mat-card{
+    padding:0;
+}
+.partiValues{
+    font-size: 13px;
+}
+
+.mat-radio-group .mat-radio-button{
+    padding-left: 15px !important;
+    padding-right: 15px !important;
+   }
+   .panelHeading{
+    padding: 0px;
+}
+.clearDateIcon{
+    position: absolute;
+    margin-right: -15px;
+    margin-left: -15px;
+    margin-top: -3px;
+}
+.testKitRow{
+    margin-top: 10px;
+}
+.text-center.native-btn.summarizeButtons{
+    width: 120px;
+}
+.text-center.native-btn.summarizeButtons.confirm{
+  float: right;
+}
+.sampleRow{
+    margin-top: 10px;
+}
+.text-title-color.covid19{
+    font-size: 13.4px !important;
+}

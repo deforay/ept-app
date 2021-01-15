@@ -681,6 +681,18 @@ import {
               }
             }
           }
+
+          if (this.TestFormArray[0].schemeType == 'covid19') {
+            if (isView == 'true') {
+              this.router.navigate(['/covid-19']);
+            } else {
+              if (this.TestFormArray[0].covid19Data.access.status == 'success') {
+                this.router.navigate(['/covid-19']);
+              } else {
+                this.alertService.presentAlert('Alert', this.TestFormArray[0].covid19Data.access.message)
+              }
+            }
+          }
         }
       }
     })
