@@ -323,9 +323,8 @@
           <ion-row>
             <ion-col size="12" class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Number of tests {{shipmentData.numberOfTests}} <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <mat-select [(ngModel)]="shipmentData.numberOfTests" (ngModelChange)="changeTestTypeArray(shipmentData.numberOfTests)" name="numberOfTests" #numberOfTests="ngModel" 
-                required [disabled]="isView=='true'" data-alert="Please select Number of tests" id="numberOfTests">
+                <mat-label>Number of tests<span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
+                <mat-select [(ngModel)]="shipmentData.numberOfTests" name="numberOfTests" #numberOfTests="ngModel" required [disabled]="isView=='true'" data-alert="Please select Number of tests" id="numberOfTests">
                   <mat-option>--Select--</mat-option>
                   <mat-option *ngFor="let numberOfTests of shipmentData.numberOfTestsDropdown" [value]="numberOfTests.value">
                     {{numberOfTests.show}}
@@ -423,12 +422,12 @@
     </form>
 
 
-    <mat-card class="main-card-panel" *ngIf="showTestTypePanel && (ptPanelNotTested==false || !ptPanelNotTested)">
+    <mat-card class="main-card-panel" *ngIf="showTestTypePanel && shipmentData.numberOfTests && (ptPanelNotTested==false || !ptPanelNotTested)">
       <mat-card-title> Test Type Details</mat-card-title>
       <mat-card-content>
     <form #testTypePanelForm="ngForm" novalidate> 
       <div *ngFor="let testTypeItem of testTypeTextArray;let i = index;">
-        <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)">
+        <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="(shipmentData.numberOfTests==1 && testTypeItem=='Test-1') || (shipmentData.numberOfTests==2 && (testTypeItem=='Test-1' || testTypeItem=='Test-2')) || (shipmentData.numberOfTests==3 && (testTypeItem=='Test-1' || testTypeItem=='Test-2' || testTypeItem=='Test-3'))">
              <mat-expansion-panel-header>
             <mat-panel-title>
               <ion-grid class="panelHeading">
@@ -447,10 +446,10 @@
             <ion-col size="12"  class="grid-readonly-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Test Type</mat-label>
-                <mat-select [(ngModel)]="testTypeModel.typeValue[i]" name="testTypeName{{i}}" #testTypeName="ngModel"                 
-                (ngModelChange)="getSelectedTestTypeName($event,i,testTypeNameArray[testTypeItem].data)"  [disabled]="isView=='true'">
+                <mat-select [(ngModel)]="testTypeModel.typeValue[i]" name="covidTestTypeName{{i}}" #covidTestTypeName="ngModel"                 
+                (ngModelChange)="getSelectedTestTypeName($event,i,testTypeDropDownArray[testTypeItem].data)"  [disabled]="isView=='true'">
                   <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let testTypeNameItem of testTypeNameArray[testTypeItem].data" 
+                  <mat-option *ngFor="let testTypeNameItem of testTypeDropDownArray[testTypeItem].data" 
                     [value]="testTypeNameItem.value" >
                     {{testTypeNameItem.show}}
                   </mat-option>
@@ -500,7 +499,7 @@
 </mat-card>
 <form #sampleDetailsForm="ngForm" novalidate> 
 
-    <mat-card class="main-card-panel" *ngIf="showSampleData && (ptPanelNotTested==false || !ptPanelNotTested)">
+    <mat-card class="main-card-panel" *ngIf="showSampleData && shipmentData.numberOfTests && (ptPanelNotTested==false || !ptPanelNotTested)">
       <mat-card-title> Sample Details</mat-card-title>
       <mat-card-content>
       <div *ngFor="let sampleName of samplesNameArr;let i = index;">
@@ -522,7 +521,7 @@
               </ion-grid>
             </mat-panel-title>
           </mat-expansion-panel-header>
-          <ion-row *ngIf="sampleDetailsArray.resultStatus[0]==true" class="sampleRow">
+          <ion-row *ngIf="(sampleDetailsArray.resultStatus[0]==true && ((shipmentData.numberOfTests==1 ||shipmentData.numberOfTests==2 ||shipmentData.numberOfTests==3) && sampleDetailsArray.resultsText[0]=='Result-1'))" class="sampleRow">
            <!-- [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true && 
             !result1Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
            
@@ -541,7 +540,7 @@
             </ion-col>
           </ion-row>
       
-          <ion-row *ngIf="sampleDetailsArray.resultStatus[1]">
+          <ion-row *ngIf="(sampleDetailsArray.resultStatus[1] && ((shipmentData.numberOfTests==2 ||shipmentData.numberOfTests==3) && sampleDetailsArray.resultsText[1]=='Result-2'))">
                 <!-- [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
           !result2Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
             <ion-col  size="12" class="grid-readonly-col">
@@ -561,7 +560,7 @@
       
           
             <!-- <ion-row *ngIf="sampleDetailsArray.resultStatus[2]"> -->
-              <ion-row *ngIf="((shipmentData['screeningTest']=='no' && ((sampleDetailsArray.resultStatus[2] && shipmentData.algorithmUsed !='myanmarNationalDtsAlgo') || (shipmentData.algorithmUsed =='myanmarNationalDtsAlgo'))) || (shipmentData['screeningTest']=='yes' && sampleDetailsArray.resultStatus[2]==true))">
+              <ion-row *ngIf="(sampleDetailsArray.resultStatus[2] && (shipmentData.numberOfTests==3 && sampleDetailsArray.resultsText[2]=='Result-3'))">
                     <!--  [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&
                  !result3Arr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
              <ion-col  size="12" class="grid-readonly-col">
@@ -726,7 +725,7 @@
 
       <mat-action-row>
         <button mat-button color="primary" (click)="prevStep()">Previous</button>
-        <button mat-button color="warn" *ngIf="summarizeForm==false && isView!='true'" (click)="submitSerologyForm(shipmentPanelForm,sampleDetailsForm,otherInfoPanelForm)">Submit</button>
+        <button mat-button color="warn" *ngIf="summarizeForm==false && isView!='true'" (click)="submitCovid19Form(shipmentPanelForm,sampleDetailsForm,otherInfoPanelForm)">Submit</button>
       </mat-action-row>
     </mat-expansion-panel>
     </form>
