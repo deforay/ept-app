@@ -309,9 +309,3 @@ export class LoginPage implements OnInit {
     this.router.navigate(['/forgot-password']);
   }
 }
-
-export interface IWriteOptions {
-  replace ? : boolean;
-  append ? : boolean;
-  truncate ? : number; // if present, number of bytes to truncate file to before writing
-}
