@@ -217,9 +217,9 @@
             <ion-col size="12"  class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Sample Rehydration Date  <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [matDatepicker]="sampleRhdPicker" name="seroSampleRhdDate" #seroSampleRhdDate="ngModel"  [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
+                <input matInput [matDatepicker]="sampleRhdPicker" name="covidSampleRhdDate" #covidSampleRhdDate="ngModel"  [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   [(ngModel)]="shipmentData.sampleRehydrationDate" placeholder="Choose Sample Rehydration Date" 
-                  [required]="isSampleRehydDateMandatory" [readonly]="isView!='true'" [disabled]="isView=='true'" data-alert="Please choose Sample Rehydration Date" id="sampleRehydrationDate" >
+                  required [readonly]="isView!='true'" [disabled]="isView=='true'" data-alert="Please choose Sample Rehydration Date" id="sampleRehydrationDate" >
                 <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
                 <ion-icon name="close" *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearSampleRehydDate()"></ion-icon>
                 <mat-datepicker #sampleRhdPicker  [disabled]="isView=='true'"></mat-datepicker>
@@ -258,32 +258,18 @@
           <ion-row>
             <ion-col size="12" class="grid-input-col" *ngIf="isPartiEditModeRec">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Mode of Receipt <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
+                <mat-label>Mode of Receipt</mat-label>
                 <mat-select [(ngModel)]="shipmentData.modeOfReceipt" name="rmode" #rmode="ngModel" 
-                [required]="isPartiEditModeRec" [disabled]="isView=='true'" data-alert="Please select Mode Of Receipt" id="modeOfReceipt">
+                [disabled]="isView=='true'" id="modeOfReceipt">
                   <mat-option>--Select--</mat-option>
                   <mat-option *ngFor="let modeRec of shipmentData.modeOfReceiptDropdown" [value]="modeRec.value">
                     {{modeRec.show}}
                   </mat-option>
                 </mat-select>
-                <mat-error *ngIf="!shipmentData.modeOfReceipt && isPartiEditModeRec">Please choose the Mode Of Receipt </mat-error>
               </mat-form-field>
             </ion-col>
           </ion-row>
 
-          <!-- <ion-row *ngIf="isQCDoneShow">
-          <ion-col size="12">
-              <mat-label>QC Done</mat-label> 
-             <mat-radio-group
-              aria-labelledby="example-radio-group-label"
-              class="login-full-width grid-col-form"
-              [(ngModel)]="qcDone">
-              <mat-radio-button class="example-radio-button" *ngFor="let qcData of qcRadioArray" [value]="qcData.value">
-                {{qcData.show}}
-              </mat-radio-button>
-            </mat-radio-group> 
-          </ion-col>
-        </ion-row> -->
           <ion-row *ngIf="isQCDoneShow && participantQcAccess">
             <ion-col size="12">
               <mat-label class="matLabel" style="margin-left: 5px;font-size: 13px;">QC Done <span class="danger-text">*</span></mat-label>
@@ -324,13 +310,13 @@
             <ion-col size="12" class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Number of tests<span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <mat-select [(ngModel)]="shipmentData.numberOfTests" name="numberOfTests" #numberOfTests="ngModel" required [disabled]="isView=='true'" data-alert="Please select Number of tests" id="numberOfTests">
+                <mat-select [(ngModel)]="shipmentData.numberOfTests" name="covidNumberOfTests" #covidNumberOfTests="ngModel" required [disabled]="isView=='true'" data-alert="Please select Number of tests" id="numberOfTests">
                   <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let numberOfTests of shipmentData.numberOfTestsDropdown" [value]="numberOfTests.value">
-                    {{numberOfTests.show}}
+                  <mat-option *ngFor="let item of shipmentData.numberOfTestsDropdown" [value]="item.value">
+                    {{item.show}}
                   </mat-option>
                 </mat-select>
-                <mat-error *ngIf="!shipmentData.numberOfTests">Please choose the Number of tests</mat-error>
+                <mat-error *ngIf="!shipmentData.numberOfTests">Please select the Number of tests</mat-error>
               </mat-form-field>
             </ion-col>
           </ion-row>
@@ -376,7 +362,7 @@
                 <mat-label>
                   {{ptPanelData.vlNotTestedReasonText}} <span class="danger-text" *ngIf="isView=='true'">*</span>
                 </mat-label>
-                <mat-select [(ngModel)]="ptPanelData.vlNotTestedReason" name="vlNotTested" #vlNotTested="ngModel"
+                <mat-select [(ngModel)]="ptPanelData.vlNotTestedReason" name="covidNotTested" #covidNotTested="ngModel"
                   [required]="ptPanelNotTested" [disabled]="isView=='true'">
                   <mat-option>--Select--</mat-option>
                   <mat-option *ngFor="let item of ptPanelData.vlNotTestedReasonDropdown" [value]="item.value">
@@ -392,8 +378,8 @@
                 <mat-label>
                   {{ptPanelData.ptNotTestedCommentsText}} <span class="danger-text" *ngIf="isView=='true'">*</span>
                 </mat-label>
-                <textarea matInput placeholder="Enter Your Comments here" name="eidPtNotTestedComments"
-                  #eidPtNotTestedComments="ngModel" [(ngModel)]="ptPanelData.ptNotTestedComments"
+                <textarea matInput placeholder="Enter Your Comments here" name="covidPtNotTestedComments"
+                  #covidPtNotTestedComments="ngModel" [(ngModel)]="ptPanelData.ptNotTestedComments"
                   [disabled]="isView=='true'" [required]="ptPanelNotTested"></textarea>
                 <mat-error *ngIf="ptPanelNotTested && !ptPanelData.ptNotTestedComments">Please Enter Your Comments
                 </mat-error>
@@ -404,8 +390,8 @@
                 <mat-label>
                   {{ptPanelData.ptSupportCommentsText}}
                 </mat-label>
-                <textarea matInput placeholder="Enter Your Support Comments here" name="eidPtNotSupportComments"
-                  #eidPtNotSupportComments="ngModel" [disabled]="isView=='true'"
+                <textarea matInput placeholder="Enter Your Support Comments here" name="covidPtNotSupportComments"
+                  #covidPtNotSupportComments="ngModel" [disabled]="isView=='true'"
                   [(ngModel)]="ptPanelData.ptSupportComments"></textarea>
                   <!-- [required]="ptPanelNotTested" -->
                 <!-- <mat-error *ngIf="ptPanelNotTested && !ptPanelData.ptSupportComments">Please Enter Your Comments
@@ -435,7 +421,7 @@
                   <ion-col size="10" class="grid-readonly-col">
                     <span class="text-title-color">{{testTypeItem}} </span>
                   </ion-col>
-                  <ion-col size="2" class="grid-readonly-col" *ngIf="isValidTestTypeDetails[i]">
+                  <ion-col size="2" class="grid-readonly-col" *ngIf="isValidTestTypeArray[i]">
                     <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
                   </ion-col>
                 </ion-row>
@@ -445,15 +431,16 @@
           <ion-row class="testKitRow">
             <ion-col size="12"  class="grid-readonly-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Test Type</mat-label>
+                <mat-label>Test Type <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <mat-select [(ngModel)]="testTypeModel.typeValue[i]" name="covidTestTypeName{{i}}" #covidTestTypeName="ngModel"                 
-                (ngModelChange)="getSelectedTestTypeName($event,i,testTypeDropDownArray[testTypeItem].data)"  [disabled]="isView=='true'">
+                (ngModelChange)="getSelectedTestTypeName($event,i,testTypeDropDownArray[testTypeItem].data)" required  [disabled]="isView=='true'">
                   <mat-option>--Select--</mat-option>
                   <mat-option *ngFor="let testTypeNameItem of testTypeDropDownArray[testTypeItem].data" 
                     [value]="testTypeNameItem.value" >
                     {{testTypeNameItem.show}}
                   </mat-option>
                 </mat-select>
+                <mat-error *ngIf="testTypeModel.typeValue[i]==''">Please select the Test Type for {{testTypeTextArray[i]}}</mat-error>
               </mat-form-field>
             </ion-col>
           </ion-row>

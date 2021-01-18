@@ -35,7 +35,7 @@ export class HeaderComponent implements OnInit {
   }
 
   goBack() {
-    if (this.router.url == '/rapid-hiv-recency-testing' || this.router.url == '/dts-hiv-serology' || this.router.url == '/dts-hiv-viralload' || this.router.url == '/dbs-eid') {
+    if (this.router.url == '/rapid-hiv-recency-testing' || this.router.url == '/dts-hiv-serology' || this.router.url == '/dts-hiv-viralload' || this.router.url == '/dbs-eid' || this.router.url == '/covid-19') {
       if (this.isFromSyncAll == true) {
         this.router.navigate(['/sync-all-shipments'], {
           replaceUrl: true
