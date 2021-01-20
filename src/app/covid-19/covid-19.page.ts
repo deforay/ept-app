@@ -106,6 +106,7 @@ export class covid19Page implements OnInit {
   samplesTextPushArray: any = [];
   resultsTextPushArray: any = [];
   shipmentPanelForm: NgForm;
+  testTypeCovidPanelForm: NgForm;
   otherInfoPanelForm: NgForm;
   approvalLabel: any;
   isValidShipmentDetails: boolean = false;
@@ -147,8 +148,8 @@ export class covid19Page implements OnInit {
   isPtPanelNotTestedRadio;
   isValidPTPanel: boolean = false;
   isValidTestTypePanel: boolean = false;
-  validTestTypeArrayCheck =[];
-
+  validTestTypeArrayCheck = [];
+  firstEmptyTestTypeIndex: number;
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -200,7 +201,6 @@ export class covid19Page implements OnInit {
       this.schemeName = this.covid19Array[0].schemeName;
       this.viewSchemeName = "View " + this.schemeName;
       this.shipmentCode = this.covid19Array[0].shipmentCode;
-      this.covid19Array[0].covid19Data.Section3['status']=true;
       if (this.covid19Array[0].covid19Data.access.message) {
         this.viewAccessMessage = this.covid19Array[0].covid19Data.access.message;
       }
@@ -318,7 +318,7 @@ export class covid19Page implements OnInit {
           this.isValidTestTypeArray.push(false);
 
         });
-        
+
       } else {
         this.showTestTypePanel = false;
       }
@@ -359,8 +359,7 @@ export class covid19Page implements OnInit {
         this.supervisorName = this.otherInfoArray.approvalInputText;
         this.approvalLabel = this.otherInfoArray.approvalLabel;
 
-      }
-      else{
+      } else {
         this.showOtherInfoData = false;
       }
 
@@ -468,11 +467,19 @@ export class covid19Page implements OnInit {
   }
 
   getSelectedTestTypeName(event, index, testTypeDropdownArr) {
-    let testTypeDropName = testTypeDropdownArr.filter(element => element.value == event);
-    this.testTypeModel['typeName'][index] = testTypeDropName[0].show;
-    //this.testTypeModel['typeValue'][index] = event.value;
-    if (this.testTypeModel['typeValue'][index] != "other") {
-      this.testTypeModel['typeOther'][index] = "";
+    if (event != undefined) {
+      let testTypeDropName = testTypeDropdownArr.filter(element => element.value == event);
+      this.testTypeModel['typeName'][index] = testTypeDropName[0].show;
+      //this.testTypeModel['typeValue'][index] = event.value;
+      if (this.testTypeModel['typeValue'][index] != "other") {
+        this.testTypeModel['typeOther'][index] = "";
+      }
+    } else {
+      this.testTypeModel['typeName'][index] = "";
+      this.testTypeModel['typeValue'][index] = "";
+      if (this.testTypeModel['typeValue'][index] != "other") {
+        this.testTypeModel['typeOther'][index] = "";
+      }
     }
   }
 
@@ -482,8 +489,8 @@ export class covid19Page implements OnInit {
       (!this.shipmentData['sampleRehydrationDate']) ||
       !this.shipmentData['shipmentTestingDate'] ||
       (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) ||
-      (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate) && this.participantQcAccess == true)||
-      !this.shipmentData['numberOfTests'] ) {
+      (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate) && this.participantQcAccess == true) ||
+      !this.shipmentData['numberOfTests']) {
       this.isValidShipmentDetails = false;
       if (param != 'onload') {
         if (this.isView == "true") {
@@ -492,18 +499,18 @@ export class covid19Page implements OnInit {
           if (!this.shipmentData['testReceiptDate']) {
             this.alertService.presentAlert('Alert', document.getElementById('testReceiptDate').getAttribute('data-alert'));
           } else if (!this.shipmentData['sampleRehydrationDate']) {
-              this.alertService.presentAlert('Alert', document.getElementById('sampleRehydrationDate').getAttribute('data-alert'));
+            this.alertService.presentAlert('Alert', document.getElementById('sampleRehydrationDate').getAttribute('data-alert'));
           } else if (!this.shipmentData['shipmentTestingDate']) {
             this.alertService.presentAlert('Alert', document.getElementById('shipmentTestingDate').getAttribute('data-alert'));
           } else if (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) {
             this.alertService.presentAlert('Alert', document.getElementById('responseDate').getAttribute('data-alert'));
-          }else if (!this.qcDate && this.participantQcAccess == true && this.qcDone == 'yes') {
+          } else if (!this.qcDate && this.participantQcAccess == true && this.qcDone == 'yes') {
             this.alertService.presentAlert('Alert', document.getElementById('qcDate').getAttribute('data-alert'));
           } else if (!this.qcDoneBy && this.participantQcAccess == true && this.qcDone == 'yes') {
             this.alertService.presentAlert('Alert', document.getElementById('qcDoneBy').getAttribute('data-alert'));
           } else if (!this.shipmentData['numberOfTests']) {
             this.alertService.presentAlert('Alert', document.getElementById('numberOfTests').getAttribute('data-alert'));
-          }  else {
+          } else {
 
           }
         }
@@ -521,11 +528,11 @@ export class covid19Page implements OnInit {
   checkPtPanel(params) {
 
     if (this.ptPanelNotTested == false || !this.ptPanelNotTested) {
-      if(params!='onload'){
-      this.isValidPTPanel = true;
-      this.nextStep();
+      if (params != 'onload') {
+        this.isValidPTPanel = true;
+        this.nextStep();
       }
-    } else  {
+    } else {
       if (!this.ptPanelData['vlNotTestedReason'] ||
         !this.ptPanelData['ptNotTestedComments']
         // !this.ptPanelData['ptSupportComments']
@@ -561,51 +568,53 @@ export class covid19Page implements OnInit {
   }
 
   checkTestTypePanel(params, index) {
- 
+
+    
     if (!this.testTypeModel['typeName'][index] ||
       (this.testTypeModel['typeValue'][index] == 'other' && !this.testTypeModel['typeOther'][index])) {
       this.isValidTestTypeArray[index] = false;
-    
       if (params == 'next' || (params == 'submit' && this.isValidShipmentDetails)) {
-      var BreakException = {};
-      try {
-      //  _.times(this.shipmentData['numberOfTests'], ()=> {
-       //  debugger;
-      //   this.testTypeModel['typeValue'].forEach((element, index) => {
-      //     debugger;
-      //     if (this.testTypeModel['typeValue'][index] == "" ) {
-      //       this.alertService.presentAlert('Alert', 'Please select the test type for ' + this.testTypeModel['typeText'][index]);
-      //       throw BreakException;
-      //     }
-      //  // })
-      // })
 
-      for(var item of this.testTypeModel['typeValue']) {
-        console.log(item)
-        if (item == "" ) {
-          this.alertService.presentAlert('Alert', 'Please select the test type for ' + this.testTypeModel['typeText'][index]);
-         break;
+        if (this.testTypeModel['typeValue'][index] != 'other') {
+          for (var item of this.testTypeModel['typeValue']) {
+            if (item == "") {
+              this.isValidTestTypeArray[index] = false;
+              this.alertService.presentAlert('Alert', 'Please select the test type for ' + this.testTypeModel['typeText'][index]);
+              break;
+            } else {
+              this.isValidTestTypeArray[index] = true;
+            }
+          }
+        } else {
+          for (var item of this.testTypeModel['typeOther']) {
+            if (item == "") {
+              this.isValidTestTypeArray[index] = false;
+              this.alertService.presentAlert('Alert', 'Please enter the Kit Name for ' + this.testTypeModel['typeText'][index]);
+              break;
+            } else {
+              this.isValidTestTypeArray[index] = true;
+            }
+          }
         }
       }
-    }
-       catch (e) {
-        if (e !== BreakException) throw e;
-      }
-    }
     } else {
       this.isValidTestTypeArray[index] = true;
     }
+
     this.validTestTypeArrayCheck = this.isValidTestTypeArray.filter(i => i == false);
+
     if (this.validTestTypeArrayCheck.length > 0) {
       this.isValidTestTypePanel = false;
     } else {
       this.isValidTestTypePanel = true;
     }
+    debugger;
     if (params == 'next') {
-      if (this.isValidTestTypePanel == false) {
-        //do  nothing
-      } else {
-        this.nextStep();
+      if (this.isValidTestTypePanel == false && this.isValidTestTypeArray[index] == true) {
+        this.setStep(2 + (index + 1));
+      }
+      if (this.isValidTestTypePanel == true) {
+        this.setStep( this.samplesNameArr.length + index+2);
       }
     }
 
@@ -652,7 +661,7 @@ export class covid19Page implements OnInit {
     }
 
   }
- 
+
   checkOtherInfoPanel(param) {
     if ((this.supReview == 'yes' && !this.supervisorName) || (this.supReview == '' || this.supReview == undefined)) {
       this.isValidOtherInfoPanel = false;
@@ -668,12 +677,14 @@ export class covid19Page implements OnInit {
     }
   }
   prevStep() {
+
     this.step--;
   }
 
-  async submitCovid19Form(shipmentPanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
+  async submitCovid19Form(shipmentPanelForm: NgForm, testTypePanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
 
     shipmentPanelForm.control.markAllAsTouched();
+    testTypePanelForm.control.markAllAsTouched();
     sampleDetailsForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
     if (otherInfoPanelForm.valid == true) {
@@ -683,9 +694,17 @@ export class covid19Page implements OnInit {
     }
     this.checkShipmentPanel('submit');
     this.checkPtPanel('submit');
-     this.testTypeTextArray.forEach((element, index) => {
-      this.checkTestTypePanel('submit', index);
-    });
+
+    if (this.testTypeModel['typeValue'][0] == '') {
+      this.firstEmptyTestTypeIndex = 0;
+    } else if (this.testTypeModel['typeValue'][1] == '') {
+      this.firstEmptyTestTypeIndex = 1;
+    } else if (this.testTypeModel['typeValue'][2] == '') {
+      this.firstEmptyTestTypeIndex = 2;
+    }
+
+    this.checkTestTypePanel('submit', this.firstEmptyTestTypeIndex);
+
     // this.sampleDetailsArray.samples.label.forEach((element, index) => {
     //   this.checkSampleDetailPanel('submit', index)
     // });
@@ -700,13 +719,16 @@ export class covid19Page implements OnInit {
 
     if (this.isValidShipmentDetails == false) {
       this.setStep(1);
+    } else if (this.isValidTestTypePanel == false) {
+      this.setStep(2 + this.firstEmptyTestTypeIndex);
     }
-
     // else if(checkSampleIndex>=0){
     //   this.setStep(this.testTypeIndex+ checkSampleIndex+2)
     // }
-    else if(this.isValidOtherInfoPanel==false){
-      this.setStep(this.testTypeIndex+this.sampleIndex+this.dynamicStep+2)
+    else if (this.isValidOtherInfoPanel == false) {
+      this.setStep(this.testTypeIndex + this.sampleIndex + this.dynamicStep + 2)
+    } else {
+
     }
     // else if (this.isValidOtherInfoPanel == false) {
     //   this.setStep(this.testTypeIndex + this.sampleIndex + this.dynamicStep + 2)
@@ -795,7 +817,7 @@ export class covid19Page implements OnInit {
       this.isPtPanelNotTestedRadio = "no";
     }
     // (checkSampleIndex== undefined || checkSampleIndex==-1)
-     if (this.isValidShipmentDetails == true && this.isValidOtherInfoPanel == true) {
+    if (this.isValidShipmentDetails == true && this.isValidTestTypePanel && this.isValidPTPanel && this.isValidOtherInfoPanel == true) {
 
       this.covid19JSON = {
 
@@ -841,8 +863,8 @@ export class covid19Page implements OnInit {
                 "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
                 "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'] ? this.shipmentData['modeOfReceipt'] : '',
                 "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
-                "numberOfTestsSelect":this.shipmentData['numberOfTestsDropdown'],
-                "numberOfTestsSelected":this.shipmentData['numberOfTests'],
+                "numberOfTestsSelect": this.shipmentData['numberOfTestsDropdown'],
+                "numberOfTestsSelected": this.shipmentData['numberOfTests'],
                 "qcData": {
                   "qcRadioSelected": this.qcDone,
                   "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
@@ -852,7 +874,7 @@ export class covid19Page implements OnInit {
                 }
               }
             },
-            "Section3":{  
+            "Section3": {
               //PT Panel details
               "status": this.covid19Array[0].covid19Data.Section3.status,
               "data": {
@@ -926,8 +948,10 @@ export class covid19Page implements OnInit {
   }
 
 
-  confirmSerologyForm(shipmentPanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
+  confirmSerologyForm(shipmentPanelForm: NgForm, testTypePanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
+
     shipmentPanelForm.control.markAllAsTouched();
+    testTypePanelForm.control.markAllAsTouched();
     sampleDetailsForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
     if (otherInfoPanelForm.valid == true) {
@@ -937,9 +961,17 @@ export class covid19Page implements OnInit {
     }
     this.checkShipmentPanel('submit');
     this.checkPtPanel('submit');
-    // this.testTypeTextArray.forEach((element, index) => {
-      this.checkTestTypePanel('submit', '');
-   // });
+
+    if (this.testTypeModel['typeValue'][0] == '') {
+      this.firstEmptyTestTypeIndex = 0;
+    } else if (this.testTypeModel['typeValue'][1] == '') {
+      this.firstEmptyTestTypeIndex = 1;
+    } else if (this.testTypeModel['typeValue'][2] == '') {
+      this.firstEmptyTestTypeIndex = 2;
+    }
+
+    this.checkTestTypePanel('submit', this.firstEmptyTestTypeIndex);
+
     // this.sampleDetailsArray.samples.label.forEach((element, index) => {
     //   this.checkSampleDetailPanel('submit', index)
     // });
@@ -954,13 +986,16 @@ export class covid19Page implements OnInit {
 
     if (this.isValidShipmentDetails == false) {
       this.setStep(1);
+    } else if (this.isValidTestTypePanel == false) {
+      this.setStep(2 + this.firstEmptyTestTypeIndex);
     }
-
     // else if(checkSampleIndex>=0){
     //   this.setStep(this.testTypeIndex+ checkSampleIndex+2)
     // }
-    else if(this.isValidOtherInfoPanel==false){
-      this.setStep(this.testTypeIndex+this.sampleIndex+this.dynamicStep+2)
+    else if (this.isValidOtherInfoPanel == false) {
+      this.setStep(this.testTypeIndex + this.sampleIndex + this.dynamicStep + 2)
+    } else {
+
     }
     // else if (this.isValidOtherInfoPanel == false) {
     //   this.setStep(this.testTypeIndex + this.sampleIndex + this.dynamicStep + 2)
@@ -1049,7 +1084,7 @@ export class covid19Page implements OnInit {
       this.isPtPanelNotTestedRadio = "no";
     }
     // (checkSampleIndex== undefined || checkSampleIndex==-1)
-     if (this.isValidShipmentDetails == true && this.isValidOtherInfoPanel == true) {
+    if (this.isValidShipmentDetails == true && this.isValidTestTypePanel && this.isValidPTPanel && this.isValidOtherInfoPanel == true) {
 
       this.covid19JSON = {
 
@@ -1095,8 +1130,8 @@ export class covid19Page implements OnInit {
                 "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
                 "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'] ? this.shipmentData['modeOfReceipt'] : '',
                 "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
-                "numberOfTestsSelect":this.shipmentData['numberOfTestsDropdown'],
-                "numberOfTestsSelected":this.shipmentData['numberOfTests'],
+                "numberOfTestsSelect": this.shipmentData['numberOfTestsDropdown'],
+                "numberOfTestsSelected": this.shipmentData['numberOfTests'],
                 "qcData": {
                   "qcRadioSelected": this.qcDone,
                   "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
@@ -1106,7 +1141,7 @@ export class covid19Page implements OnInit {
                 }
               }
             },
-            "Section3":{  
+            "Section3": {
               //PT Panel details
               "status": this.covid19Array[0].covid19Data.Section3.status,
               "data": {
@@ -1160,7 +1195,8 @@ export class covid19Page implements OnInit {
         }
       }
       console.log(this.covid19JSON);
-      if (this.network.type == 'none') {
+      if (this.network.type == 'none' || this.network.type == null) {
+
         this.covid19JSON['data']['isSynced'] = 'false';
         this.LocalShipmentFormService.offlineStoreShipmentForm(this.covid19JSON);
 
