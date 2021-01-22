@@ -333,7 +333,7 @@
             <ion-col size="12" class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Number of tests<span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <mat-select [(ngModel)]="shipmentData.numberOfTests" name="covidNumberOfTests"
+                <mat-select [(ngModel)]="shipmentData.numberOfTests" (ngModelChange)="changedNoOfTests(shipmentData.numberOfTests);changedNoOfTestsNotOnload(shipmentData.numberOfTests)"name="covidNumberOfTests"
                   #covidNumberOfTests="ngModel" required [disabled]="isView=='true'"
                   data-alert="Please select Number of tests" id="numberOfTests">
                   <mat-option>--Select--</mat-option>
@@ -427,20 +427,22 @@
         </section>
         <mat-action-row>
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
-          <button mat-button color="primary" type='submit' (click)="checkPtPanel('next')">Next</button>
+          <button mat-button color="primary" type="submit" (click)="checkPtPanel('next')">Next</button>
         </mat-action-row>
       </mat-expansion-panel>
     </form>
 
-    <form #testTypePanelForm="ngForm" novalidate>
+   
     <mat-card class="main-card-panel"
       *ngIf="showTestTypePanel && shipmentData.numberOfTests && (ptPanelNotTested==false || !ptPanelNotTested)">
       <mat-card-title> Test Type Details</mat-card-title>
       <mat-card-content>
-      
-          <div *ngFor="let testTypeItem of testTypeTextArray;let i = index;">
-            <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)"
-              *ngIf="(shipmentData.numberOfTests==1 && testTypeItem=='Test-1') || (shipmentData.numberOfTests==2 && (testTypeItem=='Test-1' || testTypeItem=='Test-2')) || (shipmentData.numberOfTests==3 && (testTypeItem=='Test-1' || testTypeItem=='Test-2' || testTypeItem=='Test-3'))">
+       <form #testTypePanelForm="ngForm" novalidate>
+          <div *ngFor="let testTypeItem of testTypeTextChangedArray;let i = index;">
+            <!--[expanded]="step === i+3" (opened)="setStep(i+3)" -->
+            <mat-expansion-panel [expanded]="(!ptPanelNotTested && step ===  i+3)" (opened)="(!ptPanelNotTested && setStep(i+3))"
+            *ngIf="(shipmentData.numberOfTests==1 && testTypeItem=='Test-1') || (shipmentData.numberOfTests==2 && (testTypeItem=='Test-1' || testTypeItem=='Test-2')) || (shipmentData.numberOfTests==3 && (testTypeItem=='Test-1' || testTypeItem=='Test-2' || testTypeItem=='Test-3'))">
+           
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   <ion-grid class="panelHeading">
@@ -458,20 +460,17 @@
               <ion-row class="testKitRow">
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                    <mat-label>Test Type<span class="danger-text"
-                        *ngIf="isView=='true'">*</span></mat-label>
+                    <mat-label>Test Type</mat-label>
                     <mat-select [(ngModel)]="testTypeModel.typeValue[i]" name="covidTestTypeName{{i}}"
                       #covidTestTypeName="ngModel"
-                      (ngModelChange)="getSelectedTestTypeName($event,i,testTypeDropDownArray[testTypeItem].data,testTypeModel.typeValue[i])"
-                      required [disabled]="isView=='true'">
+                      (ngModelChange)="getSelectedTestTypeName($event,i,testTypeDropDownArray[testTypeItem].data)"
+                       [disabled]="isView=='true'">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let testTypeNameItem of testTypeDropDownArray[testTypeItem].data"
                         [value]="testTypeNameItem.value">
                         {{testTypeNameItem.show}}
                       </mat-option>
                     </mat-select>
-                    <mat-error *ngIf="testTypeModel.typeValue[i]=='' || testTypeModel.typeValue[i]==undefined">Please
-                      select the Test Type for {{testTypeTextArray[i]}}</mat-error>
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -479,9 +478,8 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>Enter Kit Name </mat-label>
-                    <input matInput [(ngModel)]="testTypeModel.typeOther[i]" name="covidTypeOther{{i}}"
-                      #covidTypeOther="ngModel" placeholder="Enter Kit Name" [required]="testTypeModel.typeValue[i]=='other'" [disabled]="isView=='true'">
-                      <mat-error *ngIf="testTypeModel.typeOther[i]=='' || testTypeModel.typeOther[i]==undefined">Please enter the Kit Name for {{testTypeTextArray[i]}}</mat-error>
+                    <input matInput [(ngModel)]="testTypeModel.typeOther[i]" (ngModelChange)="changedTestTypeResultPanel()" name="covidTypeOther{{i}}"
+                      #covidTypeOther="ngModel" placeholder="Enter Kit Name" [disabled]="isView=='true'">
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -489,17 +487,16 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>Lot Number</mat-label>
-                    <input matInput [(ngModel)]="testTypeModel.lot[i]" placeholder="Enter Lot Number"
+                    <input matInput [(ngModel)]="testTypeModel.lot[i]" (ngModelChange)="changedTestTypeResultPanel()" placeholder="Enter Lot Number"
                       name="covidlot{{i}}" #covidlot="ngModel" [disabled]="isView=='true'">
                   </mat-form-field>
                 </ion-col>
               </ion-row>
               <ion-row>
-
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>Exp Date</mat-label>
-                    <input matInput [matDatepicker]="expDatePicker" [(ngModel)]="expDateObj[i]"
+                    <input matInput [matDatepicker]="expDatePicker" [(ngModel)]="expDateObj[i]" (ngModelChange)="changedTestTypeResultPanel()"
                       placeholder="Choose Exp Date"
                       [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                       name="covidExpDate{{i}}" #covidExpDate="ngModel" [readonly]="isView!='true'"
@@ -515,12 +512,13 @@
                 <button mat-button color="primary" (click)="prevStep()">Previous</button>
                 <button mat-button color="warn" (click)="checkTestTypePanel('next',i)">Next</button>
               </mat-action-row>
-            </mat-expansion-panel>
+              </mat-expansion-panel>
+    
           </div>
-       
+        </form>
       </mat-card-content>
     </mat-card>
-  </form>
+ 
     <form #sampleDetailsForm="ngForm" novalidate>
 
       <mat-card class="main-card-panel"
@@ -528,8 +526,8 @@
         <mat-card-title> Sample Details</mat-card-title>
         <mat-card-content>
           <div *ngFor="let sampleName of samplesNameArr;let i = index;">
-            <mat-expansion-panel *ngIf="showSampleData" [expanded]="step === i+testTypeIndex+2"
-              (opened)="setStep(i+testTypeIndex+2)">
+            <mat-expansion-panel *ngIf="showSampleData" [expanded]="(!ptPanelNotTested && step === i+testTypeChangedIndex+3)"
+              (opened)="(!ptPanelNotTested && setStep(i+testTypeChangedIndex+3))">
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   <ion-grid class="panelHeading">
@@ -560,7 +558,7 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>{{sampleDetailsArray.resultsText[0]}}</mat-label>
-                    <mat-select [(ngModel)]="result1Arr[i]" name="result1_[{{i}}]" #result1="ngModel"
+                    <mat-select [(ngModel)]="result1Arr[i]" name="result1_[{{i}}]" (ngModelChange)="changedTestTypeResultPanel()" #result1="ngModel"
                       [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-1'].data"
@@ -580,7 +578,7 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>{{sampleDetailsArray.resultsText[1]}}</mat-label>
-                    <mat-select [(ngModel)]="result2Arr[i]" name="result2_[{{i}}]" #result2="ngModel"
+                    <mat-select [(ngModel)]="result2Arr[i]" (ngModelChange)="changedTestTypeResultPanel()" name="result2_[{{i}}]" #result2="ngModel"
                       [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-2'].data"
@@ -602,7 +600,7 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>{{sampleDetailsArray.resultsText[2]}}</mat-label>
-                    <mat-select [(ngModel)]="result3Arr[i]" name="result3_[{{i}}]" #result3="ngModel"
+                    <mat-select [(ngModel)]="result3Arr[i]" (ngModelChange)="changedTestTypeResultPanel()" name="result3_[{{i}}]" #result3="ngModel"
                       [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-3'].data"
@@ -621,7 +619,7 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>{{sampleDetailsArray.resultsText[3]}}</mat-label>
-                    <mat-select [(ngModel)]="finalResultArr[i]" name="finalResult_[{{i}}]" #finalResult="ngModel"
+                    <mat-select [(ngModel)]="finalResultArr[i]" (ngModelChange)="changedTestTypeResultPanel()" name="finalResult_[{{i}}]" #finalResult="ngModel"
                       [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Final-Result'].data"
@@ -657,8 +655,8 @@
 
     <form #customFieldsForm="ngForm" novalidate>
 
-      <mat-expansion-panel *ngIf="showCustomFieldData" [expanded]="step === testTypeIndex+sampleIndex+2"
-        (opened)="setStep(testTypeIndex+sampleIndex+2)">
+      <mat-expansion-panel *ngIf="showCustomFieldData" [expanded]="((!ptPanelNotTested && step === testTypeChangedIndex+sampleIndex+3) || (ptPanelNotTested &&  step === 3))"
+        (opened)="((!ptPanelNotTested && setStep(testTypeChangedIndex+sampleIndex+3))|| (ptPanelNotTested &&  step === 3))">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <ion-grid class="panelHeading">
@@ -711,8 +709,8 @@
 
     <!-- Custom Panel Ends-->
     <form #otherInfoPanelForm="ngForm" novalidate>
-      <mat-expansion-panel [expanded]="step === testTypeIndex+sampleIndex+dynamicStep+2"
-        (opened)="setStep(testTypeIndex+sampleIndex+dynamicStep+2)">
+      <mat-expansion-panel [expanded]="((!ptPanelNotTested && step === testTypeChangedIndex+sampleIndex+dynamicStep+3) || (ptPanelNotTested &&  step === 4))"
+        (opened)="((!ptPanelNotTested && setStep(testTypeChangedIndex+sampleIndex+dynamicStep+3))||( (ptPanelNotTested &&  step === 4)))">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <ion-grid class="panelHeading">
@@ -765,7 +763,7 @@
         <mat-action-row>
           <button mat-button color="primary" (click)="prevStep()">Previous</button>
           <button mat-button color="warn" *ngIf="summarizeForm==false && isView!='true'"
-            (click)="submitCovid19Form(shipmentPanelForm, testTypePanelForm, sampleDetailsForm,otherInfoPanelForm)">Submit</button>
+            (click)="submitCovid19Form(shipmentPanelForm,sampleDetailsForm,otherInfoPanelForm)">Submit</button>
         </mat-action-row>
       </mat-expansion-panel>
     </form>
@@ -779,7 +777,7 @@
       </ion-col>
       <ion-col size="6">
         <ion-button class="text-center native-btn summarizeButtons confirm"
-          (click)="confirmSerologyForm(shipmentPanelForm,testTypePanelForm,PTPanelTestForm,otherInfoPanelForm)">Confirm
+          (click)="confirmSerologyForm(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Confirm
         </ion-button>
       </ion-col>
     </ion-row>
