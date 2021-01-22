@@ -41,6 +41,9 @@ export class AlertService {
         role: 'cancel',
         cssClass: 'secondary',
         handler: () => {
+          if (alertName == 'isChangedTestTypeResultPanel') {
+            this.eventCtrl.publish('isAcceptedTestResultData:false');
+          }
         }
       }, {
         text: leftSideButtonText,
@@ -61,6 +64,9 @@ export class AlertService {
           }
           if (alertName == 'primaryEmailAlert') {
             this.eventCtrl.publish('isChangedPrimaryEmail:true');
+          }
+          if (alertName == 'isChangedTestTypeResultPanel') {
+            this.eventCtrl.publish('isChangedTestTypeResultPanel:true');
           }
         }
       }],
