@@ -138,7 +138,6 @@ export class covid19Page implements OnInit {
   isValidTestTypeArray = [];
   customFieldData = {};
   samplesObj = {};
-  dynamicStep = 0;
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
   schemeName: string;
@@ -155,6 +154,9 @@ export class covid19Page implements OnInit {
   isChangedTestTypeResultPanel: boolean = false;
   isChangedNoOfTests: boolean = false;
   isAcceptedTestResultData: boolean = false;
+  autoSelectedFinalResultArray = [];
+  updatedStatus: boolean;
+
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -207,6 +209,7 @@ export class covid19Page implements OnInit {
       this.schemeName = this.covid19Array[0].schemeName;
       this.viewSchemeName = "View " + this.schemeName;
       this.shipmentCode = this.covid19Array[0].shipmentCode;
+      this.updatedStatus = this.covid19Array[0].updatedStatus;
       if (this.covid19Array[0].covid19Data.access.message) {
         this.viewAccessMessage = this.covid19Array[0].covid19Data.access.message;
       }
@@ -391,12 +394,6 @@ export class covid19Page implements OnInit {
       this.sampleDetailsArray.samples.label.forEach((element, index) => {
         this.checkSampleDetailPanel('onload', index)
       });
-      if (this.showCustomFieldData == true) {
-        this.dynamicStep = 1;
-        this.checkCustFieldPanel('onload');
-      } else {
-        this.dynamicStep = 0;
-      }
       this.checkOtherInfoPanel('onload');
 
       // let checkTestKitIndex = this.isValidTestTypeDetails.findIndex(index => index == false);
@@ -413,7 +410,7 @@ export class covid19Page implements OnInit {
       // } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
       //   this.setStep(this.testTypeIndex + this.sampleIndex + 2);
       // } else if (this.isValidOtherInfoPanel == false) {
-      //   this.setStep(this.testTypeIndex + this.sampleIndex + this.dynamicStep + 2);
+      //   this.setStep(this.testTypeIndex + this.sampleIndex + 2);
       // } else {
       //   this.setStep(0);
       // }
@@ -562,9 +559,8 @@ export class covid19Page implements OnInit {
 
     await this.changedNoOfTests(this.shipmentData['numberOfTests']);
 
-    if (this.ptPanelNotTested == false || !this.ptPanelNotTested) {
+    if ((this.ptPanelNotTested == false || !this.ptPanelNotTested) && (params!="onload" && this.updatedStatus==false)) {
       this.isValidPTPanel = true;
-
     } else {
       if (!this.ptPanelData['vlNotTestedReason'] ||
         !this.ptPanelData['ptNotTestedComments']
@@ -641,32 +637,7 @@ export class covid19Page implements OnInit {
     }
 
   }
-  checkCustFieldPanel(params) {
 
-    if (this.customFieldData['customField1Text']) {
-      if (!this.customFieldData['customField1Val']) {
-        this.isValidCustField = false;
-      } else {
-        if (this.customFieldData['customField2Text']) {
-          if (!this.customFieldData['customField2Val']) {
-            this.isValidCustField = false;
-          } else {
-            this.isValidCustField = true;
-          }
-        } else {
-          this.isValidCustField = true;
-        }
-      }
-    }
-    if (params == 'next') {
-      if (this.ptPanelNotTested) {
-        this.setStep(4);
-      } else {
-        this.nextStep();
-      }
-    }
-
-  }
 
   checkOtherInfoPanel(param) {
     if ((this.supReview == 'yes' && !this.supervisorName) || (this.supReview == '' || this.supReview == undefined)) {
@@ -687,6 +658,16 @@ export class covid19Page implements OnInit {
     this.step--;
   }
 
+  changedResult1(result1Value, i, sampleName) {
+    if (this.shipmentData['numberOfTests'] == 1) {
+      this.autoSelectedFinalResultArray = this.sampleDetailsArray['sampleList'][sampleName]['Final-Result'].data.filter(item => item.resultCode == result1Value.resultCode);
+      if (this.autoSelectedFinalResultArray.length != 0) {
+        this.finalResultArr[i] = this.autoSelectedFinalResultArray[0];
+        this.finalResultArr[i].selected = "selected";
+      }
+    }
+  }
+
   async submitCovid19Form(shipmentPanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
 
     shipmentPanelForm.control.markAllAsTouched();
@@ -703,12 +684,8 @@ export class covid19Page implements OnInit {
     // this.sampleDetailsArray.samples.label.forEach((element, index) => {
     //   this.checkSampleDetailPanel('submit', index)
     // });
-    if (this.showCustomFieldData == true) {
-      this.checkCustFieldPanel('submit');
-      this.checkOtherInfoPanel('submit');
-    } else {
-      this.checkOtherInfoPanel('submit');
-    }
+
+    this.checkOtherInfoPanel('submit');
 
     // let checkSampleIndex = this.isValidSampleDetails.findIndex(valid => valid==false);
 
@@ -719,13 +696,13 @@ export class covid19Page implements OnInit {
     //   this.setStep(this.testTypeIndex+ checkSampleIndex+2)
     // }
     else if (this.isValidOtherInfoPanel == false) {
-      this.setStep(this.testTypeIndex + this.sampleIndex + this.dynamicStep + 2)
+      this.setStep(this.testTypeIndex + this.sampleIndex + 2)
     } else {
 
     }
     // else if (this.isValidOtherInfoPanel == false) {
-    //   this.setStep(this.testTypeIndex + this.sampleIndex + this.dynamicStep + 2)
-    //   // this.setStep(this.testTypeIndex +this.dynamicStep + 2)
+    //   this.setStep(this.testTypeIndex + this.sampleIndex +  2)
+    //   // this.setStep(this.testTypeIndex + 2)
     // }
 
 
@@ -810,24 +787,280 @@ export class covid19Page implements OnInit {
       this.isPtPanelNotTestedRadio = "no";
     }
 
-    // if (this.isChangedTestTypeResultPanel && this.isChangedNoOfTests) {
-    //   await this.alertService.presentAlertConfirm('e-PT', '', "Are you sure you want to change the number of tests? Your previously entered test result data will be overwritten.", 'No', 'Yes', 'isChangedTestTypeResultPanel');
-    // } else {
-    //   this.isAcceptedTestResultData = true;
-    //   this.validAcceptedTestResultData();
+    // (checkSampleIndex== undefined || checkSampleIndex==-1)
+    if (this.isValidShipmentDetails == true && this.isValidPTPanel && this.isValidOtherInfoPanel == true) {
+
+      this.covid19JSON = {
+
+        "authToken": this.authToken,
+        "appVersion": this.appVersionNumber,
+        "syncType": "single",
+        "data": {
+          "evaluationStatus": this.covid19Array[0].evaluationStatus,
+          "participantId": this.covid19Array[0].participantId,
+          "schemeType": this.covid19Array[0].schemeType,
+          "schemeName": this.covid19Array[0].schemeName,
+          "shipmentCode": this.covid19Array[0].shipmentCode,
+          "shipmentId": this.covid19Array[0].shipmentId,
+          "mapId": this.covid19Array[0].mapId,
+          "isSynced": true,
+          "createdOn": this.covid19Array[0].createdOn ? this.covid19Array[0].createdOn : "",
+          "updatedOn": this.covid19Array[0].updatedOn ? this.covid19Array[0].updatedOn : "",
+          "updatedStatus": this.covid19Array[0].updatedStatus,
+          "covid19Data": {
+            "access": {
+              "status": this.covid19Array[0].covid19Data.access.status
+            },
+            "Section1": {
+              //participant details
+              "status": this.covid19Array[0].covid19Data.Section1.status,
+              "data": {
+                "participantName": this.partiDetailsArray.participantName,
+                "participantCode": this.partiDetailsArray.participantCode,
+                "participantAffiliation": this.partiDetailsArray.affiliation,
+                "participantPhone": this.partiDetailsArray.phone,
+                "participantMobile": this.partiDetailsArray.mobile,
+              }
+            },
+            "Section2": {
+              //shipment details
+              "status": this.covid19Array[0].covid19Data.Section2.status,
+              "data": {
+                "shipmentDate": this.shipmentData['shipmentDate'],
+                "resultDueDate": this.shipmentData['resultDueDate'],
+                "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
+                "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
+                "testingDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
+                "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
+                "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'] ? this.shipmentData['modeOfReceipt'] : '',
+                "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
+                "numberOfTestsSelect": this.shipmentData['numberOfTestsDropdown'],
+                "numberOfTestsSelected": this.shipmentData['numberOfTests'],
+                "qcData": {
+                  "qcRadioSelected": this.qcDone,
+                  "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
+                  "qcDoneBy": this.qcDoneBy,
+                  "status": this.isQCDoneShow,
+                  "qcRadio": this.qcRadioArray
+                }
+              }
+            },
+            "Section3": {
+              //PT Panel details
+              "status": this.covid19Array[0].covid19Data.Section3.status,
+              "data": {
+                "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
+                "vlNotTestedReasonText": this.ptPanelData['vlNotTestedReasonText'],
+                "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
+                "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
+                "ptNotTestedCommentsText": this.ptPanelData['ptNotTestedCommentsText'],
+                "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
+                "ptSupportCommentsText": this.ptPanelData['ptSupportCommentsText'],
+                "ptSupportComments": this.ptPanelData['ptSupportComments'],
+              }
+
+            },
+            "Section4": {
+              //test type details
+              "status": this.covid19Array[0].covid19Data.Section4.status,
+              "data": this.testTypeModel
+            },
+            "Section5": {
+              //sample details
+              "status": this.covid19Array[0].covid19Data.Section5.status,
+              "data": {
+                "samples": this.samplesObj,
+                "resultsText": this.resultsTextArray,
+                "resultStatus": this.sampleDetailsArray.resultStatus,
+                "sampleList": this.sampleDetailsArray.sampleList
+              }
+            },
+            "Section6": {
+              //other information
+              "status": this.covid19Array[0].covid19Data.Section6.status,
+              "data": {
+                "supervisorReview": this.supervisorReviewArray,
+                "approvalLabel": this.approvalLabel,
+                "supervisorReviewSelected": this.supReview,
+                "approvalInputText": this.supervisorName,
+                "comments": this.comments
+              }
+            },
+            "customFields": {
+              "status": this.showCustomFieldData,
+              "data": {
+                "customField1Text": this.customFieldData['customField1Text'],
+                "customField1Val": this.customFieldData['customField1Val'],
+                "customField2Text": this.customFieldData['customField2Text'],
+                "customField2Val": this.customFieldData['customField2Val']
+              }
+            }
+          }
+        }
+      }
+      console.log(this.covid19JSON);
+
+      const element = await this.loadingCtrl.getTop();
+      if (element && element.dismiss) {
+        element.dismiss();
+      }
+      const loading = await this.loadingCtrl.create({
+        spinner: 'dots',
+        mode: 'ios',
+        message: 'Please wait',
+      });
+      await loading.present();
+      this.isView = 'true';
+      this.isShowReviewMsg = true;
+      this.isViewPage = false;
+      this.summarizeForm = true;
+      loading.dismiss();
+
+    }
+
+  }
+
+  async confirmCovid19Form(shipmentPanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
+
+    shipmentPanelForm.control.markAllAsTouched();
+    sampleDetailsForm.control.markAllAsTouched();
+    otherInfoPanelForm.control.markAllAsTouched();
+    if (otherInfoPanelForm.valid == true) {
+      this.isValidOtherInfoPanel = true;
+    } else {
+      this.isValidOtherInfoPanel = false;
+    }
+    this.checkShipmentPanel('submit');
+    this.checkPtPanel('submit');
+
+    // this.sampleDetailsArray.samples.label.forEach((element, index) => {
+    //   this.checkSampleDetailPanel('submit', index)
+    // });
+
+    this.checkOtherInfoPanel('submit');
+
+    // let checkSampleIndex = this.isValidSampleDetails.findIndex(valid => valid==false);
+
+    if (this.isValidShipmentDetails == false) {
+      this.setStep(1);
+    }
+    // else if(checkSampleIndex>=0){
+    //   this.setStep(this.testTypeIndex+ checkSampleIndex+2)
+    // }
+    else if (this.isValidOtherInfoPanel == false) {
+      this.setStep(this.testTypeIndex + this.sampleIndex + 2)
+    } else {
+
+    }
+    // else if (this.isValidOtherInfoPanel == false) {
+    //   this.setStep(this.testTypeIndex + this.sampleIndex + 2)
+    //   // this.setStep(this.testTypeIndex + 2)
     // }
 
-    // await this.events.subscribe('isChangedTestTypeResultPanel:true', (data) => {
-    //   this.isAcceptedTestResultData = true;
-    //   this.validAcceptedTestResultData();
-    // })
 
-    // await this.events.subscribe('isAcceptedTestResultData:false', (data) => {
-    //   this.isAcceptedTestResultData = false;
-    // })
+    this.expDateObj.forEach((element, index) => {
+      this.testTypeModel['expDate'][index] = element ? this.dateFormat(new Date(element)) : element
+    });
 
-    // if (this.isAcceptedTestResultData) {
-      // (checkSampleIndex== undefined || checkSampleIndex==-1)
+    this.result1Arr.forEach((element, index) => {
+      if (element == null || element == undefined || element == "") {
+        this.result1Arr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
+      } else {
+        this.result1Arr[index] = element;
+      }
+    })
+    this.result2Arr.forEach((element, index) => {
+      if (element == null || element == undefined || element == "") {
+        this.result2Arr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
+      } else {
+        this.result2Arr[index] = element;
+      }
+    })
+    this.result3Arr.forEach((element, index) => {
+      if (element == null || element == undefined || element == "") {
+        this.result3Arr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
+      } else {
+        this.result3Arr[index] = element;
+      }
+    })
+    this.finalResultArr.forEach((element, index) => {
+      if (element == null || element == undefined || element == "") {
+        this.finalResultArr[index] = {
+          "resultCode": "X",
+          "selected": "",
+          "show": "",
+          "value": ""
+        };
+      } else {
+        this.finalResultArr[index] = element;
+      }
+    })
+    this.testTypeModel['typeValue'].forEach((element, index) => {
+      if (element == null || element == undefined) {
+        this.testTypeModel['typeValue'][index] = "";
+      }
+    })
+
+    //Samples Obj
+    this.samplesObj['result1'] = [...this.result1Arr];
+    this.samplesObj['result2'] = [...this.result2Arr];
+    //  if (this.showResult3 == true) {
+    this.samplesObj['result3'] = [...this.result3Arr];
+    //}
+    this.samplesObj['id'] = [...this.sampleDetailsArray.samples.id];
+    this.samplesObj['label'] = [...this.sampleDetailsArray.samples.label];
+    this.samplesObj['mandatory'] = [...this.sampleDetailsArray.samples.mandatory];
+    this.samplesObj['finalResult'] = [...this.finalResultArr];
+    // Samples Obj
+
+
+    if (this.qcDone == 'no' || this.qcDone == '') {
+      this.qcDate = "";
+      this.qcDoneBy = "";
+    }
+    if (this.ptPanelNotTested == true) {
+      this.isPtPanelNotTestedRadio = "yes";
+    } else {
+      this.isPtPanelNotTestedRadio = "no";
+    }
+
+    if (this.isChangedTestTypeResultPanel && this.isChangedNoOfTests && this.updatedStatus) {
+      await this.alertService.presentAlertConfirm('e-PT', '', "Are you sure you want to change the number of tests? Your previously entered test result data will be overwritten.", 'No', 'Yes', 'isChangedTestTypeResultPanel');
+    } else {
+      this.isAcceptedTestResultData = true;
+      this.confirmAcceptedTestResultData();
+    }
+
+    await this.events.subscribe('isChangedTestTypeResultPanel:true', (data) => {
+      this.isAcceptedTestResultData = true;
+      this.confirmAcceptedTestResultData();
+    })
+
+    await this.events.subscribe('isAcceptedTestResultData:false', (data) => {
+      this.isAcceptedTestResultData = false;
+    })
+
+  }
+
+
+  confirmAcceptedTestResultData() {
+
+    if (this.isAcceptedTestResultData) {
       if (this.isValidShipmentDetails == true && this.isValidPTPanel && this.isValidOtherInfoPanel == true) {
 
         this.covid19JSON = {
@@ -939,314 +1172,36 @@ export class covid19Page implements OnInit {
           }
         }
         console.log(this.covid19JSON);
+        // 
+        if (this.network.type == 'none') {
 
-        const element = await this.loadingCtrl.getTop();
-        if (element && element.dismiss) {
-          element.dismiss();
-        }
-        const loading = await this.loadingCtrl.create({
-          spinner: 'dots',
-          mode: 'ios',
-          message: 'Please wait',
-        });
-        await loading.present();
-        this.isView = 'true';
-        this.isShowReviewMsg = true;
-        this.isViewPage = false;
-        this.summarizeForm = true;
-        loading.dismiss();
+          this.covid19JSON['data']['isSynced'] = 'false';
+          this.LocalShipmentFormService.offlineStoreShipmentForm(this.covid19JSON);
 
-      }
-   // }
-  }
-
-  // async validAcceptedTestResultData() {
-
-  
-  // }
-
-  async confirmSerologyForm(shipmentPanelForm: NgForm, sampleDetailsForm: NgForm, otherInfoPanelForm: NgForm) {
-
-    shipmentPanelForm.control.markAllAsTouched();
-    sampleDetailsForm.control.markAllAsTouched();
-    otherInfoPanelForm.control.markAllAsTouched();
-    if (otherInfoPanelForm.valid == true) {
-      this.isValidOtherInfoPanel = true;
-    } else {
-      this.isValidOtherInfoPanel = false;
-    }
-    this.checkShipmentPanel('submit');
-    this.checkPtPanel('submit');
-
-    // this.sampleDetailsArray.samples.label.forEach((element, index) => {
-    //   this.checkSampleDetailPanel('submit', index)
-    // });
-    if (this.showCustomFieldData == true) {
-      this.checkCustFieldPanel('submit');
-      this.checkOtherInfoPanel('submit');
-    } else {
-      this.checkOtherInfoPanel('submit');
-    }
-
-    // let checkSampleIndex = this.isValidSampleDetails.findIndex(valid => valid==false);
-
-    if (this.isValidShipmentDetails == false) {
-      this.setStep(1);
-    }
-    // else if(checkSampleIndex>=0){
-    //   this.setStep(this.testTypeIndex+ checkSampleIndex+2)
-    // }
-    else if (this.isValidOtherInfoPanel == false) {
-      this.setStep(this.testTypeIndex + this.sampleIndex + this.dynamicStep + 2)
-    } else {
-
-    }
-    // else if (this.isValidOtherInfoPanel == false) {
-    //   this.setStep(this.testTypeIndex + this.sampleIndex + this.dynamicStep + 2)
-    //   // this.setStep(this.testTypeIndex +this.dynamicStep + 2)
-    // }
-
-
-    this.expDateObj.forEach((element, index) => {
-      this.testTypeModel['expDate'][index] = element ? this.dateFormat(new Date(element)) : element
-    });
-
-    this.result1Arr.forEach((element, index) => {
-      if (element == null || element == undefined || element == "") {
-        this.result1Arr[index] = {
-          "resultCode": "X",
-          "selected": "",
-          "show": "",
-          "value": ""
-        };
-      } else {
-        this.result1Arr[index] = element;
-      }
-    })
-    this.result2Arr.forEach((element, index) => {
-      if (element == null || element == undefined || element == "") {
-        this.result2Arr[index] = {
-          "resultCode": "X",
-          "selected": "",
-          "show": "",
-          "value": ""
-        };
-      } else {
-        this.result2Arr[index] = element;
-      }
-    })
-    this.result3Arr.forEach((element, index) => {
-      if (element == null || element == undefined || element == "") {
-        this.result3Arr[index] = {
-          "resultCode": "X",
-          "selected": "",
-          "show": "",
-          "value": ""
-        };
-      } else {
-        this.result3Arr[index] = element;
-      }
-    })
-    this.finalResultArr.forEach((element, index) => {
-      if (element == null || element == undefined || element == "") {
-        this.finalResultArr[index] = {
-          "resultCode": "X",
-          "selected": "",
-          "show": "",
-          "value": ""
-        };
-      } else {
-        this.finalResultArr[index] = element;
-      }
-    })
-    this.testTypeModel['typeValue'].forEach((element, index) => {
-      if (element == null || element == undefined) {
-        this.testTypeModel['typeValue'][index] = "";
-      }
-    })
-
-    //Samples Obj
-    this.samplesObj['result1'] = [...this.result1Arr];
-    this.samplesObj['result2'] = [...this.result2Arr];
-    //  if (this.showResult3 == true) {
-    this.samplesObj['result3'] = [...this.result3Arr];
-    //}
-    this.samplesObj['id'] = [...this.sampleDetailsArray.samples.id];
-    this.samplesObj['label'] = [...this.sampleDetailsArray.samples.label];
-    this.samplesObj['mandatory'] = [...this.sampleDetailsArray.samples.mandatory];
-    this.samplesObj['finalResult'] = [...this.finalResultArr];
-    // Samples Obj
-
-
-    if (this.qcDone == 'no' || this.qcDone == '') {
-      this.qcDate = "";
-      this.qcDoneBy = "";
-    }
-    if (this.ptPanelNotTested == true) {
-      this.isPtPanelNotTestedRadio = "yes";
-    } else {
-      this.isPtPanelNotTestedRadio = "no";
-    }
-
-    if (this.isChangedTestTypeResultPanel && this.isChangedNoOfTests) {
-      await this.alertService.presentAlertConfirm('e-PT', '', "Are you sure you want to change the number of tests? Your previously entered test result data will be overwritten.", 'No', 'Yes', 'isChangedTestTypeResultPanel');
-    } else {
-      this.isAcceptedTestResultData = true;
-      this.confirmAcceptedTestResultData();
-    }
-
-    await this.events.subscribe('isChangedTestTypeResultPanel:true', (data) => {
-      this.isAcceptedTestResultData = true;
-      this.confirmAcceptedTestResultData();
-    })
-
-    await this.events.subscribe('isAcceptedTestResultData:false', (data) => {
-      this.isAcceptedTestResultData = false;
-    })
-   
-  }
-
-
-  confirmAcceptedTestResultData(){
-  if (this.isValidShipmentDetails == true && this.isValidPTPanel && this.isValidOtherInfoPanel == true) {
-
-    this.covid19JSON = {
-
-      "authToken": this.authToken,
-      "appVersion": this.appVersionNumber,
-      "syncType": "single",
-      "data": {
-        "evaluationStatus": this.covid19Array[0].evaluationStatus,
-        "participantId": this.covid19Array[0].participantId,
-        "schemeType": this.covid19Array[0].schemeType,
-        "schemeName": this.covid19Array[0].schemeName,
-        "shipmentCode": this.covid19Array[0].shipmentCode,
-        "shipmentId": this.covid19Array[0].shipmentId,
-        "mapId": this.covid19Array[0].mapId,
-        "isSynced": true,
-        "createdOn": this.covid19Array[0].createdOn ? this.covid19Array[0].createdOn : "",
-        "updatedOn": this.covid19Array[0].updatedOn ? this.covid19Array[0].updatedOn : "",
-        "updatedStatus": this.covid19Array[0].updatedStatus,
-        "covid19Data": {
-          "access": {
-            "status": this.covid19Array[0].covid19Data.access.status
-          },
-          "Section1": {
-            //participant details
-            "status": this.covid19Array[0].covid19Data.Section1.status,
-            "data": {
-              "participantName": this.partiDetailsArray.participantName,
-              "participantCode": this.partiDetailsArray.participantCode,
-              "participantAffiliation": this.partiDetailsArray.affiliation,
-              "participantPhone": this.partiDetailsArray.phone,
-              "participantMobile": this.partiDetailsArray.mobile,
-            }
-          },
-          "Section2": {
-            //shipment details
-            "status": this.covid19Array[0].covid19Data.Section2.status,
-            "data": {
-              "shipmentDate": this.shipmentData['shipmentDate'],
-              "resultDueDate": this.shipmentData['resultDueDate'],
-              "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
-              "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
-              "testingDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
-              "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
-              "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'] ? this.shipmentData['modeOfReceipt'] : '',
-              "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
-              "numberOfTestsSelect": this.shipmentData['numberOfTestsDropdown'],
-              "numberOfTestsSelected": this.shipmentData['numberOfTests'],
-              "qcData": {
-                "qcRadioSelected": this.qcDone,
-                "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
-                "qcDoneBy": this.qcDoneBy,
-                "status": this.isQCDoneShow,
-                "qcRadio": this.qcRadioArray
-              }
-            }
-          },
-          "Section3": {
-            //PT Panel details
-            "status": this.covid19Array[0].covid19Data.Section3.status,
-            "data": {
-              "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
-              "vlNotTestedReasonText": this.ptPanelData['vlNotTestedReasonText'],
-              "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
-              "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
-              "ptNotTestedCommentsText": this.ptPanelData['ptNotTestedCommentsText'],
-              "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
-              "ptSupportCommentsText": this.ptPanelData['ptSupportCommentsText'],
-              "ptSupportComments": this.ptPanelData['ptSupportComments'],
-            }
-
-          },
-          "Section4": {
-            //test type details
-            "status": this.covid19Array[0].covid19Data.Section4.status,
-            "data": this.testTypeModel
-          },
-          "Section5": {
-            //sample details
-            "status": this.covid19Array[0].covid19Data.Section5.status,
-            "data": {
-              "samples": this.samplesObj,
-              "resultsText": this.resultsTextArray,
-              "resultStatus": this.sampleDetailsArray.resultStatus,
-              "sampleList": this.sampleDetailsArray.sampleList
-            }
-          },
-          "Section6": {
-            //other information
-            "status": this.covid19Array[0].covid19Data.Section6.status,
-            "data": {
-              "supervisorReview": this.supervisorReviewArray,
-              "approvalLabel": this.approvalLabel,
-              "supervisorReviewSelected": this.supReview,
-              "approvalInputText": this.supervisorName,
-              "comments": this.comments
-            }
-          },
-          "customFields": {
-            "status": this.showCustomFieldData,
-            "data": {
-              "customField1Text": this.customFieldData['customField1Text'],
-              "customField1Val": this.customFieldData['customField1Val'],
-              "customField2Text": this.customFieldData['customField2Text'],
-              "customField2Val": this.customFieldData['customField2Val']
-            }
-          }
-        }
-      }
-    }
-    console.log(this.covid19JSON);
-    // 
-    if (this.network.type == 'none') {
-
-      this.covid19JSON['data']['isSynced'] = 'false';
-      this.LocalShipmentFormService.offlineStoreShipmentForm(this.covid19JSON);
-
-    } else {
-
-      this.covid19JSON['data']['isSynced'] = 'true';
-      this.CrudServiceService.postData('/api/shipments/save-form', this.covid19JSON).then((result) => {
-        if (result["status"] == 'success') {
-          this.alertService.presentAlert('Success', result["message"]);
-          this.router.navigate(['/all-pt-schemes']);
-        } else if (result["status"] == "auth-fail") {
-          this.alertService.presentAlert('Alert', result["message"]);
-          this.storage.set("isLogOut", true);
-          this.router.navigate(['/login']);
         } else {
 
-          this.alertService.presentAlert('Alert', result["message"]);
-        }
-      }, (err) => {
-        this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
-      });
-    }
-  }
+          this.covid19JSON['data']['isSynced'] = 'true';
+          this.CrudServiceService.postData('/api/shipments/save-form', this.covid19JSON).then((result) => {
+            if (result["status"] == 'success') {
+              this.alertService.presentAlert('Success', result["message"]);
+              this.router.navigate(['/all-pt-schemes']);
+            } else if (result["status"] == "auth-fail") {
+              this.alertService.presentAlert('Alert', result["message"]);
+              this.storage.set("isLogOut", true);
+              this.router.navigate(['/login']);
+            } else {
 
-}
+              this.alertService.presentAlert('Alert', result["message"]);
+            }
+          }, (err) => {
+            this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
+          });
+        }
+      }
+
+    }
+
+  }
   editForm() {
     this.isShowReviewMsg = false;
     this.isViewPage = true;
