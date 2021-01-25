@@ -558,7 +558,7 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>{{sampleDetailsArray.resultsText[0]}}</mat-label>
-                    <mat-select [(ngModel)]="result1Arr[i]" name="result1_[{{i}}]" (ngModelChange)="changedTestTypeResultPanel()" #result1="ngModel"
+                    <mat-select [(ngModel)]="result1Arr[i]" name="result1_[{{i}}]" (ngModelChange)="changedResult1(result1Arr[i],i,sampleName);changedTestTypeResultPanel()" #result1="ngModel"
                       [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-1'].data"
@@ -651,66 +651,9 @@
     </form>
     <!-- sample details end -->
 
-    <!-- Custom Field panel starts-->
-
-    <form #customFieldsForm="ngForm" novalidate>
-
-      <mat-expansion-panel *ngIf="showCustomFieldData" [expanded]="((!ptPanelNotTested && step === testTypeChangedIndex+sampleIndex+3) || (ptPanelNotTested &&  step === 3))"
-        (opened)="((!ptPanelNotTested && setStep(testTypeChangedIndex+sampleIndex+3))|| (ptPanelNotTested &&  step === 3))">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <ion-grid class="panelHeading">
-              <ion-row>
-                <ion-col size="10" class="grid-readonly-col">
-                  <span class="text-title-color">Custom Fields</span>
-                </ion-col>
-                <ion-col size="2" class="grid-readonly-col" *ngIf="isValidCustField==true">
-                  <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <ion-grid>
-          <ion-row *ngIf="customFieldData.customField1Text">
-            <ion-col size="12" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>{{customFieldData.customField1Text}}</mat-label>
-                <input matInput [(ngModel)]="customFieldData.customField1Val"
-                  placeholder="Enter {{customFieldData.customField1Text}}" #custField1="ngModel" name="custField1"
-                  [disabled]="isView=='true'">
-                <mat-error *ngIf="!customFieldData.customField1Val">
-                  {{customFieldData.customField1Text}} is required
-                </mat-error>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-          <ion-row *ngIf="customFieldData.customField2Text">
-            <ion-col size="12" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>{{customFieldData.customField2Text}}</mat-label>
-                <input matInput [(ngModel)]="customFieldData.customField2Val"
-                  placeholder="Enter {{customFieldData.customField2Text}}" #custField2="ngModel" name="custField2"
-                  [disabled]="isView=='true'">
-                <mat-error *ngIf="!customFieldData.customField2Val">
-                  {{customFieldData.customField2Text}} is required
-                </mat-error>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-
-        </ion-grid>
-        <mat-action-row>
-          <button mat-button color="primary" (click)="prevStep()">Previous</button>
-          <button mat-button color="warn" type='submit' (click)="checkCustFieldPanel('next')">Next</button>
-        </mat-action-row>
-      </mat-expansion-panel>
-    </form>
-
-    <!-- Custom Panel Ends-->
     <form #otherInfoPanelForm="ngForm" novalidate>
-      <mat-expansion-panel [expanded]="((!ptPanelNotTested && step === testTypeChangedIndex+sampleIndex+dynamicStep+3) || (ptPanelNotTested &&  step === 4))"
-        (opened)="((!ptPanelNotTested && setStep(testTypeChangedIndex+sampleIndex+dynamicStep+3))||( (ptPanelNotTested &&  step === 4)))">
+      <mat-expansion-panel [expanded]="((!ptPanelNotTested && step === testTypeChangedIndex+sampleIndex +3) || (ptPanelNotTested &&  step === 3))"
+        (opened)="((!ptPanelNotTested && setStep(testTypeChangedIndex+sampleIndex+3))||( (ptPanelNotTested &&  step === 3)))">
         <mat-expansion-panel-header>
           <mat-panel-title>
             <ion-grid class="panelHeading">
@@ -748,6 +691,34 @@
                 <mat-error *ngIf="!supervisorName">Supervisor Name is required</mat-error>
               </mat-form-field>
             </ion-col>
+            </ion-row>
+              <ion-row *ngIf="showCustomFieldData && customFieldData.customField1Text">
+                <ion-col size="12" class="grid-input-col">
+                  <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                    <mat-label>{{customFieldData.customField1Text}}</mat-label>
+                    <input matInput [(ngModel)]="customFieldData.customField1Val"
+                      placeholder="Enter {{customFieldData.customField1Text}}" #custField1="ngModel" name="custField1"
+                      [disabled]="isView=='true'">
+                    <mat-error *ngIf="!customFieldData.customField1Val">
+                      {{customFieldData.customField1Text}} is required
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+              <ion-row *ngIf="showCustomFieldData && customFieldData.customField2Text">
+                <ion-col size="12" class="grid-input-col">
+                  <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                    <mat-label>{{customFieldData.customField2Text}}</mat-label>
+                    <input matInput [(ngModel)]="customFieldData.customField2Val"
+                      placeholder="Enter {{customFieldData.customField2Text}}" #custField2="ngModel" name="custField2"
+                      [disabled]="isView=='true'">
+                    <mat-error *ngIf="!customFieldData.customField2Val">
+                      {{customFieldData.customField2Text}} is required
+                    </mat-error>
+                  </mat-form-field>
+                </ion-col>
+              </ion-row>
+            <ion-row>
             <ion-col size="12">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Comments</mat-label>
@@ -756,8 +727,6 @@
               </mat-form-field>
             </ion-col>
           </ion-row>
-
-
         </ion-grid>
 
         <mat-action-row>
@@ -777,7 +746,7 @@
       </ion-col>
       <ion-col size="6">
         <ion-button class="text-center native-btn summarizeButtons confirm"
-          (click)="confirmSerologyForm(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Confirm
+          (click)="confirmCovid19Form(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Confirm
         </ion-button>
       </ion-col>
     </ion-row>
