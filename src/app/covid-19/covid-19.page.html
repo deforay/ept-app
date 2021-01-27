@@ -333,8 +333,9 @@
             <ion-col size="12" class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Number of tests<span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <mat-select [(ngModel)]="shipmentData.numberOfTests" (ngModelChange)="changedNoOfTests(shipmentData.numberOfTests);changedNoOfTestsNotOnload(shipmentData.numberOfTests)"name="covidNumberOfTests"
-                  #covidNumberOfTests="ngModel" required [disabled]="isView=='true'"
+                <mat-select [(ngModel)]="shipmentData.numberOfTests"
+                  (ngModelChange)="changedNoOfTests(shipmentData.numberOfTests);changedNoOfTestsNotOnload(shipmentData.numberOfTests)"
+                  name="covidNumberOfTests" #covidNumberOfTests="ngModel" required [disabled]="isView=='true'"
                   data-alert="Please select Number of tests" id="numberOfTests">
                   <mat-option>--Select--</mat-option>
                   <mat-option *ngFor="let item of shipmentData.numberOfTestsDropdown" [value]="item.value">
@@ -432,17 +433,18 @@
       </mat-expansion-panel>
     </form>
 
-   
+
     <mat-card class="main-card-panel"
       *ngIf="showTestTypePanel && shipmentData.numberOfTests && (ptPanelNotTested==false || !ptPanelNotTested)">
       <mat-card-title> Test Type Details</mat-card-title>
       <mat-card-content>
-       <form #testTypePanelForm="ngForm" novalidate>
+        <form #testTypePanelForm="ngForm" novalidate>
           <div *ngFor="let testTypeItem of testTypeTextChangedArray;let i = index;">
             <!--[expanded]="step === i+3" (opened)="setStep(i+3)" -->
-            <mat-expansion-panel [expanded]="(!ptPanelNotTested && step ===  i+3)" (opened)="(!ptPanelNotTested && setStep(i+3))"
-            *ngIf="(shipmentData.numberOfTests==1 && testTypeItem=='Test-1') || (shipmentData.numberOfTests==2 && (testTypeItem=='Test-1' || testTypeItem=='Test-2')) || (shipmentData.numberOfTests==3 && (testTypeItem=='Test-1' || testTypeItem=='Test-2' || testTypeItem=='Test-3'))">
-           
+            <mat-expansion-panel [expanded]="(!ptPanelNotTested && step ===  i+3)"
+              (opened)="(!ptPanelNotTested && setStep(i+3))"
+              *ngIf="(shipmentData.numberOfTests==1 && testTypeItem=='Test-1') || (shipmentData.numberOfTests==2 && (testTypeItem=='Test-1' || testTypeItem=='Test-2')) || (shipmentData.numberOfTests==3 && (testTypeItem=='Test-1' || testTypeItem=='Test-2' || testTypeItem=='Test-3'))">
+
               <mat-expansion-panel-header>
                 <mat-panel-title>
                   <ion-grid class="panelHeading">
@@ -464,7 +466,7 @@
                     <mat-select [(ngModel)]="testTypeModel.typeValue[i]" name="covidTestTypeName{{i}}"
                       #covidTestTypeName="ngModel"
                       (ngModelChange)="getSelectedTestTypeName($event,i,testTypeDropDownArray[testTypeItem].data)"
-                       [disabled]="isView=='true'">
+                      [disabled]="isView=='true'">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let testTypeNameItem of testTypeDropDownArray[testTypeItem].data"
                         [value]="testTypeNameItem.value">
@@ -478,7 +480,8 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>Enter Kit Name </mat-label>
-                    <input matInput [(ngModel)]="testTypeModel.typeOther[i]" (ngModelChange)="changedTestTypeResultPanel()" name="covidTypeOther{{i}}"
+                    <input matInput [(ngModel)]="testTypeModel.typeOther[i]"
+                      (ngModelChange)="changedTestTypeResultPanel()" name="covidTypeOther{{i}}"
                       #covidTypeOther="ngModel" placeholder="Enter Kit Name" [disabled]="isView=='true'">
                   </mat-form-field>
                 </ion-col>
@@ -487,8 +490,9 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>Lot Number</mat-label>
-                    <input matInput [(ngModel)]="testTypeModel.lot[i]" (ngModelChange)="changedTestTypeResultPanel()" placeholder="Enter Lot Number"
-                      name="covidlot{{i}}" #covidlot="ngModel" [disabled]="isView=='true'">
+                    <input matInput [(ngModel)]="testTypeModel.lot[i]" (ngModelChange)="changedTestTypeResultPanel()"
+                      placeholder="Enter Lot Number" name="covidlot{{i}}" #covidlot="ngModel"
+                      [disabled]="isView=='true'">
                   </mat-form-field>
                 </ion-col>
               </ion-row>
@@ -496,8 +500,8 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>Exp Date</mat-label>
-                    <input matInput [matDatepicker]="expDatePicker" [(ngModel)]="expDateObj[i]" (ngModelChange)="changedTestTypeResultPanel()"
-                      placeholder="Choose Exp Date"
+                    <input matInput [matDatepicker]="expDatePicker" [(ngModel)]="expDateObj[i]"
+                      (ngModelChange)="changedTestTypeResultPanel()" placeholder="Choose Exp Date"
                       [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                       name="covidExpDate{{i}}" #covidExpDate="ngModel" [readonly]="isView!='true'"
                       [disabled]="isView=='true'">
@@ -512,13 +516,13 @@
                 <button mat-button color="primary" (click)="prevStep()">Previous</button>
                 <button mat-button color="warn" (click)="checkTestTypePanel('next',i)">Next</button>
               </mat-action-row>
-              </mat-expansion-panel>
-    
+            </mat-expansion-panel>
+
           </div>
         </form>
       </mat-card-content>
     </mat-card>
- 
+
     <form #sampleDetailsForm="ngForm" novalidate>
 
       <mat-card class="main-card-panel"
@@ -526,7 +530,8 @@
         <mat-card-title> Sample Details</mat-card-title>
         <mat-card-content>
           <div *ngFor="let sampleName of samplesNameArr;let i = index;">
-            <mat-expansion-panel *ngIf="showSampleData" [expanded]="(!ptPanelNotTested && step === i+testTypeChangedIndex+3)"
+            <mat-expansion-panel *ngIf="showSampleData"
+              [expanded]="(!ptPanelNotTested && step === i+testTypeChangedIndex+3)"
               (opened)="(!ptPanelNotTested && setStep(i+testTypeChangedIndex+3))">
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -537,10 +542,11 @@
                             *ngIf="samplesArray.mandatory[i]==true">*</span></span>
                       </ion-col>
                       <ion-col size="5" class="grid-readonly-col">
-                        <span class="resultAbbreviation">{{result1Arr[i]?result1Arr[i].resultCode:'X'}} -
-                          {{result2Arr[i]?result2Arr[i].resultCode:'X'}} -
-                          {{result3Arr[i]?result3Arr[i].resultCode:'X'}} =
-                          {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span>
+                        <span class="resultAbbreviation"
+                          *ngIf="shipmentData.numberOfTests==1">{{result1Arr[i]?result1Arr[i].resultCode:'X'}} = {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span>
+                        <span class="resultAbbreviation"  *ngIf="shipmentData.numberOfTests==2">{{result1Arr[i]?result1Arr[i].resultCode:'X'}} - {{result2Arr[i]?result2Arr[i].resultCode:'X'}} = {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span>
+                        <span class="resultAbbreviation" *ngIf="shipmentData.numberOfTests==3">{{result1Arr[i]?result1Arr[i].resultCode:'X'}} - {{result2Arr[i]?result2Arr[i].resultCode:'X'}} - {{result3Arr[i]?result3Arr[i].resultCode:'X'}} =
+                        {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span>
                       </ion-col>
                       <ion-col size="2" class="grid-readonly-col" *ngIf="isValidSampleDetails[i]">
                         <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
@@ -558,8 +564,9 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>{{sampleDetailsArray.resultsText[0]}}</mat-label>
-                    <mat-select [(ngModel)]="result1Arr[i]" name="result1_[{{i}}]" (ngModelChange)="changedResult1(result1Arr[i],i,sampleName);changedTestTypeResultPanel()" #result1="ngModel"
-                      [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">
+                    <mat-select [(ngModel)]="result1Arr[i]" name="result1_[{{i}}]"
+                      (ngModelChange)="changedResult1(result1Arr[i],i,sampleName);changedTestTypeResultPanel()"
+                      #result1="ngModel" [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-1'].data"
                         [value]="item">
@@ -578,8 +585,9 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>{{sampleDetailsArray.resultsText[1]}}</mat-label>
-                    <mat-select [(ngModel)]="result2Arr[i]" (ngModelChange)="changedTestTypeResultPanel()" name="result2_[{{i}}]" #result2="ngModel"
-                      [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">
+                    <mat-select [(ngModel)]="result2Arr[i]" (ngModelChange)="changedTestTypeResultPanel()"
+                      name="result2_[{{i}}]" #result2="ngModel" [disabled]="isView=='true'"
+                      [compareWith]="objectComparisonFunction">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-2'].data"
                         [value]="item">
@@ -600,8 +608,9 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>{{sampleDetailsArray.resultsText[2]}}</mat-label>
-                    <mat-select [(ngModel)]="result3Arr[i]" (ngModelChange)="changedTestTypeResultPanel()" name="result3_[{{i}}]" #result3="ngModel"
-                      [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">
+                    <mat-select [(ngModel)]="result3Arr[i]" (ngModelChange)="changedTestTypeResultPanel()"
+                      name="result3_[{{i}}]" #result3="ngModel" [disabled]="isView=='true'"
+                      [compareWith]="objectComparisonFunction">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Result-3'].data"
                         [value]="item">
@@ -619,8 +628,9 @@
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                     <mat-label>{{sampleDetailsArray.resultsText[3]}}</mat-label>
-                    <mat-select [(ngModel)]="finalResultArr[i]" (ngModelChange)="changedTestTypeResultPanel()" name="finalResult_[{{i}}]" #finalResult="ngModel"
-                      [disabled]="isView=='true'" [compareWith]="objectComparisonFunction">
+                    <mat-select [(ngModel)]="finalResultArr[i]" (ngModelChange)="changedTestTypeResultPanel()"
+                      name="finalResult_[{{i}}]" #finalResult="ngModel" [disabled]="isView=='true'"
+                      [compareWith]="objectComparisonFunction">
                       <mat-option>--Select--</mat-option>
                       <mat-option *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Final-Result'].data"
                         [value]="item">
@@ -652,7 +662,8 @@
     <!-- sample details end -->
 
     <form #otherInfoPanelForm="ngForm" novalidate>
-      <mat-expansion-panel [expanded]="((!ptPanelNotTested && step === testTypeChangedIndex+sampleIndex +3) || (ptPanelNotTested &&  step === 3))"
+      <mat-expansion-panel
+        [expanded]="((!ptPanelNotTested && step === testTypeChangedIndex+sampleIndex +3) || (ptPanelNotTested &&  step === 3))"
         (opened)="((!ptPanelNotTested && setStep(testTypeChangedIndex+sampleIndex+3))||( (ptPanelNotTested &&  step === 3)))">
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -691,34 +702,34 @@
                 <mat-error *ngIf="!supervisorName">Supervisor Name is required</mat-error>
               </mat-form-field>
             </ion-col>
-            </ion-row>
-              <ion-row *ngIf="showCustomFieldData && customFieldData.customField1Text">
-                <ion-col size="12" class="grid-input-col">
-                  <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                    <mat-label>{{customFieldData.customField1Text}}</mat-label>
-                    <input matInput [(ngModel)]="customFieldData.customField1Val"
-                      placeholder="Enter {{customFieldData.customField1Text}}" #custField1="ngModel" name="custField1"
-                      [disabled]="isView=='true'">
-                    <mat-error *ngIf="!customFieldData.customField1Val">
-                      {{customFieldData.customField1Text}} is required
-                    </mat-error>
-                  </mat-form-field>
-                </ion-col>
-              </ion-row>
-              <ion-row *ngIf="showCustomFieldData && customFieldData.customField2Text">
-                <ion-col size="12" class="grid-input-col">
-                  <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                    <mat-label>{{customFieldData.customField2Text}}</mat-label>
-                    <input matInput [(ngModel)]="customFieldData.customField2Val"
-                      placeholder="Enter {{customFieldData.customField2Text}}" #custField2="ngModel" name="custField2"
-                      [disabled]="isView=='true'">
-                    <mat-error *ngIf="!customFieldData.customField2Val">
-                      {{customFieldData.customField2Text}} is required
-                    </mat-error>
-                  </mat-form-field>
-                </ion-col>
-              </ion-row>
-            <ion-row>
+          </ion-row>
+          <ion-row *ngIf="showCustomFieldData && customFieldData.customField1Text">
+            <ion-col size="12" class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>{{customFieldData.customField1Text}}</mat-label>
+                <input matInput [(ngModel)]="customFieldData.customField1Val"
+                  placeholder="Enter {{customFieldData.customField1Text}}" #custField1="ngModel" name="custField1"
+                  [disabled]="isView=='true'">
+                <mat-error *ngIf="!customFieldData.customField1Val">
+                  {{customFieldData.customField1Text}} is required
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+          <ion-row *ngIf="showCustomFieldData && customFieldData.customField2Text">
+            <ion-col size="12" class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>{{customFieldData.customField2Text}}</mat-label>
+                <input matInput [(ngModel)]="customFieldData.customField2Val"
+                  placeholder="Enter {{customFieldData.customField2Text}}" #custField2="ngModel" name="custField2"
+                  [disabled]="isView=='true'">
+                <mat-error *ngIf="!customFieldData.customField2Val">
+                  {{customFieldData.customField2Text}} is required
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+          <ion-row>
             <ion-col size="12">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Comments</mat-label>
