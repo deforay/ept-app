@@ -559,7 +559,7 @@ export class covid19Page implements OnInit {
 
     await this.changedNoOfTests(this.shipmentData['numberOfTests']);
 
-    if ((this.ptPanelNotTested == false || !this.ptPanelNotTested) && (params!="onload" && this.updatedStatus==false)) {
+    if (this.ptPanelNotTested == false || !this.ptPanelNotTested) {
       this.isValidPTPanel = true;
     } else {
       if (!this.ptPanelData['vlNotTestedReason'] ||
@@ -1056,13 +1056,15 @@ export class covid19Page implements OnInit {
     })
 
   }
-
+  ngOnDestroy(){
+    this.events.unsubscribe('isChangedTestTypeResultPanel:true');
+  }
 
   confirmAcceptedTestResultData() {
 
     if (this.isAcceptedTestResultData) {
       if (this.isValidShipmentDetails == true && this.isValidPTPanel && this.isValidOtherInfoPanel == true) {
-
+      
         this.covid19JSON = {
 
           "authToken": this.authToken,
@@ -1172,7 +1174,6 @@ export class covid19Page implements OnInit {
           }
         }
         console.log(this.covid19JSON);
-        // 
         if (this.network.type == 'none') {
 
           this.covid19JSON['data']['isSynced'] = 'false';
