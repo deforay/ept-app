@@ -470,7 +470,7 @@ import {
             item => item.status == 'finalized' && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no')) && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
         } else if (filterJSON.shipmentFilterID == 'excluded') {
           this.shippingsArray = this.shippingsOriginalArray.filter(
-            item => (item.is_excluded == 'yes' && item.responseSwitch=='off') && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
+            item => ((item.is_excluded == 'yes' && item.responseSwitch=='off')||(item.responseSwitch=='off' && item.updatedOn=='')) && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId && item.schemeType == filterJSON.schemeTypeFliterID);
         } else {}
       } else if (filterJSON.shipmentFilterID && filterJSON.participantFliterId == '' && filterJSON.schemeTypeFliterID == '') {
 
@@ -485,7 +485,7 @@ import {
             item => item.status == 'finalized' && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no')) && item.isSynced != 'false');
         } else if (filterJSON.shipmentFilterID == 'excluded') {
           this.shippingsArray = this.shippingsOriginalArray.filter(
-            item => (item.is_excluded == 'yes' && item.responseSwitch=='off') && item.isSynced != 'false');
+            item => (((item.is_excluded == 'yes' && item.responseSwitch=='off')||(item.responseSwitch=='off' && item.updatedOn==''))||(item.responseSwitch=='off' && item.updatedOn=='')) && item.isSynced != 'false');
         } else {}
 
       } else if (filterJSON.shipmentFilterID && filterJSON.participantFliterId && filterJSON.schemeTypeFliterID == '') {
@@ -502,7 +502,7 @@ import {
             item => item.status == 'finalized' && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no')) && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId);
         } else if (filterJSON.shipmentFilterID == 'excluded' && filterJSON.participantFliterId) {
           this.shippingsArray = this.shippingsOriginalArray.filter(
-            item => (item.is_excluded == 'yes' && item.responseSwitch=='off') && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId);
+            item => ((item.is_excluded == 'yes' && item.responseSwitch=='off')||(item.responseSwitch=='off' && item.updatedOn=='')) && item.isSynced != 'false' && item.participantId == filterJSON.participantFliterId);
         } else {}
       } else if (filterJSON.participantFliterId && filterJSON.shipmentFilterID == '' && filterJSON.schemeTypeFliterID == '') {
         if (filterJSON.participantFliterId) {
@@ -536,7 +536,7 @@ import {
             item => item.status == 'finalized' && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no')) && item.isSynced != 'false' && item.isSynced != 'false' && item.schemeType == filterJSON.schemeTypeFliterID);
         } else if (filterJSON.shipmentFilterID == 'excluded') {
           this.shippingsArray = this.shippingsOriginalArray.filter(
-            item => (item.is_excluded == 'yes' && item.responseSwitch=='off') && item.isSynced != 'false' && item.schemeType == filterJSON.schemeTypeFliterID);
+            item => ((item.is_excluded == 'yes' && item.responseSwitch=='off')||(item.responseSwitch=='off' && item.updatedOn=='')) && item.isSynced != 'false' && item.schemeType == filterJSON.schemeTypeFliterID);
         } else {}
 
       }

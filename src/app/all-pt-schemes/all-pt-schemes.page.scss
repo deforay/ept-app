@@ -1,52 +1,63 @@
-.cardContent{
+.cardContent {
     padding-bottom: 5px;
     padding-top: 5px;
 }
-.eptCardRow{
+
+.eptCardRow {
     padding: 5px;
 }
-.text-normal{
-    color:black;
-}
-ion-grid ion-row ion-col{
-    padding:0 ;
-        p{
-            margin:3px;
-            font-size: 16px !important;
-        }
-    } 
-    ion-grid ion-row ion-col:nth-child(3n){
-        text-align: right;
-    } 
 
-    .shipmentValues{
-        color: black;
-        font-size: 13.75px
+.text-normal {
+    color: black;
+}
+
+ion-grid ion-row ion-col {
+    padding: 0;
+
+    p {
+        margin: 3px;
+        font-size: 16px !important;
     }
-.shipmentGrid{
-    padding:0px!important;
 }
 
-.text-center.native-btn.syncAll{
-height: 45px!important;
+ion-grid ion-row ion-col:nth-child(3n) {
+    text-align: right;
 }
-.text-title-color.unSynced{
-    color: red!important;
+
+.shipmentValues {
+    color: black;
+    font-size: 13.75px
 }
-ion-button.text-center.native-btn{
-    --background:#3c8dbc !important;
-    background:#3c8dbc !important;
+
+.shipmentGrid {
+    padding: 0px !important;
+}
+
+.text-center.native-btn.syncAll {
+    height: 45px !important;
+}
+
+.text-title-color.unSynced {
+    color: red !important;
+}
+
+ion-button.text-center.native-btn {
+    --background: #3c8dbc !important;
+    background: #3c8dbc !important;
     border-radius: 6px;
 }
-.skeltonRow{
+
+.skeltonRow {
     padding: 6px;
 }
-ion-footer{
+
+ion-footer {
     ion-toolbar {
         height: 54px;
-        --min-height:25px !important;
-        --background:#fff !important;
-        ion-title{
+        --min-height: 25px !important;
+        --background: #fff !important;
+
+        ion-title {
             color: #616161 !important;
             padding: 10px;
             text-align: center;
@@ -55,50 +66,62 @@ ion-footer{
         }
     }
 }
-.noShipments{
-    text-align: center;
+
+.noShipments {
+    text-align: justify;
     font-weight: 400;
     color: black;
     font-size: 15px;
 }
-.eptCard.noShipments{
-     padding:15px;
+
+.eptCard.noShipments {
+    padding: 15px;
 }
-.fliterCardContent{
+
+.fliterCardContent {
     padding: 5px;
 }
-.fliterRow{
+
+.fliterRow {
     margin-top: 5px;
 }
-.fliterCard{
+
+.fliterCard {
     margin: 17px;
 }
 
-.funnelIcon{
+.funnelIcon {
     font-size: 25px;
     color: white;
     margin-right: 15px;
 }
-.eptHeaderToolbar{
+
+.eptHeaderToolbar {
     --background: #3c8dbc;
 }
-.eptHeaderTitle{
+
+.eptHeaderTitle {
     color: white;
-    font-size: 17px!important;
+    font-size: 17px !important;
 }
-ion-menu-button{
-    --color:white !important;
-     color:white !important;
+
+ion-menu-button {
+    --color: white !important;
+    color: white !important;
 }
-.text-center.native-btn.viewResponse{
+
+.text-center.native-btn.viewResponse {
     float: left;
 }
-.text-center.native-btn.enterEdit.download{
-    font-size: 10px!important;
+
+.text-center.native-btn.enterEdit.download {
+    font-size: 10px !important;
 }
-.text-center.native-btn.enterEdit{
+
+.text-center.native-btn.enterEdit {
     float: right;
 }
-.filterButton{
+
+.filterButton {
     margin: -17px;
 }

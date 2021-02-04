@@ -133,7 +133,7 @@ export class LoginPage implements OnInit {
     this.serverHostFormControl.setValue('');
     this.serverHostFormControl.markAsUntouched();
     this.serverHostFormControl.setErrors(null);
-    
+
   }
 
   ionViewWillEnter() {
@@ -146,12 +146,16 @@ export class LoginPage implements OnInit {
       this.alertService.presentAlert('Alert', "You are offline.Please connect with online");
     } else {
 
-      if (this.emailFormControl.invalid || this.pswdFormControl.invalid || this.serverHostFormControl.invalid) {} else {
+      if (this.emailFormControl.invalid || this.pswdFormControl.invalid || this.serverHostFormControl.invalid) {
+
+      } else {
+        
         var apiUrl = '';
         if (this.serverHostFormControl.value.indexOf("https://") == 0 || this.serverHostFormControl.value.indexOf("Https://") == 0) {
           apiUrl = this.serverHostFormControl.value
         } else if (this.serverHostFormControl.value.indexOf("http://") == 0 || this.serverHostFormControl.value.indexOf("Http://") == 0) {
-          apiUrl = this.serverHostFormControl.value
+          var replacedHttps = this.serverHostFormControl.value.replace('http', "https");
+          apiUrl = replacedHttps;
         } else {
           apiUrl = "https://" + this.serverHostFormControl.value
         }
@@ -168,11 +172,11 @@ export class LoginPage implements OnInit {
               }
               this.CrudServiceService.postData('/api/login', loginJSON)
                 .then(async (result) => {
-                 
-                  if(result['data']){
-                  this.resendEmailLink = result['data'].resendMail ? result['data'].resendMail : '';
+
+                  if (result['data']) {
+                    this.resendEmailLink = result['data'].resendMail ? result['data'].resendMail : '';
                   }
-                  this.resendEmailMessage = result["message"] ? result["message"]:'';
+                  this.resendEmailMessage = result["message"] ? result["message"] : '';
 
                   if (result["status"] == 'success') {
 
@@ -221,12 +225,12 @@ export class LoginPage implements OnInit {
                   } else {
 
                     if (result['data']) {
-                    if (result['data'].resendMail) {
+                      if (result['data'].resendMail) {
 
-                      this.resendAlert();
+                        this.resendAlert();
 
-                    }
-                   } else {
+                      }
+                    } else {
                       this.alertService.presentAlert('Alert', result["message"], '');
                     }
 
@@ -266,9 +270,8 @@ export class LoginPage implements OnInit {
         text: 'Cancel',
         role: 'cancel',
         cssClass: 'secondary',
-        handler: () => {
-        }
-      },{
+        handler: () => {}
+      }, {
         text: 'Resend Verification Link',
         handler: () => {
           this.resendEmailAPI();
