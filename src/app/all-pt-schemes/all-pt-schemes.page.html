@@ -167,11 +167,11 @@
 
           <ion-col size="6">
 
-            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && responseSwitch==on && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no')) && item.isSynced=='' " size="small" class="text-center native-btn enterEdit"
+            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && responseSwitch==on && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no' || item.is_excluded == '' )) && item.isSynced=='' " size="small" class="text-center native-btn enterEdit"
               (click)="goToTestForm(item)">Enter Response
             </ion-button>
 
-            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && responseSwitch==on && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no')) || item.isSynced=='false' " size="small" class="text-center native-btn enterEdit"
+            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && responseSwitch==on && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no' || item.is_excluded == '' )) || item.isSynced=='false' " size="small" class="text-center native-btn enterEdit"
               (click)="goToTestForm(item)">Edit Response</ion-button>
 
             <ion-button *ngIf="item.status=='finalized' && item.invididualReport!=''" size="small" class="text-center native-btn enterEdit download"
