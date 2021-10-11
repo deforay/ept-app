@@ -162,8 +162,10 @@ export class LoginPage implements OnInit {
         this.storage.remove('appPin');
         this.storage.set('apiUrl', apiUrl.trim());
         this.storage.get('appVersionNumber').then((appVersionNumber) => {
+          appVersionNumber = '2.5.1';
           if (appVersionNumber) {
-            this.appVersionNumber = appVersionNumber;
+            this.appVersionNumber = '2.5.1';
+            // this.appVersionNumber = appVersionNumber;
             if (this.appVersionNumber) {
               let loginJSON = {
                 "userId": this.emailFormControl.value,

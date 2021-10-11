@@ -13,23 +13,23 @@
 <div *ngIf="networkType!='none'" class="topDiv">
   <ion-card *ngFor="let item of individualReports | filter:search" class="eptCard">
     <ion-card-header class="CardHeader">
-      <p text-wrap class="schemeName"> {{item.schemeName}}</p>
+      <p class="ion-text-wrap" class="schemeName"> {{item.schemeName}}</p>
     </ion-card-header>
     <ion-card-content class="cardContent">
       <ion-grid>
         <ion-row *ngIf="item.shipmentDate">
           <ion-col size="5">
-            <p text-wrap>
+            <p class="ion-text-wrap">
               <span class="text-title-color">Shipment Date </span>
             </p>
           </ion-col>
           <ion-col size="1">
-              <p text-wrap>
+              <p class="ion-text-wrap">
                   <span class="text-title-color">:</span>
               </p>
           </ion-col>
           <ion-col>
-            <p text-wrap class="shipmentValues">
+            <p class="ion-text-wrap" class="shipmentValues">
               <span>{{item.shipmentDate | date :'d MMM y'}}</span>
             </p>
           </ion-col>
@@ -38,17 +38,17 @@
 
        <ion-row *ngIf="item.shipmentCode">
           <ion-col size="5">
-            <p text-wrap>
+            <p class="ion-text-wrap">
               <span class="text-title-color">Shipment Code </span>
             </p>
           </ion-col>
           <ion-col size="1">
-              <p text-wrap>
+              <p class="ion-text-wrap">
                   <span class="text-title-color">:</span>
               </p>
           </ion-col>
           <ion-col>
-            <p text-wrap class="shipmentValues">
+            <p class="ion-text-wrap" class="shipmentValues">
               <span>{{item.shipmentCode}}</span>
             </p>
           </ion-col>
@@ -57,17 +57,17 @@
 
         <ion-row *ngIf="item.uniqueIdentifier">
             <ion-col size="5">
-              <p text-wrap>
+              <p class="ion-text-wrap">
                 <span class="text-title-color">Participant ID </span>
               </p>
             </ion-col>
             <ion-col size="1">
-                <p text-wrap>
+                <p class="ion-text-wrap">
                     <span class="text-title-color">:</span>
                 </p>
             </ion-col>
             <ion-col>
-              <p text-wrap class="shipmentValues">
+              <p class="ion-text-wrap" class="shipmentValues">
                 <span>{{item.uniqueIdentifier}}</span>
               </p>
             </ion-col>
@@ -77,17 +77,17 @@
 
           <ion-row *ngIf="item.name">
               <ion-col size="5">
-                <p text-wrap>
+                <p class="ion-text-wrap">
                   <span class="text-title-color">Participant Name </span>
                 </p>
               </ion-col>
               <ion-col size="1">
-                  <p text-wrap>
+                  <p class="ion-text-wrap">
                       <span class="text-title-color">:</span>
                   </p>
               </ion-col>
               <ion-col>
-                <p text-wrap class="shipmentValues">
+                <p class="ion-text-wrap" class="shipmentValues">
                   <span>{{item.name}}</span>
                 </p>
               </ion-col>
@@ -96,17 +96,17 @@
 
               <ion-row *ngIf="item.responseDate">
                   <ion-col size="5">
-                    <p text-wrap>
+                    <p class="ion-text-wrap">
                       <span class="text-title-color">Response Date </span>
                     </p>
                   </ion-col>
                   <ion-col size="1">
-                      <p text-wrap>
+                      <p class="ion-text-wrap">
                           <span class="text-title-color">:</span>
                       </p>
                   </ion-col>
                   <ion-col>
-                    <p text-wrap class="shipmentValues">
+                    <p class="ion-text-wrap" class="shipmentValues">
                       <span>{{item.responseDate  | date :'d MMM y'}}</span>
                     </p>
                   </ion-col>
@@ -129,42 +129,42 @@
         <ion-grid class="shipmentGrid">
           <ion-row class="skeltonRow">
             <ion-col size="12">
-              <p text-wrap>
+              <p class="ion-text-wrap">
                 <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
               </p>
             </ion-col>
           </ion-row>
           <ion-row class="skeltonRow">
             <ion-col size="12">
-              <p text-wrap>
+              <p class="ion-text-wrap">
                 <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
               </p>
             </ion-col>
           </ion-row>
           <ion-row class="skeltonRow">
             <ion-col size="12">
-              <p text-wrap>
+              <p class="ion-text-wrap">
                 <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
               </p>
             </ion-col>
           </ion-row>
           <ion-row class="skeltonRow">
             <ion-col size="12">
-              <p text-wrap>
+              <p class="ion-text-wrap">
                 <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
               </p>
             </ion-col>
           </ion-row>
           <ion-row class="skeltonRow">
             <ion-col size="12">
-              <p text-wrap>
+              <p class="ion-text-wrap">
                 <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
               </p>
             </ion-col>
           </ion-row>
           <ion-row class="skeltonRow">
             <ion-col size="12">
-              <p text-wrap>
+              <p class="ion-text-wrap">
                 <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
               </p>
             </ion-col>
