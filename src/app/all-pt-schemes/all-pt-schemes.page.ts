@@ -290,7 +290,11 @@ export class AllPTSchemesPage implements OnInit {
               } else {
                 result["data"].enableAddingTestResponseDate = false;
               }
-
+              if (result["data"].displaySampleConditionFields == "yes") {
+                result["data"].displaySampleConditionFields = true;
+              } else {
+                result["data"].enableChoosingModeOfReceipt = false;
+              }
               if (result["data"].enableChoosingModeOfReceipt == "yes") {
                 result["data"].enableChoosingModeOfReceipt = true;
               } else {
