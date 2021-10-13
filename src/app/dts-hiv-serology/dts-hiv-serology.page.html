@@ -482,7 +482,7 @@
               </mat-form-field>
             </ion-col>
           </ion-row>
-          <ion-row>
+          <ion-row *ngIf="displaySampleConditionFields">
             <ion-col size="12" class="grid-input-col">
               <mat-form-field
                 class="login-full-width grid-col-form"
@@ -715,8 +715,100 @@
         </mat-action-row>
       </mat-expansion-panel>
     </form>
+<form #PTPanelTestForm="ngForm" novalidate>
 
-    <mat-card class="main-card-panel" *ngIf="showTestkitPanel">
+      <mat-expansion-panel *ngIf="showPTPanelData" [expanded]="step === 2" (opened)="setStep(2)">
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <ion-grid class="panelHeading">
+              <ion-row>
+                <ion-col size="10" class="grid-readonly-col">
+                  <span class="text-title-color"> PT Panel Test</span>
+                </ion-col>
+                <ion-col size="2" class="grid-readonly-col" *ngIf="isValidPTPanel">
+                  <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ion-row>
+          <ion-col class="grid-input-col">
+            <section class="div-section">
+              <mat-checkbox [(ngModel)]="ptPanelNotTested" name="covidPtPanelTest" #covidPtPanelTest="ngModel"
+                [disabled]="isView=='true'">PT panel not tested</mat-checkbox>
+            </section>
+          </ion-col>
+        </ion-row>
+
+        <section *ngIf="ptPanelNotTested">
+          <ion-row>
+            <ion-col size="12" class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>
+                  {{ptPanelData.notTestedReasonText}} <span class="danger-text" *ngIf="isView=='true'">*</span>
+                </mat-label>
+                <mat-select [(ngModel)]="ptPanelData.notTestedReasonSelected" name="covidNotTested" #covidNotTested="ngModel"
+                  [required]="ptPanelNotTested" [disabled]="isView=='true'">
+                  <mat-option>--Select--</mat-option>
+                  <mat-option *ngFor="let item of ptPanelData.notTestedReasons" [value]="item.value">
+                    {{item.show}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="ptPanelNotTested && !ptPanelData.notTestedReasonSelected">Please choose the Reason for not testing
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+             <ion-col size="12" class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>
+                  Received the PT Panel? <span class="danger-text" *ngIf="isView=='true'">*</span>
+                </mat-label>
+                <mat-select [(ngModel)]="ptPanelData.receivedPtPanel" name="covidNotTested" #covidNotTested="ngModel"
+                  [required]="ptPanelNotTested" [disabled]="isView=='true'">
+                  <mat-option>--Select--</mat-option>
+                  <mat-option *ngFor="let item of ptPanelData.receivedPtPanelSelect" [value]="item.value">
+                    {{item.show}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="ptPanelNotTested && !ptPanelData.receivedPtPanel">Please choose the Reason for not testing
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+            <ion-col size="12" class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>
+                  {{ptPanelData.ptNotTestedCommentsText}} <span class="danger-text" *ngIf="isView=='true'">*</span>
+                </mat-label>
+                <textarea matInput placeholder="Enter Your Comments here" name="covidPtNotTestedComments"
+                  #covidPtNotTestedComments="ngModel" [(ngModel)]="ptPanelData.ptNotTestedComments"
+                  [disabled]="isView=='true'" [required]="ptPanelNotTested"></textarea>
+                <mat-error *ngIf="ptPanelNotTested && !ptPanelData.ptNotTestedComments">Please Enter Your Comments
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+            <ion-col size="12" class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>
+                  {{ptPanelData.ptSupportCommentsText}}
+                </mat-label>
+                <textarea matInput placeholder="Enter Your Support Comments here" name="covidPtNotSupportComments"
+                  #covidPtNotSupportComments="ngModel" [disabled]="isView=='true'"
+                  [(ngModel)]="ptPanelData.ptSupportComments"></textarea>
+                <!-- [required]="ptPanelNotTested" -->
+                <!-- <mat-error *ngIf="ptPanelNotTested && !ptPanelData.ptSupportComments">Please Enter Your Comments
+                </mat-error> -->
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+        </section>
+        <mat-action-row>
+          <button mat-button color="warn" (click)="prevStep()">Previous</button>
+          <button mat-button color="primary" type="submit" (click)="checkPtPanel('next')">Next</button>
+        </mat-action-row>
+      </mat-expansion-panel>
+    </form>
+    <mat-card class="main-card-panel" *ngIf="showTestkitPanel && (ptPanelNotTested==false || !ptPanelNotTested)">
       <mat-card-title> Test Kit Details</mat-card-title>
       <mat-card-content>
         <form #testKitPanelForm="ngForm" novalidate>
@@ -867,7 +959,7 @@
       </mat-card-content>
     </mat-card>
     <form #sampleDetailsForm="ngForm" novalidate>
-      <mat-card class="main-card-panel" *ngIf="showSampleData">
+      <mat-card class="main-card-panel" *ngIf="showSampleData && (ptPanelNotTested==false || !ptPanelNotTested)">
         <mat-card-title> Sample Details</mat-card-title>
         <mat-card-content>
           <div *ngFor="let sampleName of samplesNameArr;let i = index;">
