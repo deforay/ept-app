@@ -14,7 +14,7 @@ import {
 import {
   Router,
   ActivatedRoute
-} from '@angular/router';
+} from '@angular/router'; ``
 import {
   LoaderService,
   AlertService
@@ -149,6 +149,7 @@ export class DtsHivViralloadPage implements OnInit {
   dynamicStep = 0;
   shipmentCode: any;
   isViewPage:boolean;
+  validParticipentDetails: boolean;
 
 
   constructor(private activatedRoute: ActivatedRoute,
@@ -235,8 +236,15 @@ export class DtsHivViralloadPage implements OnInit {
       }
       if (this.vlDataArray[0].vlData.Section1.status == true) {
         this.partDetailsArray = this.vlDataArray[0].vlData.Section1.data;
+        this.partDetailsArray['contactPersonEmail'] = this.vlDataArray[0].vlData.Section1.contactPersonEmail;
+        this.partDetailsArray['contactPersonName'] = this.vlDataArray[0].vlData.Section1.contactPersonName;
+        this.partDetailsArray['contactPersonTelephone'] = this.vlDataArray[0].vlData.Section1.contactPersonTelephone;
+        this.partDetailsArray['labDirectorEmail'] = this.vlDataArray[0].vlData.Section1.labDirectorEmail;
+        this.partDetailsArray['labDirectorName'] = this.vlDataArray[0].vlData.Section1.labDirectorName;
+         this.partDetailsArray['laboratoryId'] = this.vlDataArray[0].vlData.Section1.laboratoryId;
+        this.partDetailsArray['laboratoryName'] = this.vlDataArray[0].vlData.Section1.laboratoryName;
       }
-
+console.log("partdetailsarray",this.partDetailsArray)
       if (this.vlDataArray[0].vlData.Section2.status == true) {
 
         this.shipmentsDetailsArray = this.vlDataArray[0].vlData.Section2.data;
@@ -652,7 +660,50 @@ export class DtsHivViralloadPage implements OnInit {
       this.step = 4;
     }
   }
+checkParticpentPanel(param) {
+    // if (this.isView == "true") {
+    //   this.setStep(2);
+    // }
+    if (!this.partDetailsArray['contactPersonEmail'] ||
+      !this.partDetailsArray['contactPersonName'] ||
+      !this.partDetailsArray['contactPersonTelephone'] ||
+      !this.partDetailsArray['labDirectorEmail'] ||
+      !this.partDetailsArray['labDirectorName'] ||
+      !this.partDetailsArray['laboratoryId'] ||
+      !this.partDetailsArray['laboratoryName']) {
+      this.validParticipentDetails = false;
 
+      if (param != 'onload') {
+        if (this.isView == "true") {
+          this.nextStep();
+        } else {
+          if (!this.partDetailsArray['contactPersonEmail']) {
+            this.alertService.presentAlert('Alert', document.getElementById('contactPersonEmail').getAttribute('data-alert'));
+          } else if (!this.partDetailsArray['contactPersonName']) {
+            this.alertService.presentAlert('Alert', document.getElementById('contactPersonName').getAttribute('data-alert'));
+          } else if (!this.partDetailsArray['contactPersonTelephone']) {
+            this.alertService.presentAlert('Alert', document.getElementById('contactPersonTelephone').getAttribute('data-alert'));
+          } else if (!this.partDetailsArray['labDirectorEmail']) {
+            this.alertService.presentAlert('Alert', document.getElementById('labDirectorEmail').getAttribute('data-alert'));
+          } else if (!this.partDetailsArray['labDirectorName']) {
+            this.alertService.presentAlert('Alert', document.getElementById('labDirectorName').getAttribute('data-alert'));
+          } else if (!this.partDetailsArray['laboratoryId']) {
+            this.alertService.presentAlert('Alert', document.getElementById('laboratoryId').getAttribute('data-alert'));
+          } else if (!this.partDetailsArray['laboratoryName']) {
+            this.alertService.presentAlert('Alert', document.getElementById('laboratoryName').getAttribute('data-alert'));
+          } else {
+            
+          }
+        }
+      }
+
+    } else {
+      this.validParticipentDetails = true;
+      if (param == 'next') {
+        this.nextStep();
+      }
+    }
+  }
   async submitViralLoad(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
 
     this.isNextStepPanelTest = true;
@@ -718,6 +769,13 @@ export class DtsHivViralloadPage implements OnInit {
                 "participantAffiliation": this.partDetailsArray.affiliation,
                 "participantPhone": this.partDetailsArray.phone,
                 "participantMobile": this.partDetailsArray.mobile,
+                "contactPersonEmail": this.partDetailsArray['contactPersonEmail'],
+                  "contactPersonName": this.partDetailsArray['contactPersonName'],
+                  "contactPersonTelephone": this.partDetailsArray['contactPersonTelephone'],
+                  "labDirectorEmail": this.partDetailsArray['labDirectorEmail'],
+                  "labDirectorName": this.partDetailsArray['labDirectorName'],
+                  "laboratoryId": this.partDetailsArray['laboratoryId'],
+                  "laboratoryName": this.partDetailsArray['laboratoryName'],
               }
             },
             "Section2": {
@@ -883,6 +941,13 @@ export class DtsHivViralloadPage implements OnInit {
                 "participantAffiliation": this.partDetailsArray.affiliation,
                 "participantPhone": this.partDetailsArray.phone,
                 "participantMobile": this.partDetailsArray.mobile,
+                "contactPersonEmail": this.partDetailsArray['contactPersonEmail'],
+                  "contactPersonName": this.partDetailsArray['contactPersonName'],
+                  "contactPersonTelephone": this.partDetailsArray['contactPersonTelephone'],
+                  "labDirectorEmail": this.partDetailsArray['labDirectorEmail'],
+                  "labDirectorName": this.partDetailsArray['labDirectorName'],
+                  "laboratoryId": this.partDetailsArray['laboratoryId'],
+                  "laboratoryName": this.partDetailsArray['laboratoryName'],
               }
             },
             "Section2": {
@@ -991,6 +1056,9 @@ export class DtsHivViralloadPage implements OnInit {
         });
       }
     }
+  }
+  nextStep() {
+    this.step++;
   }
 
   editForm() {

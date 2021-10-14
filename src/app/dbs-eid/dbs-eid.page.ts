@@ -18,7 +18,7 @@ import {
 import {
   LoaderService,
   AlertService
-} from '../../app/service/providers';
+} from '../../app/service/providers'; 
 import {
   CrudServiceService
 } from '../../app/service/crud/crud-service.service';
@@ -111,6 +111,10 @@ export class DbsEidPage implements OnInit {
   viewSchemeName:string;
   shipmentCode: any;
   isViewPage:boolean;
+  validParticipentDetails: boolean=false;
+  changeEmail:boolean=false;
+  oldEmail:any='';
+  showMatchError: boolean;
   constructor(private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public LoaderService: LoaderService,
@@ -159,7 +163,20 @@ export class DbsEidPage implements OnInit {
     this.step--;
   }
   ngOnInit() {}
-
+async changeDirectorMail(){
+     let temp= this.alertService.confirmEmailAlert();
+     if (temp) {
+      this.changeEmail=true;
+     } else {
+       this.participantData['labDirectorEmail']= this.participantData['oldEmail'];
+     }
+}
+verifyEmailMatch(){
+  if (this.participantData['labDirectorEmail']!=this.participantData['changeLabDirectorEmail']) {
+    this.showMatchError = true;
+  }
+  // console.log(this.participantData['changeLabDirectorEmail'])
+}
   bindEIDData() {
 
     if (this.eidArray[0].eidData) {
@@ -176,10 +193,19 @@ export class DbsEidPage implements OnInit {
         this.participantData['affiliation'] = this.eidArray[0].eidData.Section1.data.affiliation;
         this.participantData['phone'] = this.eidArray[0].eidData.Section1.data.phone;
         this.participantData['mobile'] = this.eidArray[0].eidData.Section1.data.mobile;
+        this.participantData['contactPersonEmail'] = this.eidArray[0].eidData.Section1.data.contactPersonEmail;
+        this.participantData['contactPersonName'] = this.eidArray[0].eidData.Section1.data.contactPersonName;
+        this.participantData['contactPersonTelephone'] = this.eidArray[0].eidData.Section1.data.contactPersonTelephone;
+        this.participantData['labDirectorEmail'] = this.eidArray[0].eidData.Section1.data.labDirectorEmail;
+        this.participantData['labDirectorName'] = this.eidArray[0].eidData.Section1.data.labDirectorName;
+         this.participantData['laboratoryId'] = this.eidArray[0].eidData.Section1.data.laboratoryId;
+        this.participantData['laboratoryName'] = this.eidArray[0].eidData.Section1.data.laboratoryName;
+        this.participantData['oldEmail']=this.participantData['labDirectorEmail']
       } else {
         this.participantData = {};
         this.showParticipantData = false;
       }
+      console.log("participent data ",this.participantData)
       if (this.eidArray[0].eidData.Section2.status == true) {
 
         this.showShipmentData = true;
@@ -273,7 +299,7 @@ export class DbsEidPage implements OnInit {
       } else {
         this.showCustomFieldData = false;
       }
-
+this.checkParticpentPanel('onload')
       this.checkShipmentPanel('onload');
       this.checkPtPanel('onload');
       if (this.showCustomFieldData == true) {
@@ -391,6 +417,50 @@ export class DbsEidPage implements OnInit {
 
     } else {
       this.validShipmentDetails = true;
+      if (param == 'next') {
+        this.nextStep();
+      }
+    }
+  }
+ checkParticpentPanel(param) {
+    // if (this.isView == "true") {
+    //   this.setStep(2);
+    // }
+    if (!this.participantData['contactPersonEmail'] ||
+      !this.participantData['contactPersonName'] ||
+      !this.participantData['contactPersonTelephone'] ||
+      !this.participantData['labDirectorEmail'] ||
+      !this.participantData['labDirectorName'] ||
+      !this.participantData['laboratoryId'] ||
+      !this.participantData['laboratoryName']) {
+      this.validParticipentDetails = false;
+
+      if (param != 'onload') {
+        if (this.isView == "true") {
+          this.nextStep();
+        } else {
+          if (!this.participantData['contactPersonEmail']) {
+            this.alertService.presentAlert('Alert', document.getElementById('contactPersonEmail').getAttribute('data-alert'));
+          } else if (!this.participantData['contactPersonName']) {
+            this.alertService.presentAlert('Alert', document.getElementById('contactPersonName').getAttribute('data-alert'));
+          } else if (!this.participantData['contactPersonTelephone']) {
+            this.alertService.presentAlert('Alert', document.getElementById('contactPersonTelephone').getAttribute('data-alert'));
+          } else if (!this.participantData['labDirectorEmail']) {
+            this.alertService.presentAlert('Alert', document.getElementById('labDirectorEmail').getAttribute('data-alert'));
+          } else if (!this.participantData['labDirectorName']) {
+            this.alertService.presentAlert('Alert', document.getElementById('labDirectorName').getAttribute('data-alert'));
+          } else if (!this.participantData['laboratoryId']) {
+            this.alertService.presentAlert('Alert', document.getElementById('laboratoryId').getAttribute('data-alert'));
+          } else if (!this.participantData['laboratoryName']) {
+            this.alertService.presentAlert('Alert', document.getElementById('laboratoryName').getAttribute('data-alert'));
+          } else {
+            
+          }
+        }
+      }
+
+    } else {
+      this.validParticipentDetails = true;
       if (param == 'next') {
         this.nextStep();
       }
@@ -541,6 +611,7 @@ export class DbsEidPage implements OnInit {
     } else {
       this.otherInfoValid = false;
     }
+    this.checkParticpentPanel('submit')
     this.checkShipmentPanel('submit');
     this.checkPtPanel('submit');
     if (this.showCustomFieldData == true) {
@@ -613,6 +684,13 @@ export class DbsEidPage implements OnInit {
                   "participantAffiliation": this.participantData['affiliation'],
                   "participantPhone": this.participantData['phone'],
                   "participantMobile": this.participantData['mobile'],
+                  "contactPersonEmail": this.participantData['contactPersonEmail'],
+                  "contactPersonName": this.participantData['contactPersonName'],
+                  "contactPersonTelephone": this.participantData['contactPersonTelephone'],
+                  "labDirectorEmail": this.participantData['labDirectorEmail'],
+                  "labDirectorName": this.participantData['labDirectorName'],
+                  "laboratoryId": this.participantData['laboratoryId'],
+                  "laboratoryName": this.participantData['laboratoryName'],
                 }
               },
               "Section2": {
@@ -716,6 +794,7 @@ export class DbsEidPage implements OnInit {
       this.otherInfoValid = false;
     }
     this.checkShipmentPanel('submit');
+    this.checkParticpentPanel('submit')
     this.checkPtPanel('submit');
     if (this.showCustomFieldData == true) {
       this.checkCustFieldPanel('submit');
@@ -786,6 +865,13 @@ export class DbsEidPage implements OnInit {
                   "participantAffiliation": this.participantData['affiliation'],
                   "participantPhone": this.participantData['phone'],
                   "participantMobile": this.participantData['mobile'],
+                  "contactPersonEmail": this.participantData['contactPersonEmail'],
+                  "contactPersonName": this.participantData['contactPersonName'],
+                  "contactPersonTelephone": this.participantData['contactPersonTelephone'],
+                  "labDirectorEmail": this.participantData['labDirectorEmail'],
+                  "labDirectorName": this.participantData['labDirectorName'],
+                  "laboratoryId": this.participantData['laboratoryId'],
+                  "laboratoryName": this.participantData['laboratoryName'],
                 }
               },
               "Section2": {

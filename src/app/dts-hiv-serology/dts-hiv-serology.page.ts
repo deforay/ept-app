@@ -131,6 +131,7 @@ export class DTSHIVSerologyPage implements OnInit {
   showPTPanelData: boolean;
   ptPanelData = {};
   isPtPanelNotTestedRadio;
+  allowRepeatTests:boolean=false;
   ptPanelNotTested: boolean;
   isValidPTPanel: boolean = false;
   isValidTestTypePanel: boolean = false;
@@ -163,6 +164,7 @@ export class DTSHIVSerologyPage implements OnInit {
           participantLogin.enableAddingTestResponseDate;
         this.isPartiEditModeRec = participantLogin.enableChoosingModeOfReceipt;
         this.displaySampleConditionFields = participantLogin.displaySampleConditionFields;
+        this.allowRepeatTests  = participantLogin.allowRepeatTests;
         this.getSerologyDetails();
       }
     });

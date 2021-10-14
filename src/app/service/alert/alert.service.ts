@@ -145,4 +145,26 @@ export class AlertService {
     });
     await alert.present();
   }
+async confirmEmailAlert(){
+  const alert = await this.alertController.create({
+        header: 'Alert',
+        mode: "ios",
+        message: 'Do you want to change Lab Director Mail?',
+        buttons: [{
+        text: 'OK',
+        handler: () => {
+          debugger;
+          return true
+        }
+      }, {
+        text: 'Cancel',
+        handler: () => {
+          return false
+        }
+      }],
+      backdropDismiss: false
+      });
+
+      await alert.present();
+}
 }
