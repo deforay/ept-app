@@ -11,18 +11,21 @@
   <mat-accordion class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
       <mat-expansion-panel-header>
-        <mat-panel-title>
+        <mat-panel-title>  
           <ion-grid class="panelHeading">
-            <ion-row>
-              <ion-col size="12" class="grid-readonly-col">
-                <span class="text-title-color">Participant Details</span>
-              </ion-col>
-            </ion-row>
+             <ion-row>
+                <ion-col size="10" class="grid-readonly-col">
+                  <span class="text-title-color">Participent Details</span>
+                </ion-col>
+                <ion-col size="2" class="grid-readonly-col" *ngIf="validParticipentDetails==true">
+                  <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+                </ion-col>
+              </ion-row>
           </ion-grid>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
-      <ion-grid>
+      <!-- <ion-grid>
         <ion-row *ngIf="partDetailsArray.participantName">
           <ion-col size="5" class="grid-readonly-col">
 <p class="ion-text-wrap">
@@ -108,10 +111,162 @@
             </p>
           </ion-col>
         </ion-row>
+      </ion-grid> -->
+       <ion-grid>
+        <ion-row *ngIf="partDetailsArray.laboratoryName">
+          <ion-col size="5" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">Laboratory Name </span>
+            </p>
+           </ion-col>
+          <ion-col size="1" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">:</span>
+            </p>
+          </ion-col>
+          <ion-col class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span>{{partDetailsArray.laboratoryName}}</span>
+            </p>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="partDetailsArray.laboratoryId">
+          <ion-col size="5" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">Laboratory ID  </span>
+            </p>
+          </ion-col>
+          <ion-col size="1" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">:</span>
+            </p>
+          </ion-col>
+          <ion-col class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span>{{partDetailsArray.laboratoryId}}</span>
+            </p>
+          </ion-col>
+        </ion-row>
+         <ion-row>
+            <ion-col size="6" size-xs class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>Lab Director Name <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
+                <input matInput [(ngModel)]="partDetailsArray.labDirectorName"
+                  placeholder="Enter Lab Director Name." #labDirectorName="ngModel" name="labDirectorName" required
+                  [disabled]="isView=='true'" data-alert="Please enter Lab Director Name." id="labDirectorName">
+                <mat-error *ngIf="!partDetailsArray.labDirectorName">
+                  Lab Director Name is required
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+           <ion-row>
+            <ion-col size="6" size-xs class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>Lab Director Email <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
+                <input matInput [(ngModel)]="partDetailsArray.labDirectorEmail"
+                  placeholder="Enter Lab Director Email." #LotNolabDirectorEmail="ngModel" name="labDirectorEmail" required
+                  [disabled]="isView=='true'" data-alert="Please enter Lab Director Email." id="labDirectorEmail">
+                <mat-error *ngIf="!partDetailsArray.labDirectorEmail">
+                  Lab Director Email is required
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+           <ion-row>
+            <ion-col size="6" size-xs class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>Contact Person Name <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
+                <input matInput [(ngModel)]="partDetailsArray.contactPersonName"
+                  placeholder="Enter Contact Person Name." #contactPersonName="ngModel" name="contactPersonName" required
+                  [disabled]="isView=='true'" data-alert="Please enter Contact Person Name." id="contactPersonName">
+                <mat-error *ngIf="!partDetailsArray.contactPersonName">
+                  Contact Person Name is required
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+           <ion-row>
+            <ion-col size="6" size-xs class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>Contact Person Email <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
+                <input matInput [(ngModel)]="partDetailsArray.contactPersonEmail"
+                  placeholder="Enter Contact Person Email." #contactPersonEmail="ngModel" name="contactPersonEmail" required
+                  [disabled]="isView=='true'" data-alert="Please enter Contact Person Email." id="contactPersonEmail">
+                <mat-error *ngIf="!partDetailsArray.contactPersonEmail">
+                  Contact Person Email is required
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+           <ion-row>
+            <ion-col size="6" size-xs class="grid-input-col">
+              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+                <mat-label>Contact Person Phone <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
+                <input matInput [(ngModel)]="partDetailsArray.contactPersonTelephone"
+                  placeholder="Enter Contact Person Phone." #contactPersonTelephone="ngModel" name="contactPersonTelephone" required
+                  [disabled]="isView=='true'" data-alert="Please enter Contact Person Phone." id="contactPersonTelephone">
+                <mat-error *ngIf="!partDetailsArray.contactPersonTelephone">
+                  Contact Person Phone is required
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+        <!-- <ion-row *ngIf="partDetailsArray.affiliation">
+          <ion-col size="5" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">Affiliation </span>
+            </p>
+          </ion-col>
+          <ion-col size="1" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">:</span>
+            </p>
+          </ion-col>
+          <ion-col class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span>{{partDetailsArray.affiliation}}</span>
+            </p>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="partDetailsArray.phone">
+          <ion-col size="5" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">Phone No </span>
+            </p>
+          </ion-col>
+          <ion-col size="1" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">:</span>
+            </p>
+          </ion-col>
+          <ion-col class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span>{{partDetailsArray.phone}}</span>
+            </p>
+          </ion-col>
+        </ion-row>
+        <ion-row *ngIf="partDetailsArray.mobile">
+          <ion-col size="5" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">Mobile No</span>
+            </p>
+          </ion-col>
+          <ion-col size="1" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">:</span>
+            </p>
+          </ion-col>
+          <ion-col class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span> {{partDetailsArray.mobile}}</span>
+            </p>
+          </ion-col>
+        </ion-row> -->
       </ion-grid>
-      <mat-action-row>
-        <button mat-button color="primary" (click)="nextStepPartiPanel()">Next</button>
-      </mat-action-row>
+       <mat-action-row>
+          <button mat-button color="warn" type="submit" (click)=" checkParticpentPanel('next')">Next</button>
+        </mat-action-row>
     </mat-expansion-panel>
 
 

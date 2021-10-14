@@ -802,7 +802,7 @@
             </ion-col>
           </ion-row>
         </section>
-        <mat-action-row>
+        <mat-action-row *ngIf="ptPanelNotTested"> 
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
           <button mat-button color="primary" type="submit" (click)="checkPtPanel('next')">Next</button>
         </mat-action-row>
@@ -983,7 +983,7 @@
                         >
                       </ion-col>
                       <ion-col size="5" class="grid-readonly-col">
-                        <span  *ngIf="sampleDetailsArray.resultStatus[2]==true" class="resultAbbreviation"
+                        <span  *ngIf="sampleDetailsArray.resultStatus[2]==true  && allowRepeatTests" class="resultAbbreviation"
                           >{{result1Arr[i]?result1Arr[i].resultCode:'X'}} -
                           {{result2Arr[i]?result2Arr[i].resultCode:'X'}} -
                           {{result3Arr[i]?result3Arr[i].resultCode:'X'}} -
@@ -1106,7 +1106,7 @@
                 </ion-col>
               </ion-row>
 
-              <ion-row *ngIf="sampleDetailsArray.resultStatus[3]">
+              <ion-row *ngIf="sampleDetailsArray.resultStatus[3] && allowRepeatTests">
                 <!--    [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&                 !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field
@@ -1134,7 +1134,7 @@
                   </mat-form-field>
                 </ion-col>
               </ion-row>
-              <ion-row *ngIf="sampleDetailsArray.resultStatus[4]">
+              <ion-row *ngIf="sampleDetailsArray.resultStatus[4] && allowRepeatTests">
                 <!--    [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&                 !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field
@@ -1162,7 +1162,7 @@
                   </mat-form-field>
                 </ion-col>
               </ion-row>
-              <ion-row *ngIf="sampleDetailsArray.resultStatus[5]">
+              <ion-row *ngIf="sampleDetailsArray.resultStatus[5] && allowRepeatTests">
                 <!--    [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&                 !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field
