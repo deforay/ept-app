@@ -129,7 +129,7 @@ export class DTSHIVSerologyPage implements OnInit {
   repeatResult3Arr: any[];
   showRepeatResult3: boolean;
   showPTPanelData: boolean;
-  ptPanelData = {};
+  ptPanelData :any = {};
   isPtPanelNotTestedRadio;
   allowRepeatTests: boolean = false;
   ptPanelNotTested: boolean;
@@ -174,12 +174,12 @@ export class DTSHIVSerologyPage implements OnInit {
   step = 0;
 
   setStep(index: number) {
-    debugger;
+    // debugger;
     this.step = index;
   }
 
   nextStep() {
-    debugger;
+    // debugger;
     this.step++;
   }
 
@@ -294,8 +294,46 @@ export class DTSHIVSerologyPage implements OnInit {
       }
 
       if (this.dtsArray[0].dtsData.Section3.status == true) {
+        
+        this.showPTPanelData = true;
+        this.ptPanelData["isPtTestNotPerformedRadio"] =
+          this.dtsArray[0].dtsData.Section3.data.isPtTestNotPerformedRadio;
+        if (this.ptPanelData["isPtTestNotPerformedRadio"] == "yes") {
+          this.ptPanelNotTested = true;
+        } else {
+          this.ptPanelNotTested = false;
+        }
+        this.ptPanelData["ptNotTestedComments"] =
+          this.dtsArray[0].dtsData.Section3.data.ptNotTestedComments;
+        this.ptPanelData["ptNotTestedCommentsText"] =
+          this.dtsArray[0].dtsData.Section3.data.ptNotTestedCommentsText;
+        this.ptPanelData["ptSupportComments"] =
+          this.dtsArray[0].dtsData.Section3.data.ptSupportComments;
+        this.ptPanelData["ptSupportCommentsText"] =
+          this.dtsArray[0].dtsData.Section3.data.ptSupportCommentsText;
+        this.ptPanelData["notTestedReasons"] =
+          this.dtsArray[0].dtsData.Section3.data.notTestedReasons;
+        if (
+          this.dtsArray[0].dtsData.Section3.data.notTestedReasonSelected == "0"
+        ) {
+          this.ptPanelData["vlNotTestedReason"] = "";
+        } else {
+          this.ptPanelData["notTestedReasonSelected"] =
+            this.dtsArray[0].dtsData.Section3.data.notTestedReasonSelected;
+        }
+        this.ptPanelData["receivedPtPanel"] =
+          this.dtsArray[0].dtsData.Section3.data.receivedPtPanel;
+        this.ptPanelData["receivedPtPanelSelect"] =
+          this.dtsArray[0].dtsData.Section3.data.receivedPtPanelSelect;
+        this.ptPanelData["notTestedReasonText"] =
+          this.dtsArray[0].dtsData.Section3.data.notTestedReasonText;
+          this.ptPanelData["collectShipmentReceiptDate"]=this.dtsArray[0].dtsData.Section3.data.collectShipmentReceiptDate;
+      } else {
+        this.showPTPanelData = false;
+      }
+      if (this.dtsArray[0].dtsData.Section4.status == true){
         this.showTestkitPanel = true;
-        this.testKitDetailsArray = this.dtsArray[0].dtsData.Section3.data;
+        this.testKitDetailsArray = this.dtsArray[0].dtsData.Section4.data;
         this.testKitModel["kitName"] = [];
         this.testKitModel["kitValue"] = [];
         this.testKitModel["kitOther"] = [];
@@ -344,45 +382,13 @@ export class DTSHIVSerologyPage implements OnInit {
         this.testKitTextArray.forEach((element) => {
           this.isValidTestKitDetails.push(false);
         });
-        this.showPTPanelData = true;
-        this.ptPanelData["isPtTestNotPerformedRadio"] =
-          this.dtsArray[0].dtsData.Section3.data.isPtTestNotPerformedRadio;
-        if (this.ptPanelData["isPtTestNotPerformedRadio"] == "yes") {
-          this.ptPanelNotTested = true;
-        } else {
-          this.ptPanelNotTested = false;
-        }
-        this.ptPanelData["ptNotTestedComments"] =
-          this.dtsArray[0].dtsData.Section3.data.ptNotTestedComments;
-        this.ptPanelData["ptNotTestedCommentsText"] =
-          this.dtsArray[0].dtsData.Section3.data.ptNotTestedCommentsText;
-        this.ptPanelData["ptSupportComments"] =
-          this.dtsArray[0].dtsData.Section3.data.ptSupportComments;
-        this.ptPanelData["ptSupportCommentsText"] =
-          this.dtsArray[0].dtsData.Section3.data.ptSupportCommentsText;
-        this.ptPanelData["notTestedReasons"] =
-          this.dtsArray[0].dtsData.Section3.data.notTestedReasons;
-        if (
-          this.dtsArray[0].dtsData.Section3.data.notTestedReasonSelected == "0"
-        ) {
-          this.ptPanelData["vlNotTestedReason"] = "";
-        } else {
-          this.ptPanelData["notTestedReasonSelected"] =
-            this.dtsArray[0].dtsData.Section3.data.notTestedReasonSelected;
-        }
-        this.ptPanelData["receivedPtPanel"] =
-          this.dtsArray[0].dtsData.Section3.data.receivedPtPanel;
-        this.ptPanelData["receivedPtPanelSelect"] =
-          this.dtsArray[0].dtsData.Section3.data.receivedPtPanelSelect;
-        this.ptPanelData["notTestedReasonText"] =
-          this.dtsArray[0].dtsData.Section3.data.notTestedReasonText;
-      } else {
+      }else{
         this.showTestkitPanel = false;
       }
 
-      if (this.dtsArray[0].dtsData.Section4.status == true) {
+      if (this.dtsArray[0].dtsData.Section5.status == true) {
         this.showSampleData = true;
-        this.sampleDetailsArray = this.dtsArray[0].dtsData.Section4.data;
+        this.sampleDetailsArray = this.dtsArray[0].dtsData.Section5.data;
         this.sampleIndex = this.sampleDetailsArray.samples.label.length;
         this.samplesArray = this.sampleDetailsArray.samples;
         this.samplesNameArr = this.sampleDetailsArray.samples.label;
@@ -429,9 +435,9 @@ export class DTSHIVSerologyPage implements OnInit {
         this.showSampleData = false;
       }
 
-      if (this.dtsArray[0].dtsData.Section5.status == true) {
+      if (this.dtsArray[0].dtsData.Section6.status == true) {
         this.showOtherInfoData = true;
-        this.otherInfoArray = this.dtsArray[0].dtsData.Section5.data;
+        this.otherInfoArray = this.dtsArray[0].dtsData.Section6.data;
         this.supervisorReviewArray = this.otherInfoArray.supervisorReview;
         this.supReview = this.otherInfoArray.supervisorReviewSelected;
         this.comments = this.otherInfoArray.comments;
@@ -591,14 +597,32 @@ export class DTSHIVSerologyPage implements OnInit {
       this.testKitModel["kitOther"][index] = "";
     }
   }
-
+ptPanelNotTestedReasonSelected(){
+  if (this.ptPanelData.notTestedReasonSelected == '8' || this.ptPanelData.notTestedReasonSelected == '9'||this.ptPanelData.notTestedReasonSelected == '10') {
+    this.ptPanelData.collectShipmentReceiptDate = false;
+  } else {
+    this.ptPanelData.collectShipmentReceiptDate = true;
+  }
+}
   checkShipmentPanel(param) {
     if (this.ptPanelNotTested) {
-      this.isValidShipmentDetails = true;
+      if (param != "onload") {
 
-      if (param == "next") {
+      if (!this.shipmentData["testReceiptDate"] && this.ptPanelData.collectShipmentReceiptDate) {
+        this.isValidShipmentDetails = false;
+         this.alertService.presentAlert(
+                "Alert",
+                document
+                  .getElementById("testReceiptDate")
+                  .getAttribute("data-alert")
+              );
+      } else {
+        this.isValidShipmentDetails = true;
+         if (param == "next") {
         this.nextStep();
       }
+      }
+    }     
     } else {
       if (
         !this.shipmentData["testReceiptDate"] ||

@@ -767,7 +767,7 @@
                   {{ptPanelData.notTestedReasonText}}
                   <span class="danger-text" *ngIf="isView=='true'">*</span>
                 </mat-label>
-                <mat-select
+                <mat-select (selectionChange)="ptPanelNotTestedReasonSelected()"
                   [(ngModel)]="ptPanelData.notTestedReasonSelected"
                   name="covidNotTested"
                   #covidNotTested="ngModel"
@@ -1417,8 +1417,8 @@
     <!-- Custom Panel Ends-->
     <form #otherInfoPanelForm="ngForm" novalidate>
       <mat-expansion-panel
-        [expanded]="step === testKitIndex+sampleIndex+dynamicStep+3"
-        (opened)="setStep(testKitIndex+sampleIndex+dynamicStep+3)"
+        [expanded]="step === testKitIndex+sampleIndex+dynamicStep+2"
+        (opened)="setStep(testKitIndex+sampleIndex+dynamicStep+2)"
       >
         <mat-expansion-panel-header>
           <mat-panel-title>
