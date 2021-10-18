@@ -153,7 +153,6 @@ async confirmEmailAlert(){
         buttons: [{
         text: 'OK',
         handler: () => {
-          debugger;
           return true
         }
       }, {
@@ -165,6 +164,6 @@ async confirmEmailAlert(){
       backdropDismiss: false
       });
 
-      await alert.present();
+       alert.present();
 }
 }
