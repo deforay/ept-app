@@ -81,7 +81,7 @@ export class ChangePasswordPage implements OnInit {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
       }
-    })
+    }) 
   }
 
   ngOnInit() {

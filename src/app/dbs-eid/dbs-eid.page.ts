@@ -1,67 +1,34 @@
+import { Component, OnInit } from "@angular/core";
 import {
-  Component,
-  OnInit
-} from '@angular/core';
-import {
+  FormBuilder,
   FormControl,
   FormGroupDirective,
   NgForm,
-  Validators
-} from '@angular/forms';
-import {
-  Storage
-} from '@ionic/storage';
-import {
-  Router,
-  ActivatedRoute
-} from '@angular/router';
-import {
-  LoaderService,
-  AlertService
-} from '../../app/service/providers'; 
-import {
-  CrudServiceService
-} from '../../app/service/crud/crud-service.service';
-import {
-  ErrorStateMatcher
-} from '@angular/material/core';
-import {
-  BrowserModule,
-  DomSanitizer
-} from '@angular/platform-browser';
-import {
-  Network
-}
-from '@ionic-native/network/ngx';
-import {
-  LocalShipmentFormService
-}
-from '../../app/service/localShipmentForm/local-shipment-form.service';
-import {
-  LoadingController
-} from '@ionic/angular';
-export class MyErrorStateMatcher implements ErrorStateMatcher {
-  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
-    const isSubmitted = form && form.submitted;
-    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
-  }
-}
+  Validators,
+} from "@angular/forms";
+import { Storage } from "@ionic/storage";
+import { Router, ActivatedRoute } from "@angular/router";
+import { LoaderService, AlertService } from "../../app/service/providers";
+import { CrudServiceService } from "../../app/service/crud/crud-service.service";
+import { ErrorStateMatcher } from "@angular/material/core";
+import { BrowserModule, DomSanitizer } from "@angular/platform-browser";
+import { Network } from "@ionic-native/network/ngx";
+import { LocalShipmentFormService } from "../../app/service/localShipmentForm/local-shipment-form.service";
+import { AlertController, LoadingController } from "@ionic/angular";
 
 @Component({
-  selector: 'app-dbs-eid',
-  templateUrl: './dbs-eid.page.html',
-  styleUrls: ['./dbs-eid.page.scss'],
+  selector: "app-dbs-eid",
+  templateUrl: "./dbs-eid.page.html",
+  styleUrls: ["./dbs-eid.page.scss"],
 })
 export class DbsEidPage implements OnInit {
-
-
   appVersionNumber: any;
   authToken: any;
   participantID: any;
   participantName: any;
   formattedDate;
   eidArray = [];
-  viewAccessMessage = '';
+  viewAccessMessage = "";
   showParticipantData: boolean;
   showShipmentData: boolean;
   showPTPanelData: boolean;
@@ -107,15 +74,18 @@ export class DbsEidPage implements OnInit {
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
   isValidTestingDate: boolean = false;
-  schemeName:string;
-  viewSchemeName:string;
+  schemeName: string;
+  viewSchemeName: string;
   shipmentCode: any;
-  isViewPage:boolean;
-  validParticipentDetails: boolean=false;
-  changeEmail:boolean=false;
-  oldEmail:any='';
-  showMatchError: boolean;
-  constructor(private activatedRoute: ActivatedRoute,
+  isViewPage: boolean;
+  validParticipentDetails: boolean = false;
+  changeLabDirectorEmail: any ='';
+  labDirectorEmail:any = ''
+  changeEmail:any = false;
+  oldEmail: any = "";
+
+  constructor(
+    private activatedRoute: ActivatedRoute,
     private storage: Storage,
     public LoaderService: LoaderService,
     public CrudServiceService: CrudServiceService,
@@ -124,30 +94,29 @@ export class DbsEidPage implements OnInit {
     public network: Network,
     public LocalShipmentFormService: LocalShipmentFormService,
     public alertService: AlertService,
-    public loadingCtrl: LoadingController, ) {
-
-  }
+    public loadingCtrl: LoadingController,public alertController: AlertController
+  ) {}
 
   ionViewWillEnter() {
     this.summarizeForm = false;
-    this.storage.get('appVersionNumber').then((appVersionNumber) => {
+    this.storage.get("appVersionNumber").then((appVersionNumber) => {
       if (appVersionNumber) {
         this.appVersionNumber = appVersionNumber;
       }
-    })
-    this.storage.get('participantLogin').then((participantLogin) => {
+    });
+    this.storage.get("participantLogin").then((participantLogin) => {
       if (participantLogin) {
         this.authToken = participantLogin.authToken;
         this.participantID = participantLogin.id;
         this.participantName = participantLogin.name;
         this.participantQcAccess = participantLogin.qcAccess;
-        this.isPartiEditRespDate = participantLogin.enableAddingTestResponseDate;
+        this.isPartiEditRespDate =
+          participantLogin.enableAddingTestResponseDate;
         this.isPartiEditModeRec = participantLogin.enableChoosingModeOfReceipt;
 
         this.getEIDFormDetails();
       }
-    })
-
+    });
   }
   step = 0;
 
@@ -163,157 +132,264 @@ export class DbsEidPage implements OnInit {
     this.step--;
   }
   ngOnInit() {}
-async changeDirectorMail(){
-     let temp= this.alertService.confirmEmailAlert();
-     if (temp) {
-      this.changeEmail=true;
-     } else {
-       this.participantData['labDirectorEmail']= this.participantData['oldEmail'];
-     }
-}
-verifyEmailMatch(){
-  if (this.participantData['labDirectorEmail']!=this.participantData['changeLabDirectorEmail']) {
-    this.showMatchError = true;
-  }
-  // console.log(this.participantData['changeLabDirectorEmail'])
-}
-  bindEIDData() {
+   async changeDirectorMail() {
+  //   this.alertService.confirmEmailAlert().then(async(temp:any) =>{
+  //  if (temp == "true" || temp == true) {
+  //       this.changeEmail = true;
+  //     } else {
+  //       this.participantData["labDirectorEmail"] =
+  //         this.participantData["oldEmail"];
+  //     }
+  // })
+    const alert = await this.alertController.create({
+        header: 'Alert',
+        mode: "ios",
+        message: 'Do you want to change Lab Director Mail?',
+        buttons: [{
+        text: 'OK',
+        handler: () => { 
+          this.participantData["labDirectorEmail"] =
+          this.participantData["oldEmail"];
+          this.changeEmail = true;
+        }
+      }, {
+        text: 'Cancel',
+        handler: () => {
+          this.participantData["labDirectorEmail"] =
+          this.participantData["oldEmail"];
+        }
+      }],
+      backdropDismiss: false
+      });
 
+       alert.present();
+  }
+
+  bindEIDData() {
     if (this.eidArray[0].eidData) {
-      this.schemeName=this.eidArray[0].schemeName;
-      this.viewSchemeName="View "+this.schemeName;
-      this.shipmentCode=this.eidArray[0].shipmentCode;
+      this.schemeName = this.eidArray[0].schemeName;
+      this.viewSchemeName = "View " + this.schemeName;
+      this.shipmentCode = this.eidArray[0].shipmentCode;
       if (this.eidArray[0].eidData.access.message) {
         this.viewAccessMessage = this.eidArray[0].eidData.access.message;
       }
       if (this.eidArray[0].eidData.Section1.status == true) {
         this.showParticipantData = true;
-        this.participantData['participantName'] = this.eidArray[0].eidData.Section1.data.participantName;
-        this.participantData['participantCode'] = this.eidArray[0].eidData.Section1.data.participantCode;
-        this.participantData['affiliation'] = this.eidArray[0].eidData.Section1.data.affiliation;
-        this.participantData['phone'] = this.eidArray[0].eidData.Section1.data.phone;
-        this.participantData['mobile'] = this.eidArray[0].eidData.Section1.data.mobile;
-        this.participantData['contactPersonEmail'] = this.eidArray[0].eidData.Section1.data.contactPersonEmail;
-        this.participantData['contactPersonName'] = this.eidArray[0].eidData.Section1.data.contactPersonName;
-        this.participantData['contactPersonTelephone'] = this.eidArray[0].eidData.Section1.data.contactPersonTelephone;
-        this.participantData['labDirectorEmail'] = this.eidArray[0].eidData.Section1.data.labDirectorEmail;
-        this.participantData['labDirectorName'] = this.eidArray[0].eidData.Section1.data.labDirectorName;
-         this.participantData['laboratoryId'] = this.eidArray[0].eidData.Section1.data.laboratoryId;
-        this.participantData['laboratoryName'] = this.eidArray[0].eidData.Section1.data.laboratoryName;
-        this.participantData['oldEmail']=this.participantData['labDirectorEmail']
+        this.participantData["participantName"] =
+          this.eidArray[0].eidData.Section1.data.participantName;
+        this.participantData["participantCode"] =
+          this.eidArray[0].eidData.Section1.data.participantCode;
+        this.participantData["affiliation"] =
+          this.eidArray[0].eidData.Section1.data.affiliation;
+        this.participantData["phone"] =
+          this.eidArray[0].eidData.Section1.data.phone;
+        this.participantData["mobile"] =
+          this.eidArray[0].eidData.Section1.data.mobile;
+        this.participantData["contactPersonEmail"] =
+          this.eidArray[0].eidData.Section1.data.contactPersonEmail;
+        this.participantData["contactPersonName"] =
+          this.eidArray[0].eidData.Section1.data.contactPersonName;
+        this.participantData["contactPersonTelephone"] =
+          this.eidArray[0].eidData.Section1.data.contactPersonTelephone;
+        this.participantData["labDirectorEmail"] =
+          this.eidArray[0].eidData.Section1.data.labDirectorEmail;
+        this.participantData["labDirectorName"] =
+          this.eidArray[0].eidData.Section1.data.labDirectorName;
+        this.participantData["laboratoryId"] =
+          this.eidArray[0].eidData.Section1.data.laboratoryId;
+        this.participantData["laboratoryName"] =
+          this.eidArray[0].eidData.Section1.data.laboratoryName;
+        this.participantData["oldEmail"] =
+          this.participantData["labDirectorEmail"];
+          this.labDirectorEmail = this.participantData["labDirectorEmail"];
       } else {
         this.participantData = {};
         this.showParticipantData = false;
       }
-      console.log("participent data ",this.participantData)
+      console.log("participent data ", this.participantData);
       if (this.eidArray[0].eidData.Section2.status == true) {
-
         this.showShipmentData = true;
-        this.shipmentData['shipmentDate'] = this.eidArray[0].eidData.Section2.data.shipmentDate;
-        this.shipmentData['resultDueDate'] = this.eidArray[0].eidData.Section2.data.resultDueDate;
-        this.shipmentData['testReceiptDate'] = this.eidArray[0].eidData.Section2.data.testReceiptDate ? new Date(this.eidArray[0].eidData.Section2.data.testReceiptDate) : '';
-        this.shipmentData['sampleRehydrationDate'] = this.eidArray[0].eidData.Section2.data.sampleRehydrationDate ? new Date(this.eidArray[0].eidData.Section2.data.sampleRehydrationDate) : '';
-        this.shipmentData['responseDate'] = this.eidArray[0].eidData.Section2.data.responseDate ? new Date(this.eidArray[0].eidData.Section2.data.responseDate) : '';
-        this.shipmentData['shipmentTestingDate'] = this.eidArray[0].eidData.Section2.data.testDate ? new Date(this.eidArray[0].eidData.Section2.data.testDate) : '';
-        this.shipmentData['extractionLotNumber'] = this.eidArray[0].eidData.Section2.data.extractionLotNumber;
-        this.shipmentData['detectionLotNumber'] = this.eidArray[0].eidData.Section2.data.detectionLotNumber;
-        this.shipmentData['extractionExpirationDate'] = this.eidArray[0].eidData.Section2.data.extractionExpirationDate ? new Date(this.eidArray[0].eidData.Section2.data.extractionExpirationDate) : '';
-        this.shipmentData['detectionExpirationDate'] = this.eidArray[0].eidData.Section2.data.detectionExpirationDate ? new Date(this.eidArray[0].eidData.Section2.data.detectionExpirationDate) : '';
-        this.shipmentData['extractionAssayDropdown'] = this.eidArray[0].eidData.Section2.data.extractionAssaySelect;
-        this.shipmentData['detectionAssayDropdown'] = this.eidArray[0].eidData.Section2.data.detectionAssaySelect;
-        this.shipmentData['modeOfReceiptDropdown'] = this.eidArray[0].eidData.Section2.data.modeOfReceiptSelect ? this.eidArray[0].eidData.Section2.data.modeOfReceiptSelect : [];
-        this.shipmentData['extractionAssay'] = this.eidArray[0].eidData.Section2.data.extractionAssaySelected;
-        this.shipmentData['detectionAssay'] = this.eidArray[0].eidData.Section2.data.detectionAssaySelected;
-        this.shipmentData['modeOfReceipt'] = this.eidArray[0].eidData.Section2.data.modeOfReceiptSelected ? this.eidArray[0].eidData.Section2.data.modeOfReceiptSelected : '';
+        this.shipmentData["shipmentDate"] =
+          this.eidArray[0].eidData.Section2.data.shipmentDate;
+        this.shipmentData["resultDueDate"] =
+          this.eidArray[0].eidData.Section2.data.resultDueDate;
+        this.shipmentData["testReceiptDate"] = this.eidArray[0].eidData.Section2
+          .data.testReceiptDate
+          ? new Date(this.eidArray[0].eidData.Section2.data.testReceiptDate)
+          : "";
+        this.shipmentData["sampleRehydrationDate"] = this.eidArray[0].eidData
+          .Section2.data.sampleRehydrationDate
+          ? new Date(
+              this.eidArray[0].eidData.Section2.data.sampleRehydrationDate
+            )
+          : "";
+        this.shipmentData["responseDate"] = this.eidArray[0].eidData.Section2
+          .data.responseDate
+          ? new Date(this.eidArray[0].eidData.Section2.data.responseDate)
+          : "";
+        this.shipmentData["shipmentTestingDate"] = this.eidArray[0].eidData
+          .Section2.data.testDate
+          ? new Date(this.eidArray[0].eidData.Section2.data.testDate)
+          : "";
+        this.shipmentData["extractionLotNumber"] =
+          this.eidArray[0].eidData.Section2.data.extractionLotNumber;
+        this.shipmentData["detectionLotNumber"] =
+          this.eidArray[0].eidData.Section2.data.detectionLotNumber;
+        this.shipmentData["extractionExpirationDate"] = this.eidArray[0].eidData
+          .Section2.data.extractionExpirationDate
+          ? new Date(
+              this.eidArray[0].eidData.Section2.data.extractionExpirationDate
+            )
+          : "";
+        this.shipmentData["detectionExpirationDate"] = this.eidArray[0].eidData
+          .Section2.data.detectionExpirationDate
+          ? new Date(
+              this.eidArray[0].eidData.Section2.data.detectionExpirationDate
+            )
+          : "";
+        this.shipmentData["extractionAssayDropdown"] =
+          this.eidArray[0].eidData.Section2.data.extractionAssaySelect;
+        this.shipmentData["detectionAssayDropdown"] =
+          this.eidArray[0].eidData.Section2.data.detectionAssaySelect;
+        this.shipmentData["modeOfReceiptDropdown"] = this.eidArray[0].eidData
+          .Section2.data.modeOfReceiptSelect
+          ? this.eidArray[0].eidData.Section2.data.modeOfReceiptSelect
+          : [];
+        this.shipmentData["extractionAssay"] =
+          this.eidArray[0].eidData.Section2.data.extractionAssaySelected;
+        this.shipmentData["detectionAssay"] =
+          this.eidArray[0].eidData.Section2.data.detectionAssaySelected;
+        this.shipmentData["modeOfReceipt"] = this.eidArray[0].eidData.Section2
+          .data.modeOfReceiptSelected
+          ? this.eidArray[0].eidData.Section2.data.modeOfReceiptSelected
+          : "";
         if (this.participantQcAccess == true) {
           if (this.eidArray[0].eidData.Section2.data.qcData.status == true) {
             this.isQCDoneShow = true;
-            this.qcRadioArray = this.eidArray[0].eidData.Section2.data.qcData.qcRadio;
-            this.qcDone = this.eidArray[0].eidData.Section2.data.qcData.qcRadioSelected ? this.eidArray[0].eidData.Section2.data.qcData.qcRadioSelected : '';
-            this.qcDate = this.eidArray[0].eidData.Section2.data.qcData.qcDate ? new Date(this.eidArray[0].eidData.Section2.data.qcData.qcDate) : '';
-            this.qcDoneBy = this.eidArray[0].eidData.Section2.data.qcData.qcDoneBy ? this.eidArray[0].eidData.Section2.data.qcData.qcDoneBy : '';
+            this.qcRadioArray =
+              this.eidArray[0].eidData.Section2.data.qcData.qcRadio;
+            this.qcDone = this.eidArray[0].eidData.Section2.data.qcData
+              .qcRadioSelected
+              ? this.eidArray[0].eidData.Section2.data.qcData.qcRadioSelected
+              : "";
+            this.qcDate = this.eidArray[0].eidData.Section2.data.qcData.qcDate
+              ? new Date(this.eidArray[0].eidData.Section2.data.qcData.qcDate)
+              : "";
+            this.qcDoneBy = this.eidArray[0].eidData.Section2.data.qcData
+              .qcDoneBy
+              ? this.eidArray[0].eidData.Section2.data.qcData.qcDoneBy
+              : "";
           } else {
             this.isQCDoneShow = false;
-            this.qcDone = '';
-            this.qcDate = '';
-            this.qcDoneBy = '';
+            this.qcDone = "";
+            this.qcDate = "";
+            this.qcDoneBy = "";
           }
         } else {
           this.isQCDoneShow = false;
-          this.qcDone = '';
-          this.qcDate = '';
-          this.qcDoneBy = '';
+          this.qcDone = "";
+          this.qcDate = "";
+          this.qcDoneBy = "";
         }
       } else {
         this.shipmentData = {};
         this.showShipmentData = false;
       }
       if (this.eidArray[0].eidData.Section3.status == true) {
-
         this.showPTPanelData = true;
-        this.ptPanelData['isPtTestNotPerformedRadio'] = this.eidArray[0].eidData.Section3.data.isPtTestNotPerformedRadio;
-        if (this.ptPanelData['isPtTestNotPerformedRadio'] == 'yes') {
+        this.ptPanelData["isPtTestNotPerformedRadio"] =
+          this.eidArray[0].eidData.Section3.data.isPtTestNotPerformedRadio;
+        if (this.ptPanelData["isPtTestNotPerformedRadio"] == "yes") {
           this.ptPanelNotTested = true;
         } else {
           this.ptPanelNotTested = false;
         }
-        this.ptPanelData['ptNotTestedComments'] = this.eidArray[0].eidData.Section3.data.ptNotTestedComments;
-        this.ptPanelData['ptNotTestedCommentsText'] = this.eidArray[0].eidData.Section3.data.ptNotTestedCommentsText;
-        this.ptPanelData['ptSupportComments'] = this.eidArray[0].eidData.Section3.data.ptSupportComments;
-        this.ptPanelData['ptSupportCommentsText'] = this.eidArray[0].eidData.Section3.data.ptSupportCommentsText;
-        this.ptPanelData['vlNotTestedReasonDropdown'] = this.eidArray[0].eidData.Section3.data.vlNotTestedReason;
-        if(this.eidArray[0].eidData.Section3.data.vlNotTestedReasonSelected=="0"){
-          this.ptPanelData['vlNotTestedReason']="";
+        this.ptPanelData["ptNotTestedComments"] =
+          this.eidArray[0].eidData.Section3.data.ptNotTestedComments;
+        this.ptPanelData["ptNotTestedCommentsText"] =
+          this.eidArray[0].eidData.Section3.data.ptNotTestedCommentsText;
+        this.ptPanelData["ptSupportComments"] =
+          this.eidArray[0].eidData.Section3.data.ptSupportComments;
+        this.ptPanelData["ptSupportCommentsText"] =
+          this.eidArray[0].eidData.Section3.data.ptSupportCommentsText;
+        this.ptPanelData["vlNotTestedReasonDropdown"] =
+          this.eidArray[0].eidData.Section3.data.vlNotTestedReason;
+        if (
+          this.eidArray[0].eidData.Section3.data.vlNotTestedReasonSelected ==
+          "0"
+        ) {
+          this.ptPanelData["vlNotTestedReason"] = "";
+        } else {
+          this.ptPanelData["vlNotTestedReason"] =
+            this.eidArray[0].eidData.Section3.data.vlNotTestedReasonSelected;
         }
-        else{
-          this.ptPanelData['vlNotTestedReason']= this.eidArray[0].eidData.Section3.data.vlNotTestedReasonSelected;
-        }
-        this.ptPanelData['vlNotTestedReasonText'] = this.eidArray[0].eidData.Section3.data.vlNotTestedReasonText;
-        this.ptPanelData['samplesList'] = this.eidArray[0].eidData.Section3.data.samplesList;
-        this.ptPanelData['sampleTextData'] = this.eidArray[0].eidData.Section3.data.samples;
-        this.ptPanelData['samples'] = this.ptPanelData['sampleTextData'];
-        this.ptPanelData['resultsTextData'] = this.eidArray[0].eidData.Section3.data.resultsText;
-
+        this.ptPanelData["vlNotTestedReasonText"] =
+          this.eidArray[0].eidData.Section3.data.vlNotTestedReasonText;
+        this.ptPanelData["samplesList"] =
+          this.eidArray[0].eidData.Section3.data.samplesList;
+        this.ptPanelData["sampleTextData"] =
+          this.eidArray[0].eidData.Section3.data.samples;
+        this.ptPanelData["samples"] = this.ptPanelData["sampleTextData"];
+        this.ptPanelData["resultsTextData"] =
+          this.eidArray[0].eidData.Section3.data.resultsText;
       } else {
         this.showPTPanelData = false;
       }
       if (this.eidArray[0].eidData.Section4.status == true) {
         this.showOtherInfoData = true;
-        this.otherInfoData['approvalInputText'] = this.eidArray[0].eidData.Section4.data.approvalInputText;
-        this.otherInfoData['approvalLabel'] = this.eidArray[0].eidData.Section4.data.approvalLabel;
-        this.otherInfoData['comments'] = this.eidArray[0].eidData.Section4.data.comments;
-        this.otherInfoData['supervisorReviewDropdown'] = this.eidArray[0].eidData.Section4.data.supervisorReview;
-        this.otherInfoData['supervisorReview'] = this.eidArray[0].eidData.Section4.data.supervisorReviewSelected;
-        this.otherInfoData['supervisorName'] = this.eidArray[0].eidData.Section4.data.approvalInputText;
-        this.otherInfoData['supervisorLabel'] = this.eidArray[0].eidData.Section4.data.approvalLabel;
+        this.otherInfoData["approvalInputText"] =
+          this.eidArray[0].eidData.Section4.data.approvalInputText;
+        this.otherInfoData["approvalLabel"] =
+          this.eidArray[0].eidData.Section4.data.approvalLabel;
+        this.otherInfoData["comments"] =
+          this.eidArray[0].eidData.Section4.data.comments;
+        this.otherInfoData["supervisorReviewDropdown"] =
+          this.eidArray[0].eidData.Section4.data.supervisorReview;
+        this.otherInfoData["supervisorReview"] =
+          this.eidArray[0].eidData.Section4.data.supervisorReviewSelected;
+        this.otherInfoData["supervisorName"] =
+          this.eidArray[0].eidData.Section4.data.approvalInputText;
+        this.otherInfoData["supervisorLabel"] =
+          this.eidArray[0].eidData.Section4.data.approvalLabel;
       } else {
         this.showOtherInfoData = false;
       }
       if (this.eidArray[0].eidData.customFields.status == true) {
         this.showCustomFieldData = true;
-        this.customFieldData['customField1Text'] = this.eidArray[0].eidData.customFields.data.customField1Text ? this.eidArray[0].eidData.customFields.data.customField1Text : '';
-        this.customFieldData['customField1Val'] = this.eidArray[0].eidData.customFields.data.customField1Val ? this.eidArray[0].eidData.customFields.data.customField1Val : '';
-        this.customFieldData['customField2Text'] = this.eidArray[0].eidData.customFields.data.customField2Text ? this.eidArray[0].eidData.customFields.data.customField2Text : '';
-        this.customFieldData['customField2Val'] = this.eidArray[0].eidData.customFields.data.customField2Val ? this.eidArray[0].eidData.customFields.data.customField2Val : '';
-
+        this.customFieldData["customField1Text"] = this.eidArray[0].eidData
+          .customFields.data.customField1Text
+          ? this.eidArray[0].eidData.customFields.data.customField1Text
+          : "";
+        this.customFieldData["customField1Val"] = this.eidArray[0].eidData
+          .customFields.data.customField1Val
+          ? this.eidArray[0].eidData.customFields.data.customField1Val
+          : "";
+        this.customFieldData["customField2Text"] = this.eidArray[0].eidData
+          .customFields.data.customField2Text
+          ? this.eidArray[0].eidData.customFields.data.customField2Text
+          : "";
+        this.customFieldData["customField2Val"] = this.eidArray[0].eidData
+          .customFields.data.customField2Val
+          ? this.eidArray[0].eidData.customFields.data.customField2Val
+          : "";
       } else {
         this.showCustomFieldData = false;
       }
-this.checkParticpentPanel('onload')
-      this.checkShipmentPanel('onload');
-      this.checkPtPanel('onload');
+      this.checkParticpentPanel("onload");
+      this.checkShipmentPanel("onload");
+      this.checkPtPanel("onload");
       if (this.showCustomFieldData == true) {
         this.dynamicStep = 1;
-        this.checkCustFieldPanel('onload');
+        this.checkCustFieldPanel("onload");
       } else {
         this.dynamicStep = 0;
       }
-      this.checkOtherInfoPanel('onload');
+      this.checkOtherInfoPanel("onload");
 
       // if (this.validShipmentDetails == false) {
       //   this.setStep(1); // Expand Shipment Details panel
       // } else if (this.isValidPTPanel == false) {
-      //   this.setStep(2); // Expand PT Panel panel       
+      //   this.setStep(2); // Expand PT Panel panel
       // } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
       //   this.setStep(3); // Expand Custom Fields panel
       // } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
@@ -323,178 +399,283 @@ this.checkParticpentPanel('onload')
       // } else {
       //   this.setStep(0); // Expand Participant Details Panel
       // }
-
     }
     if (this.eidArray[0].eidData.access.status == "fail") {
       this.viewAccessMessage = this.eidArray[0].eidData.access.message;
     }
-
-
   }
   dateFormat(dateObj) {
-    if (dateObj != '') {
-      return this.formattedDate = dateObj.getFullYear() + '-' + ('0' + (dateObj.getMonth() + 1)).slice(-2) + '-' + dateObj.getDate();
+    if (dateObj != "") {
+      return (this.formattedDate =
+        dateObj.getFullYear() +
+        "-" +
+        ("0" + (dateObj.getMonth() + 1)).slice(-2) +
+        "-" +
+        dateObj.getDate());
     } else {
       return dateObj;
     }
   }
   getEIDFormDetails() {
-
-    this.storage.get('selectedTestFormArray').then((eidDataObj) => {
+    this.storage.get("selectedTestFormArray").then((eidDataObj) => {
       this.isView = eidDataObj[0].isView;
-      if(this.isView=='true'){
+      if (this.isView == "true") {
         this.isShowReviewMsg = true;
-        this.isViewPage=true;
+        this.isViewPage = true;
       }
-      if (eidDataObj[0].isSynced == 'false') {
-        this.storage.get('localStorageSelectedFormArray').then((localStorageSelectedFormArray) => {
-
-          if ((localStorageSelectedFormArray[0].isSynced == eidDataObj[0].isSynced) &&
-            (localStorageSelectedFormArray[0].evaluationStatus == eidDataObj[0].evaluationStatus) &&
-            (localStorageSelectedFormArray[0].mapId == eidDataObj[0].mapId) &&
-            (localStorageSelectedFormArray[0].participantId == eidDataObj[0].participantId) &&
-            (localStorageSelectedFormArray[0].shipmentId == eidDataObj[0].shipmentId) &&
-            (localStorageSelectedFormArray[0].schemeType == eidDataObj[0].schemeType)) {
-
-            this.isView = localStorageSelectedFormArray[0].isView;
-            this.eidArray = [];
-            this.eidArray.push(localStorageSelectedFormArray[0]);
-            this.bindEIDData();
-
-          }
-        })
+      if (eidDataObj[0].isSynced == "false") {
+        this.storage
+          .get("localStorageSelectedFormArray")
+          .then((localStorageSelectedFormArray) => {
+            if (
+              localStorageSelectedFormArray[0].isSynced ==
+                eidDataObj[0].isSynced &&
+              localStorageSelectedFormArray[0].evaluationStatus ==
+                eidDataObj[0].evaluationStatus &&
+              localStorageSelectedFormArray[0].mapId == eidDataObj[0].mapId &&
+              localStorageSelectedFormArray[0].participantId ==
+                eidDataObj[0].participantId &&
+              localStorageSelectedFormArray[0].shipmentId ==
+                eidDataObj[0].shipmentId &&
+              localStorageSelectedFormArray[0].schemeType ==
+                eidDataObj[0].schemeType
+            ) {
+              this.isView = localStorageSelectedFormArray[0].isView;
+              this.eidArray = [];
+              this.eidArray.push(localStorageSelectedFormArray[0]);
+              this.bindEIDData();
+            }
+          });
       } else {
-
         this.eidArray = [];
         this.eidArray.push(eidDataObj[0]);
         this.bindEIDData();
       }
-      console.log(this.eidArray)
-
-    })
+      console.log(this.eidArray);
+    });
   }
   checkShipmentPanel(param) {
     // if (this.isView == "true") {
     //   this.setStep(2);
     // }
-    if (!this.shipmentData['testReceiptDate'] ||
-      !this.shipmentData['sampleRehydrationDate'] ||
-      !this.shipmentData['extractionLotNumber'] ||
-      !this.shipmentData['detectionLotNumber'] ||
-      !this.shipmentData['detectionExpirationDate'] ||
-      (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) ||
-      (this.qcDone == 'yes' && (!this.qcDoneBy || !this.qcDate) && this.participantQcAccess == true) ||
-      (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true)) {
+    if (
+      !this.shipmentData["testReceiptDate"] ||
+      !this.shipmentData["sampleRehydrationDate"] ||
+      !this.shipmentData["extractionLotNumber"] ||
+      !this.shipmentData["detectionLotNumber"] ||
+      !this.shipmentData["detectionExpirationDate"] ||
+      (!this.shipmentData["responseDate"] &&
+        this.isPartiEditRespDate == true) ||
+      (this.qcDone == "yes" &&
+        (!this.qcDoneBy || !this.qcDate) &&
+        this.participantQcAccess == true) ||
+      (!this.shipmentData["modeOfReceipt"] && this.isPartiEditModeRec == true)
+    ) {
       this.validShipmentDetails = false;
 
-      if (param != 'onload') {
+      if (param != "onload") {
         if (this.isView == "true") {
           this.nextStep();
         } else {
-          if (!this.shipmentData['testReceiptDate']) {
-            this.alertService.presentAlert('Alert', document.getElementById('testReceiptDate').getAttribute('data-alert'));
-          } else if (!this.shipmentData['sampleRehydrationDate']) {
-            this.alertService.presentAlert('Alert', document.getElementById('sampleRehydrationDate').getAttribute('data-alert'));
-          } else if (!this.shipmentData['extractionLotNumber']) {
-            this.alertService.presentAlert('Alert', document.getElementById('extractionLotNumber').getAttribute('data-alert'));
-          } else if (!this.shipmentData['detectionLotNumber']) {
-            this.alertService.presentAlert('Alert', document.getElementById('detectionLotNumber').getAttribute('data-alert'));
-          } else if (!this.shipmentData['detectionExpirationDate']) {
-            this.alertService.presentAlert('Alert', document.getElementById('detectionExpirationDate').getAttribute('data-alert'));
-          } else if (!this.shipmentData['responseDate'] && this.isPartiEditRespDate == true) {
-            this.alertService.presentAlert('Alert', document.getElementById('responseDate').getAttribute('data-alert'));
-          } else if (!this.shipmentData['modeOfReceipt'] && this.isPartiEditModeRec == true) {
-            this.alertService.presentAlert('Alert', document.getElementById('modeOfReceipt').getAttribute('data-alert'));
-          } else if (!this.qcDate && this.participantQcAccess == true && this.qcDone == 'yes') {
-            this.alertService.presentAlert('Alert', document.getElementById('qcDate').getAttribute('data-alert'));
-          } else if (!this.qcDoneBy && this.participantQcAccess == true && this.qcDone == 'yes') {
-            this.alertService.presentAlert('Alert', document.getElementById('qcDoneBy').getAttribute('data-alert'));
+          if (!this.shipmentData["testReceiptDate"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("testReceiptDate")
+                .getAttribute("data-alert")
+            );
+          } else if (!this.shipmentData["sampleRehydrationDate"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("sampleRehydrationDate")
+                .getAttribute("data-alert")
+            );
+          } else if (!this.shipmentData["extractionLotNumber"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("extractionLotNumber")
+                .getAttribute("data-alert")
+            );
+          } else if (!this.shipmentData["detectionLotNumber"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("detectionLotNumber")
+                .getAttribute("data-alert")
+            );
+          } else if (!this.shipmentData["detectionExpirationDate"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("detectionExpirationDate")
+                .getAttribute("data-alert")
+            );
+          } else if (
+            !this.shipmentData["responseDate"] &&
+            this.isPartiEditRespDate == true
+          ) {
+            this.alertService.presentAlert(
+              "Alert",
+              document.getElementById("responseDate").getAttribute("data-alert")
+            );
+          } else if (
+            !this.shipmentData["modeOfReceipt"] &&
+            this.isPartiEditModeRec == true
+          ) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("modeOfReceipt")
+                .getAttribute("data-alert")
+            );
+          } else if (
+            !this.qcDate &&
+            this.participantQcAccess == true &&
+            this.qcDone == "yes"
+          ) {
+            this.alertService.presentAlert(
+              "Alert",
+              document.getElementById("qcDate").getAttribute("data-alert")
+            );
+          } else if (
+            !this.qcDoneBy &&
+            this.participantQcAccess == true &&
+            this.qcDone == "yes"
+          ) {
+            this.alertService.presentAlert(
+              "Alert",
+              document.getElementById("qcDoneBy").getAttribute("data-alert")
+            );
           } else {
-
           }
         }
       }
-
     } else {
       this.validShipmentDetails = true;
-      if (param == 'next') {
+      if (param == "next") {
         this.nextStep();
       }
     }
   }
- checkParticpentPanel(param) {
+  checkParticpentPanel(param) {
     // if (this.isView == "true") {
     //   this.setStep(2);
     // }
-    if (!this.participantData['contactPersonEmail'] ||
-      !this.participantData['contactPersonName'] ||
-      !this.participantData['contactPersonTelephone'] ||
-      !this.participantData['labDirectorEmail'] ||
-      !this.participantData['labDirectorName'] ||
-      !this.participantData['laboratoryId'] ||
-      !this.participantData['laboratoryName']) {
+    this.participantData["labDirectorEmail"] = this.labDirectorEmail;
+    debugger;
+    console.log(this.labDirectorEmail.errors )
+    console.log(this.changeLabDirectorEmail.errors)
+    if (
+      !this.participantData["contactPersonEmail"] ||
+      !this.participantData["contactPersonName"] ||
+      !this.participantData["contactPersonTelephone"] ||
+      !this.participantData["labDirectorEmail"] ||
+      ((this.changeLabDirectorEmail != this.labDirectorEmail) && this.changeEmail)||
+      !this.participantData["labDirectorName"] ||
+      !this.participantData["laboratoryId"] ||
+      !this.participantData["laboratoryName"]
+    ) {
       this.validParticipentDetails = false;
 
-      if (param != 'onload') {
+      if (param != "onload") {
         if (this.isView == "true") {
           this.nextStep();
         } else {
-          if (!this.participantData['contactPersonEmail']) {
-            this.alertService.presentAlert('Alert', document.getElementById('contactPersonEmail').getAttribute('data-alert'));
-          } else if (!this.participantData['contactPersonName']) {
-            this.alertService.presentAlert('Alert', document.getElementById('contactPersonName').getAttribute('data-alert'));
-          } else if (!this.participantData['contactPersonTelephone']) {
-            this.alertService.presentAlert('Alert', document.getElementById('contactPersonTelephone').getAttribute('data-alert'));
-          } else if (!this.participantData['labDirectorEmail']) {
-            this.alertService.presentAlert('Alert', document.getElementById('labDirectorEmail').getAttribute('data-alert'));
-          } else if (!this.participantData['labDirectorName']) {
-            this.alertService.presentAlert('Alert', document.getElementById('labDirectorName').getAttribute('data-alert'));
-          } else if (!this.participantData['laboratoryId']) {
-            this.alertService.presentAlert('Alert', document.getElementById('laboratoryId').getAttribute('data-alert'));
-          } else if (!this.participantData['laboratoryName']) {
-            this.alertService.presentAlert('Alert', document.getElementById('laboratoryName').getAttribute('data-alert'));
+          if (!this.participantData["contactPersonEmail"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("contactPersonEmail")
+                .getAttribute("data-alert")
+            );
+          } else if (!this.participantData["contactPersonName"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("contactPersonName")
+                .getAttribute("data-alert")
+            );
+          } else if (!this.participantData["contactPersonTelephone"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("contactPersonTelephone")
+                .getAttribute("data-alert")
+            );
+          } else if (!this.participantData["labDirectorEmail"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("labDirectorEmail")
+                .getAttribute("data-alert")
+            );
+          } else if (!this.participantData["labDirectorName"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("labDirectorName")
+                .getAttribute("data-alert")
+            );
+          } else if (!this.participantData["laboratoryId"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document.getElementById("laboratoryId").getAttribute("data-alert")
+            );
+          } else if (!this.participantData["laboratoryName"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("laboratoryName")
+                .getAttribute("data-alert")
+            );
           } else {
-            
           }
         }
       }
-
     } else {
       this.validParticipentDetails = true;
-      if (param == 'next') {
+      if (param == "next") {
         this.nextStep();
       }
     }
   }
 
   checkPtPanel(params) {
-
     if (this.ptPanelNotTested == false || !this.ptPanelNotTested) {
-      this.ptPanelData['sampleTextData'].mandatory.forEach((mandCheck, index) => {
-        if (mandCheck == true) {
-          if (this.ptPanelData['samples'].yourResults[index] == '' || !this.ptPanelData['samples'].yourResults[index]) {
-            this.yourResultCheckArray[index] = 'invalid';
+      this.ptPanelData["sampleTextData"].mandatory.forEach(
+        (mandCheck, index) => {
+          if (mandCheck == true) {
+            if (
+              this.ptPanelData["samples"].yourResults[index] == "" ||
+              !this.ptPanelData["samples"].yourResults[index]
+            ) {
+              this.yourResultCheckArray[index] = "invalid";
+            } else {
+              this.yourResultCheckArray[index] = "valid";
+            }
+            // if(this.ptPanelData['samples'].hivCtOd[index]==''||!this.ptPanelData['samples'].hivCtOd[index]){
+            //   this.icQsValuesCheckArray[index] = 'invalid';
+            // } else {
+            //   this.icQsValuesCheckArray[index] = 'valid';
+            // }
+            // if(this.ptPanelData['samples'].IcQsValues[index]==''||!this.ptPanelData['samples'].IcQsValues[index]){
+            //   this.hivCTODCheckArray[index] = 'invalid';
+            // } else {
+            //   this.hivCTODCheckArray[index] = 'valid';
+            // }
           } else {
-            this.yourResultCheckArray[index] = 'valid';
+            this.yourResultCheckArray[index] = "valid";
+            //  this.hivCTODCheckArray[index] = 'valid';
+            //  this.icQsValuesCheckArray[index] = 'valid';
           }
-          // if(this.ptPanelData['samples'].hivCtOd[index]==''||!this.ptPanelData['samples'].hivCtOd[index]){
-          //   this.icQsValuesCheckArray[index] = 'invalid';
-          // } else {
-          //   this.icQsValuesCheckArray[index] = 'valid';
-          // }
-          // if(this.ptPanelData['samples'].IcQsValues[index]==''||!this.ptPanelData['samples'].IcQsValues[index]){
-          //   this.hivCTODCheckArray[index] = 'invalid';
-          // } else {
-          //   this.hivCTODCheckArray[index] = 'valid';
-          // }
-        } else {
-          this.yourResultCheckArray[index] = 'valid';
-          //  this.hivCTODCheckArray[index] = 'valid';
-          //  this.icQsValuesCheckArray[index] = 'valid';
         }
-      });
+      );
 
-      this.resultArrayCheck = this.yourResultCheckArray.filter(i => i == 'invalid')
+      this.resultArrayCheck = this.yourResultCheckArray.filter(
+        (i) => i == "invalid"
+      );
       if (this.resultArrayCheck.length > 0) {
         this.isValidPTPanel = false;
       } else {
@@ -512,46 +693,64 @@ this.checkParticpentPanel('onload')
         //   }
         // }
       }
-      if (params == 'next' || (params == 'submit' && this.validShipmentDetails)) {
+      if (
+        params == "next" ||
+        (params == "submit" && this.validShipmentDetails)
+      ) {
         var BreakException = {};
         try {
-          this.ptPanelData['sampleTextData'].label.forEach((elementLabel, index) => {
-            if (this.ptPanelData['sampleTextData'].yourResults[index] == "" && this.ptPanelData['sampleTextData'].mandatory[index] == true) {
-              this.alertService.presentAlert('Alert', 'Please select your result for the sample ' + elementLabel);
-              throw BreakException;
+          this.ptPanelData["sampleTextData"].label.forEach(
+            (elementLabel, index) => {
+              if (
+                this.ptPanelData["sampleTextData"].yourResults[index] == "" &&
+                this.ptPanelData["sampleTextData"].mandatory[index] == true
+              ) {
+                this.alertService.presentAlert(
+                  "Alert",
+                  "Please select your result for the sample " + elementLabel
+                );
+                throw BreakException;
+              }
             }
-          })
+          );
         } catch (e) {
           if (e !== BreakException) throw e;
         }
       }
-
-    } else  {
-      if (!this.ptPanelData['vlNotTestedReason'] ||
-        !this.ptPanelData['ptNotTestedComments']
+    } else {
+      if (
+        !this.ptPanelData["vlNotTestedReason"] ||
+        !this.ptPanelData["ptNotTestedComments"]
         // !this.ptPanelData['ptSupportComments']
       ) {
-        if (params == 'next' || (params == 'submit' && this.validShipmentDetails)) {
+        if (
+          params == "next" ||
+          (params == "submit" && this.validShipmentDetails)
+        ) {
           this.isValidPTPanel = false;
-          if (!this.ptPanelData['vlNotTestedReason']) {
-            this.alertService.presentAlert('Alert', "Please choose the " + this.ptPanelData['vlNotTestedReasonText']);
-          } else if (!this.ptPanelData['ptNotTestedComments']) {
-            this.alertService.presentAlert('Alert', "Please enter " + this.ptPanelData['ptNotTestedCommentsText']);
+          if (!this.ptPanelData["vlNotTestedReason"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              "Please choose the " + this.ptPanelData["vlNotTestedReasonText"]
+            );
+          } else if (!this.ptPanelData["ptNotTestedComments"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              "Please enter " + this.ptPanelData["ptNotTestedCommentsText"]
+            );
           } else {
-
           }
         }
       } else {
         this.isValidPTPanel = true;
       }
-
     }
     if (this.isView == "true") {
-      if (params == 'next') {
+      if (params == "next") {
         this.nextStep();
       }
     } else {
-      if (params == 'next') {
+      if (params == "next") {
         if (this.isValidPTPanel == false) {
           //do  nothing
         } else {
@@ -561,12 +760,12 @@ this.checkParticpentPanel('onload')
     }
   }
   checkCustFieldPanel(params) {
-    if (this.customFieldData['customField1Text']) {
-      if (!this.customFieldData['customField1Val']) {
+    if (this.customFieldData["customField1Text"]) {
+      if (!this.customFieldData["customField1Val"]) {
         this.isValidCustField = false;
       } else {
-        if (this.customFieldData['customField2Text']) {
-          if (!this.customFieldData['customField2Val']) {
+        if (this.customFieldData["customField2Text"]) {
+          if (!this.customFieldData["customField2Val"]) {
             this.isValidCustField = false;
           } else {
             this.isValidCustField = true;
@@ -577,32 +776,49 @@ this.checkParticpentPanel('onload')
       }
     }
 
-    if (params == 'next') {
+    if (params == "next") {
       this.nextStep();
     }
-
   }
   checkOtherInfoPanel(params) {
-    if ((this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName']) ||
-      this.otherInfoData['supervisorReview'] == '') {
+    if (
+      (this.otherInfoData["supervisorReview"] == "yes" &&
+        !this.otherInfoData["supervisorName"]) ||
+      this.otherInfoData["supervisorReview"] == ""
+    ) {
       this.otherInfoValid = false;
-      if (params == 'next' || (params == 'submit' && this.validShipmentDetails && this.isValidPTPanel)) {
-        if (!this.otherInfoData['supervisorReview']) {
-          this.alertService.presentAlert('Alert', "Please choose the Supervisor Review");
-        } else if (this.otherInfoData['supervisorReview'] == 'yes' && !this.otherInfoData['supervisorName']) {
-          this.alertService.presentAlert('Alert', "Please enter the Supervisor Name");
+      if (
+        params == "next" ||
+        (params == "submit" && this.validShipmentDetails && this.isValidPTPanel)
+      ) {
+        if (!this.otherInfoData["supervisorReview"]) {
+          this.alertService.presentAlert(
+            "Alert",
+            "Please choose the Supervisor Review"
+          );
+        } else if (
+          this.otherInfoData["supervisorReview"] == "yes" &&
+          !this.otherInfoData["supervisorName"]
+        ) {
+          this.alertService.presentAlert(
+            "Alert",
+            "Please enter the Supervisor Name"
+          );
         }
       }
     } else {
       this.otherInfoValid = true;
     }
-    if (params != 'onload') {
+    if (params != "onload") {
       this.setStep(3 + this.dynamicStep);
     }
   }
 
-  async submitEID(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
-
+  async submitEID(
+    shipmentPanelForm: NgForm,
+    PTPanelTestForm: NgForm,
+    otherInfoPanelForm: NgForm
+  ) {
     shipmentPanelForm.control.markAllAsTouched();
     PTPanelTestForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
@@ -611,29 +827,37 @@ this.checkParticpentPanel('onload')
     } else {
       this.otherInfoValid = false;
     }
-    this.checkParticpentPanel('submit')
-    this.checkShipmentPanel('submit');
-    this.checkPtPanel('submit');
+    this.checkParticpentPanel("submit");
+    this.checkShipmentPanel("submit");
+    this.checkPtPanel("submit");
     if (this.showCustomFieldData == true) {
-      this.checkCustFieldPanel('submit');
+      this.checkCustFieldPanel("submit");
     }
-    this.checkOtherInfoPanel('submit');
+    this.checkOtherInfoPanel("submit");
     if (this.validShipmentDetails == false) {
       this.setStep(1);
     } else if (this.isValidPTPanel == false) {
       this.setStep(2);
-    } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
+    } else if (
+      this.showCustomFieldData == true &&
+      this.isValidCustField == false
+    ) {
       this.setStep(4);
-    } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
+    } else if (
+      this.showCustomFieldData == false &&
+      this.otherInfoValid == false
+    ) {
       this.setStep(3);
-    } else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
+    } else if (
+      this.showCustomFieldData == true &&
+      this.otherInfoValid == false
+    ) {
       // else if (this.otherInfoValid == false) {
       this.setStep(4);
     }
-    if (this.qcDone == 'no' || this.qcDone == '') {
+    if (this.qcDone == "no" || this.qcDone == "") {
       this.qcDate = "";
       this.qcDoneBy = "";
-
     }
     this.isSubmitted = "true";
     if (this.ptPanelNotTested == true) {
@@ -642,13 +866,22 @@ this.checkParticpentPanel('onload')
       this.isPtPanelNotTestedRadio = "no";
     }
     this.updatedStatus = this.eidArray[0].updatedStatus;
-    if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.otherInfoValid == true) {
-
-      if (this.shipmentData['shipmentTestingDate']) {
-        if (new Date(this.shipmentData['shipmentTestingDate']) >= new Date(this.shipmentData['testReceiptDate'])) {
+    if (
+      this.validShipmentDetails == true &&
+      this.isValidPTPanel == true &&
+      this.otherInfoValid == true
+    ) {
+      if (this.shipmentData["shipmentTestingDate"]) {
+        if (
+          new Date(this.shipmentData["shipmentTestingDate"]) >=
+          new Date(this.shipmentData["testReceiptDate"])
+        ) {
           this.isValidTestingDate = true;
         } else {
-          this.alertService.presentAlert('Alert', "Testing Date has to come after the Shipment Receipt Date");
+          this.alertService.presentAlert(
+            "Alert",
+            "Testing Date has to come after the Shipment Receipt Date"
+          );
           this.isValidTestingDate = false;
           return false;
         }
@@ -657,134 +890,183 @@ this.checkParticpentPanel('onload')
       }
       if (this.isValidTestingDate) {
         this.EIDJSON = {
-          "authToken": this.authToken,
-          "appVersion": this.appVersionNumber,
-          "syncType": "single",
-          "data": {
-            "evaluationStatus": this.eidArray[0].evaluationStatus,
-            "participantId": this.eidArray[0].participantId,
-            "schemeType": this.eidArray[0].schemeType,
-            "shipmentId": this.eidArray[0].shipmentId,
-            "schemeName":this.eidArray[0].schemeName,
-            "shipmentCode":this.eidArray[0].shipmentCode,
-            "mapId": this.eidArray[0].mapId,
-            "isSynced": true,
-            "createdOn": this.eidArray[0].createdOn ? this.eidArray[0].createdOn : "",
-            "updatedOn": this.eidArray[0].updatedOn ? this.eidArray[0].updatedOn : "",
-            "updatedStatus": this.updatedStatus,
-            "eidData": {
-              "access": {
-                "status": this.eidArray[0].eidData.access.status
+          authToken: this.authToken,
+          appVersion: this.appVersionNumber,
+          syncType: "single",
+          data: {
+            evaluationStatus: this.eidArray[0].evaluationStatus,
+            participantId: this.eidArray[0].participantId,
+            schemeType: this.eidArray[0].schemeType,
+            shipmentId: this.eidArray[0].shipmentId,
+            schemeName: this.eidArray[0].schemeName,
+            shipmentCode: this.eidArray[0].shipmentCode,
+            mapId: this.eidArray[0].mapId,
+            isSynced: true,
+            createdOn: this.eidArray[0].createdOn
+              ? this.eidArray[0].createdOn
+              : "",
+            updatedOn: this.eidArray[0].updatedOn
+              ? this.eidArray[0].updatedOn
+              : "",
+            updatedStatus: this.updatedStatus,
+            eidData: {
+              access: {
+                status: this.eidArray[0].eidData.access.status,
               },
-              "Section1": {
-                "status": this.showParticipantData,
-                "data": {
-                  "participantName": this.participantData['participantName'],
-                  "participantCode": this.participantData['participantCode'],
-                  "participantAffiliation": this.participantData['affiliation'],
-                  "participantPhone": this.participantData['phone'],
-                  "participantMobile": this.participantData['mobile'],
-                  "contactPersonEmail": this.participantData['contactPersonEmail'],
-                  "contactPersonName": this.participantData['contactPersonName'],
-                  "contactPersonTelephone": this.participantData['contactPersonTelephone'],
-                  "labDirectorEmail": this.participantData['labDirectorEmail'],
-                  "labDirectorName": this.participantData['labDirectorName'],
-                  "laboratoryId": this.participantData['laboratoryId'],
-                  "laboratoryName": this.participantData['laboratoryName'],
-                }
+              Section1: {
+                status: this.showParticipantData,
+                data: {
+                  participantName: this.participantData["participantName"],
+                  participantCode: this.participantData["participantCode"],
+                  participantAffiliation: this.participantData["affiliation"],
+                  participantPhone: this.participantData["phone"],
+                  participantMobile: this.participantData["mobile"],
+                  contactPersonEmail:
+                    this.participantData["contactPersonEmail"],
+                  contactPersonName: this.participantData["contactPersonName"],
+                  contactPersonTelephone:
+                    this.participantData["contactPersonTelephone"],
+                  labDirectorEmail: this.participantData["labDirectorEmail"],
+                  labDirectorName: this.participantData["labDirectorName"],
+                  laboratoryId: this.participantData["laboratoryId"],
+                  laboratoryName: this.participantData["laboratoryName"],
+                },
               },
-              "Section2": {
-                "status": this.showShipmentData,
-                "data": {
-                  "shipmentDate": this.shipmentData['shipmentDate'],
-                  "resultDueDate": this.shipmentData['resultDueDate'],
-                  "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
-                  "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
-                  "testDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
-                  "extractionAssaySelected": this.shipmentData['extractionAssay'],
-                  "extractionAssaySelect": this.shipmentData['extractionAssayDropdown'],
-                  "detectionAssaySelect": this.shipmentData['detectionAssayDropdown'],
-                  "detectionAssaySelected": this.shipmentData['detectionAssay'],
-                  "extractionLotNumber": this.shipmentData['extractionLotNumber'],
-                  "detectionLotNumber": this.shipmentData['detectionLotNumber'],
-                  "extractionExpirationDate": this.shipmentData['extractionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['extractionExpirationDate'])) : this.shipmentData['extractionExpirationDate'],
-                  "detectionExpirationDate": this.shipmentData['detectionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['detectionExpirationDate'])) : this.shipmentData['detectionExpirationDate'],
-                  "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
-                  "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'],
-                  "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
-                  "qcData": {
-                    "qcRadioSelected": this.qcDone,
-                    "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
-                    "qcDoneBy": this.qcDoneBy,
-                    "status": this.isQCDoneShow,
-                    "qcRadio": this.qcRadioArray
-                  }
-                }
+              Section2: {
+                status: this.showShipmentData,
+                data: {
+                  shipmentDate: this.shipmentData["shipmentDate"],
+                  resultDueDate: this.shipmentData["resultDueDate"],
+                  testReceiptDate: this.shipmentData["testReceiptDate"]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["testReceiptDate"])
+                      )
+                    : this.shipmentData["testReceiptDate"],
+                  sampleRehydrationDate: this.shipmentData[
+                    "sampleRehydrationDate"
+                  ]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["sampleRehydrationDate"])
+                      )
+                    : this.shipmentData["sampleRehydrationDate"],
+                  testDate: this.shipmentData["shipmentTestingDate"]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["shipmentTestingDate"])
+                      )
+                    : this.shipmentData["shipmentTestingDate"],
+                  extractionAssaySelected: this.shipmentData["extractionAssay"],
+                  extractionAssaySelect:
+                    this.shipmentData["extractionAssayDropdown"],
+                  detectionAssaySelect:
+                    this.shipmentData["detectionAssayDropdown"],
+                  detectionAssaySelected: this.shipmentData["detectionAssay"],
+                  extractionLotNumber: this.shipmentData["extractionLotNumber"],
+                  detectionLotNumber: this.shipmentData["detectionLotNumber"],
+                  extractionExpirationDate: this.shipmentData[
+                    "extractionExpirationDate"
+                  ]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["extractionExpirationDate"])
+                      )
+                    : this.shipmentData["extractionExpirationDate"],
+                  detectionExpirationDate: this.shipmentData[
+                    "detectionExpirationDate"
+                  ]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["detectionExpirationDate"])
+                      )
+                    : this.shipmentData["detectionExpirationDate"],
+                  responseDate: this.shipmentData["responseDate"]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["responseDate"])
+                      )
+                    : this.shipmentData["responseDate"],
+                  modeOfReceiptSelected: this.shipmentData["modeOfReceipt"],
+                  modeOfReceiptSelect:
+                    this.shipmentData["modeOfReceiptDropdown"],
+                  qcData: {
+                    qcRadioSelected: this.qcDone,
+                    qcDate: this.qcDate
+                      ? this.dateFormat(new Date(this.qcDate))
+                      : this.qcDate,
+                    qcDoneBy: this.qcDoneBy,
+                    status: this.isQCDoneShow,
+                    qcRadio: this.qcRadioArray,
+                  },
+                },
               },
-              "Section3": {
+              Section3: {
                 //PT panel details
-                "status": this.showPTPanelData,
-                "data": {
-                  "samples": this.ptPanelData['samples'],
-                  "resultsText": this.ptPanelData['resultsTextData'],
-                  "samplesList": this.ptPanelData['samplesList'],
-                  "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
-                  "vlNotTestedReasonText": this.ptPanelData['vlNotTestedReasonText'],
-                  "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
-                  "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
-                  "ptNotTestedCommentsText": this.ptPanelData['ptNotTestedCommentsText'],
-                  "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
-                  "ptSupportCommentsText": this.ptPanelData['ptSupportCommentsText'],
-                  "ptSupportComments": this.ptPanelData['ptSupportComments'],
-                }
+                status: this.showPTPanelData,
+                data: {
+                  samples: this.ptPanelData["samples"],
+                  resultsText: this.ptPanelData["resultsTextData"],
+                  samplesList: this.ptPanelData["samplesList"],
+                  isPtTestNotPerformedRadio: this.isPtPanelNotTestedRadio,
+                  vlNotTestedReasonText:
+                    this.ptPanelData["vlNotTestedReasonText"],
+                  vlNotTestedReason:
+                    this.ptPanelData["vlNotTestedReasonDropdown"],
+                  vlNotTestedReasonSelected:
+                    this.ptPanelData["vlNotTestedReason"],
+                  ptNotTestedCommentsText:
+                    this.ptPanelData["ptNotTestedCommentsText"],
+                  ptNotTestedComments: this.ptPanelData["ptNotTestedComments"],
+                  ptSupportCommentsText:
+                    this.ptPanelData["ptSupportCommentsText"],
+                  ptSupportComments: this.ptPanelData["ptSupportComments"],
+                },
               },
-              "Section4": {
+              Section4: {
                 //other information
-                "status": this.showOtherInfoData,
-                "data": {
-                  "supervisorReview": this.otherInfoData['supervisorReviewDropdown'],
-                  "approvalLabel": this.otherInfoData['approvalLabel'],
-                  "supervisorReviewSelected": this.otherInfoData['supervisorReview'],
-                  "approvalInputText": this.otherInfoData['supervisorName'],
-                  "comments": this.otherInfoData['comments']
-                }
+                status: this.showOtherInfoData,
+                data: {
+                  supervisorReview:
+                    this.otherInfoData["supervisorReviewDropdown"],
+                  approvalLabel: this.otherInfoData["approvalLabel"],
+                  supervisorReviewSelected:
+                    this.otherInfoData["supervisorReview"],
+                  approvalInputText: this.otherInfoData["supervisorName"],
+                  comments: this.otherInfoData["comments"],
+                },
               },
-              "customFields": {
-                "status": this.showCustomFieldData,
-                "data": {
-                  "customField1Text": this.customFieldData['customField1Text'],
-                  "customField1Val": this.customFieldData['customField1Val'],
-                  "customField2Text": this.customFieldData['customField2Text'],
-                  "customField2Val": this.customFieldData['customField2Val']
-                }
-              }
-
-            }
-          }
-        }
+              customFields: {
+                status: this.showCustomFieldData,
+                data: {
+                  customField1Text: this.customFieldData["customField1Text"],
+                  customField1Val: this.customFieldData["customField1Val"],
+                  customField2Text: this.customFieldData["customField2Text"],
+                  customField2Val: this.customFieldData["customField2Val"],
+                },
+              },
+            },
+          },
+        };
         console.log(this.EIDJSON);
         const element = await this.loadingCtrl.getTop();
         if (element && element.dismiss) {
           element.dismiss();
         }
         const loading = await this.loadingCtrl.create({
-          spinner: 'dots',
-          mode: 'ios',
-          message: 'Please wait',
+          spinner: "dots",
+          mode: "ios",
+          message: "Please wait",
         });
         await loading.present();
-        this.isView = 'true';
+        this.isView = "true";
         this.isShowReviewMsg = true;
-        this.isViewPage=false;
+        this.isViewPage = false;
         this.summarizeForm = true;
         loading.dismiss();
       }
     }
   }
 
-
-  confirmEID(shipmentPanelForm: NgForm, PTPanelTestForm: NgForm, otherInfoPanelForm: NgForm) {
-
+  confirmEID(
+    shipmentPanelForm: NgForm,
+    PTPanelTestForm: NgForm,
+    otherInfoPanelForm: NgForm
+  ) {
     shipmentPanelForm.control.markAllAsTouched();
     PTPanelTestForm.control.markAllAsTouched();
     otherInfoPanelForm.control.markAllAsTouched();
@@ -793,29 +1075,37 @@ this.checkParticpentPanel('onload')
     } else {
       this.otherInfoValid = false;
     }
-    this.checkShipmentPanel('submit');
-    this.checkParticpentPanel('submit')
-    this.checkPtPanel('submit');
+    this.checkShipmentPanel("submit");
+    this.checkParticpentPanel("submit");
+    this.checkPtPanel("submit");
     if (this.showCustomFieldData == true) {
-      this.checkCustFieldPanel('submit');
+      this.checkCustFieldPanel("submit");
     }
-    this.checkOtherInfoPanel('submit');
+    this.checkOtherInfoPanel("submit");
     if (this.validShipmentDetails == false) {
       this.setStep(1);
     } else if (this.isValidPTPanel == false) {
       this.setStep(2);
-    } else if (this.showCustomFieldData == true && this.isValidCustField == false) {
+    } else if (
+      this.showCustomFieldData == true &&
+      this.isValidCustField == false
+    ) {
       this.setStep(4);
-    } else if (this.showCustomFieldData == false && this.otherInfoValid == false) {
+    } else if (
+      this.showCustomFieldData == false &&
+      this.otherInfoValid == false
+    ) {
       this.setStep(3);
-    } else if (this.showCustomFieldData == true && this.otherInfoValid == false) {
+    } else if (
+      this.showCustomFieldData == true &&
+      this.otherInfoValid == false
+    ) {
       // else if (this.otherInfoValid == false) {
       this.setStep(4);
     }
-    if (this.qcDone == 'no' || this.qcDone == '') {
+    if (this.qcDone == "no" || this.qcDone == "") {
       this.qcDate = "";
       this.qcDoneBy = "";
-
     }
     this.isSubmitted = "true";
     if (this.ptPanelNotTested == true) {
@@ -824,12 +1114,22 @@ this.checkParticpentPanel('onload')
       this.isPtPanelNotTestedRadio = "no";
     }
     this.updatedStatus = this.eidArray[0].updatedStatus;
-    if (this.validShipmentDetails == true && this.isValidPTPanel == true && this.otherInfoValid == true) {
-      if (this.shipmentData['shipmentTestingDate']) {
-        if (new Date(this.shipmentData['shipmentTestingDate']) >= new Date(this.shipmentData['testReceiptDate'])) {
+    if (
+      this.validShipmentDetails == true &&
+      this.isValidPTPanel == true &&
+      this.otherInfoValid == true
+    ) {
+      if (this.shipmentData["shipmentTestingDate"]) {
+        if (
+          new Date(this.shipmentData["shipmentTestingDate"]) >=
+          new Date(this.shipmentData["testReceiptDate"])
+        ) {
           this.isValidTestingDate = true;
         } else {
-          this.alertService.presentAlert('Alert', "Testing Date has to come after the Shipment Receipt Date");
+          this.alertService.presentAlert(
+            "Alert",
+            "Testing Date has to come after the Shipment Receipt Date"
+          );
           this.isValidTestingDate = false;
           return false;
         }
@@ -838,171 +1138,220 @@ this.checkParticpentPanel('onload')
       }
       if (this.isValidTestingDate) {
         this.EIDJSON = {
-          "authToken": this.authToken,
-          "appVersion": this.appVersionNumber,
-          "syncType": "single",
-          "data": {
-            "evaluationStatus": this.eidArray[0].evaluationStatus,
-            "participantId": this.eidArray[0].participantId,
-            "schemeType": this.eidArray[0].schemeType,
-            "shipmentId": this.eidArray[0].shipmentId,
-            "schemeName":this.eidArray[0].schemeName,
-            "shipmentCode":this.eidArray[0].shipmentCode,
-            "mapId": this.eidArray[0].mapId,
-            "isSynced": true,
-            "createdOn": this.eidArray[0].createdOn ? this.eidArray[0].createdOn : "",
-            "updatedOn": this.eidArray[0].updatedOn ? this.eidArray[0].updatedOn : "",
-            "updatedStatus": this.updatedStatus,
-            "eidData": {
-              "access": {
-                "status": this.eidArray[0].eidData.access.status
+          authToken: this.authToken,
+          appVersion: this.appVersionNumber,
+          syncType: "single",
+          data: {
+            evaluationStatus: this.eidArray[0].evaluationStatus,
+            participantId: this.eidArray[0].participantId,
+            schemeType: this.eidArray[0].schemeType,
+            shipmentId: this.eidArray[0].shipmentId,
+            schemeName: this.eidArray[0].schemeName,
+            shipmentCode: this.eidArray[0].shipmentCode,
+            mapId: this.eidArray[0].mapId,
+            isSynced: true,
+            createdOn: this.eidArray[0].createdOn
+              ? this.eidArray[0].createdOn
+              : "",
+            updatedOn: this.eidArray[0].updatedOn
+              ? this.eidArray[0].updatedOn
+              : "",
+            updatedStatus: this.updatedStatus,
+            eidData: {
+              access: {
+                status: this.eidArray[0].eidData.access.status,
               },
-              "Section1": {
-                "status": this.showParticipantData,
-                "data": {
-                  "participantName": this.participantData['participantName'],
-                  "participantCode": this.participantData['participantCode'],
-                  "participantAffiliation": this.participantData['affiliation'],
-                  "participantPhone": this.participantData['phone'],
-                  "participantMobile": this.participantData['mobile'],
-                  "contactPersonEmail": this.participantData['contactPersonEmail'],
-                  "contactPersonName": this.participantData['contactPersonName'],
-                  "contactPersonTelephone": this.participantData['contactPersonTelephone'],
-                  "labDirectorEmail": this.participantData['labDirectorEmail'],
-                  "labDirectorName": this.participantData['labDirectorName'],
-                  "laboratoryId": this.participantData['laboratoryId'],
-                  "laboratoryName": this.participantData['laboratoryName'],
-                }
+              Section1: {
+                status: this.showParticipantData,
+                data: {
+                  participantName: this.participantData["participantName"],
+                  participantCode: this.participantData["participantCode"],
+                  participantAffiliation: this.participantData["affiliation"],
+                  participantPhone: this.participantData["phone"],
+                  participantMobile: this.participantData["mobile"],
+                  contactPersonEmail:
+                    this.participantData["contactPersonEmail"],
+                  contactPersonName: this.participantData["contactPersonName"],
+                  contactPersonTelephone:
+                    this.participantData["contactPersonTelephone"],
+                  labDirectorEmail: this.participantData["labDirectorEmail"],
+                  labDirectorName: this.participantData["labDirectorName"],
+                  laboratoryId: this.participantData["laboratoryId"],
+                  laboratoryName: this.participantData["laboratoryName"],
+                },
               },
-              "Section2": {
-                "status": this.showShipmentData,
-                "data": {
-                  "shipmentDate": this.shipmentData['shipmentDate'],
-                  "resultDueDate": this.shipmentData['resultDueDate'],
-                  "testReceiptDate": this.shipmentData['testReceiptDate'] ? this.dateFormat(new Date(this.shipmentData['testReceiptDate'])) : this.shipmentData['testReceiptDate'],
-                  "sampleRehydrationDate": this.shipmentData['sampleRehydrationDate'] ? this.dateFormat(new Date(this.shipmentData['sampleRehydrationDate'])) : this.shipmentData['sampleRehydrationDate'],
-                  "testDate": this.shipmentData['shipmentTestingDate'] ? this.dateFormat(new Date(this.shipmentData['shipmentTestingDate'])) : this.shipmentData['shipmentTestingDate'],
-                  "extractionAssaySelected": this.shipmentData['extractionAssay'],
-                  "extractionAssaySelect": this.shipmentData['extractionAssayDropdown'],
-                  "detectionAssaySelect": this.shipmentData['detectionAssayDropdown'],
-                  "detectionAssaySelected": this.shipmentData['detectionAssay'],
-                  "extractionLotNumber": this.shipmentData['extractionLotNumber'],
-                  "detectionLotNumber": this.shipmentData['detectionLotNumber'],
-                  "extractionExpirationDate": this.shipmentData['extractionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['extractionExpirationDate'])) : this.shipmentData['extractionExpirationDate'],
-                  "detectionExpirationDate": this.shipmentData['detectionExpirationDate'] ? this.dateFormat(new Date(this.shipmentData['detectionExpirationDate'])) : this.shipmentData['detectionExpirationDate'],
-                  "responseDate": this.shipmentData['responseDate'] ? this.dateFormat(new Date(this.shipmentData['responseDate'])) : this.shipmentData['responseDate'],
-                  "modeOfReceiptSelected": this.shipmentData['modeOfReceipt'],
-                  "modeOfReceiptSelect": this.shipmentData['modeOfReceiptDropdown'],
-                  "qcData": {
-                    "qcRadioSelected": this.qcDone,
-                    "qcDate": this.qcDate ? this.dateFormat(new Date(this.qcDate)) : this.qcDate,
-                    "qcDoneBy": this.qcDoneBy,
-                    "status": this.isQCDoneShow,
-                    "qcRadio": this.qcRadioArray
-                  }
-                }
+              Section2: {
+                status: this.showShipmentData,
+                data: {
+                  shipmentDate: this.shipmentData["shipmentDate"],
+                  resultDueDate: this.shipmentData["resultDueDate"],
+                  testReceiptDate: this.shipmentData["testReceiptDate"]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["testReceiptDate"])
+                      )
+                    : this.shipmentData["testReceiptDate"],
+                  sampleRehydrationDate: this.shipmentData[
+                    "sampleRehydrationDate"
+                  ]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["sampleRehydrationDate"])
+                      )
+                    : this.shipmentData["sampleRehydrationDate"],
+                  testDate: this.shipmentData["shipmentTestingDate"]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["shipmentTestingDate"])
+                      )
+                    : this.shipmentData["shipmentTestingDate"],
+                  extractionAssaySelected: this.shipmentData["extractionAssay"],
+                  extractionAssaySelect:
+                    this.shipmentData["extractionAssayDropdown"],
+                  detectionAssaySelect:
+                    this.shipmentData["detectionAssayDropdown"],
+                  detectionAssaySelected: this.shipmentData["detectionAssay"],
+                  extractionLotNumber: this.shipmentData["extractionLotNumber"],
+                  detectionLotNumber: this.shipmentData["detectionLotNumber"],
+                  extractionExpirationDate: this.shipmentData[
+                    "extractionExpirationDate"
+                  ]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["extractionExpirationDate"])
+                      )
+                    : this.shipmentData["extractionExpirationDate"],
+                  detectionExpirationDate: this.shipmentData[
+                    "detectionExpirationDate"
+                  ]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["detectionExpirationDate"])
+                      )
+                    : this.shipmentData["detectionExpirationDate"],
+                  responseDate: this.shipmentData["responseDate"]
+                    ? this.dateFormat(
+                        new Date(this.shipmentData["responseDate"])
+                      )
+                    : this.shipmentData["responseDate"],
+                  modeOfReceiptSelected: this.shipmentData["modeOfReceipt"],
+                  modeOfReceiptSelect:
+                    this.shipmentData["modeOfReceiptDropdown"],
+                  qcData: {
+                    qcRadioSelected: this.qcDone,
+                    qcDate: this.qcDate
+                      ? this.dateFormat(new Date(this.qcDate))
+                      : this.qcDate,
+                    qcDoneBy: this.qcDoneBy,
+                    status: this.isQCDoneShow,
+                    qcRadio: this.qcRadioArray,
+                  },
+                },
               },
-              "Section3": {
+              Section3: {
                 //PT panel details
-                "status": this.showPTPanelData,
-                "data": {
-                  "samples": this.ptPanelData['samples'],
-                  "resultsText": this.ptPanelData['resultsTextData'],
-                  "samplesList": this.ptPanelData['samplesList'],
-                  "isPtTestNotPerformedRadio": this.isPtPanelNotTestedRadio,
-                  "vlNotTestedReasonText": this.ptPanelData['vlNotTestedReasonText'],
-                  "vlNotTestedReason": this.ptPanelData['vlNotTestedReasonDropdown'],
-                  "vlNotTestedReasonSelected": this.ptPanelData['vlNotTestedReason'],
-                  "ptNotTestedCommentsText": this.ptPanelData['ptNotTestedCommentsText'],
-                  "ptNotTestedComments": this.ptPanelData['ptNotTestedComments'],
-                  "ptSupportCommentsText": this.ptPanelData['ptSupportCommentsText'],
-                  "ptSupportComments": this.ptPanelData['ptSupportComments'],
-                }
+                status: this.showPTPanelData,
+                data: {
+                  samples: this.ptPanelData["samples"],
+                  resultsText: this.ptPanelData["resultsTextData"],
+                  samplesList: this.ptPanelData["samplesList"],
+                  isPtTestNotPerformedRadio: this.isPtPanelNotTestedRadio,
+                  vlNotTestedReasonText:
+                    this.ptPanelData["vlNotTestedReasonText"],
+                  vlNotTestedReason:
+                    this.ptPanelData["vlNotTestedReasonDropdown"],
+                  vlNotTestedReasonSelected:
+                    this.ptPanelData["vlNotTestedReason"],
+                  ptNotTestedCommentsText:
+                    this.ptPanelData["ptNotTestedCommentsText"],
+                  ptNotTestedComments: this.ptPanelData["ptNotTestedComments"],
+                  ptSupportCommentsText:
+                    this.ptPanelData["ptSupportCommentsText"],
+                  ptSupportComments: this.ptPanelData["ptSupportComments"],
+                },
               },
-              "Section4": {
+              Section4: {
                 //other information
-                "status": this.showOtherInfoData,
-                "data": {
-                  "supervisorReview": this.otherInfoData['supervisorReviewDropdown'],
-                  "approvalLabel": this.otherInfoData['approvalLabel'],
-                  "supervisorReviewSelected": this.otherInfoData['supervisorReview'],
-                  "approvalInputText": this.otherInfoData['supervisorName'],
-                  "comments": this.otherInfoData['comments']
-                }
+                status: this.showOtherInfoData,
+                data: {
+                  supervisorReview:
+                    this.otherInfoData["supervisorReviewDropdown"],
+                  approvalLabel: this.otherInfoData["approvalLabel"],
+                  supervisorReviewSelected:
+                    this.otherInfoData["supervisorReview"],
+                  approvalInputText: this.otherInfoData["supervisorName"],
+                  comments: this.otherInfoData["comments"],
+                },
               },
-              "customFields": {
-                "status": this.showCustomFieldData,
-                "data": {
-                  "customField1Text": this.customFieldData['customField1Text'],
-                  "customField1Val": this.customFieldData['customField1Val'],
-                  "customField2Text": this.customFieldData['customField2Text'],
-                  "customField2Val": this.customFieldData['customField2Val']
-                }
-              }
-
-            }
-          }
-        }
+              customFields: {
+                status: this.showCustomFieldData,
+                data: {
+                  customField1Text: this.customFieldData["customField1Text"],
+                  customField1Val: this.customFieldData["customField1Val"],
+                  customField2Text: this.customFieldData["customField2Text"],
+                  customField2Val: this.customFieldData["customField2Val"],
+                },
+              },
+            },
+          },
+        };
         console.log(this.EIDJSON);
-        if (this.network.type == 'none') {
-          this.EIDJSON['data']['isSynced'] = 'false';
+        if (this.network.type == "none") {
+          this.EIDJSON["data"]["isSynced"] = "false";
           this.LocalShipmentFormService.offlineStoreShipmentForm(this.EIDJSON);
-
         } else {
+          this.EIDJSON["data"]["isSynced"] = "true";
 
-          this.EIDJSON['data']['isSynced'] = 'true';
-
-          this.CrudServiceService.postData('/api/shipments/save-form', this.EIDJSON).then((result) => {
-            if (result["status"] == 'success') {
-              this.alertService.presentAlert('Success', result['message']);
-              this.router.navigate(['/all-pt-schemes']);
-            } else if (result["status"] == "auth-fail") {
-              this.alertService.presentAlert('Alert', result["message"]);
-              this.storage.set("isLogOut", true);
-              this.router.navigate(['/login']);
+          this.CrudServiceService.postData(
+            "/api/shipments/save-form",
+            this.EIDJSON
+          ).then(
+            (result) => {
+              if (result["status"] == "success") {
+                this.alertService.presentAlert("Success", result["message"]);
+                this.router.navigate(["/all-pt-schemes"]);
+              } else if (result["status"] == "auth-fail") {
+                this.alertService.presentAlert("Alert", result["message"]);
+                this.storage.set("isLogOut", true);
+                this.router.navigate(["/login"]);
+              } else {
+                this.alertService.presentAlert("Alert", result["message"]);
+              }
+            },
+            (err) => {
+              this.alertService.presentAlert(
+                "Alert",
+                "Something went wrong.Please try again later"
+              );
             }
-             else {
-
-              this.alertService.presentAlert('Alert', result["message"]);
-            }
-          }, (err) => {
-            this.alertService.presentAlert('Alert', 'Something went wrong.Please try again later');
-          });
+          );
         }
       }
     }
   }
 
-
   editForm() {
     this.isShowReviewMsg = false;
-    this.isViewPage= true;
+    this.isViewPage = true;
     this.summarizeForm = true;
-    this.isView = 'false';
+    this.isView = "false";
   }
 
-
   clearTestReceiptDate() {
-    this.shipmentData['testReceiptDate'] = ""
+    this.shipmentData["testReceiptDate"] = "";
   }
 
   clearSampleRehydDate() {
-    this.shipmentData['sampleRehydrationDate'] = ""
+    this.shipmentData["sampleRehydrationDate"] = "";
   }
   clearTestingDate() {
-
-    this.shipmentData['shipmentTestingDate'] = "";
+    this.shipmentData["shipmentTestingDate"] = "";
   }
   clearExtAssExpDate() {
-    this.shipmentData['extractionExpirationDate'] = '';
+    this.shipmentData["extractionExpirationDate"] = "";
   }
   clearDecAssExpDate() {
-    this.shipmentData['detectionExpirationDate'] = '';
+    this.shipmentData["detectionExpirationDate"] = "";
   }
   clearResponseDate() {
-    this.shipmentData['responseDate'] = ''
+    this.shipmentData["responseDate"] = "";
   }
   clearQCDate() {
-    this.qcDate = '';
+    this.qcDate = "";
   }
 }
