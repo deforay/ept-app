@@ -34,12 +34,12 @@
       <ion-grid>
         <ion-row *ngIf="partiDetailsArray.participantName">
           <ion-col size="6" class="grid-readonly-col">
-<p class="ion-text-wrap">
+            <p class="ion-text-wrap">
               <span class="text-title-color">Participant Name</span>
             </p>
           </ion-col>
           <ion-col size="1" class="grid-readonly-col">
-<p class="ion-text-wrap">
+            <p class="ion-text-wrap">
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
@@ -52,12 +52,12 @@
 
         <ion-row *ngIf="partiDetailsArray.participantCode">
           <ion-col size="6" class="grid-readonly-col">
-<p class="ion-text-wrap">
+            <p class="ion-text-wrap">
               <span class="text-title-color">Participant Code </span>
             </p>
           </ion-col>
           <ion-col size="1" class="grid-readonly-col">
-<p class="ion-text-wrap">
+            <p class="ion-text-wrap">
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
@@ -70,12 +70,12 @@
 
         <ion-row *ngIf="partiDetailsArray.affiliation">
           <ion-col size="6" class="grid-readonly-col">
-<p class="ion-text-wrap">
+            <p class="ion-text-wrap">
               <span class="text-title-color">Affiliation </span>
             </p>
           </ion-col>
           <ion-col size="1" class="grid-readonly-col">
-<p class="ion-text-wrap">
+            <p class="ion-text-wrap">
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
@@ -88,12 +88,12 @@
 
         <ion-row *ngIf="partiDetailsArray.phone">
           <ion-col size="6" class="grid-readonly-col">
-<p class="ion-text-wrap">
+            <p class="ion-text-wrap">
               <span class="text-title-color">Tel Phone No</span>
             </p>
           </ion-col>
           <ion-col size="1" class="grid-readonly-col">
-<p class="ion-text-wrap">
+            <p class="ion-text-wrap">
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
@@ -106,12 +106,12 @@
 
         <ion-row *ngIf="partiDetailsArray.mobile">
           <ion-col size="6" class="grid-readonly-col">
-<p class="ion-text-wrap">
+            <p class="ion-text-wrap">
               <span class="text-title-color">Mobile No</span>
             </p>
           </ion-col>
           <ion-col size="1" class="grid-readonly-col">
-<p class="ion-text-wrap">
+            <p class="ion-text-wrap">
               <span class="text-title-color">:</span>
             </p>
           </ion-col>
@@ -154,34 +154,34 @@
         <ion-grid>
           <ion-row *ngIf="shipmentData.shipmentDate">
             <ion-col size="5" class="grid-readonly-col">
-  <p class="ion-text-wrap">
+              <p class="ion-text-wrap">
                 <span class="text-title-color">Shipment Date </span>
               </p>
             </ion-col>
             <ion-col size="1" class="grid-readonly-col">
-  <p class="ion-text-wrap">
+              <p class="ion-text-wrap">
                 <span class="text-title-color">:</span>
               </p>
             </ion-col>
             <ion-col class="grid-readonly-col">
-  <p class="ion-text-wrap">
+              <p class="ion-text-wrap">
                 <span>{{shipmentData.shipmentDate}} </span>
               </p>
             </ion-col>
           </ion-row>
           <ion-row *ngIf="shipmentData.resultDueDate">
             <ion-col size="5" class="grid-readonly-col">
-  <p class="ion-text-wrap">
+              <p class="ion-text-wrap">
                 <span class="text-title-color">Result Due Date </span>
               </p>
             </ion-col>
             <ion-col size="1" class="grid-readonly-col">
-  <p class="ion-text-wrap">
+              <p class="ion-text-wrap">
                 <span class="text-title-color">:</span>
               </p>
             </ion-col>
             <ion-col class="grid-readonly-col">
-  <p class="ion-text-wrap">
+              <p class="ion-text-wrap">
                 <span>{{shipmentData.resultDueDate}} </span>
               </p>
             </ion-col>
@@ -715,9 +715,12 @@
         </mat-action-row>
       </mat-expansion-panel>
     </form>
-<form #PTPanelTestForm="ngForm" novalidate>
-
-      <mat-expansion-panel *ngIf="showPTPanelData" [expanded]="step === 2" (opened)="setStep(2)">
+    <form #PTPanelTestForm="ngForm" novalidate>
+      <mat-expansion-panel
+        *ngIf="showPTPanelData"
+        [expanded]="step === 2"
+        (opened)="setStep(2)"
+      >
         <mat-expansion-panel-header>
           <mat-panel-title>
             <ion-grid class="panelHeading">
@@ -725,8 +728,15 @@
                 <ion-col size="10" class="grid-readonly-col">
                   <span class="text-title-color"> PT Panel Test</span>
                 </ion-col>
-                <ion-col size="2" class="grid-readonly-col" *ngIf="isValidPTPanel">
-                  <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+                <ion-col
+                  size="2"
+                  class="grid-readonly-col"
+                  *ngIf="isValidPTPanel"
+                >
+                  <ion-icon
+                    name="checkmark-circle"
+                    class="checkMarkIcon"
+                  ></ion-icon>
                 </ion-col>
               </ion-row>
             </ion-grid>
@@ -735,8 +745,13 @@
         <ion-row>
           <ion-col class="grid-input-col">
             <section class="div-section">
-              <mat-checkbox [(ngModel)]="ptPanelNotTested" name="covidPtPanelTest" #covidPtPanelTest="ngModel"
-                [disabled]="isView=='true'">PT panel not tested</mat-checkbox>
+              <mat-checkbox
+                [(ngModel)]="ptPanelNotTested"
+                name="covidPtPanelTest"
+                #covidPtPanelTest="ngModel"
+                [disabled]="isView=='true'"
+                >PT panel not tested</mat-checkbox
+              >
             </section>
           </ion-col>
         </ion-row>
@@ -744,57 +759,103 @@
         <section *ngIf="ptPanelNotTested">
           <ion-row>
             <ion-col size="12" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+              <mat-form-field
+                class="login-full-width grid-col-form"
+                appearance="outline"
+              >
                 <mat-label>
-                  {{ptPanelData.notTestedReasonText}} <span class="danger-text" *ngIf="isView=='true'">*</span>
+                  {{ptPanelData.notTestedReasonText}}
+                  <span class="danger-text" *ngIf="isView=='true'">*</span>
                 </mat-label>
-                <mat-select [(ngModel)]="ptPanelData.notTestedReasonSelected" name="covidNotTested" #covidNotTested="ngModel"
-                  [required]="ptPanelNotTested" [disabled]="isView=='true'">
+                <mat-select
+                  [(ngModel)]="ptPanelData.notTestedReasonSelected"
+                  name="covidNotTested"
+                  #covidNotTested="ngModel"
+                  [required]="ptPanelNotTested"
+                  [disabled]="isView=='true'"
+                >
                   <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let item of ptPanelData.notTestedReasons" [value]="item.value">
+                  <mat-option
+                    *ngFor="let item of ptPanelData.notTestedReasons"
+                    [value]="item.value"
+                  >
                     {{item.show}}
                   </mat-option>
                 </mat-select>
-                <mat-error *ngIf="ptPanelNotTested && !ptPanelData.notTestedReasonSelected">Please choose the Reason for not testing
-                </mat-error>
-              </mat-form-field>
-            </ion-col>
-             <ion-col size="12" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>
-                  Received the PT Panel? <span class="danger-text" *ngIf="isView=='true'">*</span>
-                </mat-label>
-                <mat-select [(ngModel)]="ptPanelData.receivedPtPanel" name="covidNotTested" #covidNotTested="ngModel"
-                  [required]="ptPanelNotTested" [disabled]="isView=='true'">
-                  <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let item of ptPanelData.receivedPtPanelSelect" [value]="item.value">
-                    {{item.show}}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="ptPanelNotTested && !ptPanelData.receivedPtPanel">Please choose the Reason for not testing
+                <mat-error
+                  *ngIf="ptPanelNotTested && !ptPanelData.notTestedReasonSelected"
+                  >Please choose the Reason for not testing
                 </mat-error>
               </mat-form-field>
             </ion-col>
             <ion-col size="12" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+              <mat-form-field
+                class="login-full-width grid-col-form"
+                appearance="outline"
+              >
                 <mat-label>
-                  {{ptPanelData.ptNotTestedCommentsText}} <span class="danger-text" *ngIf="isView=='true'">*</span>
+                  Received the PT Panel?
+                  <span class="danger-text" *ngIf="isView=='true'">*</span>
                 </mat-label>
-                <textarea matInput placeholder="Enter Your Comments here" name="covidPtNotTestedComments"
-                  #covidPtNotTestedComments="ngModel" [(ngModel)]="ptPanelData.ptNotTestedComments"
-                  [disabled]="isView=='true'" [required]="ptPanelNotTested"></textarea>
-                <mat-error *ngIf="ptPanelNotTested && !ptPanelData.ptNotTestedComments">Please Enter Your Comments
+                <mat-select
+                  [(ngModel)]="ptPanelData.receivedPtPanel"
+                  name="covidNotTested"
+                  #covidNotTested="ngModel"
+                  [required]="ptPanelNotTested"
+                  [disabled]="isView=='true'"
+                >
+                  <mat-option>--Select--</mat-option>
+                  <mat-option
+                    *ngFor="let item of ptPanelData.receivedPtPanelSelect"
+                    [value]="item.value"
+                  >
+                    {{item.show}}
+                  </mat-option>
+                </mat-select>
+                <mat-error
+                  *ngIf="ptPanelNotTested && !ptPanelData.receivedPtPanel"
+                  >Please choose the Reason for not testing
                 </mat-error>
               </mat-form-field>
             </ion-col>
             <ion-col size="12" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+              <mat-form-field
+                class="login-full-width grid-col-form"
+                appearance="outline"
+              >
                 <mat-label>
-                  {{ptPanelData.ptSupportCommentsText}}
+                  {{ptPanelData.ptNotTestedCommentsText}}
+                  <span class="danger-text" *ngIf="isView=='true'">*</span>
                 </mat-label>
-                <textarea matInput placeholder="Enter Your Support Comments here" name="covidPtNotSupportComments"
-                  #covidPtNotSupportComments="ngModel" [disabled]="isView=='true'"
-                  [(ngModel)]="ptPanelData.ptSupportComments"></textarea>
+                <textarea
+                  matInput
+                  placeholder="Enter Your Comments here"
+                  name="covidPtNotTestedComments"
+                  #covidPtNotTestedComments="ngModel"
+                  [(ngModel)]="ptPanelData.ptNotTestedComments"
+                  [disabled]="isView=='true'"
+                  [required]="ptPanelNotTested"
+                ></textarea>
+                <mat-error
+                  *ngIf="ptPanelNotTested && !ptPanelData.ptNotTestedComments"
+                  >Please Enter Your Comments
+                </mat-error>
+              </mat-form-field>
+            </ion-col>
+            <ion-col size="12" class="grid-input-col">
+              <mat-form-field
+                class="login-full-width grid-col-form"
+                appearance="outline"
+              >
+                <mat-label> {{ptPanelData.ptSupportCommentsText}} </mat-label>
+                <textarea
+                  matInput
+                  placeholder="Enter Your Support Comments here"
+                  name="covidPtNotSupportComments"
+                  #covidPtNotSupportComments="ngModel"
+                  [disabled]="isView=='true'"
+                  [(ngModel)]="ptPanelData.ptSupportComments"
+                ></textarea>
                 <!-- [required]="ptPanelNotTested" -->
                 <!-- <mat-error *ngIf="ptPanelNotTested && !ptPanelData.ptSupportComments">Please Enter Your Comments
                 </mat-error> -->
@@ -802,20 +863,30 @@
             </ion-col>
           </ion-row>
         </section>
-        <mat-action-row *ngIf="ptPanelNotTested"> 
+        <mat-action-row>
           <button mat-button color="warn" (click)="prevStep()">Previous</button>
-          <button mat-button color="primary" type="submit" (click)="checkPtPanel('next')">Next</button>
+          <button
+            mat-button
+            color="primary"
+            type="submit"
+            (click)="checkPtPanel('next')"
+          >
+            Next
+          </button>
         </mat-action-row>
       </mat-expansion-panel>
     </form>
-    <mat-card class="main-card-panel" *ngIf="showTestkitPanel && (ptPanelNotTested==false || !ptPanelNotTested)">
+    <mat-card
+      class="main-card-panel"
+      *ngIf="showTestkitPanel && (ptPanelNotTested==false || !ptPanelNotTested)"
+    >
       <mat-card-title> Test Kit Details</mat-card-title>
       <mat-card-content>
         <form #testKitPanelForm="ngForm" novalidate>
           <div *ngFor="let kitTextItem of testKitTextArray;let i = index;">
             <mat-expansion-panel
-              [expanded]="step === i+2"
-              (opened)="setStep(i+2)"
+              [expanded]="step === i+3"
+              (opened)="setStep(i+3)"
               *ngIf="(shipmentData['screeningTest']=='no' && ((shipmentData.algorithmUsedSelected !='myanmarNationalDtsAlgo' && testKitNameArray[kitTextItem].status==true) ||
         (shipmentData.algorithmUsedSelected =='myanmarNationalDtsAlgo' && kitTextItem =='Test-3')|| (shipmentData.algorithmUsedSelected =='myanmarNationalDtsAlgo' && kitTextItem !='Test-3'&& testKitNameArray[kitTextItem].status==true))) || (shipmentData['screeningTest']=='yes' && kitTextItem =='Test-1') "
             >
@@ -959,14 +1030,17 @@
       </mat-card-content>
     </mat-card>
     <form #sampleDetailsForm="ngForm" novalidate>
-      <mat-card class="main-card-panel" *ngIf="showSampleData && (ptPanelNotTested==false || !ptPanelNotTested)">
+      <mat-card
+        class="main-card-panel"
+        *ngIf="showSampleData && (ptPanelNotTested==false || !ptPanelNotTested)"
+      >
         <mat-card-title> Sample Details</mat-card-title>
         <mat-card-content>
           <div *ngFor="let sampleName of samplesNameArr;let i = index;">
             <mat-expansion-panel
               *ngIf="showSampleData"
-              [expanded]="step === i+testKitIndex+2"
-              (opened)="setStep(i+testKitIndex+2)"
+              [expanded]="step === i+testKitIndex+3"
+              (opened)="setStep(i+testKitIndex+3)"
             >
               <mat-expansion-panel-header>
                 <mat-panel-title>
@@ -983,20 +1057,28 @@
                         >
                       </ion-col>
                       <ion-col size="5" class="grid-readonly-col">
-                        <span  *ngIf="sampleDetailsArray.resultStatus[2]==true  && allowRepeatTests" class="resultAbbreviation"
+                        <span
+                          *ngIf="sampleDetailsArray.resultStatus[2]==true  && allowRepeatTests"
+                          class="resultAbbreviation"
                           >{{result1Arr[i]?result1Arr[i].resultCode:'X'}} -
                           {{result2Arr[i]?result2Arr[i].resultCode:'X'}} -
                           {{result3Arr[i]?result3Arr[i].resultCode:'X'}} -
-                          {{repeatResult1Arr[i]?repeatResult1Arr[i].resultCode:'X'}} -
-                          {{repeatResult2Arr[i]?repeatResult2Arr[i].resultCode:'X'}} -
+                          {{repeatResult1Arr[i]?repeatResult1Arr[i].resultCode:'X'}}
+                          -
+                          {{repeatResult2Arr[i]?repeatResult2Arr[i].resultCode:'X'}}
+                          -
                           {{repeatResult3Arr[i]?repeatResult3Arr[i].resultCode:'X'}}=
                           {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span
                         >
-                        <span  *ngIf="sampleDetailsArray.resultStatus[2]==false"class="resultAbbreviation"
+                        <span
+                          *ngIf="sampleDetailsArray.resultStatus[2]==false"
+                          class="resultAbbreviation"
                           >{{result1Arr[i]?result1Arr[i].resultCode:'X'}} -
                           {{result2Arr[i]?result2Arr[i].resultCode:'X'}} -
-                          {{repeatResult1Arr[i]?repeatResult1Arr[i].resultCode:'X'}} -
-                          {{repeatResult2Arr[i]?repeatResult2Arr[i].resultCode:'X'}} -=
+                          {{repeatResult1Arr[i]?repeatResult1Arr[i].resultCode:'X'}}
+                          -
+                          {{repeatResult2Arr[i]?repeatResult2Arr[i].resultCode:'X'}}
+                          -=
                           {{finalResultArr[i]?finalResultArr[i].resultCode:'X'}}</span
                         >
                       </ion-col>
@@ -1106,7 +1188,9 @@
                 </ion-col>
               </ion-row>
 
-              <ion-row *ngIf="sampleDetailsArray.resultStatus[3] && allowRepeatTests">
+              <ion-row
+                *ngIf="sampleDetailsArray.resultStatus[3] && allowRepeatTests"
+              >
                 <!--    [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&                 !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field
@@ -1134,7 +1218,9 @@
                   </mat-form-field>
                 </ion-col>
               </ion-row>
-              <ion-row *ngIf="sampleDetailsArray.resultStatus[4] && allowRepeatTests">
+              <ion-row
+                *ngIf="sampleDetailsArray.resultStatus[4] && allowRepeatTests"
+              >
                 <!--    [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&                 !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field
@@ -1162,7 +1248,9 @@
                   </mat-form-field>
                 </ion-col>
               </ion-row>
-              <ion-row *ngIf="sampleDetailsArray.resultStatus[5] && allowRepeatTests">
+              <ion-row
+                *ngIf="sampleDetailsArray.resultStatus[5] && allowRepeatTests"
+              >
                 <!--    [ngClass]="{ 'mat-form-field-invalid':samplesArray.mandatory[i]==true &&                 !finalResultArr[i],'mat-form-field-valid': samplesArray.mandatory[i]==false}" -->
                 <ion-col size="12" class="grid-readonly-col">
                   <mat-form-field
@@ -1242,8 +1330,8 @@
     <form #customFieldsForm="ngForm" novalidate>
       <mat-expansion-panel
         *ngIf="showCustomFieldData"
-        [expanded]="step === testKitIndex+sampleIndex+2"
-        (opened)="setStep(testKitIndex+sampleIndex+2)"
+        [expanded]="step === testKitIndex+sampleIndex+3"
+        (opened)="setStep(testKitIndex+sampleIndex+3)"
       >
         <mat-expansion-panel-header>
           <mat-panel-title>
@@ -1329,8 +1417,8 @@
     <!-- Custom Panel Ends-->
     <form #otherInfoPanelForm="ngForm" novalidate>
       <mat-expansion-panel
-        [expanded]="step === testKitIndex+sampleIndex+dynamicStep+2"
-        (opened)="setStep(testKitIndex+sampleIndex+dynamicStep+2)"
+        [expanded]="step === testKitIndex+sampleIndex+dynamicStep+3"
+        (opened)="setStep(testKitIndex+sampleIndex+dynamicStep+3)"
       >
         <mat-expansion-panel-header>
           <mat-panel-title>

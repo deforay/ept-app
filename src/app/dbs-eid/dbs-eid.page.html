@@ -78,29 +78,30 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Lab Director Email <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [(ngModel)]="labDirectorEmail" (change)="changeDirectorMail()"
-                  placeholder="Enter Lab Director Email." name="labDirectorEmail" 
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required
-                  [disabled]="isView=='true'" data-alert="Please enter Lab Director Email." id="labDirectorEmail">
+                  placeholder="Enter Lab Director Email." name="eidLabDirectorEmail" 
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required #eidLabDirectorEmail="ngModel"
+                  [disabled]="isView=='true'" data-alert="Please enter Lab Director Email." id="eidLabDirectorEmail">
                 <mat-error *ngIf="!labDirectorEmail">
                   Lab Director Email is required
                 </mat-error>
-                 <mat-error *ngIf="labDirectorEmail.errors?.pattern">
+                 <mat-error *ngIf="labDirectorEmail && eidLabDirectorEmail.errors?.pattern">
                 Please enter a valid email address
               </mat-error>
             </mat-form-field>
             </ion-col>
+            <!--  -->
           <ion-col size="6" size-xs class="grid-input-col" *ngIf="changeEmail">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label class="matLabel">Confirm Lab Director Email<span class="danger-text" *ngIf="isView=='true'">*</span> </mat-label>
               <input matInput [(ngModel)]="changeLabDirectorEmail" placeholder="enter Confirm Lab Director Email" name="changeLabDirectorEmail"
                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required
                  [disabled]="isView=='true'" data-alert="Please enter Confirm Lab Director Email." id="changeLabDirectorEmail">
-              <mat-error *ngIf="changeLabDirectorEmail.errors?.pattern">
+              <!-- <mat-error *ngIf="changeLabDirectorEmail && changeLabDirectorEmail.errors?.pattern">
                 Please enter a valid email address
-              </mat-error>
+              </mat-error> -->
               <mat-error *ngIf="!changeLabDirectorEmail">
                 Confirm Lab Director Email is required</mat-error>
-              <mat-error *ngIf="(changeLabDirectorEmail != labDirectorEmail)">
+              <mat-error *ngIf="(changeLabDirectorEmail && (changeLabDirectorEmail != labDirectorEmail))">
                 Email doesn't match</mat-error>
             </mat-form-field>
           </ion-col>
