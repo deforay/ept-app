@@ -16,6 +16,13 @@ import { Network } from "@ionic-native/network/ngx";
 import { LocalShipmentFormService } from "../../app/service/localShipmentForm/local-shipment-form.service";
 import { AlertController, LoadingController } from "@ionic/angular";
 
+/** Error when invalid control is dirty, touched, or submitted. */
+export class MyErrorStateMatcher implements ErrorStateMatcher {
+  isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
+    const isSubmitted = form && form.submitted;
+    return !!(control && control.invalid && (control.dirty || control.touched || isSubmitted));
+  }
+}
 @Component({
   selector: "app-dbs-eid",
   templateUrl: "./dbs-eid.page.html",
@@ -133,15 +140,8 @@ export class DbsEidPage implements OnInit {
   }
   ngOnInit() {}
    async changeDirectorMail() {
-  //   this.alertService.confirmEmailAlert().then(async(temp:any) =>{
-  //  if (temp == "true" || temp == true) {
-  //       this.changeEmail = true;
-  //     } else {
-  //       this.participantData["labDirectorEmail"] =
-  //         this.participantData["oldEmail"];
-  //     }
-  // })
-    const alert = await this.alertController.create({
+     if (this.eidArray[0].updatedStatus) {
+        const alert = await this.alertController.create({
         header: 'Alert',
         mode: "ios",
         message: 'Do you want to change Lab Director Mail?',
@@ -163,6 +163,8 @@ export class DbsEidPage implements OnInit {
       });
 
        alert.present();
+     }
+   
   }
 
   bindEIDData() {

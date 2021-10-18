@@ -131,11 +131,11 @@ export class DTSHIVSerologyPage implements OnInit {
   showPTPanelData: boolean;
   ptPanelData = {};
   isPtPanelNotTestedRadio;
-  allowRepeatTests:boolean=false;
+  allowRepeatTests: boolean = false;
   ptPanelNotTested: boolean;
   isValidPTPanel: boolean = false;
   isValidTestTypePanel: boolean = false;
-  displaySampleConditionFields:boolean = false;
+  displaySampleConditionFields: boolean = false;
   constructor(
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -163,8 +163,9 @@ export class DTSHIVSerologyPage implements OnInit {
         this.isPartiEditRespDate =
           participantLogin.enableAddingTestResponseDate;
         this.isPartiEditModeRec = participantLogin.enableChoosingModeOfReceipt;
-        this.displaySampleConditionFields = participantLogin.displaySampleConditionFields;
-        this.allowRepeatTests  = participantLogin.allowRepeatTests;
+        this.displaySampleConditionFields =
+          participantLogin.displaySampleConditionFields;
+        this.allowRepeatTests = participantLogin.allowRepeatTests;
         this.getSerologyDetails();
       }
     });
@@ -173,10 +174,12 @@ export class DTSHIVSerologyPage implements OnInit {
   step = 0;
 
   setStep(index: number) {
+    debugger;
     this.step = index;
   }
 
   nextStep() {
+    debugger;
     this.step++;
   }
 
@@ -367,8 +370,10 @@ export class DTSHIVSerologyPage implements OnInit {
           this.ptPanelData["notTestedReasonSelected"] =
             this.dtsArray[0].dtsData.Section3.data.notTestedReasonSelected;
         }
-        this.ptPanelData["receivedPtPanel"] =this.dtsArray[0].dtsData.Section3.data.receivedPtPanel;
-                 this.ptPanelData["receivedPtPanelSelect"]=this.dtsArray[0].dtsData.Section3.data.receivedPtPanelSelect;
+        this.ptPanelData["receivedPtPanel"] =
+          this.dtsArray[0].dtsData.Section3.data.receivedPtPanel;
+        this.ptPanelData["receivedPtPanelSelect"] =
+          this.dtsArray[0].dtsData.Section3.data.receivedPtPanelSelect;
         this.ptPanelData["notTestedReasonText"] =
           this.dtsArray[0].dtsData.Section3.data.notTestedReasonText;
       } else {
@@ -588,99 +593,109 @@ export class DTSHIVSerologyPage implements OnInit {
   }
 
   checkShipmentPanel(param) {
-    if (
-      !this.shipmentData["testReceiptDate"] ||
-      (!this.shipmentData["sampleRehydrationDate"] &&
-        this.shipmentData["sampleType"] == "dried") ||
-      !this.shipmentData["shipmentTestingDate"] ||
-      !this.shipmentData["algorithmUsedSelected"] ||
-      (!this.shipmentData["responseDate"] &&
-        this.isPartiEditRespDate == true) ||
-      (this.qcDone == "yes" &&
-        (!this.qcDoneBy || !this.qcDate) &&
-        this.participantQcAccess == true) ||
-      (!this.shipmentData["modeOfReceipt"] && this.isPartiEditModeRec == true)
-    ) {
-      this.isValidShipmentDetails = false;
-      if (param != "onload") {
-        if (this.isView == "true") {
-          this.nextStep();
-        } else {
-          if (!this.shipmentData["testReceiptDate"]) {
-            this.alertService.presentAlert(
-              "Alert",
-              document
-                .getElementById("testReceiptDate")
-                .getAttribute("data-alert")
-            );
-          } else if (this.shipmentData["sampleType"] == "dried") {
-            if (!this.shipmentData["sampleRehydrationDate"]) {
-              this.alertService.presentAlert(
-                "Alert",
-                document
-                  .getElementById("sampleRehydrationDate")
-                  .getAttribute("data-alert")
-              );
-            }
-          } else if (!this.shipmentData["shipmentTestingDate"]) {
-            this.alertService.presentAlert(
-              "Alert",
-              document
-                .getElementById("shipmentTestingDate")
-                .getAttribute("data-alert")
-            );
-          } else if (!this.shipmentData["algorithmUsedSelected"]) {
-            this.alertService.presentAlert(
-              "Alert",
-              document
-                .getElementById("algorithmUsedSelected")
-                .getAttribute("data-alert")
-            );
-          } else if (
-            !this.shipmentData["responseDate"] &&
-            this.isPartiEditRespDate == true
-          ) {
-            this.alertService.presentAlert(
-              "Alert",
-              document.getElementById("responseDate").getAttribute("data-alert")
-            );
-          } else if (
-            !this.shipmentData["modeOfReceipt"] &&
-            this.isPartiEditModeRec == true
-          ) {
-            this.alertService.presentAlert(
-              "Alert",
-              document
-                .getElementById("modeOfReceipt")
-                .getAttribute("data-alert")
-            );
-          } else if (
-            !this.qcDate &&
-            this.participantQcAccess == true &&
-            this.qcDone == "yes"
-          ) {
-            this.alertService.presentAlert(
-              "Alert",
-              document.getElementById("qcDate").getAttribute("data-alert")
-            );
-          } else if (
-            !this.qcDoneBy &&
-            this.participantQcAccess == true &&
-            this.qcDone == "yes"
-          ) {
-            this.alertService.presentAlert(
-              "Alert",
-              document.getElementById("qcDoneBy").getAttribute("data-alert")
-            );
-          } else {
-          }
-        }
-      }
-    } else {
+    if (this.ptPanelNotTested) {
       this.isValidShipmentDetails = true;
 
       if (param == "next") {
         this.nextStep();
+      }
+    } else {
+      if (
+        !this.shipmentData["testReceiptDate"] ||
+        (!this.shipmentData["sampleRehydrationDate"] &&
+          this.shipmentData["sampleType"] == "dried") ||
+        !this.shipmentData["shipmentTestingDate"] ||
+        !this.shipmentData["algorithmUsedSelected"] ||
+        (!this.shipmentData["responseDate"] &&
+          this.isPartiEditRespDate == true) ||
+        (this.qcDone == "yes" &&
+          (!this.qcDoneBy || !this.qcDate) &&
+          this.participantQcAccess == true) ||
+        (!this.shipmentData["modeOfReceipt"] && this.isPartiEditModeRec == true)
+      ) {
+        this.isValidShipmentDetails = false;
+        if (param != "onload") {
+          if (this.isView == "true") {
+            this.nextStep();
+          } else {
+            if (!this.shipmentData["testReceiptDate"]) {
+              this.alertService.presentAlert(
+                "Alert",
+                document
+                  .getElementById("testReceiptDate")
+                  .getAttribute("data-alert")
+              );
+            } else if (this.shipmentData["sampleType"] == "dried") {
+              if (!this.shipmentData["sampleRehydrationDate"]) {
+                this.alertService.presentAlert(
+                  "Alert",
+                  document
+                    .getElementById("sampleRehydrationDate")
+                    .getAttribute("data-alert")
+                );
+              }
+            } else if (!this.shipmentData["shipmentTestingDate"]) {
+              this.alertService.presentAlert(
+                "Alert",
+                document
+                  .getElementById("shipmentTestingDate")
+                  .getAttribute("data-alert")
+              );
+            } else if (!this.shipmentData["algorithmUsedSelected"]) {
+              this.alertService.presentAlert(
+                "Alert",
+                document
+                  .getElementById("algorithmUsedSelected")
+                  .getAttribute("data-alert")
+              );
+            } else if (
+              !this.shipmentData["responseDate"] &&
+              this.isPartiEditRespDate == true
+            ) {
+              this.alertService.presentAlert(
+                "Alert",
+                document
+                  .getElementById("responseDate")
+                  .getAttribute("data-alert")
+              );
+            } else if (
+              !this.shipmentData["modeOfReceipt"] &&
+              this.isPartiEditModeRec == true
+            ) {
+              this.alertService.presentAlert(
+                "Alert",
+                document
+                  .getElementById("modeOfReceipt")
+                  .getAttribute("data-alert")
+              );
+            } else if (
+              !this.qcDate &&
+              this.participantQcAccess == true &&
+              this.qcDone == "yes"
+            ) {
+              this.alertService.presentAlert(
+                "Alert",
+                document.getElementById("qcDate").getAttribute("data-alert")
+              );
+            } else if (
+              !this.qcDoneBy &&
+              this.participantQcAccess == true &&
+              this.qcDone == "yes"
+            ) {
+              this.alertService.presentAlert(
+                "Alert",
+                document.getElementById("qcDoneBy").getAttribute("data-alert")
+              );
+            } else {
+            }
+          }
+        }
+      } else {
+        this.isValidShipmentDetails = true;
+
+        if (param == "next") {
+          this.nextStep();
+        }
       }
     }
   }
@@ -804,7 +819,7 @@ export class DTSHIVSerologyPage implements OnInit {
               "Alert",
               "Please enter Whether Received the PT Panel or not? "
             );
-          }else {
+          } else {
           }
         }
       } else {
@@ -830,6 +845,13 @@ export class DTSHIVSerologyPage implements OnInit {
     }
   }
   checkOtherInfoPanel(param) {
+     if (this.ptPanelNotTested) {
+      this.isValidOtherInfoPanel = true;
+
+      if (param == "next") {
+        this.nextStep();
+      }
+    } else {
     if (
       (this.supReview == "yes" && !this.supervisorName) ||
       this.supReview == "" ||
@@ -856,6 +878,7 @@ export class DTSHIVSerologyPage implements OnInit {
       this.isValidOtherInfoPanel = true;
     }
   }
+}
   prevStep() {
     this.step--;
   }
@@ -1131,9 +1154,11 @@ export class DTSHIVSerologyPage implements OnInit {
                 isPtTestNotPerformedRadio: this.isPtPanelNotTestedRadio,
                 notTestedReasonText: this.ptPanelData["notTestedReasonText"],
                 notTestedReasons: this.ptPanelData["notTestedReasons"],
-                notTestedReasonSelected: this.ptPanelData["notTestedReasonSelected"],
-                 receivedPtPanel: this.ptPanelData["receivedPtPanel"],
-                receivedPtPanelSelect: this.ptPanelData["receivedPtPanelSelect"],
+                notTestedReasonSelected:
+                  this.ptPanelData["notTestedReasonSelected"],
+                receivedPtPanel: this.ptPanelData["receivedPtPanel"],
+                receivedPtPanelSelect:
+                  this.ptPanelData["receivedPtPanelSelect"],
                 ptNotTestedCommentsText:
                   this.ptPanelData["ptNotTestedCommentsText"],
                 ptNotTestedComments: this.ptPanelData["ptNotTestedComments"],
@@ -1472,9 +1497,11 @@ export class DTSHIVSerologyPage implements OnInit {
                 isPtTestNotPerformedRadio: this.isPtPanelNotTestedRadio,
                 notTestedReasonText: this.ptPanelData["notTestedReasonText"],
                 notTestedReasons: this.ptPanelData["notTestedReasons"],
-                notTestedReasonSelected: this.ptPanelData["notTestedReasonSelected"],
-                 receivedPtPanel: this.ptPanelData["receivedPtPanel"],
-                receivedPtPanelSelect: this.ptPanelData["receivedPtPanelSelect"],
+                notTestedReasonSelected:
+                  this.ptPanelData["notTestedReasonSelected"],
+                receivedPtPanel: this.ptPanelData["receivedPtPanel"],
+                receivedPtPanelSelect:
+                  this.ptPanelData["receivedPtPanelSelect"],
                 ptNotTestedCommentsText:
                   this.ptPanelData["ptNotTestedCommentsText"],
                 ptNotTestedComments: this.ptPanelData["ptNotTestedComments"],
