@@ -17,9 +17,11 @@ import { FingerprintAIO } from "@ionic-native/fingerprint-aio/ngx";
   styleUrls: ["./enter-app-password.page.scss"],
 })
 export class EnterAppPasswordPage implements OnInit {
+
   @ViewChild("ngPinInput", {
     static: false,
   })
+  
   ngPinInput: any;
   appPin: string;
   participantName: string;
@@ -48,6 +50,7 @@ export class EnterAppPasswordPage implements OnInit {
   createAppPin: any;
   ngCreatePinInput: any;
   showbutton: boolean = false;
+  isFingerprintAvailable: boolean;
   constructor(
     private storage: Storage,
     private router: Router,
@@ -249,6 +252,14 @@ this.storage.get("appPin").then((pin) => {
         console.log(error);
         this.showbutton = true;
         alert("FingerPrint Authentication canceled!");
+        // this.alertService.presentAlertConfirm(
+        //       "Alert",
+        //       "",
+        //       "Your Fingerprint is not verified.Click try again or use login to use pin",
+        //       "Try Again",
+        //       "Login",
+        //       "invalidFingerprint"
+        //     );
       });
   }
   checkFingerprintAvaiablity() {
@@ -257,6 +268,7 @@ this.storage.get("appPin").then((pin) => {
       .then((result: any) => {
         console.log(result);
         if (result) {
+          this.isFingerprintAvailable=true;
           this.showFingerprintAuthDlg();
         } else {
           this.isBiometricUsed = false;

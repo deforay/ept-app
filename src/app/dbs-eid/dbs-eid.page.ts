@@ -85,12 +85,15 @@ export class DbsEidPage implements OnInit {
   viewSchemeName: string;
   shipmentCode: any;
   isViewPage: boolean;
-  validParticipentDetails: boolean = false;
+  validParticipantDetails: boolean = false;
   changeLabDirectorEmail: any ='';
-  labDirectorEmail:any = ''
-  changeEmail:any = false;
-  oldEmail: any = "";
-
+  labDirectorEmail:any = '';
+  contactPersonEmail:any='';
+  changeContactPersonEmail:any='';
+  changeDirectorEmail:any = false;
+  changeContactEmail:any=false;
+  oldDirectorEmail: any = "";
+oldContactEmail:any="";
   constructor(
     private activatedRoute: ActivatedRoute,
     private storage: Storage,
@@ -139,6 +142,32 @@ export class DbsEidPage implements OnInit {
     this.step--;
   }
   ngOnInit() {}
+  async changeContactMail(){
+     if (this.eidArray[0].updatedStatus) {
+        const alert = await this.alertController.create({
+        header: 'Alert',
+        mode: "ios",
+        message: 'Do you want to change Lab Director Mail?',
+        buttons: [{
+        text: 'OK',
+        handler: () => { 
+          this.participantData["contactPersonEmail"] =
+          this.participantData["oldContactEmail"];
+          this.changeContactEmail = true;
+        }
+      }, {
+        text: 'Cancel',
+        handler: () => {
+          this.participantData["contactPersonEmail"] =
+          this.participantData["oldContactEmail"];
+        }
+      }],
+      backdropDismiss: false
+      });
+
+       alert.present();
+     }
+  }
    async changeDirectorMail() {
      if (this.eidArray[0].updatedStatus) {
         const alert = await this.alertController.create({
@@ -149,14 +178,14 @@ export class DbsEidPage implements OnInit {
         text: 'OK',
         handler: () => { 
           this.participantData["labDirectorEmail"] =
-          this.participantData["oldEmail"];
-          this.changeEmail = true;
+          this.participantData["oldDirectorEmail"];
+          this.changeDirectorEmail = true;
         }
       }, {
         text: 'Cancel',
         handler: () => {
           this.participantData["labDirectorEmail"] =
-          this.participantData["oldEmail"];
+          this.participantData["oldDirectorEmail"];
         }
       }],
       backdropDismiss: false
@@ -201,14 +230,17 @@ export class DbsEidPage implements OnInit {
           this.eidArray[0].eidData.Section1.data.laboratoryId;
         this.participantData["laboratoryName"] =
           this.eidArray[0].eidData.Section1.data.laboratoryName;
-        this.participantData["oldEmail"] =
+        this.participantData["oldDirectorEmail"] =
           this.participantData["labDirectorEmail"];
+            this.participantData["oldContactEmail"] =
+          this.participantData["contactPersonEmail"];
           this.labDirectorEmail = this.participantData["labDirectorEmail"];
+          this.contactPersonEmail = this.participantData["contactPersonEmail"];
       } else {
         this.participantData = {};
         this.showParticipantData = false;
       }
-      console.log("participent data ", this.participantData);
+      console.log("Participant data ", this.participantData);
       if (this.eidArray[0].eidData.Section2.status == true) {
         this.showShipmentData = true;
         this.shipmentData["shipmentDate"] =
@@ -460,12 +492,18 @@ export class DbsEidPage implements OnInit {
     // if (this.isView == "true") {
     //   this.setStep(2);
     // }
+       if (this.ptPanelNotTested) {
+      this.validShipmentDetails = true;
+      if (param == "next") {
+        this.nextStep();
+      }
+    } else {
     if (
       !this.shipmentData["testReceiptDate"] ||
-      !this.shipmentData["sampleRehydrationDate"] ||
-      !this.shipmentData["extractionLotNumber"] ||
-      !this.shipmentData["detectionLotNumber"] ||
-      !this.shipmentData["detectionExpirationDate"] ||
+      // !this.shipmentData["sampleRehydrationDate"] ||
+      // !this.shipmentData["extractionLotNumber"] ||
+      // !this.shipmentData["detectionLotNumber"] ||
+      // !this.shipmentData["detectionExpirationDate"] ||
       (!this.shipmentData["responseDate"] &&
         this.isPartiEditRespDate == true) ||
       (this.qcDone == "yes" &&
@@ -560,26 +598,27 @@ export class DbsEidPage implements OnInit {
         this.nextStep();
       }
     }
+ 
+      
+    }
   }
   checkParticpentPanel(param) {
     // if (this.isView == "true") {
     //   this.setStep(2);
     // }
     this.participantData["labDirectorEmail"] = this.labDirectorEmail;
-    debugger;
-    console.log(this.labDirectorEmail.errors )
-    console.log(this.changeLabDirectorEmail.errors)
     if (
       !this.participantData["contactPersonEmail"] ||
       !this.participantData["contactPersonName"] ||
       !this.participantData["contactPersonTelephone"] ||
       !this.participantData["labDirectorEmail"] ||
-      ((this.changeLabDirectorEmail != this.labDirectorEmail) && this.changeEmail)||
-      !this.participantData["labDirectorName"] ||
-      !this.participantData["laboratoryId"] ||
-      !this.participantData["laboratoryName"]
+      ((this.changeLabDirectorEmail != this.labDirectorEmail) && this.changeDirectorEmail)||
+      ((this.changeContactPersonEmail != this.contactPersonEmail) && this.changeContactEmail)||
+      !this.participantData["labDirectorName"] 
+      // !this.participantData["laboratoryId"] ||
+      // !this.participantData["laboratoryName"]
     ) {
-      this.validParticipentDetails = false;
+      this.validParticipantDetails = false;
 
       if (param != "onload") {
         if (this.isView == "true") {
@@ -606,14 +645,26 @@ export class DbsEidPage implements OnInit {
                 .getElementById("contactPersonTelephone")
                 .getAttribute("data-alert")
             );
-          } else if (!this.participantData["labDirectorEmail"]) {
+          }else if (!this.participantData["labDirectorEmail"]) {
             this.alertService.presentAlert(
               "Alert",
               document
                 .getElementById("labDirectorEmail")
                 .getAttribute("data-alert")
             );
-          } else if (!this.participantData["labDirectorName"]) {
+          } else if (!this.participantData["contactPersonEmail"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("contactPersonEmail")
+                .getAttribute("data-alert")
+            );
+          }else if (this.changeLabDirectorEmail != this.labDirectorEmail) {
+            this.alertService.presentAlert(
+              "Alert",
+              "Email does not match"
+            );
+          }  else if (!this.participantData["labDirectorName"]) {
             this.alertService.presentAlert(
               "Alert",
               document
@@ -637,7 +688,7 @@ export class DbsEidPage implements OnInit {
         }
       }
     } else {
-      this.validParticipentDetails = true;
+      this.validParticipantDetails = true;
       if (param == "next") {
         this.nextStep();
       }

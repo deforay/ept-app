@@ -133,11 +133,15 @@ export class DtsHivViralloadPage implements OnInit {
   dynamicStep = 0;
   shipmentCode: any;
   isViewPage: boolean;
-  validParticipentDetails: boolean;
-  changeLabDirectorEmail: any = "";
-  labDirectorEmail: any = "";
-  changeEmail: any = false;
-  oldEmail: any = "";
+  validParticipantDetails: boolean;
+  changeLabDirectorEmail: any ='';
+  labDirectorEmail:any = '';
+  contactPersonEmail:any='';
+  changeContactPersonEmail:any='';
+  changeDirectorEmail:any = false;
+  changeContactEmail:any=false;
+  oldDirectorEmail: any = "";
+oldContactEmail:any="";
 
   constructor(
     private activatedRoute: ActivatedRoute,
@@ -251,9 +255,12 @@ export class DtsHivViralloadPage implements OnInit {
           this.vlDataArray[0].vlData.Section1.laboratoryId;
         this.partDetailsArray["laboratoryName"] =
           this.vlDataArray[0].vlData.Section1.laboratoryName;
-        this.partDetailsArray["oldEmail"] =
+       this.partDetailsArray["oldDirectorEmail"] =
           this.partDetailsArray["labDirectorEmail"];
-        this.labDirectorEmail = this.partDetailsArray["labDirectorEmail"];
+            this.partDetailsArray["oldContactEmail"] =
+          this.partDetailsArray["contactPersonEmail"];
+          this.labDirectorEmail = this.partDetailsArray["labDirectorEmail"];
+          this.contactPersonEmail = this.partDetailsArray["contactPersonEmail"];
       }
       console.log("partdetailsarray", this.partDetailsArray);
       if (this.vlDataArray[0].vlData.Section2.status == true) {
@@ -460,7 +467,7 @@ export class DtsHivViralloadPage implements OnInit {
             handler: () => {
               this.partDetailsArray["labDirectorEmail"] =
                 this.partDetailsArray["oldEmail"];
-              this.changeEmail = true;
+              this.changeDirectorEmail = true;
             },
           },
           {
@@ -477,6 +484,32 @@ export class DtsHivViralloadPage implements OnInit {
       alert.present();
     }
    
+  }
+  async changeContactMail(){
+     if (this.vlDataArray[0].updatedStatus) {
+        const alert = await this.alertController.create({
+        header: 'Alert',
+        mode: "ios",
+        message: 'Do you want to change Lab Director Mail?',
+        buttons: [{
+        text: 'OK',
+        handler: () => { 
+          this.partDetailsArray["contactPersonEmail"] =
+          this.partDetailsArray["oldContactEmail"];
+          this.changeContactEmail = true;
+        }
+      }, {
+        text: 'Cancel',
+        handler: () => {
+          this.partDetailsArray["contactPersonEmail"] =
+          this.partDetailsArray["oldContactEmail"];
+        }
+      }],
+      backdropDismiss: false
+      });
+
+       alert.present();
+     }
   }
   step = 0;
 
@@ -526,11 +559,11 @@ export class DtsHivViralloadPage implements OnInit {
       }
 
       if (
-        this.vlassay &&
+        // this.vlassay &&
         this.testDate != undefined &&
-        this.validVlAssay == "true" &&
-        this.assayExpDate != "Invalid Date" &&
-        this.assayLotNo &&
+        // this.validVlAssay == "true" &&
+        // this.assayExpDate != "Invalid Date" &&
+        // this.assayLotNo &&
         this.validResponseDate == true &&
         this.validQC == "true" &&
         this.validModeOfRec == true &&
@@ -578,27 +611,31 @@ export class DtsHivViralloadPage implements OnInit {
             "Alert",
             "Please choose the Testing Date"
           );
-        } else if (!this.vlassay) {
+        }
+         else if (!this.vlassay) {
           this.alertService.presentAlert(
             "Alert",
             "Please select the Viral Load Assay"
           );
-        } else if (this.isSelectedOther && !this.othervlassay) {
+        } 
+        else if (this.isSelectedOther && !this.othervlassay) {
           this.alertService.presentAlert(
             "Alert",
             "Please specify Other Assay Name"
           );
-        } else if (!this.assayExpDate) {
-          this.alertService.presentAlert(
-            "Alert",
-            "Please choose the Assay Expiration Date"
-          );
-        } else if (!this.assayLotNo) {
-          this.alertService.presentAlert(
-            "Alert",
-            "Please enter Assay Lot Number"
-          );
-        } else if (this.validResponseDate == false) {
+        } 
+        // else if (!this.assayExpDate) {
+        //   this.alertService.presentAlert(
+        //     "Alert",
+        //     "Please choose the Assay Expiration Date"
+        //   );
+        // } else if (!this.assayLotNo) {
+        //   this.alertService.presentAlert(
+        //     "Alert",
+        //     "Please enter Assay Lot Number"
+        //   );
+        // } 
+        else if (this.validResponseDate == false) {
           this.alertService.presentAlert(
             "Alert",
             "Please choose the Response Date"
@@ -747,7 +784,7 @@ export class DtsHivViralloadPage implements OnInit {
   nextStepOtherInfoPanel(event) {
     if (
       (this.supReview && this.supReview == "no") ||
-      (this.supReview == "yes" && this.supName)
+      (this.supReview == "yes" && !this.supName)
     ) {
       this.validOtherInfo = true;
     } else {
@@ -842,18 +879,21 @@ export class DtsHivViralloadPage implements OnInit {
     //   this.setStep(2);
     // }
         this.partDetailsArray["labDirectorEmail"] = this.labDirectorEmail;
+         this.partDetailsArray["contactPersonEmail"] = this.contactPersonEmail;
     if (
       !this.partDetailsArray["contactPersonEmail"] ||
       !this.partDetailsArray["contactPersonName"] ||
       !this.partDetailsArray["contactPersonTelephone"] ||
       !this.partDetailsArray["labDirectorEmail"] ||
       (this.changeLabDirectorEmail != this.labDirectorEmail &&
-        this.changeEmail) ||
-      !this.partDetailsArray["labDirectorName"] ||
-      !this.partDetailsArray["laboratoryId"] ||
-      !this.partDetailsArray["laboratoryName"]
+        this.changeDirectorEmail) ||
+         (this.changeContactPersonEmail != this.contactPersonEmail &&
+        this.changeContactPersonEmail)
+      // !this.partDetailsArray["labDirectorName"] ||
+      // !this.partDetailsArray["laboratoryId"] ||
+      // !this.partDetailsArray["laboratoryName"]
     ) {
-      this.validParticipentDetails = false;
+      this.validParticipantDetails = false;
 
       if (param != "onload") {
         if (this.isView == "true") {
@@ -906,19 +946,21 @@ export class DtsHivViralloadPage implements OnInit {
                 .getElementById("laboratoryName")
                 .getAttribute("data-alert")
             );
-          } else if (!this.partDetailsArray["labDirectorEmail"]) {
+          } 
+          else if (this.changeLabDirectorEmail != this.labDirectorEmail) {
             this.alertService.presentAlert(
               "Alert",
-              document
-                .getElementById("labDirectorEmail")
-                .getAttribute("data-alert")
-            );
-          } else {
+              "Email does not match"
+            );}  else if (this.changeContactPersonEmail != this.contactPersonEmail) {
+            this.alertService.presentAlert(
+              "Alert",
+              "Email does not match"
+            );} else {
           }
         }
       }
     } else {
-      this.validParticipentDetails = true;
+      this.validParticipantDetails = true;
       if (param == "next") {
         this.nextStep();
       }
@@ -1025,14 +1067,14 @@ export class DtsHivViralloadPage implements OnInit {
                 testDate: this.testDate
                   ? this.dateFormat(new Date(this.testDate))
                   : "",
-                vlAssaySelect: this.shipmentsDetailsArray["vlAssaySelect"],
-                vlAssaySelected: this.vlassay,
-                otherAssay: this.othervlassay ? this.othervlassay : "",
-                specimenVolume: this.specVolTest ? this.specVolTest : "",
-                assayExpirationDate: this.assayExpDate
-                  ? this.dateFormat(new Date(this.assayExpDate))
-                  : "",
-                assayLotNumber: this.assayLotNo,
+                // vlAssaySelect: this.shipmentsDetailsArray["vlAssaySelect"],
+                // vlAssaySelected: this.vlassay,
+                // otherAssay: this.othervlassay ? this.othervlassay : "",
+                // specimenVolume: this.specVolTest ? this.specVolTest : "",
+                // assayExpirationDate: this.assayExpDate
+                //   ? this.dateFormat(new Date(this.assayExpDate))
+                //   : "",
+                // assayLotNumber: this.assayLotNo,
                 responseDate: this.responseDate
                   ? this.dateFormat(new Date(this.responseDate))
                   : "",
@@ -1228,14 +1270,14 @@ export class DtsHivViralloadPage implements OnInit {
                 testDate: this.testDate
                   ? this.dateFormat(new Date(this.testDate))
                   : "",
-                vlAssaySelect: this.shipmentsDetailsArray["vlAssaySelect"],
-                vlAssaySelected: this.vlassay,
-                otherAssay: this.othervlassay ? this.othervlassay : "",
-                specimenVolume: this.specVolTest ? this.specVolTest : "",
-                assayExpirationDate: this.assayExpDate
-                  ? this.dateFormat(new Date(this.assayExpDate))
-                  : "",
-                assayLotNumber: this.assayLotNo,
+                // vlAssaySelect: this.shipmentsDetailsArray["vlAssaySelect"],
+                // vlAssaySelected: this.vlassay,
+                // otherAssay: this.othervlassay ? this.othervlassay : "",
+                // specimenVolume: this.specVolTest ? this.specVolTest : "",
+                // assayExpirationDate: this.assayExpDate
+                //   ? this.dateFormat(new Date(this.assayExpDate))
+                //   : "",
+                // assayLotNumber: this.assayLotNo,
                 responseDate: this.responseDate
                   ? this.dateFormat(new Date(this.responseDate))
                   : "",
@@ -1369,7 +1411,7 @@ export class DtsHivViralloadPage implements OnInit {
     this.testDate = "";
   }
   clearAssayExpDate() {
-    this.assayExpDate = "";
+    // this.assayExpDate = "";
   }
   clearResponseDate() {
     this.responseDate = "";
