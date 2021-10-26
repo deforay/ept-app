@@ -212,11 +212,12 @@ export class AppComponent {
 
                     );
                   } else {
-                    this.router.navigate(['/all-pt-schemes'], {
-                        replaceUrl: true
-                      }
+                    this.alertService.presentAlertConfirm('e-PT', '', "Are you sure want to exit?", 'No', 'Yes', 'formExitAlert');
+                    // this.router.navigate(['/all-pt-schemes'], {
+                    //     replaceUrl: true
+                    //   }
 
-                    );
+                    // );
                   }
                 }
               )

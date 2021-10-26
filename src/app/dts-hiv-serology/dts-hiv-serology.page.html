@@ -83,7 +83,7 @@
             <p class="ion-text-wrap" class="partiValues">
               <span>{{partiDetailsArray.affiliation}}</span>
             </p>
-          </ion-col>
+          </ion-col> 
         </ion-row>
 
         <ion-row *ngIf="partiDetailsArray.phone">
@@ -254,10 +254,10 @@
               </mat-form-field>
             </ion-col>
 
-            <ion-col
+            <!-- <ion-col
               size="12"
               class="grid-input-col"
-              *ngIf="shipmentData['sampleType']=='dried'"
+              *ngIf="shipmentData['sampleType']=='dried' && !ptPanelNotTested"
             >
               <mat-form-field
                 class="login-full-width grid-col-form"
@@ -304,7 +304,7 @@
                   Sample Rehydration Date is required</mat-error
                 >
               </mat-form-field>
-            </ion-col>
+            </ion-col> -->
           </ion-row>
           <ion-row>
             <ion-col size="12" class="grid-input-col">

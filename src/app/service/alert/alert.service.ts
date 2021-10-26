@@ -55,6 +55,12 @@ export class AlertService {
           if (alertName == 'appExitAlert') {
             navigator['app'].exitApp();
           }
+          if (alertName == 'formExitAlert') {
+            this.router.navigate(['/all-pt-schemes'], {
+                        replaceUrl: true
+                      }
+                    );
+          }
           if (alertName == 'invalidPIN') {
             this.storage.set("isLogOut", true);
             this.storage.remove('appPin');
@@ -85,7 +91,7 @@ export class AlertService {
       buttons: [{
         text: firstButtonText,
         role: 'cancel',
-        handler: () => {
+        handler: () => { 
         }
       },
       {

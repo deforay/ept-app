@@ -15,9 +15,9 @@
           <ion-grid class="panelHeading">
              <ion-row>
                 <ion-col size="10" class="grid-readonly-col">
-                  <span class="text-title-color">Participent Details</span>
+                  <span class="text-title-color">Participant Details</span>
                 </ion-col>
-                <ion-col size="2" class="grid-readonly-col" *ngIf="validParticipentDetails==true">
+                <ion-col size="2" class="grid-readonly-col" *ngIf="validParticipantDetails==true">
                   <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
                 </ion-col>
               </ion-row>
@@ -165,7 +165,7 @@
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Lab Director Email <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [(ngModel)]="labDirectorEmail" (change)="changeDirectorMail()"
-                  placeholder="Enter Lab Director Email." name="eidLabDirectorEmail" 
+                  placeholder="Enter Lab Director Email." name="eidLabDirectorEmail" type="email"
                   pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required #eidLabDirectorEmail="ngModel"
                   [disabled]="isView=='true'" data-alert="Please enter Lab Director Email." id="eidLabDirectorEmail">
                 <mat-error *ngIf="!labDirectorEmail">
@@ -181,7 +181,7 @@
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label class="matLabel">Confirm Lab Director Email<span class="danger-text" *ngIf="isView=='true'">*</span> </mat-label>
               <input matInput [(ngModel)]="changeLabDirectorEmail" placeholder="enter Confirm Lab Director Email" name="changeLabDirectorEmail"
-                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required
+                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required type="email"
                  [disabled]="isView=='true'" data-alert="Please enter Confirm Lab Director Email." id="changeLabDirectorEmail">
               <!-- <mat-error *ngIf="changeLabDirectorEmail && changeLabDirectorEmail.errors?.pattern">
                 Please enter a valid email address
@@ -206,24 +206,43 @@
               </mat-form-field>
             </ion-col>
           </ion-row>
-           <ion-row>
+            <ion-row>
             <ion-col size="6" size-xs class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Contact Person Email <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [(ngModel)]="partDetailsArray.contactPersonEmail"
-                  placeholder="Enter Contact Person Email." #contactPersonEmail="ngModel" name="contactPersonEmail" required
-                  [disabled]="isView=='true'" data-alert="Please enter Contact Person Email." id="contactPersonEmail">
-                <mat-error *ngIf="!partDetailsArray.contactPersonEmail">
+                <input matInput [(ngModel)]="contactPersonEmail" (change)="changeContactMail()"
+                  placeholder="Enter Contact Person Email." name="eidContactPersonEmail" type="email"
+                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required #eidContactPersonEmail="ngModel"
+                  [disabled]="isView=='true'" data-alert="Please enter Contact Person Email." id="eidContactPersonEmail">
+                <mat-error *ngIf="!contactPersonEmail">
                   Contact Person Email is required
                 </mat-error>
-              </mat-form-field>
+                 <mat-error *ngIf="contactPersonEmail && eidContactPersonEmail.errors?.pattern">
+                Please enter a valid email address
+              </mat-error>
+            </mat-form-field> 
             </ion-col>
+          <ion-col size="6" size-xs class="grid-input-col" *ngIf="changeContactEmail">
+            <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+              <mat-label class="matLabel">Confirm Contact Person Email<span class="danger-text" *ngIf="isView=='true'">*</span> </mat-label>
+              <input matInput [(ngModel)]="changeContactPersonEmail" placeholder="enter Confirm Contact Person Email" name="changeContactPersonEmail"
+                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required type="email"
+                 [disabled]="isView=='true'" data-alert="Please enter Confirm Lab Director Email." id="changeContactPersonEmail">
+              <!-- <mat-error *ngIf="changeContactPersonEmail && changeContactPersonEmail.errors?.pattern">
+                Please enter a valid email address
+              </mat-error> -->
+              <mat-error *ngIf="!changeContactPersonEmail">
+                Confirm Lab Director Email is required</mat-error>
+              <mat-error *ngIf="(changeContactPersonEmail && (changeContactPersonEmail != labDirectorEmail))">
+                Email doesn't match</mat-error>
+            </mat-form-field>
+          </ion-col>
           </ion-row>
            <ion-row>
             <ion-col size="6" size-xs class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>Contact Person Phone <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [(ngModel)]="partDetailsArray.contactPersonTelephone"
+                <input matInput [(ngModel)]="partDetailsArray.contactPersonTelephone"  type="number"maxlength="12"
                   placeholder="Enter Contact Person Phone." #contactPersonTelephone="ngModel" name="contactPersonTelephone" required
                   [disabled]="isView=='true'" data-alert="Please enter Contact Person Phone." id="contactPersonTelephone">
                 <mat-error *ngIf="!partDetailsArray.contactPersonTelephone">
@@ -381,7 +400,7 @@
             </ion-col>
 
 
-            <ion-col size="6" size-xs class="grid-input-col">
+            <ion-col size="6" size-xs class="grid-input-col" *ngIf="!ptPanelTest">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label class="matLabel">Sample Rehydration Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
                 <input matInput [matDatepicker]="sampleRhdPicker" [(ngModel)]="sampleRhdDate"
@@ -444,8 +463,8 @@
                   Please specify Other Assay Name </mat-error>
               </mat-form-field>
             </ion-col>
-          </ion-row>
-          <ion-row>
+          </ion-row> 
+           <ion-row *ngIf="!ptPanelTest">
             <ion-col size="6" size-xs class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form"
                 [ngClass]="{ 'mat-form-field-invalid': !assayExpDate && isView==false }" appearance="outline">
@@ -604,7 +623,7 @@
                   <div [innerHtml]="ptPanelTestData.vlResultSectionLabel">
                   </div>
                 </mat-label>
-                <input matInput [(ngModel)]="vlCalc" name="calc" #calc="ngModel"
+                <input matInput type="number" [(ngModel)]="vlCalc" name="calc" #calc="ngModel"
                   placeholder="Enter result value to calculate log value" (ngModelChange)="calcLog()">
               </mat-form-field>
               <p class="log-para">{{vlLog}}</p>
