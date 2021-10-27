@@ -177,7 +177,7 @@
             </mat-form-field>
             </ion-col>
             <!--  -->
-          <ion-col size="6" size-xs class="grid-input-col" *ngIf="changeEmail">
+          <ion-col size="6" size-xs class="grid-input-col" *ngIf="changeDirectorEmail">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
               <mat-label class="matLabel">Confirm Lab Director Email<span class="danger-text" *ngIf="isView=='true'">*</span> </mat-label>
               <input matInput [(ngModel)]="changeLabDirectorEmail" placeholder="enter Confirm Lab Director Email" name="changeLabDirectorEmail"
@@ -232,7 +232,7 @@
                 Please enter a valid email address
               </mat-error> -->
               <mat-error *ngIf="!changeContactPersonEmail">
-                Confirm Lab Director Email is required</mat-error>
+                Confirm Contact Person Email is required</mat-error>
               <mat-error *ngIf="(changeContactPersonEmail && (changeContactPersonEmail != labDirectorEmail))">
                 Email doesn't match</mat-error>
             </mat-form-field>

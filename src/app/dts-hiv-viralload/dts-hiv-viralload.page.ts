@@ -456,7 +456,7 @@ oldContactEmail:any="";
 
   ngOnInit() {}
   async changeDirectorMail() {
-    if (this.vlDataArray.updatedStatus){
+    if (this.vlDataArray[0].updatedStatus &&  this.vlDataArray[0].vlData.Section1.labDirectorEmail){
       const alert = await this.alertController.create({
         header: "Alert",
         mode: "ios",
@@ -482,15 +482,17 @@ oldContactEmail:any="";
       });
   
       alert.present();
+    }else{
+       this.changeDirectorEmail = true;
     }
    
   }
   async changeContactMail(){
-     if (this.vlDataArray[0].updatedStatus) {
+     if (this.vlDataArray[0].updatedStatus &&  this.vlDataArray[0].vlData.Section1.contactPersonEmail) {
         const alert = await this.alertController.create({
         header: 'Alert',
         mode: "ios",
-        message: 'Do you want to change Lab Director Mail?',
+        message: 'Do you want to change contact person Mail?',
         buttons: [{
         text: 'OK',
         handler: () => { 
@@ -509,7 +511,9 @@ oldContactEmail:any="";
       });
 
        alert.present();
-     }
+     }else{
+       this.changeContactEmail = true;
+    }
   }
   step = 0;
 
@@ -784,7 +788,7 @@ oldContactEmail:any="";
   nextStepOtherInfoPanel(event) {
     if (
       (this.supReview && this.supReview == "no") ||
-      (this.supReview == "yes" && !this.supName)
+      (this.supReview == "yes" && this.supName)
     ) {
       this.validOtherInfo = true;
     } else {
@@ -888,8 +892,8 @@ oldContactEmail:any="";
       (this.changeLabDirectorEmail != this.labDirectorEmail &&
         this.changeDirectorEmail) ||
          (this.changeContactPersonEmail != this.contactPersonEmail &&
-        this.changeContactPersonEmail)
-      // !this.partDetailsArray["labDirectorName"] ||
+        this.changeContactPersonEmail) ||
+      !this.partDetailsArray["labDirectorName"] 
       // !this.partDetailsArray["laboratoryId"] ||
       // !this.partDetailsArray["laboratoryName"]
     ) {

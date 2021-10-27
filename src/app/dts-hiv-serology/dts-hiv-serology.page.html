@@ -254,7 +254,7 @@
               </mat-form-field>
             </ion-col>
 
-            <!-- <ion-col
+            <ion-col
               size="12"
               class="grid-input-col"
               *ngIf="shipmentData['sampleType']=='dried' && !ptPanelNotTested"
@@ -272,7 +272,7 @@
                 <input
                   matInput
                   [matDatepicker]="sampleRhdPicker"
-                  name="seroSampleRhdDate"
+                  name="seroSampleRhdDate" [min]="shipmentData.testReceiptDate"
                   #seroSampleRhdDate="ngModel"
                   [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   [(ngModel)]="shipmentData.sampleRehydrationDate"
@@ -304,7 +304,7 @@
                   Sample Rehydration Date is required</mat-error
                 >
               </mat-form-field>
-            </ion-col> -->
+            </ion-col>
           </ion-row>
           <ion-row>
             <ion-col size="12" class="grid-input-col">
@@ -322,7 +322,7 @@
                   matInput
                   [matDatepicker]="testDatePicker"
                   [(ngModel)]="shipmentData.shipmentTestingDate"
-                  name="seroTestingDate"
+                  name="seroTestingDate"[min]="shipmentData.testReceiptDate"
                   [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   #seroTestingDate="ngModel"
                   placeholder="Choose Testing Date"
@@ -373,7 +373,7 @@
                 >
                 <input
                   matInput
-                  [matDatepicker]="respDatePicker"
+                  [matDatepicker]="respDatePicker"[min]="shipmentData.testReceiptDate"
                   [(ngModel)]="shipmentData.responseDate"
                   name="seroRespDate"
                   [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
@@ -546,7 +546,7 @@
               >
                 <mat-label>Room Temperature <span>&#8451;</span></mat-label>
                 <input
-                  matInput
+                  matInput type="number"
                   [(ngModel)]="shipmentData.roomTemperature"
                   placeholder="Enter Room Temperature in &#8451;"
                   name="roomTemperature"
