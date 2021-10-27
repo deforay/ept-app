@@ -143,11 +143,11 @@ oldContactEmail:any="";
   }
   ngOnInit() {}
   async changeContactMail(){
-     if (this.eidArray[0].updatedStatus) {
+     if (this.eidArray[0].updatedStatus && this.eidArray[0].eidData.Section1.data.contactPersonEmail) {
         const alert = await this.alertController.create({
         header: 'Alert',
         mode: "ios",
-        message: 'Do you want to change Lab Director Mail?',
+        message: 'Do you want to change Contact Person Mail?',
         buttons: [{
         text: 'OK',
         handler: () => { 
@@ -166,10 +166,12 @@ oldContactEmail:any="";
       });
 
        alert.present();
-     }
+     }else{
+       this.changeContactEmail = true;
+    }
   }
    async changeDirectorMail() {
-     if (this.eidArray[0].updatedStatus) {
+     if (this.eidArray[0].updatedStatus && this.eidArray[0].eidData.Section1.data.labDirectorEmail) {
         const alert = await this.alertController.create({
         header: 'Alert',
         mode: "ios",
@@ -192,7 +194,9 @@ oldContactEmail:any="";
       });
 
        alert.present();
-     }
+     }else{
+       this.changeDirectorEmail = true;
+    }
    
   }
 

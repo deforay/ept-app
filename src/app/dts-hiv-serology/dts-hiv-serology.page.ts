@@ -588,11 +588,26 @@ export class DTSHIVSerologyPage implements OnInit {
   }
 
   getSelectedTestKitName(event, index, testkitDropdownArr) {
+   
     let testkitDropName = testkitDropdownArr.filter(
       (element) => element.value == event
     );
-    this.testKitModel["kitName"][index] = testkitDropName[0].show;
-    //this.testKitModel['kitValue'][index] = event.value;
+    if (this.testKitTextArray[index] == 'Test-1') {
+      let index1 = this.testKitTextArray.indexOf('Repeat Test-1');
+       this.testKitModel["kitName"][index] = testkitDropName[0].show;
+     this.testKitModel["kitName"][index1] = testkitDropName[0].show;
+     this.testKitModel['kitValue'][index] = event;
+     this.testKitModel['kitValue'][index1] = event;
+    }else if (this.testKitTextArray[index] == 'Test-2') {
+       let index2 = this.testKitTextArray.indexOf('Repeat Test-2');
+       this.testKitModel["kitName"][index] = testkitDropName[0].show;
+     this.testKitModel["kitName"][index2] = testkitDropName[0].show;
+    }  else if (this.testKitTextArray[index] == 'Test-3') {
+       let index3 = this.testKitTextArray.indexOf('Repeat Test-3');
+       this.testKitModel["kitName"][index] = testkitDropName[0].show;
+     this.testKitModel["kitName"][index3] = testkitDropName[0].show;
+    } 
+   //this.testKitModel['kitValue'][index] = event.value;
     if (this.testKitModel["kitValue"][index] != "other") {
       this.testKitModel["kitOther"][index] = "";
     }
