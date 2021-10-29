@@ -124,15 +124,15 @@ export class LoginPage implements OnInit {
   ionViewWillLeave() {
     // enable the root left menu when leaving this page
     this.menu.enable(true);
-    this.emailFormControl.setValue('');
-    this.emailFormControl.markAsUntouched();
-    this.emailFormControl.setErrors(null);
-    this.pswdFormControl.setValue('');
-    this.pswdFormControl.markAsUntouched();
-    this.pswdFormControl.setErrors(null);
-    this.serverHostFormControl.setValue('');
-    this.serverHostFormControl.markAsUntouched();
-    this.serverHostFormControl.setErrors(null);
+    // this.emailFormControl.setValue('');
+    // this.emailFormControl.markAsUntouched();
+    // this.emailFormControl.setErrors(null);
+    // this.pswdFormControl.setValue('');
+    // this.pswdFormControl.markAsUntouched();
+    // this.pswdFormControl.setErrors(null);
+    // this.serverHostFormControl.setValue('');
+    // this.serverHostFormControl.markAsUntouched();
+    // this.serverHostFormControl.setErrors(null);
 
   }
 
@@ -311,6 +311,22 @@ export class LoginPage implements OnInit {
   }
 
   forgotPassword() {
+   if (this.serverHostFormControl.value) {
+      var apiUrl = '';
+        if (this.serverHostFormControl.value.indexOf("https://") == 0 || this.serverHostFormControl.value.indexOf("Https://") == 0) {
+          apiUrl = this.serverHostFormControl.value
+        } else if (this.serverHostFormControl.value.indexOf("http://") == 0 || this.serverHostFormControl.value.indexOf("Http://") == 0) {
+          var replacedHttps = this.serverHostFormControl.value.replace('http', "https");
+          apiUrl = replacedHttps;
+        } else {
+          apiUrl = "https://" + this.serverHostFormControl.value
+        }
+        this.storage.remove('appPin');
+        this.storage.set('apiUrl', apiUrl.trim());
+   }
+   if (this.emailFormControl.value) {
+     this.storage.set('email',this.emailFormControl.value)
+   }
     this.router.navigate(['/forgot-password']);
   }
 }

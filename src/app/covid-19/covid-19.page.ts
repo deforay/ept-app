@@ -57,7 +57,7 @@ export class covid19Page implements OnInit {
   shipmentData = {};
   panelOpenState = false;
   selectedTestFormArray = [];
-  partiDetailsArray: any = [];
+  partiDetailsArray: any = []; 
   shipmentsDetailsArray: any = {};
   algorithmUsedSelectArray = [];
   modeOfReceiptArray = [];
@@ -296,7 +296,7 @@ export class covid19Page implements OnInit {
         this.testTypeIndex = 0;
         this.testTypeTextArray = this.testTypeDetailsArray.typeText;
         console.log(this.testTypeTextArray);
-        this.testTypeDropDownArray = (this.testTypeDetailsArray.testTypeDropDown);
+        this.testTypeDropDownArray = (this.testTypeDetailsArray.testPlatformDropDown);
         this.testTypeModel['testTypeDropDown'] = this.testTypeDropDownArray;
         this.testTypeModel['typeText'] = [...this.testTypeTextArray];
 
@@ -425,7 +425,7 @@ export class covid19Page implements OnInit {
     this.samplesNameArr.forEach((element, index) => {
       if (this.isValidSampleDetails[index] == false) {
         this.setStep(this.testTypeIndex + index + 2)
-      }
+      } 
     })
   }
 

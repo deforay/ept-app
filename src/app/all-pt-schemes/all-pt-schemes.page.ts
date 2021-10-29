@@ -360,10 +360,12 @@ export class AllPTSchemesPage implements OnInit {
                                   this.alertService.presentAlert(
                                     "Alert",
                                     result["message"]
-                                  );
+                                  ); 
                                   this.storage.set("isLogOut", true);
                                   this.router.navigate(["/login"]);
                                 } else {
+                                  this.showNoData = true;
+                                this.skeltonArray = [];
                                   this.alertService.presentAlert(
                                     "Alert",
                                     result["message"]

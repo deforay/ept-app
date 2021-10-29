@@ -832,7 +832,7 @@ ptPanelNotTestedReasonSelected(){
     if (this.ptPanelNotTested == false || !this.ptPanelNotTested) {
       this.isValidPTPanel = true;
     } else {
-      if (
+      if ( 
         !this.ptPanelData["notTestedReasonSelected"] ||
         !this.ptPanelData["receivedPtPanel"] ||
         !this.ptPanelData["ptNotTestedComments"]
@@ -848,15 +848,15 @@ ptPanelNotTestedReasonSelected(){
               "Alert",
               "Please choose the " + this.ptPanelData["notTestedReasonText"]
             );
-          } else if (!this.ptPanelData["ptNotTestedComments"]) {
-            this.alertService.presentAlert(
-              "Alert",
-              "Please enter " + this.ptPanelData["ptNotTestedCommentsText"]
-            );
-          } else if (!this.ptPanelData["receivedPtPanel"]) {
+          }  else if (!this.ptPanelData["receivedPtPanel"]) {
             this.alertService.presentAlert(
               "Alert",
               "Please enter Whether Received the PT Panel or not? "
+            );
+          }else if (!this.ptPanelData["ptNotTestedComments"]) {
+            this.alertService.presentAlert(
+              "Alert",
+              "Please enter " + this.ptPanelData["ptNotTestedCommentsText"]
             );
           } else {
           }
