@@ -82,9 +82,9 @@ export class EnterAppPasswordPage implements OnInit {
       this.participantName = participantLogin.name;
     });
 this.storage.get("appPin").then((pin) => {
+  this.checkFingerprintAvaiablity();
       if(pin === 'biometric'){
         this.isBiometricUsed = true;
- this.checkFingerprintAvaiablity();
       } else{
         this.isBiometricUsed = false;
       }

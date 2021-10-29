@@ -227,7 +227,7 @@
               <mat-label class="matLabel">Confirm Contact Person Email<span class="danger-text" *ngIf="isView=='true'">*</span> </mat-label>
               <input matInput [(ngModel)]="changeContactPersonEmail" placeholder="enter Confirm Contact Person Email" name="changeContactPersonEmail"
                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required type="email"
-                 [disabled]="isView=='true'" data-alert="Please enter Confirm Lab Director Email." id="changeContactPersonEmail">
+                 [disabled]="isView=='true'" data-alert="Please enter Confirm Contact Person Email." id="changeContactPersonEmail">
               <!-- <mat-error *ngIf="changeContactPersonEmail && changeContactPersonEmail.errors?.pattern">
                 Please enter a valid email address
               </mat-error> -->
@@ -403,7 +403,7 @@
             <ion-col size="6" size-xs class="grid-input-col" *ngIf="!ptPanelTest">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label class="matLabel">Sample Rehydration Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [matDatepicker]="sampleRhdPicker" [(ngModel)]="sampleRhdDate"
+                <input matInput [matDatepicker]="sampleRhdPicker" [(ngModel)]="sampleRhdDate"[min]="testReceiptDate"
                   placeholder="Choose Sample Rehydration Date" class="datepicker-input" #vlSampleRhdDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" required
                   name="vlSampleRhdDate"  [readonly]="isView!='true'" [disabled]="isView=='true'"  >
                 <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
@@ -419,7 +419,7 @@
               <mat-form-field class="login-full-width grid-col-form"
                 [ngClass]="{ 'mat-form-field-invalid': !testDate && isView==false }" appearance="outline">
                 <mat-label class="matLabel">Testing Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="testDate" name="vlTestDate"
+                <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="testDate" name="vlTestDate"[min]="testReceiptDate"
                   #vlTestDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"  placeholder="Choose Testing Date" class="datepicker-input" required  [readonly]="isView!='true'" [disabled]="isView=='true'"  >
                 <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
                 <ion-icon name="close" *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearTestingDate()"></ion-icon>

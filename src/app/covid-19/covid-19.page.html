@@ -268,7 +268,7 @@
                 <input
                   matInput
                   [matDatepicker]="sampleRhdPicker"
-                  name="covidSampleRhdDate"
+                  name="covidSampleRhdDate"[min]="shipmentData.testReceiptDate"
                   #covidSampleRhdDate="ngModel"
                   [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   [(ngModel)]="shipmentData.sampleRehydrationDate"
@@ -317,7 +317,7 @@
                 <input
                   matInput
                   [matDatepicker]="testDatePicker"
-                  [(ngModel)]="shipmentData.shipmentTestingDate"
+                  [(ngModel)]="shipmentData.shipmentTestingDate"[min]="shipmentData.testReceiptDate"
                   name="seroTestingDate"
                   [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   #seroTestingDate="ngModel"
@@ -371,7 +371,7 @@
                   matInput
                   [matDatepicker]="respDatePicker"
                   [(ngModel)]="shipmentData.responseDate"
-                  name="seroRespDate"
+                  name="seroRespDate"[min]="shipmentData.testReceiptDate"
                   [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
                   placeholder="Choose Response Date"
                   #seroRespDate="ngModel"
@@ -881,7 +881,7 @@
       <mat-card
         class="main-card-panel"
         *ngIf="showSampleData && shipmentData.numberOfTests && (ptPanelNotTested==false || !ptPanelNotTested)"
-      >
+      > 
         <mat-card-title> Sample Details</mat-card-title>
         <mat-card-content>
           <div *ngFor="let sampleName of samplesNameArr;let i = index;">

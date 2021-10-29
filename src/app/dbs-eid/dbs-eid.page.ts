@@ -616,9 +616,12 @@ oldContactEmail:any="";
       !this.participantData["contactPersonName"] ||
       !this.participantData["contactPersonTelephone"] ||
       !this.participantData["labDirectorEmail"] ||
-      ((this.changeLabDirectorEmail != this.labDirectorEmail) && this.changeDirectorEmail)||
-      ((this.changeContactPersonEmail != this.contactPersonEmail) && this.changeContactEmail)||
-      !this.participantData["labDirectorName"] 
+      (this.changeLabDirectorEmail != this.labDirectorEmail &&
+        this.changeDirectorEmail) ||
+         (this.changeContactPersonEmail != this.contactPersonEmail &&
+        this.changeContactPersonEmail) ||
+      !this.participantData["labDirectorName"] ||
+      (!this.changeContactPersonEmail)||(!this.changeDirectorEmail)
       // !this.participantData["laboratoryId"] ||
       // !this.participantData["laboratoryName"]
     ) {
@@ -632,7 +635,7 @@ oldContactEmail:any="";
             this.alertService.presentAlert(
               "Alert",
               document
-                .getElementById("contactPersonEmail")
+                .getElementById("eidContactPersonEmail")
                 .getAttribute("data-alert")
             );
           } else if (!this.participantData["contactPersonName"]) {
@@ -653,7 +656,7 @@ oldContactEmail:any="";
             this.alertService.presentAlert(
               "Alert",
               document
-                .getElementById("labDirectorEmail")
+                .getElementById("eidLabDirectorEmail")
                 .getAttribute("data-alert")
             );
           } else if (!this.participantData["contactPersonEmail"]) {
@@ -663,12 +666,27 @@ oldContactEmail:any="";
                 .getElementById("contactPersonEmail")
                 .getAttribute("data-alert")
             );
-          }else if (this.changeLabDirectorEmail != this.labDirectorEmail) {
+          }
+          else if (!this.changeLabDirectorEmail) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("changeLabDirectorEmail")
+                .getAttribute("data-alert")
+            );
+          } else if (!this.changeContactPersonEmail) {
+            this.alertService.presentAlert(
+              "Alert",
+              document
+                .getElementById("changeContactPersonEmail")
+                .getAttribute("data-alert")
+            );
+          }else if (this.changeContactPersonEmail != this.labDirectorEmail) {
             this.alertService.presentAlert(
               "Alert",
               "Email does not match"
             );
-          }  else if (!this.participantData["labDirectorName"]) {
+          }   else if (!this.participantData["labDirectorName"]) {
             this.alertService.presentAlert(
               "Alert",
               document

@@ -51,7 +51,9 @@ export class ForgotPasswordPage implements OnInit {
     EmailIdValidator.patternValidation
   ]);
   appVersionNumber: any;
-
+ serverHostFormControl = new FormControl('', [
+    Validators.required
+  ]);
   constructor(public network: Network,
     private router: Router,
     public menu: MenuController,
@@ -65,6 +67,18 @@ export class ForgotPasswordPage implements OnInit {
   ionViewDidEnter() {
     // the root left menu should be disabled on this page
     this.menu.enable(false);
+    this.storage.get('apiUrl').then((url) => {
+          if (url) {
+            this.serverHostFormControl.setValue(url);
+          } else {
+          }
+        })
+         this.storage.get('email').then((email) => {
+          if (email) {
+            this.emailFormControl.setValue(email);
+          } else {
+          }
+        })
   }
 
   ionViewWillLeave() {
@@ -86,7 +100,7 @@ export class ForgotPasswordPage implements OnInit {
           if (this.appVersionNumber) {
             let forgotPwdJSON = {
               "email": this.emailFormControl.value,
-              "appVersion": this.appVersionNumber
+              "appVersion": this.appVersionNumber,
             }
             this.CrudServiceService.postData('/api/login/forget-password', forgotPwdJSON)
               .then((result) => {
