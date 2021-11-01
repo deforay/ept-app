@@ -49,7 +49,7 @@ export class SummaryReportPage implements OnInit {
   networkType: string;
   skeltonArray: any = [];
   showNoData: boolean= false;
-  
+ search:any; 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public LoaderService: LoaderService,

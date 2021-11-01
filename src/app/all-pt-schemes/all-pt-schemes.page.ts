@@ -30,8 +30,8 @@ import { FcmService } from "../../app/fcm.service";
 export class AllPTSchemesPage implements OnInit {
   //variable declaration
   authToken: any;
-  shippingsArray = [];
-  shipmentFormArray = [];
+  shippingsArray  :any= [];
+  shipmentFormArray  :any= [];
   TestFormArray: any;
   appVersionNumber: any;
   localShipmentArray: any = [];
@@ -48,7 +48,7 @@ export class AllPTSchemesPage implements OnInit {
   NoFilteredData: boolean = false;
   filterJSON: any = [];
   apiUrl: string;
-
+search:any;
   constructor(
     public CrudServiceService: CrudServiceService,
     private storage: Storage,

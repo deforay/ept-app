@@ -144,11 +144,11 @@
         </ion-col>
 
         <ion-col size="6">
-          <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && responseSwitch==on && item.is_excluded!='yes' && item.isSynced=='' " size="small" class="text-center native-btn enterEdit"
-            (click)="goToTestForm(item)">Enter Response
+          <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && item.responseSwitch=='on' && item.is_excluded!='yes' && item.isSynced=='' " size="small" class="text-center native-btn enterEdit"
+            (click)="goToTestForm(item,undefined)">Enter Response
           </ion-button>
-          <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && responseSwitch==on && item.is_excluded!='yes' || item.isSynced=='false' " size="small" class="text-center native-btn enterEdit"
-            (click)="goToTestForm(item)">Edit Response</ion-button>
+          <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && item.responseSwitch=='on' && item.is_excluded!='yes' || item.isSynced=='false' " size="small" class="text-center native-btn enterEdit"
+            (click)="goToTestForm(item,undefined)">Edit Response</ion-button>
         </ion-col>
       </ion-row>
 

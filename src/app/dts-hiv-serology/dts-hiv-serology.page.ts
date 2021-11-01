@@ -32,25 +32,25 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   styleUrls: ["./dts-hiv-serology.page.scss"],
 })
 export class DTSHIVSerologyPage implements OnInit {
-  shipmentData = {};
+  shipmentData :any = {};
   panelOpenState = false;
-  selectedTestFormArray = [];
+  selectedTestFormArray :any= [];
   partiDetailsArray: any = [];
   shipmentsDetailsArray: any = {};
   algorithmUsedSelectArray = [];
-  modeOfReceiptArray = [];
-  qcRadioArray = [];
+  modeOfReceiptArray :any= [];
+  qcRadioArray :any= [];
   isQCDoneShow: boolean;
   testKitDetailsArray: any = [];
   sampleDetailsArray: any = [];
   otherInfoArray: any;
-  supervisorReviewArray = [];
-  testKitNameArray = [];
-  testKitTextArray = [];
+  supervisorReviewArray :any= [];
+  testKitNameArray :any= [];
+  testKitTextArray :any= [];
   resultsTextArray: any;
-  exp = [];
+  exp :any= [];
   expDateObj: any = [];
-  testKitModel = {};
+  testKitModel :any= {};
   viewAccessMessage: string = "";
   testKitIndex: any;
   sampleIndex: any;
@@ -104,7 +104,7 @@ export class DTSHIVSerologyPage implements OnInit {
   showSampleData: boolean;
   showOtherInfoData: boolean;
   showCustomFieldData: boolean;
-  samplesArray = [];
+  samplesArray :any= [];
   result1Arr: any = [];
   result2Arr: any = [];
   result3Arr: any = [];
@@ -112,8 +112,8 @@ export class DTSHIVSerologyPage implements OnInit {
   showResult3: boolean = false;
   isValidSampleDetails = [];
   isValidTestKitDetails = [];
-  customFieldData = {};
-  samplesObj = {};
+  customFieldData :any= {};
+  samplesObj :any= {};
   dynamicStep = 0;
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
@@ -122,11 +122,11 @@ export class DTSHIVSerologyPage implements OnInit {
   shipmentCode: any;
   isViewPage: boolean;
   isSampleRehydDateMandatory: boolean;
-  repeatResult1Arr: any[];
+  repeatResult1Arr: any=[];
   showRepeatResult1: boolean;
-  repeatResult2Arr: any[];
+  repeatResult2Arr: any=[];
   showRepeatResult2: boolean;
-  repeatResult3Arr: any[];
+  repeatResult3Arr: any=[];
   showRepeatResult3: boolean;
   showPTPanelData: boolean;
   ptPanelData :any = {};

@@ -55,7 +55,7 @@ export class IndividualReportPage {
   networkType: string;
   skeltonArray: any = [];
   showNoData: boolean = false;
-
+search:any;
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
     public alertService: AlertService,
