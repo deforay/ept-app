@@ -88,8 +88,8 @@ export class DtsHivViralloadPage implements OnInit {
   loginID: any;
   notes: any = [];
   formattedQCDate: any;
-  ptPanelTestData = {};
-  ptPanelNotTestData = {};
+  ptPanelTestData  :any= {};
+  ptPanelNotTestData  :any= {};
   viralLoadJSON = {};
   vlResult = [];
   tndArray = [];
@@ -109,7 +109,7 @@ export class DtsHivViralloadPage implements OnInit {
   validMandVLResultCount: number = 0;
   validFloatVLResultCount: number = 0;
   mandatoryTrueArray = [];
-  vlResultArray = [];
+  vlResultArray  :any= [];
   vlresult: any;
   isPartiQCAccess: boolean;
   isPartiEditRespDate: boolean;
@@ -121,7 +121,7 @@ export class DtsHivViralloadPage implements OnInit {
   validVlCount: any;
   showCustomFieldData: boolean;
   isValidCustField: boolean = false;
-  customFieldData = {};
+  customFieldData  :any= {};
   validResponseDate: boolean = false;
   validModeOfRec: boolean = false;
   localFormToSubmitArray: any = [];
@@ -242,19 +242,19 @@ oldContactEmail:any="";
       if (this.vlDataArray[0].vlData.Section1.status == true) {
         this.partDetailsArray = this.vlDataArray[0].vlData.Section1.data;
         this.partDetailsArray["contactPersonEmail"] =
-          this.vlDataArray[0].vlData.Section1.contactPersonEmail;
+          this.vlDataArray[0].vlData.Section1.data.contactPersonEmail;
         this.partDetailsArray["contactPersonName"] =
-          this.vlDataArray[0].vlData.Section1.contactPersonName;
+          this.vlDataArray[0].vlData.Section1.data.contactPersonName;
         this.partDetailsArray["contactPersonTelephone"] =
-          this.vlDataArray[0].vlData.Section1.contactPersonTelephone;
+          this.vlDataArray[0].vlData.Section1.data.contactPersonTelephone;
         this.partDetailsArray["labDirectorEmail"] =
-          this.vlDataArray[0].vlData.Section1.labDirectorEmail;
+          this.vlDataArray[0].vlData.Section1.data.labDirectorEmail;
         this.partDetailsArray["labDirectorName"] =
-          this.vlDataArray[0].vlData.Section1.labDirectorName;
+          this.vlDataArray[0].vlData.Section1.data.labDirectorName;
         this.partDetailsArray["laboratoryId"] =
-          this.vlDataArray[0].vlData.Section1.laboratoryId;
+          this.vlDataArray[0].vlData.Section1.data.laboratoryId;
         this.partDetailsArray["laboratoryName"] =
-          this.vlDataArray[0].vlData.Section1.laboratoryName;
+          this.vlDataArray[0].vlData.Section1.data.laboratoryName;
        this.partDetailsArray["oldDirectorEmail"] =
           this.partDetailsArray["labDirectorEmail"];
             this.partDetailsArray["oldContactEmail"] =
@@ -456,7 +456,7 @@ oldContactEmail:any="";
 
   ngOnInit() {}
   async changeDirectorMail() {
-    if (this.vlDataArray[0].updatedStatus &&  this.vlDataArray[0].vlData.Section1.labDirectorEmail){
+    if (this.vlDataArray[0].updatedStatus &&  this.vlDataArray[0].vlData.Section1.data.labDirectorEmail){
       const alert = await this.alertController.create({
         header: "Alert",
         mode: "ios",
@@ -488,7 +488,7 @@ oldContactEmail:any="";
    
   }
   async changeContactMail(){
-     if (this.vlDataArray[0].updatedStatus &&  this.vlDataArray[0].vlData.Section1.contactPersonEmail) {
+     if (this.vlDataArray[0].updatedStatus &&  this.vlDataArray[0].vlData.Section1.data.contactPersonEmail) {
         const alert = await this.alertController.create({
         header: 'Alert',
         mode: "ios",

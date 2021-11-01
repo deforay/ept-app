@@ -34,7 +34,7 @@ export class DbsEidPage implements OnInit {
   participantID: any;
   participantName: any;
   formattedDate;
-  eidArray = [];
+  eidArray  :any= [];
   viewAccessMessage = "";
   showParticipantData: boolean;
   showShipmentData: boolean;
@@ -42,11 +42,11 @@ export class DbsEidPage implements OnInit {
   showOtherInfoData: boolean;
   showCustomFieldData: boolean;
   ptPanelNotTested: boolean;
-  participantData = {};
-  shipmentData = {};
-  ptPanelData = {};
-  otherInfoData = {};
-  customFieldData = {};
+  participantData :any= {};
+  shipmentData  :any= {};
+  ptPanelData  :any= {};
+  otherInfoData  :any= {};
+  customFieldData  :any= {};
   EIDJSON = {};
   updatedStatus: any;
   participantQcAccess: any;
@@ -64,9 +64,9 @@ export class DbsEidPage implements OnInit {
   isValidPTPanel: boolean = false;
   isValidCustField: boolean = false;
   otherInfoValid: boolean = false;
-  yourResultArray = [];
+  yourResultArray  :any= [];
   icQsValuesArray = [];
-  hivCTODArray = [];
+  hivCTODArray  :any= [];
   yourResultCheckArray = [];
   icQsValuesCheckArray = [];
   hivCTODCheckArray = [];

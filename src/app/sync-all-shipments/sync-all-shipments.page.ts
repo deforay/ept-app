@@ -13,6 +13,7 @@ import {
   Router
 } from '@angular/router';
 import {
+  Events,
   ModalController
 } from '@ionic/angular';
 import {
@@ -25,6 +26,7 @@ import {
 import {
   LoadingController
 } from '@ionic/angular';
+import { Network } from '@ionic-native/network/ngx';
 
 @Component({
   selector: 'app-sync-all-shipments',
@@ -60,8 +62,9 @@ export class SyncAllShipmentsPage implements OnInit {
   localStorageSelectedFormArray: any = [];
   isViewOnlyAccess: boolean;
   shipmentArray:any=[];
-
-  constructor(private storage: Storage, private router: Router, public modalController: ModalController,
+networkType: string;
+  constructor(private storage: Storage,public events:Events, public network: Network,
+private router: Router, public modalController: ModalController,
     public LoaderService: LoaderService, public CrudServiceService: CrudServiceService, public alertService: AlertService, public loadingCtrl: LoadingController) {
 
     this.storage.get('participantLogin').then((partiLoginResult) => {
@@ -83,6 +86,16 @@ export class SyncAllShipmentsPage implements OnInit {
   ngOnInit() {}
 
   ionViewWillEnter() {
+    this.networkType = this.network.type;
+     // Offline event
+    this.events.subscribe("network:offline", (data) => {
+      this.networkType = this.network.type;
+    });
+
+    // Online event
+    this.events.subscribe("network:online", () => {
+      this.networkType = this.network.type;
+    });
     this.storage.get('shipmentArray').then((shipmentArray) => {
    
       if (shipmentArray.length != 0) {

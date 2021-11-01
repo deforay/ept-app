@@ -551,7 +551,7 @@
                 >
                 <mat-select
                   [(ngModel)]="shipmentData.numberOfTests"
-                  (ngModelChange)="changedNoOfTests(shipmentData.numberOfTests);changedNoOfTestsNotOnload(shipmentData.numberOfTests)"
+                  (ngModelChange)="changedNoOfTests(shipmentData.numberOfTests);changedNoOfTestsNotOnload()"
                   name="covidNumberOfTests"
                   #covidNumberOfTests="ngModel"
                   required
@@ -658,7 +658,7 @@
                     {{item.show}}
                   </mat-option>
                 </mat-select>
-                <mat-error *ngIf="ptPanelNotTested && !vlNotTestedReason"
+                <mat-error *ngIf="ptPanelNotTested && !ptPanelData.vlNotTestedReason"
                   >Please choose the Reason for not testing
                 </mat-error>
               </mat-form-field>
@@ -1093,7 +1093,7 @@
     <form #otherInfoPanelForm="ngForm" novalidate>
       <mat-expansion-panel
         [expanded]="((!ptPanelNotTested && step === testTypeChangedIndex+sampleIndex +3) || (ptPanelNotTested &&  step === 3))"
-        (opened)="((!ptPanelNotTested && setStep(testTypeChangedIndex+sampleIndex+3))||( (ptPanelNotTested &&  step === 3)))"
+(opened)="((!ptPanelNotTested && setStep(testTypeChangedIndex+sampleIndex+3))||( (ptPanelNotTested &&  step === 3)))"
       >
         <mat-expansion-panel-header>
           <mat-panel-title>

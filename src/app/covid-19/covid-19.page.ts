@@ -54,29 +54,29 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 })
 
 export class covid19Page implements OnInit {
-  shipmentData = {};
+  shipmentData  :any= {};
   panelOpenState = false;
-  selectedTestFormArray = [];
+  selectedTestFormArray  :any= [];
   partiDetailsArray: any = []; 
   shipmentsDetailsArray: any = {};
-  algorithmUsedSelectArray = [];
-  modeOfReceiptArray = [];
+  algorithmUsedSelectArray  :any= [];
+  modeOfReceiptArray  :any= [];
   qcRadioArray = [];
   isQCDoneShow: boolean;
   testTypeDetailsArray: any = [];
   sampleDetailsArray: any = [];
   otherInfoArray: any;
-  supervisorReviewArray = [];
-  testTypeDropDownArray = [];
-  testTypeTextArray = [];
+  supervisorReviewArray  :any= [];
+  testTypeDropDownArray  :any= [];
+  testTypeTextArray  :any= [];
   resultsTextArray: any;
   exp = [];
   expDateObj: any = [];
-  testTypeModel = {};
+  testTypeModel  :any= {};
   viewAccessMessage: string = '';
   testTypeIndex: any;
   sampleIndex: any;
-  samplesNameArr = [];
+  samplesNameArr :any = [];
   testReceiptDate: any;
   sampleRhdDate: any;
   testingDate: any;
@@ -120,15 +120,15 @@ export class covid19Page implements OnInit {
   isPartiEditModeRec: boolean;
   participantQcAccess: any;
   isView: any;
-  covid19Array = [];
+  covid19Array  :any= [];
   showParticipantData: boolean;
   showShipmentData: boolean;
   showTestTypePanel: boolean;
   showSampleData: boolean;
   showOtherInfoData: boolean;
   showCustomFieldData: boolean;
-  ptPanelNotTested: boolean;
-  samplesArray = [];
+  ptPanelNotTested: boolean = true;
+  samplesArray :any= [];
   result1Arr: any = [];
   result2Arr: any = [];
   result3Arr: any = [];
@@ -136,8 +136,8 @@ export class covid19Page implements OnInit {
   showResult3: boolean = false;
   isValidSampleDetails = [];
   isValidTestTypeArray = [];
-  customFieldData = {};
-  samplesObj = {};
+  customFieldData  :any= {};
+  samplesObj  :any= {};
   summarizeForm: boolean = false;
   isShowReviewMsg: boolean = false;
   schemeName: string;
@@ -145,18 +145,18 @@ export class covid19Page implements OnInit {
   shipmentCode: any;
   isViewPage: boolean;
   showPTPanelData: boolean;
-  ptPanelData = {};
+  ptPanelData :any= {};
   isPtPanelNotTestedRadio;
   isValidPTPanel: boolean = false;
   isValidTestTypePanel: boolean = false;
-  testTypeTextChangedArray = [];
+  testTypeTextChangedArray  :any= [];
   testTypeChangedIndex: number = 0;
   isChangedTestTypeResultPanel: boolean = false;
   isChangedNoOfTests: boolean = false;
   isAcceptedTestResultData: boolean = false;
-  autoSelectedFinalResultArray = [];
+  autoSelectedFinalResultArray  :any= [];
   updatedStatus: boolean;
-
+  step = 0;
 
   constructor(public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -191,7 +191,7 @@ export class covid19Page implements OnInit {
     })
   }
 
-  step = 0;
+  
 
   setStep(index: number) {
     this.step = index;
