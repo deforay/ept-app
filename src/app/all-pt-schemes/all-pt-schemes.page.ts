@@ -748,7 +748,7 @@ search:any;
       spinner: "dots",
       mode: "ios",
       message: "Please wait",
-    });
+    }); 
     await loading.present();
     if (isView == undefined) {
       isView = "false";

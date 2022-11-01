@@ -2,72 +2,69 @@
   max-height: 35vh;
   overflow: hidden;
 }
-ion-grid ion-row ion-col{
-  padding:2px !important;
-  width:calc(100% - 10px);
-      p{
-          margin:5px;
-      }
-  } 
+ion-grid ion-row ion-col {
+  padding: 2px !important;
+  width: calc(100% - 10px);
+  p {
+    margin: 5px;
+  }
+}
 .login-form {
   // min-width: 150px;
   // max-width: 500px;
   width: calc(100% - 50px);
   margin-left: 25px;
-
 }
-.row-top{
+.row-top {
   margin-top: 50px;
 }
 .row-top img {
   display: block;
-margin: auto;
- 
+  margin: auto;
 }
 .login-full-width {
-  width: 100%; 
-}
-.login-btn-grid button{ 
   width: 100%;
 }
-.loginTile{
+.login-btn-grid button {
+  width: 100%;
+}
+.loginTile {
   margin-left: 8px;
 }
 .login-btn-grid a {
-  color:#F44336;
-  padding:0 5px 0 5px;
+  color: #f44336;
+  padding: 0 5px 0 5px;
 }
 .mat-form-field-appearance-legacy .mat-form-field-label {
   color: rgb(54, 154, 234) !important;
 }
 .mat-form-field-appearance-legacy .mat-form-field-underline {
-  background-color: rgba(255,255,255,.7) !important;
+  background-color: rgba(255, 255, 255, 0.7) !important;
 }
 .mat-form-field-appearance-legacy .mat-hint {
-  color: rgba(255,255,255,.7);
+  color: rgba(255, 255, 255, 0.7);
 }
-.float-right{
-  font-size: 11px!important ;
+.float-right {
+  font-size: 11px !important ;
 }
 .mat-raised-button.mat-primary.form-btn {
   width: 150px !important;
   background: #3c8dbc !important;
 }
-.forgotPassword{
-    font-size: 12px;
-    color:(var(--ion-color-dark-grey));
-    margin-top: 10px;
-    text-align: center;
+.forgotPassword {
+  font-size: 12px;
+  color: (var(--ion-color-dark-grey));
+  margin-top: 10px;
+  text-align: center;
 }
-.loginRow{
+.loginRow {
   padding: 10px;
 }
-.matIcons{
- color: #3c8dbc;
+.matIcons {
+  color: #3c8dbc;
 }
-.forgot-btn{
+.forgot-btn {
   color: #616161;
-    font-weight: 400;
-    font-size:13px !important;
-
+  font-weight: 400;
+  font-size: 13px !important;
 }

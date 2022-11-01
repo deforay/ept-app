@@ -31,7 +31,7 @@ import { FcmService } from '../app/fcm.service';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
 import { Firebase } from '@ionic-native/firebase/ngx';
-import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx'
+import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 @NgModule({
   declarations: [
     AppComponent,
@@ -74,7 +74,11 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx'
     NgForm,
     FcmService,
     Firebase,
-    FingerprintAIO,
+    FingerprintAIO, 
+    { 
+      provide: RouteReuseStrategy, 
+      useClass: IonicRouteStrategy 
+    },
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

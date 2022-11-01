@@ -747,8 +747,10 @@
             <section class="div-section">
               <mat-checkbox
                 [(ngModel)]="ptPanelNotTested"
+                value="checked"
                 name="covidPtPanelTest"
                 #covidPtPanelTest="ngModel"
+                (click)="changeValue(checked)"
                 [disabled]="isView=='true'"
                 >PT panel not tested</mat-checkbox
               >
@@ -887,7 +889,7 @@
             <mat-expansion-panel
               [expanded]="step === i+3"
               (opened)="setStep(i+3)"
-              *ngIf="(shipmentData['screeningTest']=='no' && ((shipmentData.algorithmUsedSelected !='myanmarNationalDtsAlgo' && testKitNameArray[kitTextItem].status==true) ||
+              *ngIf="((shipmentData['screeningTest']=='no' || shipmentData['screeningTest']=='' || shipmentData['screeningTest']== null) && ((shipmentData.algorithmUsedSelected !='myanmarNationalDtsAlgo' && testKitNameArray[kitTextItem].status==true) ||
         (shipmentData.algorithmUsedSelected =='myanmarNationalDtsAlgo' && kitTextItem =='Test-3')|| (shipmentData.algorithmUsedSelected =='myanmarNationalDtsAlgo' && kitTextItem !='Test-3'&& testKitNameArray[kitTextItem].status==true))) || (shipmentData['screeningTest']=='yes' && kitTextItem =='Test-1') "
             >
               <!-- <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="(shipmentData.algorithmUsedSelected !='myanmarNationalDtsAlgo' && testKitNameArray[kitTextItem].status==true) ||
@@ -895,7 +897,7 @@
 
               <!-- <mat-expansion-panel [expanded]="step === i+2" (opened)="setStep(i+2)" *ngIf="testKitNameArray[kitTextItem].status==true"> -->
               <mat-expansion-panel-header>
-                <mat-panel-title>
+                <mat-panel-title style="height: 48px !important">
                   <ion-grid class="panelHeading">
                     <ion-row>
                       <ion-col size="10" class="grid-readonly-col">
@@ -1043,11 +1045,17 @@
               (opened)="setStep(i+testKitIndex+3)"
             >
               <mat-expansion-panel-header>
-                <mat-panel-title>
+                <mat-panel-title style="height: 48px !important">
                   <ion-grid class="panelHeading">
                     <ion-row>
                       <ion-col size="5" class="grid-readonly-col">
-                        <span class="text-title-color"
+                        <span
+                          class="text-title-color"
+                          style="
+                            text-overflow: ellipsis;
+                            white-space: normal;
+                            overflow: hidden;
+                          "
                           >{{sampleName}}
                           <span
                             class="danger-text"
@@ -1207,7 +1215,7 @@
                     >
                       <mat-option>--Select--</mat-option>
                       <mat-option
-                        *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Repeat Result-1'].data"
+                        *ngFor="let item of sampleDetailsArray['sampleList'][sampleName]['Repeat Result-1']?.data"
                         [value]="item"
                       >
                         {{item.show}}
@@ -1417,8 +1425,126 @@
     <!-- Custom Panel Ends-->
     <form #otherInfoPanelForm="ngForm" novalidate>
       <mat-expansion-panel
+        *ngIf="!showCustomFieldData"
         [expanded]="step === testKitIndex+sampleIndex+dynamicStep+2"
         (opened)="setStep(testKitIndex+sampleIndex+dynamicStep+2)"
+      >
+        <mat-expansion-panel-header>
+          <mat-panel-title>
+            <ion-grid class="panelHeading">
+              <ion-row>
+                <ion-col size="10" class="grid-readonly-col">
+                  <span class="text-title-color">Other Information</span>
+                </ion-col>
+                <ion-col
+                  size="2"
+                  class="grid-readonly-col"
+                  *ngIf="isValidOtherInfoPanel==true"
+                >
+                  <ion-icon
+                    name="checkmark-circle"
+                    class="checkMarkIcon"
+                  ></ion-icon>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </mat-panel-title>
+        </mat-expansion-panel-header>
+        <ion-grid>
+          <ion-row>
+            <ion-col size="12">
+              <mat-form-field
+                class="login-full-width grid-col-form"
+                appearance="outline"
+              >
+                <mat-label
+                  >Supervisor Review
+                  <span class="danger-text" *ngIf="isView=='true'"
+                    >*</span
+                  ></mat-label
+                >
+                <mat-select
+                  [(ngModel)]="supReview"
+                  name="serosupReview"
+                  #serosupReview="ngModel"
+                  required
+                  [disabled]="isView=='true'"
+                >
+                  <mat-option>--Select--</mat-option>
+                  <mat-option
+                    *ngFor="let item of supervisorReviewArray"
+                    [value]="item.value"
+                  >
+                    {{item.show}}
+                  </mat-option>
+                </mat-select>
+                <mat-error *ngIf="!supReview"
+                  >Supervisor Review is required</mat-error
+                >
+              </mat-form-field>
+            </ion-col>
+            <ion-col size="12" *ngIf="supReview=='yes'">
+              <mat-form-field
+                class="login-full-width grid-col-form"
+                appearance="outline"
+              >
+                <mat-label
+                  >{{approvalLabel}}
+                  <span class="danger-text" *ngIf="isView=='true'"
+                    >*</span
+                  ></mat-label
+                >
+                <input
+                  matInput
+                  [(ngModel)]="supervisorName"
+                  name="serosupervisorName"
+                  #serosupervisorName="ngModel"
+                  placeholder="Enter Supervisor Name"
+                  [required]="supReview=='yes'"
+                  [disabled]="isView=='true'"
+                />
+                <mat-error *ngIf="!supervisorName"
+                  >Supervisor Name is required</mat-error
+                >
+              </mat-form-field>
+            </ion-col>
+            <ion-col size="12">
+              <mat-form-field
+                class="login-full-width grid-col-form"
+                appearance="outline"
+              >
+                <mat-label>Comments</mat-label>
+                <textarea
+                  matInput
+                  placeholder="Enter Comments here"
+                  [(ngModel)]="comments"
+                  name="serocomments"
+                  #serocomments="ngModel"
+                  [disabled]="isView=='true'"
+                ></textarea>
+              </mat-form-field>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+
+        <mat-action-row>
+          <button mat-button color="primary" (click)="prevStep()">
+            Previous
+          </button>
+          <button
+            mat-button
+            color="warn"
+            *ngIf="summarizeForm==false && isView!='true'"
+            (click)="submitSerologyForm(shipmentPanelForm,sampleDetailsForm,otherInfoPanelForm)"
+          >
+            Submit
+          </button>
+        </mat-action-row>
+      </mat-expansion-panel>
+      <mat-expansion-panel
+        *ngIf="showCustomFieldData"
+        [expanded]="step === testKitIndex+sampleIndex+dynamicStep+3"
+        (opened)="setStep(testKitIndex+sampleIndex+dynamicStep+3)"
       >
         <mat-expansion-panel-header>
           <mat-panel-title>
