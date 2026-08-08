@@ -1,0 +1,15 @@
+# System
+.DS_Store
+*.orig
+
+# Node
+node_modules/
+
+# Cordova / Ionic build output
+www/
+plugins/
+platforms/
+.tmp/
+
+# Bower
+bower_components/
