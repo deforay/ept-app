@@ -63,7 +63,7 @@
                 <input matInput [type]="pswdhide ? 'password' : 'text'" [formControl]="pswdFormControl"
                   [errorStateMatcher]="matcher" autocomplete="off">
                 <button mat-icon-button matSuffix (click)="pswdhide = !pswdhide" [attr.aria-label]="'hide password'"
-                  [attr.aria-pressed]="hide">
+                  [attr.aria-pressed]="pswdhide">
                   <mat-icon class="matIcons">{{pswdhide ? 'visibility_off' : 'visibility'}}</mat-icon>
                 </button>
                 <mat-error
