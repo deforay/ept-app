@@ -1,6 +1,18 @@
+# Secrets — never commit these
+*.keystore
+*.jks
+release-signing.properties
+google-services.json
+GoogleService-Info.plist
+
+# Build artefacts
+*.apk
+*.aab
+
 # System
 .DS_Store
 *.orig
+*.swp
 
 # Node
 node_modules/
