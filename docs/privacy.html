@@ -1,0 +1,122 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Privacy Policy — e-PT</title>
+<meta name="description" content="Privacy policy for the e-PT proficiency testing Android app (com.deforay.ept).">
+<link rel="stylesheet" href="style.css">
+</head>
+<body>
+
+<header class="site">
+  <div class="wrap">
+    <a class="brand" href="./">e-PT</a>
+    <nav>
+      <a href="privacy.html">Privacy</a>
+      <a href="terms.html">Terms</a>
+      <a href="https://github.com/deforay/ept-app">Source</a>
+    </nav>
+  </div>
+</header>
+
+<main class="wrap">
+  <h1>Privacy Policy</h1>
+  <p class="meta">For the <strong>e-PT</strong> Android application (<code>com.deforay.ept</code>), published by the Deforay Developers Team.<br>
+  Effective 10 August 2026.</p>
+
+  <p>This policy explains what information the e-PT app handles, why, and what control you have over it. It covers the app itself. It does not cover the proficiency testing server your organisation runs, which is a separate system with its own operator.</p>
+
+  <h2>1. Who is responsible</h2>
+  <p>The app is developed and published by the <strong>Deforay Developers Team</strong>, reachable at <a href="mailto:hello@deforay.com">hello@deforay.com</a>.</p>
+  <p>e-PT is a client application. When you sign in you supply the address of a proficiency testing server, and the app communicates only with that server. That server is operated by your proficiency testing programme, national reference laboratory, or the organisation that issued your account — not by us, unless we separately host your instance under a written agreement. <strong>The operator of that server is the controller of the data you submit through the app.</strong> For questions about how your submitted results are used or retained, contact your programme administrator.</p>
+
+  <h2>2. Who the app is for</h2>
+  <p>e-PT is intended for laboratory and testing-site staff enrolled in a proficiency testing or external quality assessment scheme. It is not a consumer app and is not directed at children.</p>
+
+  <div class="note">
+    <p><strong>Not for patient data.</strong> e-PT is designed for proficiency testing panels and control samples. Do not enter patient names, patient identifiers, or any other personally identifiable patient information into the app.</p>
+  </div>
+
+  <h2>3. Information you provide</h2>
+  <ul>
+    <li><strong>Server address</strong> — the host name of the proficiency testing server you connect to.</li>
+    <li><strong>Sign-in credentials</strong> — the username and password issued to you by your programme. These are sent to your server for authentication; the app does not store your password after sign-in.</li>
+    <li><strong>Profile information</strong> held on your account, such as first and last name, primary and secondary email addresses, and mobile or telephone number. This is retrieved from and updated on your server.</li>
+    <li><strong>Proficiency testing responses</strong> — the shipment, panel and result data you enter for each scheme, which is submitted to your server.</li>
+  </ul>
+
+  <h2>4. Information stored on your device</h2>
+  <p>The following is kept locally on your phone or tablet so the app can work offline and stay signed in:</p>
+  <ul>
+    <li>An authentication token for your session, and your server address.</li>
+    <li>Cached shipment, scheme and result data, so you can enter results without a network connection and sync later.</li>
+    <li>Reports you choose to download, saved as files in an <code>EPT REPORTS</code> folder in your device storage. These remain on your device until you delete them, and are not removed automatically when you uninstall the app.</li>
+    <li>Your app-lock preference, if you enable one.</li>
+  </ul>
+  <p>Signing out clears your session. Uninstalling the app removes the app's local data, but not files already saved to your device storage.</p>
+
+  <h2>5. Biometric and app-lock</h2>
+  <p>You may optionally protect the app with a passcode or your device biometrics (fingerprint or face unlock). Biometric verification is performed entirely by the Android operating system. <strong>The app never receives, sees, or stores your fingerprint or face data</strong> — it is told only whether the device verified you successfully.</p>
+
+  <h2>6. Push notifications</h2>
+  <p>The app uses Firebase Cloud Messaging so your programme can notify you about new shipments, deadlines and results. To do this, Google issues your app installation a device registration token, and the app sends that token to your proficiency testing server so it can address notifications to you. The token identifies the app installation, not you personally. You can turn off notifications for the app in your device settings at any time.</p>
+
+  <h2>7. Diagnostics and analytics</h2>
+  <p>The app includes Google Firebase Analytics, Crashlytics (crash reporting) and Performance Monitoring. These collect technical and usage information such as:</p>
+  <ul>
+    <li>crash reports, error traces and the state of the app at the time of a crash;</li>
+    <li>device model, operating system version, language, and app version;</li>
+    <li>app screen views, session length, and performance timings;</li>
+    <li>a pseudonymous app-instance identifier generated by Google.</li>
+  </ul>
+  <p>This information is processed by Google as our service provider and is used only to diagnose faults and improve the app. It is <strong>not</strong> used for advertising, and the app contains no advertising SDKs. Google's handling of this data is described in the <a href="https://firebase.google.com/support/privacy">Firebase privacy documentation</a> and the <a href="https://policies.google.com/privacy">Google Privacy Policy</a>.</p>
+  <p>Because the app is open source, you can inspect exactly what is collected, or build a version with these components removed, from the <a href="https://github.com/deforay/ept-app">source repository</a>.</p>
+
+  <h2>8. Permissions the app requests</h2>
+  <div class="scroll">
+  <table>
+    <thead><tr><th>Permission</th><th>Why</th></tr></thead>
+    <tbody>
+      <tr><td>Internet and network state</td><td>To reach your proficiency testing server and to detect whether you are online before syncing.</td></tr>
+      <tr><td>File storage</td><td>To save downloaded reports to the <code>EPT REPORTS</code> folder and open them.</td></tr>
+      <tr><td>Biometrics</td><td>Only if you enable biometric unlock for the app.</td></tr>
+      <tr><td>Notifications</td><td>To display shipment and result alerts sent by your programme.</td></tr>
+    </tbody>
+  </table>
+  </div>
+  <p>The app does not request access to your location, camera, microphone, contacts, call logs or SMS messages.</p>
+
+  <h2>9. What we do not do</h2>
+  <ul>
+    <li>We do not sell or rent your information.</li>
+    <li>We do not show advertising or use advertising identifiers.</li>
+    <li>We do not share your proficiency testing data with third parties. It goes only to the server you sign in to.</li>
+    <li>We do not track you across other apps or websites.</li>
+  </ul>
+
+  <h2>10. Data security</h2>
+  <p>Traffic between the app and your server uses HTTPS where your server provides it; the app defaults to <code>https://</code> when you enter a server address. Because the server is chosen and operated by your organisation, the security of data at rest, and its retention, are governed by that organisation's policies.</p>
+
+  <h2>11. Your choices and rights</h2>
+  <ul>
+    <li><strong>Access, correction or deletion of your account and submitted results</strong> — contact your proficiency testing programme administrator, who operates the server holding that data. We cannot access it on your behalf.</li>
+    <li><strong>Local data</strong> — sign out to clear your session, or uninstall the app to remove its local data. Delete the <code>EPT REPORTS</code> folder to remove downloaded reports.</li>
+    <li><strong>Notifications</strong> — disable them in your device settings.</li>
+    <li><strong>Diagnostics</strong> — you can build and install the app from source without the analytics and crash reporting components.</li>
+  </ul>
+
+  <h2>12. Changes to this policy</h2>
+  <p>If this policy changes, the updated version will be published at this address with a new effective date. Material changes will also be noted in the app's release notes on Google Play.</p>
+
+  <h2>13. Contact</h2>
+  <p>Questions about this policy or about the app: <a href="mailto:hello@deforay.com">hello@deforay.com</a>.</p>
+  <p>Questions about your account, your results, or data held by your programme: contact your proficiency testing programme administrator.</p>
+
+  <footer class="site">
+    <p>&copy; Deforay Developers Team · <a href="./">Home</a> · <a href="terms.html">Terms &amp; Conditions</a></p>
+  </footer>
+</main>
+
+</body>
+</html>
