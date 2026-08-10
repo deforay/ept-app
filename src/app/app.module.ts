@@ -30,7 +30,7 @@ import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
 import { FcmService } from '../app/fcm.service';
 import { AngularFireModule } from 'angularfire2';
 import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { Firebase } from '@ionic-native/firebase/ngx';
+import { FirebaseX } from '@ionic-native/firebase-x/ngx';
 import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
 @NgModule({
   declarations: [
@@ -73,7 +73,7 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
     FileOpener,
     NgForm,
     FcmService,
-    Firebase,
+    FirebaseX,
     FingerprintAIO, 
     { 
       provide: RouteReuseStrategy, 

@@ -156,29 +156,18 @@ export class AppComponent {
           , (err) => {}
         );
 
-        //Create Directory for EPT REPORTS
-        this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
-
-        let newdir = this.file.externalRootDirectory + ROOT_DIRECTORY + '/';
-        console.log(newdir);
-
-        setTimeout(function () {
-            this.directoryProvider.createDirectory(newdir, INDIVIDUAL_REPORTS_DIRECTORY);
-          }
-
-          , 4000);
-
-        setTimeout(function () {
-            this.directoryProvider.createDirectory(newdir, SUMMARY_REPORTS_DIRECTORY);
-          }
-
-          , 6000);
-
-        setTimeout(function () {
-            this.directoryProvider.createDirectory(newdir, SHIPMENTS_REPORTS_DIRECTORY);
-          }
-
-          , 8000);
+        // Create the EPT REPORTS tree under app-specific external storage.
+        // externalRootDirectory is unwritable from Android 10 onwards under
+        // scoped storage, and targetSdk 30+ removes the legacy opt-out.
+        this.commonService.createDirectory(this.file.externalDataDirectory, ROOT_DIRECTORY)
+          .then(() => {
+            const newdir = this.file.externalDataDirectory + ROOT_DIRECTORY + '/';
+            return Promise.all([
+              this.commonService.createDirectory(newdir, INDIVIDUAL_REPORTS_DIRECTORY),
+              this.commonService.createDirectory(newdir, SUMMARY_REPORTS_DIRECTORY),
+              this.commonService.createDirectory(newdir, SHIPMENTS_REPORTS_DIRECTORY),
+            ]);
+          });
 
         this.NetworkService.initializeNetworkEvents();
 

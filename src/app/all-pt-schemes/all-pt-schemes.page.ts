@@ -894,11 +894,12 @@ search:any;
     let downloadUrl = this.apiUrl + downloadLink;
 
     let path =
-      this.file.externalRootDirectory +
+      this.file.externalDataDirectory +
       ROOT_DIRECTORY +
       "/" +
-      SHIPMENTS_REPORTS_DIRECTORY;
-    fileTransfer.download(downloadUrl, path + fileName).then(
+      SHIPMENTS_REPORTS_DIRECTORY +
+      "/";
+    fileTransfer.download(downloadUrl, path + String(fileName).replace(/^\/+/, "")).then(
       (entry) => {
         console.log("download complete: " + entry.toURL());
         let url = entry.toURL();

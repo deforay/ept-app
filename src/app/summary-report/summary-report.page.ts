@@ -80,8 +80,8 @@ export class SummaryReportPage implements OnInit {
     const fileTransfer: FileTransferObject = this.ft.create();
     let downloadUrl = this.apiUrl + downloadLink;
 
-    let path = this.file.externalRootDirectory + ROOT_DIRECTORY + '/' + SUMMARY_REPORTS_DIRECTORY;
-    fileTransfer.download(downloadUrl, path + fileName).then((entry) => {
+    let path = this.file.externalDataDirectory + ROOT_DIRECTORY + '/' + SUMMARY_REPORTS_DIRECTORY + '/';
+    fileTransfer.download(downloadUrl, path + String(fileName).replace(/^\/+/, '')).then((entry) => {
       console.log('download complete: ' + entry.toURL());
       let url = entry.toURL();
       loading.dismiss();
