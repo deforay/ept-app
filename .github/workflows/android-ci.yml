@@ -3,11 +3,9 @@ name: Android CI
 # Unsigned debug build on every push. Proves the app still compiles; it never
 # touches the signing key. Signed builds live in android-release.yml.
 #
-# The web layer and the native shell need different Node versions and cannot be
-# built by one toolchain:
-#   - Angular 8 / webpack 4 need Node 16, the last release on OpenSSL 1.1
-#   - cordova-android 15 requires Node >= 20.5
-# Both stages share one node_modules; only the interpreter changes between them.
+# Angular 21 and cordova-android 15 both run on Node 22, so the web layer and
+# the native shell are built by one toolchain. Cordova and the Ionic CLI are
+# project dependencies; nothing is installed globally.
 
 on:
   push:
@@ -62,28 +60,17 @@ jobs:
           python3 -c "import json;json.load(open('google-services.json'))" \
             || { echo "::error::Decoded google-services.json is not valid JSON. Store the secret base64-encoded."; exit 1; }
 
-      # ---- web layer (Node 16) ----
-
-      - name: Use Node 16 for the Angular build
+      - name: Use Node 22
         uses: actions/setup-node@v4
         with:
-          node-version: '16.20.2'
+          node-version: '22'
           cache: npm
 
-      # The dependency tree predates strict peer resolution: material-moment-adapter
-      # declares Angular 9/10 while the app is pinned to Angular 8.
       - name: Install dependencies
-        run: npm install --legacy-peer-deps --no-audit --no-fund
+        run: npm ci --no-audit --no-fund
 
       - name: Build web assets
-        run: npx ng build --prod
-
-      # ---- native shell (Node 22) ----
-
-      - name: Use Node 22 for the Cordova build
-        uses: actions/setup-node@v4
-        with:
-          node-version: '22.22.2'
+        run: npx ng build --configuration production
 
       - name: Cache Gradle
         uses: actions/cache@v4
@@ -97,18 +84,25 @@ jobs:
       # firebasex must be installed with explicit variables: values written only
       # into the package.json cordova.plugins block are ignored on install, which
       # would silently re-enable ad-ID collection.
+      #
+      # The wrapper's plugin.xml names its sub-plugins without versions, so
+      # Cordova fetches each one's npm "latest" tag. For the messaging and
+      # in-app-messaging sub-plugins that tag points at a 1.x patch published
+      # after 2.x, which rejects the 2.x core the other sub-plugins pull in.
+      # Install those two at 2.x first so the wrapper finds them already present.
       - name: Add Android platform
         run: |
-          npx -y cordova@13 plugin add cordova-plugin-firebasex@20.0.2 \
+          npx cordova plugin add cordova-plugin-firebasex-messaging@^2.0.3 cordova-plugin-firebasex-inappmessaging@^2.0.1
+          npx cordova plugin add cordova-plugin-firebasex@20.0.2 \
             --variable FIREBASE_ANALYTICS_WITHOUT_ADS=true \
             --variable GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED=false \
             --variable GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_STORAGE=false \
             --variable GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_USER_DATA=false \
             --variable GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS=false
-          npx -y cordova@13 platform add android@15.1.0
+          npx cordova platform add android
 
       - name: Build debug APK
-        run: npx -y cordova@13 build android --debug
+        run: npx cordova build android --debug
 
       # Guards against a regression re-introducing the advertising permissions,
       # which would contradict the published privacy policy and Data safety form.
