@@ -47,6 +47,8 @@
     "cordova-plugin-file-opener2": "^4.0.0",
     "cordova-plugin-file-transfer": "^2.0.0",
     "cordova-plugin-firebasex": "^20.0.2",
+    "cordova-plugin-firebasex-inappmessaging": "^2.0.1",
+    "cordova-plugin-firebasex-messaging": "^2.0.3",
     "cordova-plugin-inappbrowser": "^7.0.0",
     "cordova-plugin-market": "^1.2.0",
     "cordova-plugin-network-information": "^3.1.0",
@@ -103,6 +105,8 @@
         "ANDROIDX_WEBKIT_VERSION": "1.4.0"
       },
       "cordova-plugin-file-transfer": {},
+      "cordova-plugin-firebasex-messaging": {},
+      "cordova-plugin-firebasex-inappmessaging": {},
       "cordova-plugin-firebasex": {
         "FIREBASE_ANALYTICS_WITHOUT_ADS": "true",
         "GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED": "false",
