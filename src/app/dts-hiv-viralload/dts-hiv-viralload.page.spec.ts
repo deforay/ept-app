@@ -1,5 +1,5 @@
 import { waitForAsync, ComponentFixture, TestBed } from '@angular/core/testing';
-import { IonicModule } from '@ionic/angular';
+import { provideIonicAngular } from '@ionic/angular';
 
 import { DtsHivViralloadPage } from './dts-hiv-viralload.page';
 
@@ -10,7 +10,7 @@ describe('DtsHivViralloadPage', () => {
   beforeEach(waitForAsync(() => {
     TestBed.configureTestingModule({
       declarations: [ DtsHivViralloadPage ],
-      imports: [IonicModule.forRoot()]
+      providers: [provideIonicAngular()]
     }).compileComponents();
 
     fixture = TestBed.createComponent(DtsHivViralloadPage);

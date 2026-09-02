@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import { IonButton, IonCol, IonContent, IonGrid, IonIcon, IonRow } from '@ionic/angular';
 
 import { RapidHIVRecencyTestingPageRoutingModule } from './rapid-hiv-recency-testing-routing.module';
 
@@ -14,7 +14,7 @@ import { MomentModule } from '../moment.module';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
+    IonButton, IonCol, IonContent, IonGrid, IonIcon, IonRow,
     MaterialModule,
     ComponentsModule,
     ReactiveFormsModule,

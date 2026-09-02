@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import { IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonMenuButton, IonRefresher, IonRefresherContent, IonRow, IonSearchbar, IonSkeletonText, IonTitle, IonToolbar } from '@ionic/angular';
 
 import { AllPTSchemesPageRoutingModule } from './all-pt-schemes-routing.module';
 import { MaterialModule } from '../material.module';
@@ -13,7 +13,7 @@ import { SearchFilterPipe } from '../pipes/search-filter.pipe';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
+    IonButton, IonButtons, IonCard, IonCardContent, IonCardHeader, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonMenuButton, IonRefresher, IonRefresherContent, IonRow, IonSearchbar, IonSkeletonText, IonTitle, IonToolbar,
     ComponentsModule,
     ReactiveFormsModule,
     MaterialModule,

@@ -51,6 +51,8 @@ import {
 import {
   ToastController
 }from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { arrowBack, checkmarkCircle, close, sync } from 'ionicons/icons';
 @Component({
   standalone: false,
     selector: 'app-root',
@@ -136,6 +138,8 @@ export class AppComponent {
     public toastController: ToastController,
     public CrudServiceService: CrudServiceService,
   ) {
+    // Standalone Ionic components do not auto-load icons; register the ones the templates use.
+    addIcons({ 'arrow-back': arrowBack, 'checkmark-circle': checkmarkCircle, close, sync });
     this.initializeApp();
   }
 

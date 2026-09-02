@@ -1,7 +1,7 @@
 import { NgModule, inject, provideAppInitializer } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular';
+import { IonicRouteStrategy, Platform, provideIonicAngular, IonApp, IonButton, IonCard, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle, IonRouterLink, IonRouterLinkWithHref, IonRouterOutlet, IonRow, IonSplitPane, IonTitle, IonToolbar } from '@ionic/angular';
 import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
 import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 import { AppComponent } from './app.component';
@@ -36,7 +36,7 @@ import { FingerprintAIO } from '@awesome-cordova-plugins/fingerprint-aio/ngx';
   ],
   imports: [
     BrowserModule,
-    IonicModule.forRoot(),
+    IonApp, IonButton, IonCard, IonCol, IonContent, IonFooter, IonGrid, IonHeader, IonItem, IonLabel, IonList, IonMenu, IonMenuToggle, IonRouterLink, IonRouterLinkWithHref, IonRouterOutlet, IonRow, IonSplitPane, IonTitle, IonToolbar,
     AppRoutingModule,
     MaterialModule,
     BrowserAnimationsModule,
@@ -45,6 +45,7 @@ import { FingerprintAIO } from '@awesome-cordova-plugins/fingerprint-aio/ngx';
     IonicStorageModule.forRoot(),
   ],
   providers: [
+    provideIonicAngular(),
     provideHttpClient(),
     // @ionic/storage 3+ opens its backing store lazily; open it before any
     // component or service issues a get/set.
