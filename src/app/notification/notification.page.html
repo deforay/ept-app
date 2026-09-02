@@ -2,112 +2,130 @@
 
 <ion-content>
 
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="networkType!='none'">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+  @if (networkType!='none') {
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+  }
 
-  <p *ngIf="networkType=='none'" class="accessMsg">You are offline</p>
+  @if (networkType=='none') {
+    <p class="accessMsg">You are offline</p>
+  }
 
 
-  <div class="notifyDiv" *ngFor="let item of notificationsArray;let i = index">
-    <ion-card class="eptNotificationCard" [ngStyle]="{'border-left-color': borderColorArr[i]}">
-      <ion-card-header class="notifyHeader"
-        [ngStyle]="{'background-color':item.markAsRead === false ? 'rgb(224, 229, 234)' : 'white' }" >
-        <ion-grid class="notifyGrid">
-          <ion-row >
-            <ion-col size="10" class="grid-readonly-col">
-              <p class="ion-text-wrap" class="schemeName"
-                [ngStyle]="{'color':item.markAsRead === false ? 'rgb(19, 18, 18)' : '#544e4e' }">
-                {{item.notification['title']}}
-              </p>
-            </ion-col>
-            <ion-col size="2" class="markAsReadCol">
-              <mat-icon class="tickIcon" *ngIf="item.markAsRead==true">done</mat-icon>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-header>
-      <ion-card-content class="cardContent"
-        [ngStyle]="{'background-color':item.markAsRead === false ? 'rgb(224, 229, 234)' : 'white' }">
-        <ion-grid class="notifyGrid">
-          <ion-row>
-            <ion-col size="12">
-              <p class="ion-text-wrap" class="notifyPara" [ngStyle]="{'font-weight':item.markAsRead === false ? '600' : '400' }">
-                <span class="notificationContent">
-                  {{item.notification['body']}}
-                </span>
-              </p>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="7">
-              <p class="ion-text-wrap" class="notifyPara" [ngStyle]="{'font-weight':item.markAsRead === false ? '600' : '400' }">
-                <span class="notifyTime">{{item.createdOn}}</span>
-              </p>
-            </ion-col>
-            <ion-col size="5" class="markAsReadCol" *ngIf="networkType!='none'">
-              <button mat-stroked-button class="markAsReadButton" *ngIf="item.markAsRead==false"
-                (click)="markAsRead(item)" [disabled]="item.disableMarkAsRead==true">
-                <span class="markAsReadText">Mark As Read</span></button>
-              <button mat-stroked-button class="markAsReadButton" *ngIf="item.markAsRead==true"
-                (click)="markAsUnread(item)" [disabled]="item.disableMarkAsUnRead==true">
-                <span class="markAsReadText">Mark As Unread</span></button>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
-  </div>
-    <!-- ion-skeleton-text code start -->
-    <ion-card *ngFor="let item of skeltonArray" class="eptNotificationCard">
-      <ion-card-header class="notifyHeader">
-        <ion-grid class="notifyGrid">
-          <ion-row>
-            <ion-col size="12" class="grid-readonly-col">
-              <p class="ion-text-wrap" class="schemeName">
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+  @for (item of notificationsArray; track item; let i = $index) {
+    <div class="notifyDiv">
+      <ion-card class="eptNotificationCard" [ngStyle]="{'border-left-color': borderColorArr[i]}">
+        <ion-card-header class="notifyHeader"
+          [ngStyle]="{'background-color':item.markAsRead === false ? 'rgb(224, 229, 234)' : 'white' }" >
+          <ion-grid class="notifyGrid">
+            <ion-row >
+              <ion-col size="10" class="grid-readonly-col">
+                <p class="ion-text-wrap" class="schemeName"
+                  [ngStyle]="{'color':item.markAsRead === false ? 'rgb(19, 18, 18)' : '#544e4e' }">
+                  {{item.notification['title']}}
+                </p>
+              </ion-col>
+              <ion-col size="2" class="markAsReadCol">
+                @if (item.markAsRead==true) {
+                  <mat-icon class="tickIcon">done</mat-icon>
+                }
+              </ion-col>
+            </ion-row>
+          </ion-grid>
+        </ion-card-header>
+        <ion-card-content class="cardContent"
+          [ngStyle]="{'background-color':item.markAsRead === false ? 'rgb(224, 229, 234)' : 'white' }">
+          <ion-grid class="notifyGrid">
+            <ion-row>
+              <ion-col size="12">
+                <p class="ion-text-wrap" class="notifyPara" [ngStyle]="{'font-weight':item.markAsRead === false ? '600' : '400' }">
+                  <span class="notificationContent">
+                    {{item.notification['body']}}
+                  </span>
+                </p>
+              </ion-col>
+            </ion-row>
+            <ion-row>
+              <ion-col size="7">
+                <p class="ion-text-wrap" class="notifyPara" [ngStyle]="{'font-weight':item.markAsRead === false ? '600' : '400' }">
+                  <span class="notifyTime">{{item.createdOn}}</span>
+                </p>
+              </ion-col>
+              @if (networkType!='none') {
+                <ion-col size="5" class="markAsReadCol">
+                  @if (item.markAsRead==false) {
+                    <button mat-stroked-button class="markAsReadButton"
+                      (click)="markAsRead(item)" [disabled]="item.disableMarkAsRead==true">
+                      <span class="markAsReadText">Mark As Read</span></button>
+                    }
+                    @if (item.markAsRead==true) {
+                      <button mat-stroked-button class="markAsReadButton"
+                        (click)="markAsUnread(item)" [disabled]="item.disableMarkAsUnRead==true">
+                        <span class="markAsReadText">Mark As Unread</span></button>
+                      }
+                    </ion-col>
+                  }
+                </ion-row>
+              </ion-grid>
+            </ion-card-content>
+          </ion-card>
+        </div>
+      }
+      <!-- ion-skeleton-text code start -->
+      @for (item of skeltonArray; track item) {
+        <ion-card class="eptNotificationCard">
+          <ion-card-header class="notifyHeader">
+            <ion-grid class="notifyGrid">
+              <ion-row>
+                <ion-col size="12" class="grid-readonly-col">
+                  <p class="ion-text-wrap" class="schemeName">
+                    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                  </p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-header>
+          <ion-card-content class="cardContent">
+            <ion-grid class="notifyGrid">
+              <ion-row>
+                <ion-col size="12">
+                  <p class="ion-text-wrap">
+                    <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
+                  </p>
+                  <p class="ion-text-wrap">
+                    <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+                  </p>
+                  <p class="ion-text-wrap">
+                    <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+                  </p>
+                </ion-col>
+              </ion-row>
+              <ion-row>
+                <ion-col size="7">
+                  <p class="ion-text-wrap" class="notifyPara" >
+                    <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+                  </p>
+                </ion-col>
+                <ion-col size="5">
+                  <p class="ion-text-wrap" class="notifyPara" >
+                    <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+                  </p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      }
+      <!-- ion-skeleton-text code end -->
+      @if (showNoData) {
+        <ion-card class="eptCard noNotification">
+          <ion-card-content class="cardContent">
+            <p class="noNotification">
+              No notification available
             </p>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-header>
-      <ion-card-content class="cardContent">
-      <ion-grid class="notifyGrid">
-          <ion-row>
-            <ion-col size="12">
-              <p class="ion-text-wrap">
-                <ion-skeleton-text animated style="width: 100%"></ion-skeleton-text>
-              </p>
-              <p class="ion-text-wrap">
-                <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
-              </p>
-              <p class="ion-text-wrap">
-                <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
-              </p>
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col size="7">
-              <p class="ion-text-wrap" class="notifyPara" >
-                <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
-              </p>
-            </ion-col>
-            <ion-col size="5">
-              <p class="ion-text-wrap" class="notifyPara" >
-                <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
-              </p>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
-      </ion-card-content>
-    </ion-card>
-    <!-- ion-skeleton-text code end -->
-    <ion-card class="eptCard noNotification" *ngIf="showNoData">
-      <ion-card-content class="cardContent">
-      <p class="noNotification">
-       No notification available
-      </p>
-        </ion-card-content>
-    </ion-card>
- 
-</ion-content>
+          </ion-card-content>
+        </ion-card>
+      }
+
+    </ion-content>

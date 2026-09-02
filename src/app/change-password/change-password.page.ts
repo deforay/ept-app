@@ -22,7 +22,7 @@ import {
 } from '../../validators/password.validator';
 import {
   Network
-} from '@ionic-native/network/ngx';
+} from '@awesome-cordova-plugins/network/ngx';
 import {
   Router
 } from '@angular/router';
@@ -35,7 +35,7 @@ import {
 } from '../../app/service/crud/crud-service.service';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 export class MyErrorStateMatcher implements ErrorStateMatcher {
   isErrorState(control: FormControl | null, form: FormGroupDirective | NgForm | null): boolean {
     const isSubmitted = form && form.submitted;
@@ -43,6 +43,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 @Component({
+  standalone: false,
   selector: 'app-change-password',
   templateUrl: './change-password.page.html',
   styleUrls: ['./change-password.page.scss'],

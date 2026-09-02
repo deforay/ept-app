@@ -34,23 +34,17 @@ import {
 } from '../../app/service/crud/crud-service.service';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   LoadingController
 } from '@ionic/angular';
 import {
   Network
-} from '@ionic-native/network/ngx';
-import {
-  Events
-} from '@ionic/angular';
+} from '@awesome-cordova-plugins/network/ngx';
+import { Events } from '../service/events/events.service';
 import {
   FcmService
 } from '../../app/fcm.service';
-import {
-  AngularFireModule
-} from '../../../node_modules/@angular/fire/firebase.app.module';
-import * as googleServiceJSON from '../../../google-services.json';
 import {
   AlertController
 } from '@ionic/angular';
@@ -64,6 +58,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-login',
   templateUrl: 'login.page.html',
   styleUrls: ['login.page.scss'],
@@ -103,7 +98,6 @@ export class LoginPage implements OnInit {
     public loadingController: LoadingController,
     private FcmService: FcmService,
     public events: Events,
-    public AngularFireModule: AngularFireModule,
     public alertController: AlertController
   ) {
 
@@ -210,12 +204,6 @@ export class LoginPage implements OnInit {
                     this.getAllShipmentsAPI();
 
                     if (result['data'].pushStatus == 'not-send') {
-
-                      googleServiceJSON['default'] = result['data'].fcmJsonFile;
-
-                      console.log(googleServiceJSON['default']);
-
-                      AngularFireModule.initializeApp(result['data'].fcm);
 
                       this.FcmService.onTokenRefresh();
                     }

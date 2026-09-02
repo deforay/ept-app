@@ -9,7 +9,7 @@ import { IndividualReportPageRoutingModule } from './individual-report-routing.m
 import { IndividualReportPage } from './individual-report.page';
 import { MaterialModule } from '../material.module';
 import { ComponentsModule } from '../component/components.module';
-import { Ng2SearchPipeModule } from 'ng2-search-filter';
+import { SearchFilterPipe } from '../pipes/search-filter.pipe';
 @NgModule({
   imports: [
     CommonModule,
@@ -17,7 +17,7 @@ import { Ng2SearchPipeModule } from 'ng2-search-filter';
     IonicModule,
     MaterialModule,
     ComponentsModule,
-    Ng2SearchPipeModule,
+    SearchFilterPipe,
     IndividualReportPageRoutingModule
   ],
   declarations: [IndividualReportPage]

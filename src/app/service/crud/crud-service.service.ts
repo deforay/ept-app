@@ -10,10 +10,10 @@ import {
 } from '@ionic/angular';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   Network
-} from '@ionic-native/network/ngx';
+} from '@awesome-cordova-plugins/network/ngx';
 import {
   AlertService
 } from '../../../app/service/providers';

@@ -1,5 +1,5 @@
 import { Injectable } from '@angular/core';
-import { File } from '@ionic-native/file/ngx';
+import { File } from '@awesome-cordova-plugins/file/ngx';
 
 @Injectable({
   providedIn: 'root'

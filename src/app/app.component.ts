@@ -8,16 +8,16 @@ import {
 }from '@ionic/angular';
 import {
   SplashScreen
-}from '@ionic-native/splash-screen/ngx';
+}from '@awesome-cordova-plugins/splash-screen/ngx';
 import {
   StatusBar
-}from '@ionic-native/status-bar/ngx';
+}from '@awesome-cordova-plugins/status-bar/ngx';
 import {
   AppVersion
-}from '@ionic-native/app-version/ngx';
+}from '@awesome-cordova-plugins/app-version/ngx';
 import {
   Storage
-}from '@ionic/storage';
+}from '@ionic/storage-angular';
 import {
   AlertService,
   ToastService,
@@ -28,10 +28,8 @@ import {
 } from '../app/service/crud/crud-service.service';
 import {
   Network
-}from '@ionic-native/network/ngx';
-import {
-  Events
-}from '@ionic/angular';
+}from '@awesome-cordova-plugins/network/ngx';
+import { Events } from './service/events/events.service';
 import {
   NetworkService
 }from '../app/service/network.service';
@@ -40,7 +38,7 @@ import {
 }from '@angular/router';
 import {
   File
-}from '@ionic-native/file/ngx';
+}from '@awesome-cordova-plugins/file/ngx';
 import {
   ROOT_DIRECTORY,
   INDIVIDUAL_REPORTS_DIRECTORY,
@@ -54,6 +52,7 @@ import {
   ToastController
 }from '@ionic/angular';
 @Component({
+  standalone: false,
     selector: 'app-root',
     templateUrl: 'app.component.html',
     styleUrls: ['app.component.scss']

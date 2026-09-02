@@ -10,21 +10,21 @@
  */
 
 /* Core CSS required for Ionic components to work properly */
-@import "~@ionic/angular/css/core.css";
-@import '~material-design-icons/iconfont/material-icons.css'; // Import Materialize css locally
+@import "@ionic/angular/css/core.css";
+@import 'material-design-icons/iconfont/material-icons.css'; // Import Materialize css locally
 
 /* Basic CSS for apps built with Ionic */
-@import "~@ionic/angular/css/normalize.css";
-@import "~@ionic/angular/css/structure.css";
-@import "~@ionic/angular/css/typography.css";
-@import '~@ionic/angular/css/display.css';
+@import "@ionic/angular/css/normalize.css";
+@import "@ionic/angular/css/structure.css";
+@import "@ionic/angular/css/typography.css";
+@import '@ionic/angular/css/display.css';
 
 /* Optional CSS utils that can be commented out */
-@import "~@ionic/angular/css/padding.css";
-@import "~@ionic/angular/css/float-elements.css";
-@import "~@ionic/angular/css/text-alignment.css";
-@import "~@ionic/angular/css/text-transformation.css";
-@import "~@ionic/angular/css/flex-utils.css";
+@import "@ionic/angular/css/padding.css";
+@import "@ionic/angular/css/float-elements.css";
+@import "@ionic/angular/css/text-alignment.css";
+@import "@ionic/angular/css/text-transformation.css";
+@import "@ionic/angular/css/flex-utils.css";
 //@import '@angular/material/prebuilt-themes/deeppurple-amber.css';
 
 
@@ -242,7 +242,7 @@ ion-toast {
     font-weight: 700;
 }
 
-input.mat-input-element {
+input.mat-mdc-input-element {
     font-size: 15px;
 }
 
@@ -363,7 +363,7 @@ ion-toast{
 .loading-content.sc-ion-loading-ios{
     font-weight: 400;
 }
-mat-chip-list.shipmentCodeList>.mat-chip-list-wrapper{
+mat-chip-set.shipmentCodeList > .mdc-evolution-chip-set__chips{
     display: block!important;
 }
 .text-center.native-btn{
@@ -398,54 +398,53 @@ ion-button
 
 
 /* Materialize Global CSS Changes Starts*/
-// .mat-checkbox-background{
+// .mdc-checkbox__background{
 //     background-color: #3c8dbc!important;
 // }
-.mat-fab.mat-primary,
-.mat-flat-button.mat-primary,
-.mat-mini-fab.mat-primary,
-.mat-raised-button.mat-primary {
+.mat-mdc-fab.mat-primary,
+.mat-mdc-unelevated-button.mat-primary,
+.mat-mdc-mini-fab.mat-primary,
+.mat-mdc-raised-button.mat-primary {
     background: #3c8dbc;
 }
 
-.mat-radio-button.mat-accent .mat-radio-inner-circle,
-.mat-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
-.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-persistent-ripple,
-.mat-radio-button.mat-accent:active .mat-radio-persistent-ripple {
+.mat-mdc-radio-button.mat-accent .mdc-radio__inner-circle,
+.mat-mdc-radio-button.mat-accent .mat-radio-ripple .mat-ripple-element:not(.mat-radio-persistent-ripple),
+.mat-mdc-radio-button.mat-accent.mat-mdc-radio-checked .mat-radio-persistent-ripple,
+.mat-mdc-radio-button.mat-accent:active .mat-radio-persistent-ripple {
     background-color: #42A5F5 !important;
 }
 
-.mat-radio-button.mat-accent.mat-radio-checked .mat-radio-outer-circle {
+.mat-mdc-radio-button.mat-accent.mat-mdc-radio-checked .mdc-radio__outer-circle {
     border-color: #1565C0 !important;
 }
 
-.mat-select {
+.mat-mdc-select {
     font-size: 13px;
 }
 
-.mat-select-panel {
-    margin-top: 40px;
-}
-
-.mat-focused .mat-form-field-required-marker {
+.mat-focused .mat-mdc-form-field-required-marker {
     color: #F44336;
 }
 
 // .mat-form-field-appearance-outline.grid-col-form.mat-form-field-hide-placeholder .mat-form-field-outline-thick ,
 // .mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick,
-// .mat-form-field.mat-focused .mat-form-field-label{
+// .mat-mdc-form-field.mat-focused .mdc-floating-label{
 //     color: #3c8dbc ;
 // }
-.mat-form-field-appearance-outline.mat-focused .mat-form-field-outline-thick,
-.mat-form-field.mat-focused .mat-form-field-label {
+.mat-form-field-appearance-outline.mat-focused .mdc-notched-outline > * {
+    border-color: #3c8dbc;
+}
+
+.mat-mdc-form-field.mat-focused .mdc-floating-label {
     color: #3c8dbc;
 }
 
-.mat-form-field.mat-form-field.mat-focused.mat-form-field-invalid .mat-form-field-label {
+.mat-mdc-form-field.mat-form-field.mat-focused.mat-form-field-invalid .mdc-floating-label {
     color: #F44336;
 }
 
-.mat-input-element {
+.mat-mdc-input-element {
 
     caret-color:
         #3c8dbc // #673ab7;
@@ -456,84 +455,79 @@ ion-button
     color: #000000 !important;
 }
 
-// .mat-input-element:disabled{
+// .mat-mdc-input-element:disabled{
 //     color: #000000 !important;
 // }
-// .mat-select-disabled .mat-select-value{
+// .mat-mdc-select-disabled .mat-mdc-select-value{
 //     color: #000000 !important;
 // }
-.mat-checkbox-disabled .mat-checkbox-label {
+.mat-mdc-checkbox-disabled .mdc-label {
     color: #000000 !important;
 }
 
-// .mat-radio-button.mat-radio-disabled .mat-radio-label-content{
+// .mat-mdc-radio-button.mat-radio-disabled .mdc-label{
 //     color: #000000 !important;
 // }
-// .datepicker-input.mat-input-element:disabled,
-// .datepicker-input.mat-input-element::placeholder{
+// .datepicker-input.mat-mdc-input-element:disabled,
+// .datepicker-input.mat-mdc-input-element::placeholder{
 //    color: #000000 !important;
 // }
 
-.mat-form-field-appearance-outline .mat-form-field-outline-thick {
-    color: #3c8dbc;
+.mat-form-field-appearance-outline .mdc-notched-outline > * {
+    border-color: #3c8dbc;
 }
 
-.mat-form-field.grid-col-form {
+.mat-mdc-form-field.grid-col-form {
     //    width:calc(100% - 10px) !important;
     width: 100% !important;
 }
 
-.mat-form-field .mat-form-field-wrapper {
+.mat-mdc-form-field .mat-mdc-text-field-wrapper {
     padding-bottom: 0px;
 }
 
-.mat-form-field.mat-form-field-invalid .mat-form-field-wrapper {
+.mat-mdc-form-field.mat-form-field-invalid .mat-mdc-text-field-wrapper {
     padding-bottom: 25px;
 
 }
 
-.mat-form-field-subscript-wrapper {
+.mat-mdc-form-field-subscript-wrapper {
     margin-top: 0 !important;
 }
 
-.mat-form-field-appearance-outline .mat-form-field-wrapper {
+.mat-form-field-appearance-outline .mat-mdc-text-field-wrapper {
     margin: .07em 0 !important;
 }
 
-.mat-form-field-label mat-label {
+.mdc-floating-label mat-label {
     float: left !important;
     padding-right: 5px;
     font-size: 13px;
     color: black;
 }
 
-.mat-form-field.mat-form-field.mat-focused.mat-form-field-invalid .mat-form-field-label-wrapper .mat-form-field-label {
+.mat-mdc-form-field.mat-form-field.mat-focused.mat-form-field-invalid .mdc-floating-label {
     font-size: 14px;
 
 }
 
-.mat-form-field-appearance-outline .mat-form-field-flex {
-    .mat-form-field-infix {
+.mat-form-field-appearance-outline .mat-mdc-form-field-flex {
+    .mat-mdc-form-field-infix {
         padding: 0.7em 0 0.7em 0 !important;
 
-        .mat-form-field-label-wrapper {
-            top: -1em;
-            padding-top: 1em;
-
-        }
     }
 }
 
-.vlCalc.mat-form-field-appearance-outline .mat-form-field-outline-gap {
+.vlCalc.mat-form-field-appearance-outline .mdc-notched-outline__notch {
     width: 190px !important;
 
 }
 
-.vlResultInput.mat-form-field-appearance-outline .mat-form-field-outline-gap {
+.vlResultInput.mat-form-field-appearance-outline .mdc-notched-outline__notch {
     width: 150px !important;
 }
 
-.mat-error {
+.mat-mdc-form-field-error {
     margin-left: -6px;
     font-size: 13px;
     margin-top: 2px;
@@ -542,7 +536,7 @@ ion-button
     }
 }
 
-.mat-hint {
+.mat-mdc-form-field-hint {
     color: rgba(0, 0, 0, 0.71);
     margin-top: 15px;
     padding: 10px 0 !important;
@@ -604,13 +598,13 @@ ion-button
 //     height: 45px !important;
 // }
 
-.mat-card.main-card-panel {
+.mat-mdc-card.main-card-panel {
     padding: 0;
     width: calc(100% - 20px) !important;
     padding-bottom: 15px;
     margin: 15px auto !important;
 
-    .mat-card-title {
+    .mat-mdc-card-title {
         height: 31px !important;
         background-color: var(--ion-color-light-purple) !important;
         font-size: 15px !important;
@@ -622,42 +616,33 @@ ion-button
     }
 }
 
-.mat-chip-list-wrapper {
+.mat-mdc-chip-set {
     margin: 11px !important;
     margin-top: 5px !important;
     margin-bottom: -10px !important;
 }
 
-.mat-standard-chip {
+.mat-mdc-standard-chip {
     font-size: 14px !important;
     min-height: 25px !important;
     color: rgba(0, 0, 0, .87) !important;
 }
 
-.cust-form.mat-form-field-appearance-outline .mat-form-field-flex {
-    .mat-form-field-infix {
+.cust-form.mat-form-field-appearance-outline .mat-mdc-form-field-flex {
+    .mat-mdc-form-field-infix {
         //@extend: 0em 0 0.7em 0 !important;
         padding: .5em 0 !important;
 
-        .mat-form-field-label-wrapper {
-            top: -1em;
-            padding-top: 1em;
-            font-size: 12px !important;
-        }
     }
 }
-//   .mat-form-field-appearance-outline .mat-form-field-infix {
+//   .mat-form-field-appearance-outline .mat-mdc-form-field-infix {
 //     padding: 10px;
 //  }
-//  .mat-form-field-infix {
+//  .mat-mdc-form-field-infix {
 //       padding:5;
 //       border-top: 0;
 //  }
 
 //  //change top and padding-top as per required
 
-//  .mat-form-field-label-wrapper {
-//      top: 5.84375em;
-//      padding-top: 5.84375em;
-//  }
 // /* Materialize Global CSS Changes Ends*/

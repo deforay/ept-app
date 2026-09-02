@@ -1,43 +1,37 @@
-import { NgModule} from '@angular/core';
+import { NgModule, inject, provideAppInitializer } from '@angular/core';
 import { BrowserModule } from '@angular/platform-browser';
 import { RouteReuseStrategy } from '@angular/router';
-import { Platform } from '@ionic/angular';
-import { IonicModule, IonicRouteStrategy } from '@ionic/angular';
-import { SplashScreen } from '@ionic-native/splash-screen/ngx';
-import { StatusBar } from '@ionic-native/status-bar/ngx';
+import { IonicModule, IonicRouteStrategy, Platform } from '@ionic/angular';
+import { SplashScreen } from '@awesome-cordova-plugins/splash-screen/ngx';
+import { StatusBar } from '@awesome-cordova-plugins/status-bar/ngx';
 import { AppComponent } from './app.component';
 import { AppRoutingModule } from './app-routing.module';
 import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 //providers
-import { ToastService,LoaderService,AlertService} from '../app/service/providers';
-import { HttpClientModule } from '@angular/common/http';
-import { IonicStorageModule } from '@ionic/storage';
-import { AppVersion } from '@ionic-native/app-version/ngx';
-import { Market } from '@ionic-native/market/ngx';
-import { AndroidPermissions } from '@ionic-native/android-permissions/ngx';
-import { Network } from '@ionic-native/network/ngx';
-import { NetworkService} from '../app/service/network.service';
-import { CrudServiceService} from '../app/service/crud/crud-service.service';
+import { ToastService, LoaderService, AlertService } from '../app/service/providers';
+import { provideHttpClient } from '@angular/common/http';
+import { IonicStorageModule, Storage } from '@ionic/storage-angular';
+import { AppVersion } from '@awesome-cordova-plugins/app-version/ngx';
+import { Market } from '@awesome-cordova-plugins/market/ngx';
+import { AndroidPermissions } from '@awesome-cordova-plugins/android-permissions/ngx';
+import { Network } from '@awesome-cordova-plugins/network/ngx';
+import { NetworkService } from '../app/service/network.service';
+import { CrudServiceService } from '../app/service/crud/crud-service.service';
 import { LocalShipmentFormService } from '../app/service/localShipmentForm/local-shipment-form.service';
-import { NgForm} from '@angular/forms';
-import { FileTransfer, FileUploadOptions, FileTransferObject } from '@ionic-native/file-transfer/ngx';
-import { File } from '@ionic-native/file/ngx';
-import { InAppBrowser } from '@ionic-native/in-app-browser/ngx';
-import { FileOpener } from '@ionic-native/file-opener/ngx';
-import { ShipmentFilterComponent} from '../app/shipment-filter/shipment-filter.component';
-import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
+import { NgForm } from '@angular/forms';
+import { FileTransfer } from '@awesome-cordova-plugins/file-transfer/ngx';
+import { File } from '@awesome-cordova-plugins/file/ngx';
+import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
+import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
+import { ShipmentFilterComponent } from '../app/shipment-filter/shipment-filter.component';
+import { FormsModule, ReactiveFormsModule } from '@angular/forms';
 import { FcmService } from '../app/fcm.service';
-import { AngularFireModule } from 'angularfire2';
-import { AngularFirestoreModule } from 'angularfire2/firestore';
-import { FirebaseX } from '@ionic-native/firebase-x/ngx';
-import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
+import { FirebaseX } from '@awesome-cordova-plugins/firebase-x/ngx';
+import { FingerprintAIO } from '@awesome-cordova-plugins/fingerprint-aio/ngx';
 @NgModule({
   declarations: [
     AppComponent,
-    ShipmentFilterComponent,
-   ],
-  entryComponents: [
     ShipmentFilterComponent,
   ],
   imports: [
@@ -46,14 +40,15 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
     AppRoutingModule,
     MaterialModule,
     BrowserAnimationsModule,
-    HttpClientModule,
     FormsModule,
     ReactiveFormsModule,
-    AngularFireModule,
-    AngularFirestoreModule,
     IonicStorageModule.forRoot(),
   ],
   providers: [
+    provideHttpClient(),
+    // @ionic/storage 3+ opens its backing store lazily; open it before any
+    // component or service issues a get/set.
+    provideAppInitializer(() => inject(Storage).create()),
     StatusBar,
     SplashScreen,
     CrudServiceService,
@@ -74,11 +69,7 @@ import { FingerprintAIO } from '@ionic-native/fingerprint-aio/ngx';
     NgForm,
     FcmService,
     FirebaseX,
-    FingerprintAIO, 
-    { 
-      provide: RouteReuseStrategy, 
-      useClass: IonicRouteStrategy 
-    },
+    FingerprintAIO,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],
   bootstrap: [AppComponent]

@@ -9,9 +9,10 @@ import {
 } from '@angular/router';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 
 @Component({
+  standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
   styleUrls: ['./header.component.scss'],

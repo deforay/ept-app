@@ -9,13 +9,11 @@ import {
 } from '@angular/router';
 import {
   Market
-} from '@ionic-native/market/ngx';
+} from '@awesome-cordova-plugins/market/ngx';
 import {
   Storage
-} from '@ionic/storage';
-import {
-  Events
-} from '@ionic/angular';
+} from '@ionic/storage-angular';
+import { Events } from '../events/events.service';
 @Injectable({
   providedIn: 'root'
 })

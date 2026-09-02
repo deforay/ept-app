@@ -8,14 +8,14 @@ import {
 import * as _ from 'lodash';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   Router
 } from '@angular/router';
 import {
-  Events,
   ModalController
 } from '@ionic/angular';
+import { Events } from '../service/events/events.service';
 import {
   LoaderService,
   AlertService
@@ -26,9 +26,10 @@ import {
 import {
   LoadingController
 } from '@ionic/angular';
-import { Network } from '@ionic-native/network/ngx';
+import { Network } from '@awesome-cordova-plugins/network/ngx';
 
 @Component({
+  standalone: false,
   selector: 'app-sync-all-shipments',
   templateUrl: './sync-all-shipments.page.html',
   styleUrls: ['./sync-all-shipments.page.scss'],

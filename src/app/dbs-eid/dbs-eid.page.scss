@@ -20,7 +20,7 @@ ion-row {
         margin:5px !important;
     }
     } 
-    .mat-card ion-row ion-col{
+    .mat-mdc-card ion-row ion-col{
         p{
             font-size: 13px !important; 
             margin-bottom: 5px !important;
@@ -59,15 +59,15 @@ ion-row {
        margin: 0;
        font-size: 13px;
    }
-   .mat-card{
+   .mat-mdc-card{
        padding:0 !important;
        margin: -1px !important;
        margin-bottom: 10px !important;
    }
-//    .mat-card.dynamic-card{
+//    .mat-mdc-card.dynamic-card{
 
 //    }
-   .mat-card .mat-card-title {
+   .mat-mdc-card .mat-mdc-card-title {
        font-size: 14px !important;
        padding: 5px 10px !important;
        margin: 0!important;
@@ -75,11 +75,11 @@ ion-row {
        border-top-left-radius: 4px !important;
        border-top-right-radius: 4px!important ;
    }
-   .mat-radio-group .mat-radio-button{
+   .mat-mdc-radio-group .mat-mdc-radio-button{
     padding-left: 15px !important;
     padding-right: 15px !important;
    }
-   .mat-card .mat-card-content{
+   .mat-mdc-card .mat-mdc-card-content{
     padding: 10px !important;
     padding-top: 0 !important;
    }

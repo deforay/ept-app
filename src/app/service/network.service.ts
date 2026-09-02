@@ -3,13 +3,11 @@ import {
 } from '@angular/core';
 import {
   Network
-} from '@ionic-native/network/ngx';
-import {
-  Events
-} from '@ionic/angular';
+} from '@awesome-cordova-plugins/network/ngx';
+import { Events } from './events/events.service';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   ToastService,
   AlertService

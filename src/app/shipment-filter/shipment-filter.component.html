@@ -1,62 +1,66 @@
 <ion-card>
-<ion-grid>
-  <ion-row>
-    <ion-col size="12" class="grid-input-col">
-      <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-        <mat-label>Shipment Status</mat-label>
-        <mat-select [(ngModel)]="shipmentStatusFliter" name="shipmentStatus" #shipmentStatus="ngModel" >
-          <mat-option>--Select--</mat-option>
-          <mat-option value="activeNotResp">Active and Not Responded</mat-option>
-          <mat-option value="activeResp">Active and Responded</mat-option>
-          <mat-option value="closed">Closed</mat-option>    
-          <mat-option value="excluded">Delayed/Excluded</mat-option>
-        </mat-select>
-      </mat-form-field>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col size="12" class="grid-input-col">
-    <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-      <mat-label>Participants</mat-label>
-      <mat-select [(ngModel)]="participantFliter" name="participant" #participant="ngModel"  [compareWith]="objCompFnParticipants" (selectionChange)="selectedParticipantObj(participantFliter)">
-        <mat-option>--Select--</mat-option>
-        <mat-option *ngFor="let item of participantsArray" [value]="item">
-          {{item.first_name + item.last_name}}
-        </mat-option>
-      </mat-select>
-    </mat-form-field>
-    </ion-col>
-  </ion-row>
-  <ion-row>
-    <ion-col size="12"  class="grid-input-col">
-      <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-        <mat-label>Scheme Type</mat-label>
-        <mat-select [(ngModel)]="schemeTypeFliter" name="schemeType" #schemeType="ngModel" [compareWith]="objCompFnSchemeType" (selectionChange)="selectedSchemeObj(schemeTypeFliter)">
-          <mat-option>--Select--</mat-option>
-          <mat-option *ngFor="let item of shipmentsArray" [value]="item">
-            {{item.scheme_name}}
-          </mat-option>
-        </mat-select>
-      </mat-form-field>
-    </ion-col>
+  <ion-grid>
+    <ion-row>
+      <ion-col size="12" class="grid-input-col">
+        <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+          <mat-label>Shipment Status</mat-label>
+          <mat-select [(ngModel)]="shipmentStatusFliter" name="shipmentStatus" #shipmentStatus="ngModel" >
+            <mat-option>--Select--</mat-option>
+            <mat-option value="activeNotResp">Active and Not Responded</mat-option>
+            <mat-option value="activeResp">Active and Responded</mat-option>
+            <mat-option value="closed">Closed</mat-option>
+            <mat-option value="excluded">Delayed/Excluded</mat-option>
+          </mat-select>
+        </mat-form-field>
+      </ion-col>
     </ion-row>
-</ion-grid>
-<ion-footer>
-  <ion-toolbar class="filterToolbar">
-    <ion-grid class="filterFooterGrid">
-      <ion-row>
-        <ion-col size="6">
-          <ion-button size="small"
+    <ion-row>
+      <ion-col size="12" class="grid-input-col">
+        <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+          <mat-label>Participants</mat-label>
+          <mat-select [(ngModel)]="participantFliter" name="participant" #participant="ngModel"  [compareWith]="objCompFnParticipants" (selectionChange)="selectedParticipantObj(participantFliter)">
+            <mat-option>--Select--</mat-option>
+            @for (item of participantsArray; track item) {
+              <mat-option [value]="item">
+                {{item.first_name + item.last_name}}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="12"  class="grid-input-col">
+        <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+          <mat-label>Scheme Type</mat-label>
+          <mat-select [(ngModel)]="schemeTypeFliter" name="schemeType" #schemeType="ngModel" [compareWith]="objCompFnSchemeType" (selectionChange)="selectedSchemeObj(schemeTypeFliter)">
+            <mat-option>--Select--</mat-option>
+            @for (item of shipmentsArray; track item) {
+              <mat-option [value]="item">
+                {{item.scheme_name}}
+              </mat-option>
+            }
+          </mat-select>
+        </mat-form-field>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+  <ion-footer>
+    <ion-toolbar class="filterToolbar">
+      <ion-grid class="filterFooterGrid">
+        <ion-row>
+          <ion-col size="6">
+            <ion-button size="small"
               class="text-center native-btn filterButton" (click)="applyFilter()">Apply
             </ion-button>
-        </ion-col>
-        <ion-col size="6">
-          <ion-button size="small"
-          class="text-center native-btn filterButton resetButton" (click)="resetFilter()">Reset
-        </ion-button>
-        </ion-col>
-      </ion-row>
-    </ion-grid>
-  </ion-toolbar>
-</ion-footer>
+          </ion-col>
+          <ion-col size="6">
+            <ion-button size="small"
+              class="text-center native-btn filterButton resetButton" (click)="resetFilter()">Reset
+            </ion-button>
+          </ion-col>
+        </ion-row>
+      </ion-grid>
+    </ion-toolbar>
+  </ion-footer>
 </ion-card>

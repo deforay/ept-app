@@ -25,3 +25,6 @@ platforms/
 
 # Bower
 bower_components/
+
+# Angular CLI cache
+.angular/

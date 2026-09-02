@@ -1,5 +1,5 @@
 import { Injectable } from "@angular/core";
-import { Storage } from "@ionic/storage";
+import { Storage } from "@ionic/storage-angular";
 import { LoaderService, AlertService } from "../../../app/service/providers";
 import { Router } from "@angular/router";
 import _ from "lodash";

@@ -3,7 +3,7 @@ import {
 } from '@angular/core';
 import {
   FirebaseX
-} from '@ionic-native/firebase-x/ngx';
+} from '@awesome-cordova-plugins/firebase-x/ngx';
 import {
   Platform
 } from '@ionic/angular';
@@ -12,7 +12,7 @@ import {
 } from '../app/service/crud/crud-service.service';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   Observable
 } from 'rxjs';

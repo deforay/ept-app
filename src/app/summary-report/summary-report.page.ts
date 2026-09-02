@@ -12,31 +12,30 @@ import {
 import { CrudServiceService} from '../../app/service/crud/crud-service.service';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   FileTransfer,
   FileUploadOptions,
   FileTransferObject
-} from '@ionic-native/file-transfer/ngx';
+} from '@awesome-cordova-plugins/file-transfer/ngx';
 import {
   File
-} from '@ionic-native/file/ngx';
+} from '@awesome-cordova-plugins/file/ngx';
 import {
   FileOpener
-} from '@ionic-native/file-opener/ngx';
+} from '@awesome-cordova-plugins/file-opener/ngx';
 import {
   ROOT_DIRECTORY,SUMMARY_REPORTS_DIRECTORY
 } from '../../app/service/constant';
 import {
   Network
-} from '@ionic-native/network/ngx';
-import {
-  Events
-} from '@ionic/angular';
+} from '@awesome-cordova-plugins/network/ngx';
+import { Events } from '../service/events/events.service';
 import {
   LoadingController
 } from '@ionic/angular';
 @Component({
+  standalone: false,
   selector: 'app-summary-report',
   templateUrl: './summary-report.page.html',
   styleUrls: ['./summary-report.page.scss'],

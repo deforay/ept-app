@@ -5,7 +5,6 @@ import { IonicModule } from '@ionic/angular';
 import { RouterModule } from '@angular/router';
 import { LoginPage } from './login.page';
 import { MaterialModule } from '../material.module';
-import { AngularFireModule } from '../../../node_modules/@angular/fire/firebase.app.module';
 @NgModule({
   imports: [
     CommonModule,
@@ -19,9 +18,6 @@ import { AngularFireModule } from '../../../node_modules/@angular/fire/firebase.
         component: LoginPage
       }
     ])
-  ],
-  providers: [
-    AngularFireModule
   ],
   declarations: [LoginPage]
 })

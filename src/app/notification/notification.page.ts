@@ -10,20 +10,19 @@ import {
 } from '../../app/service/providers';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   Router
 } from '@angular/router';
 import {
   Network
-} from '@ionic-native/network/ngx';
+} from '@awesome-cordova-plugins/network/ngx';
 import {
   stripcolor
 } from '../service/constant';
-import {
-  Events
-} from '@ionic/angular';
+import { Events } from '../service/events/events.service';
 @Component({
+  standalone: false,
   selector: 'app-notification',
   templateUrl: './notification.page.html',
   styleUrls: ['./notification.page.scss'],

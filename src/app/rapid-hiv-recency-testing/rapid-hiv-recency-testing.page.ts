@@ -10,7 +10,7 @@ import {
 } from '@angular/forms';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   Router,
   ActivatedRoute
@@ -32,7 +32,7 @@ import {
 } from '@angular/platform-browser'
 import {
   Network
-} from '@ionic-native/network/ngx';
+} from '@awesome-cordova-plugins/network/ngx';
 import {
   LocalShipmentFormService
 } from '../../app/service/localShipmentForm/local-shipment-form.service';
@@ -47,6 +47,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 @Component({
+  standalone: false,
   selector: 'app-rapid-hiv-recency-testing',
   templateUrl: './rapid-hiv-recency-testing.page.html',
   styleUrls: ['./rapid-hiv-recency-testing.page.scss'],
