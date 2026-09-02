@@ -1,4 +1,4 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { Router } from "@angular/router";
 import { Storage } from "@ionic/storage-angular";
 import {
@@ -15,6 +15,7 @@ import { FingerprintAIO } from "@awesome-cordova-plugins/fingerprint-aio/ngx";
   standalone: false,
   selector: "app-enter-app-password",
   templateUrl: "./enter-app-password.page.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./enter-app-password.page.scss"],
 })
 export class EnterAppPasswordPage implements OnInit {

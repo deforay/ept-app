@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   Router
@@ -44,6 +45,7 @@ import { Events } from '../service/events/events.service';
   standalone: false,
   selector: 'app-individual-report',
   templateUrl: './individual-report.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./individual-report.page.scss'],
 })
 export class IndividualReportPage {

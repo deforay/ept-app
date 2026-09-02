@@ -10,7 +10,7 @@ import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 import { MaterialModule } from './material.module';
 //providers
 import { ToastService, LoaderService, AlertService } from '../app/service/providers';
-import { provideHttpClient } from '@angular/common/http';
+import { provideHttpClient, withXhr } from '@angular/common/http';
 import { IonicStorageModule, Storage } from '@ionic/storage-angular';
 import { AppVersion } from '@awesome-cordova-plugins/app-version/ngx';
 import { Market } from '@awesome-cordova-plugins/market/ngx';
@@ -46,7 +46,7 @@ import { FingerprintAIO } from '@awesome-cordova-plugins/fingerprint-aio/ngx';
   ],
   providers: [
     provideIonicAngular(),
-    provideHttpClient(),
+    provideHttpClient(withXhr()),
     // @ionic/storage 3+ opens its backing store lazily; open it before any
     // component or service issues a get/set.
     provideAppInitializer(() => inject(Storage).create()),

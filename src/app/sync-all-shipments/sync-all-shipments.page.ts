@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   syncDataLimit
@@ -32,6 +33,7 @@ import { Network } from '@awesome-cordova-plugins/network/ngx';
   standalone: false,
   selector: 'app-sync-all-shipments',
   templateUrl: './sync-all-shipments.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./sync-all-shipments.page.scss'],
 })
 export class SyncAllShipmentsPage implements OnInit {

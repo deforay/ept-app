@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroupDirective, NgForm } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { LoaderService, AlertService } from "../../app/service/providers";
@@ -30,6 +30,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   standalone: false,
   selector: "app-dts-hiv-serology",
   templateUrl: "./dts-hiv-serology.page.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./dts-hiv-serology.page.scss"],
 } )
 export class DTSHIVSerologyPage implements OnInit {

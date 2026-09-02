@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import {
   FormControl,
   FormGroupDirective,
@@ -44,6 +44,7 @@ interface selectArray {
   standalone: false,
   selector: "app-dts-hiv-viralload",
   templateUrl: "./dts-hiv-viralload.page.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./dts-hiv-viralload.page.scss"],
 })
 export class DtsHivViralloadPage implements OnInit {

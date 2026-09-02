@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   Router
@@ -42,6 +43,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   standalone: false,
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./forgot-password.page.scss'],
 })
 

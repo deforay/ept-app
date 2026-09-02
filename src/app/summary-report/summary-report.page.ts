@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   Router
@@ -38,6 +39,7 @@ import {
   standalone: false,
   selector: 'app-summary-report',
   templateUrl: './summary-report.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./summary-report.page.scss'],
 })
 export class SummaryReportPage implements OnInit {

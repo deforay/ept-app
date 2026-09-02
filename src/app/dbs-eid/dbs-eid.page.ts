@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -27,6 +27,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   standalone: false,
   selector: "app-dbs-eid",
   templateUrl: "./dbs-eid.page.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./dbs-eid.page.scss"],
 })
 export class DbsEidPage implements OnInit {

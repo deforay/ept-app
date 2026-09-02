@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   FormControl,
@@ -61,6 +62,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   standalone: false,
   selector: 'app-login',
   templateUrl: 'login.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['login.page.scss'],
 })
 export class LoginPage implements OnInit {

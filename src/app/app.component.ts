@@ -1,6 +1,7 @@
 import {
   Component,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 }from '@angular/core';
 import {
   Platform,
@@ -57,6 +58,7 @@ import { arrowBack, checkmarkCircle, close, sync } from 'ionicons/icons';
   standalone: false,
     selector: 'app-root',
     templateUrl: 'app.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['app.component.scss']
 })
 export class AppComponent {

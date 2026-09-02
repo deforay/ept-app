@@ -1,6 +1,7 @@
 import {
   Component,
   OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   CrudServiceService
@@ -25,6 +26,7 @@ import {
   standalone: false,
   selector: 'app-shipment-filter',
   templateUrl: './shipment-filter.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./shipment-filter.component.scss'],
 })
 export class ShipmentFilterComponent implements OnInit {

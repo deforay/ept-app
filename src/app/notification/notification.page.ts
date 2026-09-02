@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   CrudServiceService
@@ -25,6 +26,7 @@ import { Events } from '../service/events/events.service';
   standalone: false,
   selector: 'app-notification',
   templateUrl: './notification.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./notification.page.scss'],
 })
 export class NotificationPage implements OnInit {

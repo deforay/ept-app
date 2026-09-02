@@ -3,6 +3,7 @@ import {
   Component,
   OnInit,
   Input,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   Router
@@ -15,6 +16,7 @@ import {
   standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {

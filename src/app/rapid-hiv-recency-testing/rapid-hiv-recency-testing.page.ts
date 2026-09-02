@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   FormControl,
@@ -50,6 +51,7 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   standalone: false,
   selector: 'app-rapid-hiv-recency-testing',
   templateUrl: './rapid-hiv-recency-testing.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./rapid-hiv-recency-testing.page.scss'],
 })
 export class RapidHIVRecencyTestingPage implements OnInit {

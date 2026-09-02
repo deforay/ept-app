@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { Router } from "@angular/router";
 import { LoaderService, AlertService } from "../../app/service/providers";
 import { CrudServiceService } from "../../app/service/crud/crud-service.service";
@@ -26,6 +26,7 @@ import { FcmService } from "../../app/fcm.service";
   standalone: false,
   selector: "app-all-pt-schemes",
   templateUrl: "./all-pt-schemes.page.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./all-pt-schemes.page.scss"],
 })
 export class AllPTSchemesPage implements OnInit {
