@@ -21,7 +21,6 @@ import {
   SHIPMENTS_REPORTS_DIRECTORY,
 } from "../../app/service/constant";
 import { ModalController } from "@ionic/angular";
-import { FcmService } from "../../app/fcm.service";
 @Component({
   standalone: false,
   selector: "app-all-pt-schemes",
@@ -64,8 +63,7 @@ search:any;
     private ft: FileTransfer,
     private file: File,
     private fileOpener: FileOpener,
-    public modalController: ModalController,
-    private FcmService: FcmService
+    public modalController: ModalController
   ) {}
 
   ionViewWillEnter(param) {
@@ -318,9 +316,6 @@ search:any;
               this.isViewOnlyAccess = result["data"].viewOnlyAccess;
               this.storage.set("participantLogin", this.partiDetailsArray);
 
-              if (result["data"].pushStatus == "not-send") {
-                this.FcmService.onTokenRefresh();
-              }
               //calling Shipment API();
               this.CrudServiceService.getData(
                 "/api/shipments/get/?authToken=" +

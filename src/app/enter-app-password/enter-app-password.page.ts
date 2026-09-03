@@ -9,7 +9,6 @@ import {
 import { CrudServiceService } from "../../app/service/crud/crud-service.service";
 import { MenuController, LoadingController } from "@ionic/angular";
 import { Events } from '../service/events/events.service';
-import { FcmService } from "../../app/fcm.service";
 import { FingerprintAIO } from "@awesome-cordova-plugins/fingerprint-aio/ngx";
 @Component({
   standalone: false,
@@ -63,7 +62,6 @@ export class EnterAppPasswordPage implements OnInit {
     public loadingCtrl: LoadingController,
     public events: Events,
     public toastService: ToastService,
-    private FcmService: FcmService,
     private faio: FingerprintAIO
   ) {}
 
@@ -146,7 +144,6 @@ this.storage.get("appPin").then((pin) => {
               this.toastService.presentToastWithOptions(
                 "Pin verified successfully"
               );
-              this.FcmService.onTokenRefresh();
               this.storage.set("bindLocalFilterJSON", []);
               this.storage.set("filterValuesJSON", []);
               this.storage.get("participantLogin").then((participantLogin) => {
@@ -230,7 +227,6 @@ this.storage.get("appPin").then((pin) => {
           this.toastService.presentToastWithOptions(
             "Fingerprint verified successfully"
           );
-          this.FcmService.onTokenRefresh();
           this.storage.set("bindLocalFilterJSON", []);
           this.storage.set("filterValuesJSON", []);
           this.storage.get("participantLogin").then((participantLogin) => {
@@ -305,7 +301,6 @@ this.storage.get("appPin").then((pin) => {
           this.toastService.presentToastWithOptions(
             "Fingerprint verified successfully"
           );
-          this.FcmService.onTokenRefresh();
           this.storage.set("bindLocalFilterJSON", []);
           this.storage.set("filterValuesJSON", []);
           this.storage.get("participantLogin").then((participantLogin) => {

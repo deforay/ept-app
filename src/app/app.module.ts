@@ -26,8 +26,6 @@ import { InAppBrowser } from '@awesome-cordova-plugins/in-app-browser/ngx';
 import { FileOpener } from '@awesome-cordova-plugins/file-opener/ngx';
 import { ShipmentFilterComponent } from '../app/shipment-filter/shipment-filter.component';
 import { FormsModule, ReactiveFormsModule } from '@angular/forms';
-import { FcmService } from '../app/fcm.service';
-import { FirebaseX } from '@awesome-cordova-plugins/firebase-x/ngx';
 import { FingerprintAIO } from '@awesome-cordova-plugins/fingerprint-aio/ngx';
 @NgModule({
   declarations: [
@@ -68,8 +66,6 @@ import { FingerprintAIO } from '@awesome-cordova-plugins/fingerprint-aio/ngx';
     InAppBrowser,
     FileOpener,
     NgForm,
-    FcmService,
-    FirebaseX,
     FingerprintAIO,
     { provide: RouteReuseStrategy, useClass: IonicRouteStrategy }
   ],

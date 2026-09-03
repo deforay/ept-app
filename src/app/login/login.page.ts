@@ -44,9 +44,6 @@ import {
 } from '@awesome-cordova-plugins/network/ngx';
 import { Events } from '../service/events/events.service';
 import {
-  FcmService
-} from '../../app/fcm.service';
-import {
   AlertController
 } from '@ionic/angular';
 /** Error when invalid control is dirty, touched, or submitted. */
@@ -98,7 +95,6 @@ export class LoginPage implements OnInit {
     public alertService: AlertService,
     public network: Network,
     public loadingController: LoadingController,
-    private FcmService: FcmService,
     public events: Events,
     public alertController: AlertController
   ) {
@@ -205,10 +201,6 @@ export class LoginPage implements OnInit {
                     this.router.navigate(['/app-password']);
                     this.getAllShipmentsAPI();
 
-                    if (result['data'].pushStatus == 'not-send') {
-
-                      this.FcmService.onTokenRefresh();
-                    }
                     if (result['data'].resendMail) {
 
                       this.resendAlert();

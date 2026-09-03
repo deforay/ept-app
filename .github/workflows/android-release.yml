@@ -8,7 +8,6 @@ name: Android Release
 # ever decoded.
 #
 # Required secrets, scoped to the 'release' environment:
-#   GOOGLE_SERVICES_JSON        base64 of google-services.json
 #   ANDROID_KEYSTORE_BASE64     base64 of the .keystore file
 #   ANDROID_KEYSTORE_PASSWORD   store password
 #   ANDROID_KEY_ALIAS           key alias
@@ -51,18 +50,6 @@ jobs:
       - name: Install SDK platform and build tools
         run: sdkmanager --install "platforms;android-36" "build-tools;36.0.0"
 
-      - name: Restore google-services.json
-        env:
-          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
-        run: |
-          if [ -z "$GOOGLE_SERVICES_JSON" ]; then
-            echo "::error::GOOGLE_SERVICES_JSON secret is not set."
-            exit 1
-          fi
-          printf '%s' "$GOOGLE_SERVICES_JSON" | base64 --decode > google-services.json
-          python3 -c "import json;json.load(open('google-services.json'))" \
-            || { echo "::error::Decoded google-services.json is not valid JSON. Store the secret base64-encoded."; exit 1; }
-
       - name: Use Node 22
         uses: actions/setup-node@v4
         with:
@@ -84,25 +71,8 @@ jobs:
           key: gradle-${{ runner.os }}-${{ hashFiles('package.json', 'config.xml') }}
           restore-keys: gradle-${{ runner.os }}-
 
-      # firebasex must be installed with explicit variables: values written only
-      # into the package.json cordova.plugins block are ignored on install, which
-      # would silently re-enable ad-ID collection.
-      #
-      # The wrapper's plugin.xml names its sub-plugins without versions, so
-      # Cordova fetches each one's npm "latest" tag. For the messaging and
-      # in-app-messaging sub-plugins that tag points at a 1.x patch published
-      # after 2.x, which rejects the 2.x core the other sub-plugins pull in.
-      # Install those two at 2.x first so the wrapper finds them already present.
       - name: Add Android platform
-        run: |
-          npx cordova plugin add cordova-plugin-firebasex-messaging@^2.0.3 cordova-plugin-firebasex-inappmessaging@^2.0.1
-          npx cordova plugin add cordova-plugin-firebasex@20.0.2 \
-            --variable FIREBASE_ANALYTICS_WITHOUT_ADS=true \
-            --variable GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED=false \
-            --variable GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_STORAGE=false \
-            --variable GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_USER_DATA=false \
-            --variable GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS=false
-          npx cordova platform add android
+        run: npx cordova platform add android
 
       - name: Restore signing keystore
         env:

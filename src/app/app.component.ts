@@ -47,9 +47,6 @@ import {
   SHIPMENTS_REPORTS_DIRECTORY
 }from '../app/service/constant';
 import {
-  FcmService
-}from '../app/fcm.service';
-import {
   ToastController
 }from '@ionic/angular';
 import { addIcons } from 'ionicons';
@@ -136,7 +133,6 @@ export class AppComponent {
     public events: Events,
     public ToastService: ToastService,
     private router: Router,
-    private FcmService: FcmService,
     public toastController: ToastController,
     public CrudServiceService: CrudServiceService,
   ) {
@@ -147,7 +143,6 @@ export class AppComponent {
 
   initializeApp() {
     this.platform.ready().then(() => {
-        this.fcmPushNotification();
         //  this.statusBar.styleDefault();
         this.statusBar.styleLightContent();
         this.splashScreen.hide();
@@ -310,38 +305,6 @@ export class AppComponent {
     //   //end
     // }
 
-    this.events.subscribe('setLoggedOutFCM:true', (data) => {
-      this.storage.get('appVersionNumber').then((appVersionNumber) => {
-        if (appVersionNumber) {
-          this.appVersionNumber = appVersionNumber;
-        }
-      })
-      this.storage.get('participantLogin').then((partiLoginResult) => {
-        if (partiLoginResult.authToken) {
-          this.authToken = partiLoginResult.authToken;
-              let tokenJSON = {
-                "appVersion": this.appVersionNumber,
-                "authToken": this.authToken,
-                "token": "loggedOut"
-              }
-              console.log(tokenJSON);
-              this.CrudServiceService.postDataWithoutLoader('/api/participant/push-token', tokenJSON).then((result) => {
-                console.log(result);
-                if (result["status"] == 'success') {
-              
-                }
-              }, (err) => {
-  
-              });
-            }
-          })
-
-    })
-  }
-
-  private fcmPushNotification() {
-    this.FcmService.onNotifications().subscribe((msg) => {
-    });
   }
 
   logout() {

@@ -99,7 +99,6 @@ export class AlertService {
           if (alertName == 'logoutAlert') {
             this.router.navigate(['/login'], {replaceUrl: true});
             this.storage.set("isLogOut", false);
-            this.eventCtrl.publish('setLoggedOutFCM:true');
           }
         }
       },
@@ -110,7 +109,6 @@ export class AlertService {
           if (alertName == 'logoutAlert') {
             this.router.navigate(['/enter-app-password']);
             this.storage.set("isLogOut", false);
-            this.eventCtrl.publish('setLoggedOutFCM:true');
           }
         }
       },
