@@ -1,0 +1,165 @@
+name: Android Release
+
+# Manual, signed build producing an Android App Bundle for Google Play.
+#
+# Kept separate from android-ci.yml because this is the only workflow with
+# access to the signing key. It runs in the 'release' environment, so required
+# reviewers and branch restrictions configured there apply before the key is
+# ever decoded.
+#
+# Required secrets, scoped to the 'release' environment:
+#   GOOGLE_SERVICES_JSON        base64 of google-services.json
+#   ANDROID_KEYSTORE_BASE64     base64 of the .keystore file
+#   ANDROID_KEYSTORE_PASSWORD   store password
+#   ANDROID_KEY_ALIAS           key alias
+#   ANDROID_KEY_PASSWORD        key password
+
+on:
+  workflow_dispatch:
+    inputs:
+      packageType:
+        description: 'bundle for Play; apk for direct distribution'
+        type: choice
+        options: [bundle, apk]
+        default: bundle
+
+concurrency:
+  group: android-release
+  cancel-in-progress: false
+
+permissions:
+  contents: read
+
+jobs:
+  release:
+    runs-on: ubuntu-latest
+    environment: release
+    timeout-minutes: 45
+
+    steps:
+      - uses: actions/checkout@v4
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - name: Set up Android SDK
+        uses: android-actions/setup-android@v3
+
+      - name: Install SDK platform and build tools
+        run: sdkmanager --install "platforms;android-36" "build-tools;36.0.0"
+
+      - name: Restore google-services.json
+        env:
+          GOOGLE_SERVICES_JSON: ${{ secrets.GOOGLE_SERVICES_JSON }}
+        run: |
+          if [ -z "$GOOGLE_SERVICES_JSON" ]; then
+            echo "::error::GOOGLE_SERVICES_JSON secret is not set."
+            exit 1
+          fi
+          printf '%s' "$GOOGLE_SERVICES_JSON" | base64 --decode > google-services.json
+          python3 -c "import json;json.load(open('google-services.json'))" \
+            || { echo "::error::Decoded google-services.json is not valid JSON. Store the secret base64-encoded."; exit 1; }
+
+      - name: Use Node 22
+        uses: actions/setup-node@v4
+        with:
+          node-version: '22'
+          cache: npm
+
+      - name: Install dependencies
+        run: npm ci --no-audit --no-fund
+
+      - name: Build web assets
+        run: npx ng build --configuration production
+
+      - name: Cache Gradle
+        uses: actions/cache@v4
+        with:
+          path: |
+            ~/.gradle/caches
+            ~/.gradle/wrapper
+          key: gradle-${{ runner.os }}-${{ hashFiles('package.json', 'config.xml') }}
+          restore-keys: gradle-${{ runner.os }}-
+
+      # firebasex must be installed with explicit variables: values written only
+      # into the package.json cordova.plugins block are ignored on install, which
+      # would silently re-enable ad-ID collection.
+      #
+      # The wrapper's plugin.xml names its sub-plugins without versions, so
+      # Cordova fetches each one's npm "latest" tag. For the messaging and
+      # in-app-messaging sub-plugins that tag points at a 1.x patch published
+      # after 2.x, which rejects the 2.x core the other sub-plugins pull in.
+      # Install those two at 2.x first so the wrapper finds them already present.
+      - name: Add Android platform
+        run: |
+          npx cordova plugin add cordova-plugin-firebasex-messaging@^2.0.3 cordova-plugin-firebasex-inappmessaging@^2.0.1
+          npx cordova plugin add cordova-plugin-firebasex@20.0.2 \
+            --variable FIREBASE_ANALYTICS_WITHOUT_ADS=true \
+            --variable GOOGLE_ANALYTICS_ADID_COLLECTION_ENABLED=false \
+            --variable GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_STORAGE=false \
+            --variable GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_USER_DATA=false \
+            --variable GOOGLE_ANALYTICS_DEFAULT_ALLOW_AD_PERSONALIZATION_SIGNALS=false
+          npx cordova platform add android
+
+      - name: Restore signing keystore
+        env:
+          KEYSTORE_BASE64: ${{ secrets.ANDROID_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.ANDROID_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.ANDROID_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.ANDROID_KEY_PASSWORD }}
+        run: |
+          for v in KEYSTORE_BASE64 KEYSTORE_PASSWORD KEY_ALIAS KEY_PASSWORD; do
+            if [ -z "${!v}" ]; then echo "::error::Secret $v is not set."; exit 1; fi
+          done
+          printf '%s' "$KEYSTORE_BASE64" | base64 --decode > "$RUNNER_TEMP/release.keystore"
+          # build.json rather than CLI flags, so passwords never reach the
+          # process list or the build log.
+          python3 - <<'PY'
+          import json, os
+          cfg = {"android": {"release": {
+              "keystore": os.path.join(os.environ["RUNNER_TEMP"], "release.keystore"),
+              "storePassword": os.environ["KEYSTORE_PASSWORD"],
+              "alias": os.environ["KEY_ALIAS"],
+              "password": os.environ["KEY_PASSWORD"],
+              "keystoreType": "pkcs12",
+          }}}
+          with open("build.json", "w") as fh:
+              json.dump(cfg, fh)
+          PY
+
+      - name: Build signed release
+        env:
+          PACKAGE_TYPE: ${{ inputs.packageType }}
+        run: npx cordova build android --release -- --packageType="$PACKAGE_TYPE"
+
+      - name: Remove signing material
+        if: always()
+        run: rm -f build.json "$RUNNER_TEMP/release.keystore"
+
+      - name: Verify the signed artifact
+        run: |
+          BT="$ANDROID_SDK_ROOT/build-tools/36.0.0"
+          ARTIFACT=$(find platforms/android/app/build/outputs \( -name '*.aab' -o -name '*-release*.apk' \) | head -1)
+          if [ -z "$ARTIFACT" ]; then echo "::error::No release artifact produced."; exit 1; fi
+          echo "Built $ARTIFACT"
+          if [ "${ARTIFACT##*.}" = "apk" ]; then
+            "$BT/aapt2" dump badging "$ARTIFACT" | grep -E 'package:|targetSdkVersion'
+            if "$BT/aapt2" dump badging "$ARTIFACT" | grep -qE 'AD_ID|ADSERVICES'; then
+              echo "::error::Advertising permissions present in the release build."
+              exit 1
+            fi
+            "$BT/apksigner" verify --print-certs "$ARTIFACT"
+          fi
+
+      - name: Upload release artifact
+        uses: actions/upload-artifact@v4
+        with:
+          name: ept-release-${{ github.sha }}
+          path: |
+            platforms/android/app/build/outputs/**/*.aab
+            platforms/android/app/build/outputs/**/*-release*.apk
+          if-no-files-found: error
+          retention-days: 30

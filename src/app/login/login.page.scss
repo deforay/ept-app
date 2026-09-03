@@ -35,19 +35,10 @@ ion-grid ion-row ion-col {
   color: #f44336;
   padding: 0 5px 0 5px;
 }
-.mat-form-field-appearance-legacy .mat-form-field-label {
-  color: rgb(54, 154, 234) !important;
-}
-.mat-form-field-appearance-legacy .mat-form-field-underline {
-  background-color: rgba(255, 255, 255, 0.7) !important;
-}
-.mat-form-field-appearance-legacy .mat-hint {
-  color: rgba(255, 255, 255, 0.7);
-}
 .float-right {
   font-size: 11px !important ;
 }
-.mat-raised-button.mat-primary.form-btn {
+.mat-mdc-raised-button.mat-primary.form-btn {
   width: 150px !important;
   background: #3c8dbc !important;
 }

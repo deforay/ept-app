@@ -1,0 +1,9 @@
+# Browsers the CSS and JS output must support. The app runs inside the Android
+# System WebView (Chromium), so this mirrors Angular's own support matrix.
+# See https://angular.dev/reference/versions#browser-support
+last 2 Chrome versions
+last 1 Firefox version
+last 2 Edge major versions
+last 2 Safari major versions
+last 2 iOS major versions
+Firefox ESR

@@ -13,9 +13,11 @@
               <button mat-icon-button matSuffix>
                 <mat-icon class="matIcons">email</mat-icon>
               </button>
-              <mat-error *ngIf="profilePrimaryEmail.errors?.pattern">
-              Please enter a valid email address
-            </mat-error>
+              @if (profilePrimaryEmail.errors?.pattern) {
+                <mat-error>
+                  Please enter a valid email address
+                </mat-error>
+              }
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -29,8 +31,10 @@
               <button mat-icon-button matSuffix>
                 <mat-icon class="matIcons">account_box</mat-icon>
               </button>
-              <mat-error *ngIf="!firstName">
+              @if (!firstName) {
+                <mat-error>
                 First Name is required</mat-error>
+              }
             </mat-form-field>
 
           </ion-col>
@@ -45,8 +49,10 @@
               <button mat-icon-button matSuffix>
                 <mat-icon class="matIcons">portrait</mat-icon>
               </button>
-              <mat-error *ngIf="!lastName">
+              @if (!lastName) {
+                <mat-error>
                 Last Name is required</mat-error>
+              }
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -60,11 +66,15 @@
               <button mat-icon-button matSuffix>
                 <mat-icon class="matIcons">email</mat-icon>
               </button>
-              <mat-error *ngIf="profileSecEmailAddress.errors?.pattern">
-                Please enter a valid email address
-              </mat-error>
-              <mat-error *ngIf="!secEmailAddress">
+              @if (profileSecEmailAddress.errors?.pattern) {
+                <mat-error>
+                  Please enter a valid email address
+                </mat-error>
+              }
+              @if (!secEmailAddress) {
+                <mat-error>
                 Secondary e-mail address is required</mat-error>
+              }
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -78,8 +88,10 @@
               <button mat-icon-button matSuffix>
                 <mat-icon class="matIcons">phone_iphone</mat-icon>
               </button>
-              <mat-error *ngIf="!cellPhoneNo">
+              @if (!cellPhoneNo) {
+                <mat-error>
                 Cell Phone Number is required</mat-error>
+              }
             </mat-form-field>
           </ion-col>
         </ion-row>
@@ -106,7 +118,7 @@
           <ion-col></ion-col>
           <ion-col>
             <button ion-col mat-raised-button color="primary" class="text-center submit" type="submit"
-              (click)="updateProfile(profilePageForm)">Submit</button>
+            (click)="updateProfile(profilePageForm)">Submit</button>
           </ion-col>
         </ion-row>
 

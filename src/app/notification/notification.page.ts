@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   CrudServiceService
@@ -10,22 +11,22 @@ import {
 } from '../../app/service/providers';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   Router
 } from '@angular/router';
 import {
   Network
-} from '@ionic-native/network/ngx';
+} from '@awesome-cordova-plugins/network/ngx';
 import {
   stripcolor
 } from '../service/constant';
-import {
-  Events
-} from '@ionic/angular';
+import { Events } from '../service/events/events.service';
 @Component({
+  standalone: false,
   selector: 'app-notification',
   templateUrl: './notification.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./notification.page.scss'],
 })
 export class NotificationPage implements OnInit {

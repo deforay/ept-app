@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule } from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import { IonCard, IonCardContent, IonCardHeader, IonCol, IonContent, IonGrid, IonRefresher, IonRefresherContent, IonRow, IonSkeletonText } from '@ionic/angular';
 
 import { NotificationPageRoutingModule } from './notification-routing.module';
 
@@ -13,7 +13,7 @@ import { ComponentsModule } from '../component/components.module';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
+    IonCard, IonCardContent, IonCardHeader, IonCol, IonContent, IonGrid, IonRefresher, IonRefresherContent, IonRow, IonSkeletonText,
     MaterialModule,
     ComponentsModule,
     NotificationPageRoutingModule

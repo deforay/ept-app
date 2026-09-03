@@ -8,12 +8,14 @@ import {
 import {
   HeaderComponent
 } from '../component/header/header.component';
+import { IonButtons, IonHeader, IonIcon, IonMenuButton, IonTitle, IonToolbar } from '@ionic/angular';
 @NgModule({
   declarations: [
     HeaderComponent,
   ],
   imports: [
-    CommonModule
+    CommonModule,
+    IonButtons, IonHeader, IonIcon, IonMenuButton, IonTitle, IonToolbar
   ],
   schemas: [
     CUSTOM_ELEMENTS_SCHEMA

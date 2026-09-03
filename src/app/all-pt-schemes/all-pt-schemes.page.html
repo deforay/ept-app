@@ -1,17 +1,19 @@
 <ion-header>
   <ion-toolbar class="eptHeaderToolbar">
-          <ion-buttons slot="start">
-            <ion-menu-button></ion-menu-button>
-          </ion-buttons>
-          <ion-title class="eptHeaderTitle">
-            All Shipments
-          </ion-title>
-          <ion-buttons slot="end" (click)="presentPopover($event)" *ngIf="shippingsOriginalArray.length!=0 || NoFilteredData">
-          <button mat-button class="filterButton">
-            <span class="eptHeaderTitle">Filter</span> 
-            <mat-icon class="funnelIcon">filter_list</mat-icon>
+    <ion-buttons slot="start">
+      <ion-menu-button></ion-menu-button>
+    </ion-buttons>
+    <ion-title class="eptHeaderTitle">
+      All Shipments
+    </ion-title>
+    @if (shippingsOriginalArray.length!=0 || NoFilteredData) {
+      <ion-buttons slot="end" (click)="presentPopover($event)">
+        <button mat-button class="filterButton">
+          <span class="eptHeaderTitle">Filter</span>
+          <mat-icon class="funnelIcon">filter_list</mat-icon>
         </button>
-        </ion-buttons>     
+      </ion-buttons>
+    }
   </ion-toolbar>
 </ion-header>
 
@@ -21,286 +23,314 @@
     <ion-refresher-content></ion-refresher-content>
   </ion-refresher>
 
-<ion-searchbar *ngIf="shippingsArray.length!=0" class="searchBar" [(ngModel)]="search" mode="ios" showCancelButton="never"
-#searchShipment="ngModel" name="searchShipment"></ion-searchbar>
+  @if (shippingsArray.length!=0) {
+    <ion-searchbar class="searchBar" [(ngModel)]="search" mode="ios" showCancelButton="never"
+    #searchShipment="ngModel" name="searchShipment"></ion-searchbar>
+  }
 
-  <mat-chip-list aria-label="Fish selection" class="filterChipList" *ngIf="filterJSON">
-    <mat-chip *ngIf="filterJSON.shipmentFilterName">{{filterJSON.shipmentFilterName}}</mat-chip>
-    <mat-chip *ngIf="filterJSON.participantFliterName">{{filterJSON.participantFliterName}}</mat-chip>
-    <mat-chip *ngIf="filterJSON.schemeTypeFliterName">{{filterJSON.schemeTypeFliterName}}</mat-chip>
-  </mat-chip-list>
-
-
-  <ion-card *ngFor="let item of shippingsArray | filter:search" class="eptCard">
-    <ion-card-header class="CardHeader">
-      <p class="ion-text-wrap" class="schemeName"> {{item.schemeName}}</p>
-    </ion-card-header>
-    <ion-card-content class="cardContent">
-      <ion-grid class="shipmentGrid">
-        <ion-row *ngIf="item.shipmentDate">
-          <ion-col size="5">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">Shipment Date</span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col>
-            <p class="ion-text-wrap" class="shipmentValues">
-              <span>{{item.shipmentDate | date :'d MMM y'}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
+  @if (filterJSON) {
+    <mat-chip-set aria-label="Active filters" class="filterChipList">
+      @if (filterJSON.shipmentFilterName) {
+        <mat-chip>{{filterJSON.shipmentFilterName}}</mat-chip>
+      }
+      @if (filterJSON.participantFliterName) {
+        <mat-chip>{{filterJSON.participantFliterName}}</mat-chip>
+      }
+      @if (filterJSON.schemeTypeFliterName) {
+        <mat-chip>{{filterJSON.schemeTypeFliterName}}</mat-chip>
+      }
+    </mat-chip-set>
+  }
 
 
-        <ion-row *ngIf="item.shipmentCode">
-          <ion-col size="5">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">Shipment Code </span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col>
-            <p class="ion-text-wrap" class="shipmentValues">
-              <span>{{item.shipmentCode}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-
-
-        <ion-row *ngIf="item.participantId">
-          <ion-col size="5">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">Participant ID </span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col>
-            <p class="ion-text-wrap" class="shipmentValues">
-              <span>{{item.uniqueIdentifier}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-
-
-
-        <ion-row *ngIf="item.participantName">
-          <ion-col size="5">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">Participant Name </span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col>
-            <p class="ion-text-wrap" class="shipmentValues">
-              <span>{{item.participantName}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-
-
-        <ion-row *ngIf="item.resultDueDate">
-          <ion-col size="5">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">Result Due Date </span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col>
-            <p class="ion-text-wrap" class="shipmentValues">
-              <span>{{item.resultDueDate  | date :'d MMM y'}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="item.responseDate">
-          <ion-col size="5">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">Response Date </span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col>
-            <p class="ion-text-wrap" class="shipmentValues">
-              <span>{{item.responseDate  | date :'d MMM y'}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-       
-        <ion-row *ngIf="item.isSynced=='false'">
-          <ion-col size="12">
-            <p class="ion-text-wrap">
-              <span class="text-title-color unSynced"> Unsynced shipment </span>
-            </p>
-          </ion-col>
-        </ion-row>
-
-        <ion-row>
-
-          <ion-col size="6">
-            <ion-button size="small" *ngIf="item.updatedOn!=''|| item.isSynced=='false'"
-              class="text-center native-btn viewResponse" (click)="goToTestForm(item,'true')">View Response
-            </ion-button>
-          </ion-col>
-
-          <ion-col size="6">
-
-            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && item.responseSwitch=='on' && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no' || item.is_excluded == '' )) && item.isSynced=='' " size="small" class="text-center native-btn enterEdit"
-              (click)="goToTestForm(item,undefined)">Enter Response
-            </ion-button>
-
-            <ion-button *ngIf="isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && item.responseSwitch=='on' && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no' || item.is_excluded == '' )) || item.isSynced=='false' " size="small" class="text-center native-btn enterEdit"
-              (click)="goToTestForm(item,undefined)">Edit Response</ion-button>
-
-            <ion-button *ngIf="item.status=='finalized' && item.invididualReport!=''" size="small" class="text-center native-btn enterEdit download"
-              (click)="downloadReport(item.invididualReport,item.invididualFileName)">Download Report</ion-button>
-          
-          </ion-col>
-        </ion-row>
-
-      </ion-grid>
-
-    </ion-card-content>
-  </ion-card>
+  @for (item of shippingsArray | filter:search; track item) {
+    <ion-card class="eptCard">
+      <ion-card-header class="CardHeader">
+        <p class="ion-text-wrap" class="schemeName"> {{item.schemeName}}</p>
+      </ion-card-header>
+      <ion-card-content class="cardContent">
+        <ion-grid class="shipmentGrid">
+          @if (item.shipmentDate) {
+            <ion-row>
+              <ion-col size="5">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">Shipment Date</span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">:</span>
+                </p>
+              </ion-col>
+              <ion-col>
+                <p class="ion-text-wrap" class="shipmentValues">
+                  <span>{{item.shipmentDate | date :'d MMM y'}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
+          }
+          @if (item.shipmentCode) {
+            <ion-row>
+              <ion-col size="5">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">Shipment Code </span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">:</span>
+                </p>
+              </ion-col>
+              <ion-col>
+                <p class="ion-text-wrap" class="shipmentValues">
+                  <span>{{item.shipmentCode}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
+          }
+          @if (item.participantId) {
+            <ion-row>
+              <ion-col size="5">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">Participant ID </span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">:</span>
+                </p>
+              </ion-col>
+              <ion-col>
+                <p class="ion-text-wrap" class="shipmentValues">
+                  <span>{{item.uniqueIdentifier}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
+          }
+          @if (item.participantName) {
+            <ion-row>
+              <ion-col size="5">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">Participant Name </span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">:</span>
+                </p>
+              </ion-col>
+              <ion-col>
+                <p class="ion-text-wrap" class="shipmentValues">
+                  <span>{{item.participantName}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
+          }
+          @if (item.resultDueDate) {
+            <ion-row>
+              <ion-col size="5">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">Result Due Date </span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">:</span>
+                </p>
+              </ion-col>
+              <ion-col>
+                <p class="ion-text-wrap" class="shipmentValues">
+                  <span>{{item.resultDueDate  | date :'d MMM y'}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
+          }
+          @if (item.responseDate) {
+            <ion-row>
+              <ion-col size="5">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">Response Date </span>
+                </p>
+              </ion-col>
+              <ion-col size="1">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color">:</span>
+                </p>
+              </ion-col>
+              <ion-col>
+                <p class="ion-text-wrap" class="shipmentValues">
+                  <span>{{item.responseDate  | date :'d MMM y'}}</span>
+                </p>
+              </ion-col>
+            </ion-row>
+          }
+          @if (item.isSynced=='false') {
+            <ion-row>
+              <ion-col size="12">
+                <p class="ion-text-wrap">
+                  <span class="text-title-color unSynced"> Unsynced shipment </span>
+                </p>
+              </ion-col>
+            </ion-row>
+          }
+          <ion-row>
+            <ion-col size="6">
+              @if (item.updatedOn!=''|| item.isSynced=='false') {
+                <ion-button size="small"
+                  class="text-center native-btn viewResponse" (click)="goToTestForm(item,'true')">View Response
+                </ion-button>
+              }
+            </ion-col>
+            <ion-col size="6">
+              @if (isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn=='' && item.responseSwitch=='on' && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no' || item.is_excluded == '' )) && item.isSynced=='' ) {
+                <ion-button size="small" class="text-center native-btn enterEdit"
+                  (click)="goToTestForm(item,undefined)">Enter Response
+                </ion-button>
+              }
+              @if (isViewOnlyAccess==false && item.status!='finalized' && item.updatedOn!='' && item.responseSwitch=='on' && ((item.is_excluded == 'yes' && item.responseSwitch=='on') || (item.is_excluded == 'no' || item.is_excluded == '' )) || item.isSynced=='false' ) {
+                <ion-button size="small" class="text-center native-btn enterEdit"
+                (click)="goToTestForm(item,undefined)">Edit Response</ion-button>
+              }
+              @if (item.status=='finalized' && item.invididualReport!='') {
+                <ion-button size="small" class="text-center native-btn enterEdit download"
+                (click)="downloadReport(item.invididualReport,item.invididualFileName)">Download Report</ion-button>
+              }
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  }
 
   <!-- ion-skeleton-text code start -->
-  <ion-card *ngFor="let item of skeltonArray" class="eptCard">
-    <ion-card-header class="CardHeader">
-      <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-    </ion-card-header>
-
-    <ion-card-content class="cardContent">
-      <ion-grid class="shipmentGrid">
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p class="ion-text-wrap">
-              <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p class="ion-text-wrap">
-              <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p class="ion-text-wrap">
-              <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p class="ion-text-wrap">
-              <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p class="ion-text-wrap">
-              <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row class="skeltonRow">
-          <ion-col size="12">
-            <p class="ion-text-wrap">
-              <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
-            </p>
-          </ion-col>
-        </ion-row>
-      </ion-grid>
-    </ion-card-content>
-  </ion-card>
+  @for (item of skeltonArray; track item) {
+    <ion-card class="eptCard">
+      <ion-card-header class="CardHeader">
+        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+      </ion-card-header>
+      <ion-card-content class="cardContent">
+        <ion-grid class="shipmentGrid">
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p class="ion-text-wrap">
+                <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p class="ion-text-wrap">
+                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p class="ion-text-wrap">
+                <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p class="ion-text-wrap">
+                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p class="ion-text-wrap">
+                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+          <ion-row class="skeltonRow">
+            <ion-col size="12">
+              <p class="ion-text-wrap">
+                <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+              </p>
+            </ion-col>
+          </ion-row>
+        </ion-grid>
+      </ion-card-content>
+    </ion-card>
+  }
   <!-- ion-skeleton-text code end -->
 
-  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON==''">
-    <ion-card-content class="cardContent">
-      <p class="noShipments">
-        No active shipments found.<br>
-        If you would like to see previous shipments, please click on the filter button above and choose an appropriate option.<br>
-        Please contact your PT provider if you need support.
-      </p>
+  @if (showNoData && shippingsArray.length==0 && filterJSON=='') {
+    <ion-card class="eptCard noShipments">
+      <ion-card-content class="cardContent">
+        <p class="noShipments">
+          No active shipments found.<br>
+          If you would like to see previous shipments, please click on the filter button above and choose an appropriate option.<br>
+          Please contact your PT provider if you need support.
+        </p>
       </ion-card-content>
-  </ion-card>
+    </ion-card>
+  }
 
 
-  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='activeNotResp'">
-    <ion-card-content class="cardContent">
-    <p class="noShipments">
-      No active shipments found. <br>
-      If you would like to see previous shipments, please click on the filter button above and choose an appropriate option.<br>
-      Please contact your PT provider if you need support.
-    </p>
+  @if (showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='activeNotResp') {
+    <ion-card class="eptCard noShipments">
+      <ion-card-content class="cardContent">
+        <p class="noShipments">
+          No active shipments found. <br>
+          If you would like to see previous shipments, please click on the filter button above and choose an appropriate option.<br>
+          Please contact your PT provider if you need support.
+        </p>
       </ion-card-content>
-  </ion-card>
+    </ion-card>
+  }
 
 
-  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='activeResp'">
-    <ion-card-content class="cardContent">
-    <p class="noShipments">
-      No active shipments that are already responded found. <br>
-      If you would like to see other shipments, please click on the filter button above and choose an appropriate option.<br>
-      Please contact your PT provider if you need support.
-    </p>
+  @if (showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='activeResp') {
+    <ion-card class="eptCard noShipments">
+      <ion-card-content class="cardContent">
+        <p class="noShipments">
+          No active shipments that are already responded found. <br>
+          If you would like to see other shipments, please click on the filter button above and choose an appropriate option.<br>
+          Please contact your PT provider if you need support.
+        </p>
       </ion-card-content>
-  </ion-card>
+    </ion-card>
+  }
 
-  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='closed'">
-    <ion-card-content class="cardContent">
-    <p class="noShipments">
-      No finalized/closed shipments found. <br>
-      If you would like to see other shipments, please click on the filter button above and choose an appropriate option.<br>
-      Please contact your PT provider if you need support.
-    </p>
+  @if (showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='closed') {
+    <ion-card class="eptCard noShipments">
+      <ion-card-content class="cardContent">
+        <p class="noShipments">
+          No finalized/closed shipments found. <br>
+          If you would like to see other shipments, please click on the filter button above and choose an appropriate option.<br>
+          Please contact your PT provider if you need support.
+        </p>
       </ion-card-content>
-  </ion-card>
+    </ion-card>
+  }
 
 
-  <ion-card class="eptCard noShipments" *ngIf="showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='excluded'">
-    <ion-card-content class="cardContent">
-    <p class="noShipments">
-      No delayed/excluded shipments found. <br>
-      If you would like to see other shipments, please click on the filter button above and choose an appropriate option.<br>
-      Please contact your PT provider if you need support.
-    </p>
+  @if (showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='excluded') {
+    <ion-card class="eptCard noShipments">
+      <ion-card-content class="cardContent">
+        <p class="noShipments">
+          No delayed/excluded shipments found. <br>
+          If you would like to see other shipments, please click on the filter button above and choose an appropriate option.<br>
+          Please contact your PT provider if you need support.
+        </p>
       </ion-card-content>
-  </ion-card>
+    </ion-card>
+  }
 
 
 </ion-content>
 
 
-  <ion-footer *ngIf="localStorageUnSyncedArray.length!=0 && networkType!='none'">
+@if (localStorageUnSyncedArray.length!=0 && networkType!='none') {
+  <ion-footer>
     <ion-toolbar>
       <ion-button expand="full" class="text-center native-btn syncAll" (click)="syncShipments()">
         View Unsynced Shipments ({{localStorageUnSyncedArray.length}})
       </ion-button>
     </ion-toolbar>
   </ion-footer>
+}

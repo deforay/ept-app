@@ -1,10 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { FormControl, FormGroupDirective, NgForm } from "@angular/forms";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { LoaderService, AlertService } from "../../app/service/providers";
 import { CrudServiceService } from "../../app/service/crud/crud-service.service";
-import { Storage } from "@ionic/storage";
-import { Network } from "@ionic-native/network/ngx";
+import { Storage } from "@ionic/storage-angular";
+import { Network } from "@awesome-cordova-plugins/network/ngx";
 import { Router } from "@angular/router";
 import { LocalShipmentFormService } from "../../app/service/localShipmentForm/local-shipment-form.service";
 import { LoadingController } from "@ionic/angular";
@@ -26,9 +26,11 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 /** Error when invalid control is dirty, touched, or submitted. */
 
-@Component( {
+@Component({
+  standalone: false,
   selector: "app-dts-hiv-serology",
   templateUrl: "./dts-hiv-serology.page.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./dts-hiv-serology.page.scss"],
 } )
 export class DTSHIVSerologyPage implements OnInit {

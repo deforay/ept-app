@@ -1,6 +1,7 @@
 import {
   Component,
-  ViewChild
+  ViewChild,
+  ChangeDetectionStrategy
 }from '@angular/core';
 import {
   Platform,
@@ -8,16 +9,16 @@ import {
 }from '@ionic/angular';
 import {
   SplashScreen
-}from '@ionic-native/splash-screen/ngx';
+}from '@awesome-cordova-plugins/splash-screen/ngx';
 import {
   StatusBar
-}from '@ionic-native/status-bar/ngx';
+}from '@awesome-cordova-plugins/status-bar/ngx';
 import {
   AppVersion
-}from '@ionic-native/app-version/ngx';
+}from '@awesome-cordova-plugins/app-version/ngx';
 import {
   Storage
-}from '@ionic/storage';
+}from '@ionic/storage-angular';
 import {
   AlertService,
   ToastService,
@@ -28,10 +29,8 @@ import {
 } from '../app/service/crud/crud-service.service';
 import {
   Network
-}from '@ionic-native/network/ngx';
-import {
-  Events
-}from '@ionic/angular';
+}from '@awesome-cordova-plugins/network/ngx';
+import { Events } from './service/events/events.service';
 import {
   NetworkService
 }from '../app/service/network.service';
@@ -40,7 +39,7 @@ import {
 }from '@angular/router';
 import {
   File
-}from '@ionic-native/file/ngx';
+}from '@awesome-cordova-plugins/file/ngx';
 import {
   ROOT_DIRECTORY,
   INDIVIDUAL_REPORTS_DIRECTORY,
@@ -53,9 +52,13 @@ import {
 import {
   ToastController
 }from '@ionic/angular';
+import { addIcons } from 'ionicons';
+import { arrowBack, checkmarkCircle, close, sync } from 'ionicons/icons';
 @Component({
+  standalone: false,
     selector: 'app-root',
     templateUrl: 'app.component.html',
+    changeDetection: ChangeDetectionStrategy.Eager,
     styleUrls: ['app.component.scss']
 })
 export class AppComponent {
@@ -137,6 +140,8 @@ export class AppComponent {
     public toastController: ToastController,
     public CrudServiceService: CrudServiceService,
   ) {
+    // Standalone Ionic components do not auto-load icons; register the ones the templates use.
+    addIcons({ 'arrow-back': arrowBack, 'checkmark-circle': checkmarkCircle, close, sync });
     this.initializeApp();
   }
 
@@ -156,29 +161,18 @@ export class AppComponent {
           , (err) => {}
         );
 
-        //Create Directory for EPT REPORTS
-        this.commonService.createDirectory(this.file.externalRootDirectory, ROOT_DIRECTORY);
-
-        let newdir = this.file.externalRootDirectory + ROOT_DIRECTORY + '/';
-        console.log(newdir);
-
-        setTimeout(function () {
-            this.directoryProvider.createDirectory(newdir, INDIVIDUAL_REPORTS_DIRECTORY);
-          }
-
-          , 4000);
-
-        setTimeout(function () {
-            this.directoryProvider.createDirectory(newdir, SUMMARY_REPORTS_DIRECTORY);
-          }
-
-          , 6000);
-
-        setTimeout(function () {
-            this.directoryProvider.createDirectory(newdir, SHIPMENTS_REPORTS_DIRECTORY);
-          }
-
-          , 8000);
+        // Create the EPT REPORTS tree under app-specific external storage.
+        // externalRootDirectory is unwritable from Android 10 onwards under
+        // scoped storage, and targetSdk 30+ removes the legacy opt-out.
+        this.commonService.createDirectory(this.file.externalDataDirectory, ROOT_DIRECTORY)
+          .then(() => {
+            const newdir = this.file.externalDataDirectory + ROOT_DIRECTORY + '/';
+            return Promise.all([
+              this.commonService.createDirectory(newdir, INDIVIDUAL_REPORTS_DIRECTORY),
+              this.commonService.createDirectory(newdir, SUMMARY_REPORTS_DIRECTORY),
+              this.commonService.createDirectory(newdir, SHIPMENTS_REPORTS_DIRECTORY),
+            ]);
+          });
 
         this.NetworkService.initializeNetworkEvents();
 

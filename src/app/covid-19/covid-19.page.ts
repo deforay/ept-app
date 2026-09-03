@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   FormControl,
@@ -19,10 +20,10 @@ import {
 } from '../../app/service/crud/crud-service.service';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   Network
-} from '@ionic-native/network/ngx';
+} from '@awesome-cordova-plugins/network/ngx';
 import {
   Router
 } from '@angular/router';
@@ -33,9 +34,7 @@ import {
   LoadingController
 } from '@ionic/angular';
 import _ from 'lodash';
-import {
-  Events
-} from '@ionic/angular';
+import { Events } from '../service/events/events.service';
 
 /** Error when invalid control is dirty, touched, or submitted. */
 
@@ -48,8 +47,10 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 /** Error when invalid control is dirty, touched, or submitted. */
 
 @Component({
+  standalone: false,
   selector: 'app-covid-19',
   templateUrl: './covid-19.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./covid-19.page.scss'],
 })
 

@@ -1,124 +1,135 @@
-<app-header *ngIf="isShowReviewMsg==false" [titleHeader]="schemeName" [isMenuOrBackButton]="'back'"></app-header>
+@if (isShowReviewMsg==false) {
+  <app-header [titleHeader]="schemeName" [isMenuOrBackButton]="'back'"></app-header>
+}
 
-<app-header *ngIf="isShowReviewMsg==true" [titleHeader]="viewSchemeName" [isMenuOrBackButton]="'back'"></app-header>
+@if (isShowReviewMsg==true) {
+  <app-header [titleHeader]="viewSchemeName" [isMenuOrBackButton]="'back'"></app-header>
+}
 
 
 <ion-content>
-  <p *ngIf="viewAccessMessage" class="accessMsg">{{viewAccessMessage}}</p>
+  @if (viewAccessMessage) {
+    <p class="accessMsg">{{viewAccessMessage}}</p>
+  }
 
-  <p *ngIf="isViewPage==false"  class="infoMsg">Please review and verify your result submission</p>
-  
+  @if (isViewPage==false) {
+    <p  class="infoMsg">Please review and verify your result submission</p>
+  }
+
   <mat-accordion class="example-headers-align">
     <mat-expansion-panel [expanded]="step === 0" (opened)="setStep(0)">
       <mat-expansion-panel-header>
-        <mat-panel-title>  
+        <mat-panel-title>
           <ion-grid class="panelHeading">
-             <ion-row>
-                <ion-col size="10" class="grid-readonly-col">
-                  <span class="text-title-color">Participant Details</span>
-                </ion-col>
-                <ion-col size="2" class="grid-readonly-col" *ngIf="validParticipantDetails==true">
+            <ion-row>
+              <ion-col size="10" class="grid-readonly-col">
+                <span class="text-title-color">Participant Details</span>
+              </ion-col>
+              @if (validParticipantDetails==true) {
+                <ion-col size="2" class="grid-readonly-col">
                   <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
                 </ion-col>
-              </ion-row>
+              }
+            </ion-row>
           </ion-grid>
         </mat-panel-title>
       </mat-expansion-panel-header>
 
       <!-- <ion-grid>
-        <ion-row *ngIf="partDetailsArray.participantName">
-          <ion-col size="5" class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span class="text-title-color">Participant Name </span>
-            </p>
-          </ion-col>
-          <ion-col size="1" class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span>{{partDetailsArray.participantName}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="partDetailsArray.participantCode">
-          <ion-col size="5" class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span class="text-title-color">Participant Code </span>
-            </p>
-          </ion-col>
-          <ion-col size="1" class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span>{{partDetailsArray.participantCode}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="partDetailsArray.affiliation">
-          <ion-col size="5" class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span class="text-title-color">Affiliation </span>
-            </p>
-          </ion-col>
-          <ion-col size="1" class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span> {{partDetailsArray.affiliation}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="partDetailsArray.phone">
-          <ion-col size="5" class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span class="text-title-color">Phone No </span>
-            </p>
-          </ion-col>
-          <ion-col size="1" class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span>{{partDetailsArray.phone}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="partDetailsArray.mobile">
-          <ion-col size="5" class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span class="text-title-color">Mobile No</span>
-            </p>
-          </ion-col>
-          <ion-col size="1" class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col class="grid-readonly-col">
-<p class="ion-text-wrap">
-              <span>{{partDetailsArray.mobile}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-      </ion-grid> -->
-       <ion-grid>
-        <ion-row *ngIf="partDetailsArray.laboratoryName">
+      <ion-row *ngIf="partDetailsArray.participantName">
+        <ion-col size="5" class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span class="text-title-color">Participant Name </span>
+          </p>
+        </ion-col>
+        <ion-col size="1" class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span class="text-title-color">:</span>
+          </p>
+        </ion-col>
+        <ion-col class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span>{{partDetailsArray.participantName}}</span>
+          </p>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="partDetailsArray.participantCode">
+        <ion-col size="5" class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span class="text-title-color">Participant Code </span>
+          </p>
+        </ion-col>
+        <ion-col size="1" class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span class="text-title-color">:</span>
+          </p>
+        </ion-col>
+        <ion-col class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span>{{partDetailsArray.participantCode}}</span>
+          </p>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="partDetailsArray.affiliation">
+        <ion-col size="5" class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span class="text-title-color">Affiliation </span>
+          </p>
+        </ion-col>
+        <ion-col size="1" class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span class="text-title-color">:</span>
+          </p>
+        </ion-col>
+        <ion-col class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span> {{partDetailsArray.affiliation}}</span>
+          </p>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="partDetailsArray.phone">
+        <ion-col size="5" class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span class="text-title-color">Phone No </span>
+          </p>
+        </ion-col>
+        <ion-col size="1" class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span class="text-title-color">:</span>
+          </p>
+        </ion-col>
+        <ion-col class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span>{{partDetailsArray.phone}}</span>
+          </p>
+        </ion-col>
+      </ion-row>
+      <ion-row *ngIf="partDetailsArray.mobile">
+        <ion-col size="5" class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span class="text-title-color">Mobile No</span>
+          </p>
+        </ion-col>
+        <ion-col size="1" class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span class="text-title-color">:</span>
+          </p>
+        </ion-col>
+        <ion-col class="grid-readonly-col">
+          <p class="ion-text-wrap">
+            <span>{{partDetailsArray.mobile}}</span>
+          </p>
+        </ion-col>
+      </ion-row>
+    </ion-grid> -->
+    <ion-grid>
+      @if (partDetailsArray.laboratoryName) {
+        <ion-row>
           <ion-col size="5" class="grid-readonly-col">
             <p class="ion-text-wrap">
               <span class="text-title-color">Laboratory Name </span>
             </p>
-           </ion-col>
+          </ion-col>
           <ion-col size="1" class="grid-readonly-col">
             <p class="ion-text-wrap">
               <span class="text-title-color">:</span>
@@ -130,7 +141,9 @@
             </p>
           </ion-col>
         </ion-row>
-        <ion-row *ngIf="partDetailsArray.laboratoryId">
+      }
+      @if (partDetailsArray.laboratoryId) {
+        <ion-row>
           <ion-col size="5" class="grid-readonly-col">
             <p class="ion-text-wrap">
               <span class="text-title-color">Laboratory ID  </span>
@@ -147,476 +160,604 @@
             </p>
           </ion-col>
         </ion-row>
-         <ion-row>
-            <ion-col size="6" size-xs class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Lab Director Name <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [(ngModel)]="partDetailsArray.labDirectorName"
-                  placeholder="Enter Lab Director Name." #labDirectorName="ngModel" name="labDirectorName" required
-                  [disabled]="isView=='true'" data-alert="Please enter Lab Director Name." id="labDirectorName">
-                <mat-error *ngIf="!partDetailsArray.labDirectorName">
-                  Lab Director Name is required
-                </mat-error>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-           <ion-row>
-            <ion-col size="6" size-xs class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Lab Director Email <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [(ngModel)]="labDirectorEmail" (change)="changeDirectorMail()"
-                  placeholder="Enter Lab Director Email." name="eidLabDirectorEmail" type="email"
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required #eidLabDirectorEmail="ngModel"
-                  [disabled]="isView=='true'" data-alert="Please enter Lab Director Email." id="eidLabDirectorEmail">
-                <mat-error *ngIf="!labDirectorEmail">
-                  Lab Director Email is required
-                </mat-error>
-                 <mat-error *ngIf="labDirectorEmail && eidLabDirectorEmail.errors?.pattern">
+      }
+      <ion-row>
+        <ion-col size="6" size-xs class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+            <mat-label>Lab Director Name @if (isView=='true') {
+              <span class="danger-text">*</span>
+            }</mat-label>
+            <input matInput [(ngModel)]="partDetailsArray.labDirectorName"
+              placeholder="Enter Lab Director Name." #labDirectorName="ngModel" name="labDirectorName" required
+              [disabled]="isView=='true'" data-alert="Please enter Lab Director Name." id="labDirectorName">
+            @if (!partDetailsArray.labDirectorName) {
+              <mat-error>
+                Lab Director Name is required
+              </mat-error>
+            }
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+      <ion-row>
+        <ion-col size="6" size-xs class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+            <mat-label>Lab Director Email @if (isView=='true') {
+              <span class="danger-text">*</span>
+            }</mat-label>
+            <input matInput [(ngModel)]="labDirectorEmail" (change)="changeDirectorMail()"
+              placeholder="Enter Lab Director Email." name="eidLabDirectorEmail" type="email"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required #eidLabDirectorEmail="ngModel"
+              [disabled]="isView=='true'" data-alert="Please enter Lab Director Email." id="eidLabDirectorEmail">
+            @if (!labDirectorEmail) {
+              <mat-error>
+                Lab Director Email is required
+              </mat-error>
+            }
+            @if (labDirectorEmail && eidLabDirectorEmail.errors?.pattern) {
+              <mat-error>
                 Please enter a valid email address
               </mat-error>
-            </mat-form-field>
-            </ion-col>
-            <!--  -->
-          <ion-col size="6" size-xs class="grid-input-col" *ngIf="changeDirectorEmail">
+            }
+          </mat-form-field>
+        </ion-col>
+        <!--  -->
+        @if (changeDirectorEmail) {
+          <ion-col size="6" size-xs class="grid-input-col">
             <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-              <mat-label class="matLabel">Confirm Lab Director Email<span class="danger-text" *ngIf="isView=='true'">*</span> </mat-label>
+              <mat-label class="matLabel">Confirm Lab Director Email@if (isView=='true') {
+                <span class="danger-text">*</span>
+              } </mat-label>
               <input matInput [(ngModel)]="changeLabDirectorEmail" placeholder="enter Confirm Lab Director Email" name="changeLabDirectorEmail"
-                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required type="email"
-                 [disabled]="isView=='true'" data-alert="Please enter Confirm Lab Director Email." id="changeLabDirectorEmail">
+                pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required type="email"
+                [disabled]="isView=='true'" data-alert="Please enter Confirm Lab Director Email." id="changeLabDirectorEmail">
               <!-- <mat-error *ngIf="changeLabDirectorEmail && changeLabDirectorEmail.errors?.pattern">
-                Please enter a valid email address
-              </mat-error> -->
-              <mat-error *ngIf="!changeLabDirectorEmail">
-                Confirm Lab Director Email is required</mat-error>
-              <mat-error *ngIf="(changeLabDirectorEmail && (changeLabDirectorEmail != labDirectorEmail))">
-                Email doesn't match</mat-error>
-            </mat-form-field>
-          </ion-col>
-          </ion-row>
+              Please enter a valid email address
+            </mat-error> -->
+            @if (!changeLabDirectorEmail) {
+              <mat-error>
+              Confirm Lab Director Email is required</mat-error>
+            }
+            @if ((changeLabDirectorEmail && (changeLabDirectorEmail != labDirectorEmail))) {
+              <mat-error>
+              Email doesn't match</mat-error>
+            }
+          </mat-form-field>
+        </ion-col>
+      }
+    </ion-row>
+    <ion-row>
+      <ion-col size="6" size-xs class="grid-input-col">
+        <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+          <mat-label>Contact Person Name @if (isView=='true') {
+            <span class="danger-text">*</span>
+          }</mat-label>
+          <input matInput [(ngModel)]="partDetailsArray.contactPersonName"
+            placeholder="Enter Contact Person Name." #contactPersonName="ngModel" name="contactPersonName" required
+            [disabled]="isView=='true'" data-alert="Please enter Contact Person Name." id="contactPersonName">
+          @if (!partDetailsArray.contactPersonName) {
+            <mat-error>
+              Contact Person Name is required
+            </mat-error>
+          }
+        </mat-form-field>
+      </ion-col>
+    </ion-row>
+    <ion-row>
+      <ion-col size="6" size-xs class="grid-input-col">
+        <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+          <mat-label>Contact Person Email @if (isView=='true') {
+            <span class="danger-text">*</span>
+          }</mat-label>
+          <input matInput [(ngModel)]="contactPersonEmail" (change)="changeContactMail()"
+            placeholder="Enter Contact Person Email." name="eidContactPersonEmail" type="email"
+            pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required #eidContactPersonEmail="ngModel"
+            [disabled]="isView=='true'" data-alert="Please enter Contact Person Email." id="eidContactPersonEmail">
+          @if (!contactPersonEmail) {
+            <mat-error>
+              Contact Person Email is required
+            </mat-error>
+          }
+          @if (contactPersonEmail && eidContactPersonEmail.errors?.pattern) {
+            <mat-error>
+              Please enter a valid email address
+            </mat-error>
+          }
+        </mat-form-field>
+      </ion-col>
+      @if (changeContactEmail) {
+        <ion-col size="6" size-xs class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+            <mat-label class="matLabel">Confirm Contact Person Email@if (isView=='true') {
+              <span class="danger-text">*</span>
+            } </mat-label>
+            <input matInput [(ngModel)]="changeContactPersonEmail" placeholder="enter Confirm Contact Person Email" name="changeContactPersonEmail"
+              pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required type="email"
+              [disabled]="isView=='true'" data-alert="Please enter Confirm Contact Person Email." id="changeContactPersonEmail">
+            <!-- <mat-error *ngIf="changeContactPersonEmail && changeContactPersonEmail.errors?.pattern">
+            Please enter a valid email address
+          </mat-error> -->
+          @if (!changeContactPersonEmail) {
+            <mat-error>
+            Confirm Contact Person Email is required</mat-error>
+          }
+          @if ((changeContactPersonEmail && (changeContactPersonEmail != labDirectorEmail))) {
+            <mat-error>
+            Email doesn't match</mat-error>
+          }
+        </mat-form-field>
+      </ion-col>
+    }
+  </ion-row>
+  <ion-row>
+    <ion-col size="6" size-xs class="grid-input-col">
+      <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+        <mat-label>Contact Person Phone @if (isView=='true') {
+          <span class="danger-text">*</span>
+        }</mat-label>
+        <input matInput [(ngModel)]="partDetailsArray.contactPersonTelephone"  type="number"maxlength="12"
+          placeholder="Enter Contact Person Phone." #contactPersonTelephone="ngModel" name="contactPersonTelephone" required
+          [disabled]="isView=='true'" data-alert="Please enter Contact Person Phone." id="contactPersonTelephone">
+        @if (!partDetailsArray.contactPersonTelephone) {
+          <mat-error>
+            Contact Person Phone is required
+          </mat-error>
+        }
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+  <!-- <ion-row *ngIf="partDetailsArray.affiliation">
+  <ion-col size="5" class="grid-readonly-col">
+    <p class="ion-text-wrap">
+      <span class="text-title-color">Affiliation </span>
+    </p>
+  </ion-col>
+  <ion-col size="1" class="grid-readonly-col">
+    <p class="ion-text-wrap">
+      <span class="text-title-color">:</span>
+    </p>
+  </ion-col>
+  <ion-col class="grid-readonly-col">
+    <p class="ion-text-wrap">
+      <span>{{partDetailsArray.affiliation}}</span>
+    </p>
+  </ion-col>
+</ion-row>
+<ion-row *ngIf="partDetailsArray.phone">
+  <ion-col size="5" class="grid-readonly-col">
+    <p class="ion-text-wrap">
+      <span class="text-title-color">Phone No </span>
+    </p>
+  </ion-col>
+  <ion-col size="1" class="grid-readonly-col">
+    <p class="ion-text-wrap">
+      <span class="text-title-color">:</span>
+    </p>
+  </ion-col>
+  <ion-col class="grid-readonly-col">
+    <p class="ion-text-wrap">
+      <span>{{partDetailsArray.phone}}</span>
+    </p>
+  </ion-col>
+</ion-row>
+<ion-row *ngIf="partDetailsArray.mobile">
+  <ion-col size="5" class="grid-readonly-col">
+    <p class="ion-text-wrap">
+      <span class="text-title-color">Mobile No</span>
+    </p>
+  </ion-col>
+  <ion-col size="1" class="grid-readonly-col">
+    <p class="ion-text-wrap">
+      <span class="text-title-color">:</span>
+    </p>
+  </ion-col>
+  <ion-col class="grid-readonly-col">
+    <p class="ion-text-wrap">
+      <span> {{partDetailsArray.mobile}}</span>
+    </p>
+  </ion-col>
+</ion-row> -->
+</ion-grid>
+<mat-action-row>
+  <button mat-button color="warn" type="submit" (click)=" checkParticpentPanel('next')">Next</button>
+</mat-action-row>
+</mat-expansion-panel>
+
+
+
+<form #shipmentPanelForm="ngForm" novalidate>
+  <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <ion-grid class="panelHeading">
           <ion-row>
-            <ion-col size="6" size-xs class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Contact Person Name <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [(ngModel)]="partDetailsArray.contactPersonName"
-                  placeholder="Enter Contact Person Name." #contactPersonName="ngModel" name="contactPersonName" required
-                  [disabled]="isView=='true'" data-alert="Please enter Contact Person Name." id="contactPersonName">
-                <mat-error *ngIf="!partDetailsArray.contactPersonName">
-                  Contact Person Name is required
-                </mat-error>
-              </mat-form-field>
+            <ion-col size="10" class="grid-readonly-col">
+              <span class="text-title-color">Shipment Details</span>
             </ion-col>
-          </ion-row>
-            <ion-row>
-            <ion-col size="6" size-xs class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Contact Person Email <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [(ngModel)]="contactPersonEmail" (change)="changeContactMail()"
-                  placeholder="Enter Contact Person Email." name="eidContactPersonEmail" type="email"
-                  pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required #eidContactPersonEmail="ngModel"
-                  [disabled]="isView=='true'" data-alert="Please enter Contact Person Email." id="eidContactPersonEmail">
-                <mat-error *ngIf="!contactPersonEmail">
-                  Contact Person Email is required
-                </mat-error>
-                 <mat-error *ngIf="contactPersonEmail && eidContactPersonEmail.errors?.pattern">
-                Please enter a valid email address
-              </mat-error>
-            </mat-form-field> 
-            </ion-col>
-          <ion-col size="6" size-xs class="grid-input-col" *ngIf="changeContactEmail">
-            <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-              <mat-label class="matLabel">Confirm Contact Person Email<span class="danger-text" *ngIf="isView=='true'">*</span> </mat-label>
-              <input matInput [(ngModel)]="changeContactPersonEmail" placeholder="enter Confirm Contact Person Email" name="changeContactPersonEmail"
-                 pattern="[a-z0-9._%+-]+@[a-z0-9.-]+\.[a-z]{2,3}$" required type="email"
-                 [disabled]="isView=='true'" data-alert="Please enter Confirm Contact Person Email." id="changeContactPersonEmail">
-              <!-- <mat-error *ngIf="changeContactPersonEmail && changeContactPersonEmail.errors?.pattern">
-                Please enter a valid email address
-              </mat-error> -->
-              <mat-error *ngIf="!changeContactPersonEmail">
-                Confirm Contact Person Email is required</mat-error>
-              <mat-error *ngIf="(changeContactPersonEmail && (changeContactPersonEmail != labDirectorEmail))">
-                Email doesn't match</mat-error>
-            </mat-form-field>
-          </ion-col>
-          </ion-row>
-           <ion-row>
-            <ion-col size="6" size-xs class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label>Contact Person Phone <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [(ngModel)]="partDetailsArray.contactPersonTelephone"  type="number"maxlength="12"
-                  placeholder="Enter Contact Person Phone." #contactPersonTelephone="ngModel" name="contactPersonTelephone" required
-                  [disabled]="isView=='true'" data-alert="Please enter Contact Person Phone." id="contactPersonTelephone">
-                <mat-error *ngIf="!partDetailsArray.contactPersonTelephone">
-                  Contact Person Phone is required
-                </mat-error>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-        <!-- <ion-row *ngIf="partDetailsArray.affiliation">
-          <ion-col size="5" class="grid-readonly-col">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">Affiliation </span>
-            </p>
-          </ion-col>
-          <ion-col size="1" class="grid-readonly-col">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col class="grid-readonly-col">
-            <p class="ion-text-wrap">
-              <span>{{partDetailsArray.affiliation}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="partDetailsArray.phone">
-          <ion-col size="5" class="grid-readonly-col">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">Phone No </span>
-            </p>
-          </ion-col>
-          <ion-col size="1" class="grid-readonly-col">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col class="grid-readonly-col">
-            <p class="ion-text-wrap">
-              <span>{{partDetailsArray.phone}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-        <ion-row *ngIf="partDetailsArray.mobile">
-          <ion-col size="5" class="grid-readonly-col">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">Mobile No</span>
-            </p>
-          </ion-col>
-          <ion-col size="1" class="grid-readonly-col">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">:</span>
-            </p>
-          </ion-col>
-          <ion-col class="grid-readonly-col">
-            <p class="ion-text-wrap">
-              <span> {{partDetailsArray.mobile}}</span>
-            </p>
-          </ion-col>
-        </ion-row> -->
-      </ion-grid>
-       <mat-action-row>
-          <button mat-button color="warn" type="submit" (click)=" checkParticpentPanel('next')">Next</button>
-        </mat-action-row>
-    </mat-expansion-panel>
-
-
-
-    <form #shipmentPanelForm="ngForm" novalidate>
-      <mat-expansion-panel [expanded]="step === 1" (opened)="setStep(1)">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <ion-grid class="panelHeading">
-              <ion-row>
-                <ion-col size="10" class="grid-readonly-col">
-                  <span class="text-title-color">Shipment Details</span>
-                </ion-col>
-                <ion-col size="2" class="grid-readonly-col" *ngIf="validShipmentDetails==true">
-                  <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-
-        <ion-grid>
-          <ion-row *ngIf="shipmentsDetailsArray.shipmentDate">
-            <ion-col size="5" class="grid-readonly-col">
-  <p class="ion-text-wrap">
-                <span class="text-title-color">Shipment Date </span>
-              </p>
-            </ion-col>
-            <ion-col size="1" class="grid-readonly-col">
-  <p class="ion-text-wrap">
-                <span class="text-title-color">:</span>
-              </p>
-            </ion-col>
-            <ion-col class="grid-readonly-col">
-  <p class="ion-text-wrap">
-                <span>{{shipmentsDetailsArray.shipmentDate}}</span>
-              </p>
-            </ion-col>
-          </ion-row>
-          <ion-row *ngIf="shipmentsDetailsArray.resultDueDate">
-            <ion-col size="5" class="grid-readonly-col">
-  <p class="ion-text-wrap">
-                <span class="text-title-color">Result Due Date </span>
-              </p>
-            </ion-col>
-            <ion-col size="1" class="grid-readonly-col">
-  <p class="ion-text-wrap">
-                <span class="text-title-color">:</span>
-              </p>
-            </ion-col>
-            <ion-col class="grid-readonly-col">
-  <p class="ion-text-wrap">
-                <span>{{shipmentsDetailsArray.resultDueDate}}
-                </span>
-              </p>
-            </ion-col>
-          </ion-row>
-          <ion-row *ngIf="shipmentCode">
-            <ion-col size="5" class="grid-readonly-col">
-              <p class="ion-text-wrap">
-                <span class="text-title-color">Shipment Code </span>
-              </p>
-            </ion-col>
-            <ion-col size="1" class="grid-readonly-col">
-              <p class="ion-text-wrap">
-                <span class="text-title-color">:</span>
-              </p>
-            </ion-col>
-            <ion-col class="grid-readonly-col">
-              <p class="ion-text-wrap">
-                <span>{{shipmentCode}}
-                </span>
-              </p>
-            </ion-col>
+            @if (validShipmentDetails==true) {
+              <ion-col size="2" class="grid-readonly-col">
+                <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+              </ion-col>
+            }
           </ion-row>
         </ion-grid>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
 
-        <ion-grid>
-          <ion-row>
+    <ion-grid>
+      @if (shipmentsDetailsArray.shipmentDate) {
+        <ion-row>
+          <ion-col size="5" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">Shipment Date </span>
+            </p>
+          </ion-col>
+          <ion-col size="1" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">:</span>
+            </p>
+          </ion-col>
+          <ion-col class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span>{{shipmentsDetailsArray.shipmentDate}}</span>
+            </p>
+          </ion-col>
+        </ion-row>
+      }
+      @if (shipmentsDetailsArray.resultDueDate) {
+        <ion-row>
+          <ion-col size="5" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">Result Due Date </span>
+            </p>
+          </ion-col>
+          <ion-col size="1" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">:</span>
+            </p>
+          </ion-col>
+          <ion-col class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span>{{shipmentsDetailsArray.resultDueDate}}
+              </span>
+            </p>
+          </ion-col>
+        </ion-row>
+      }
+      @if (shipmentCode) {
+        <ion-row>
+          <ion-col size="5" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">Shipment Code </span>
+            </p>
+          </ion-col>
+          <ion-col size="1" class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span class="text-title-color">:</span>
+            </p>
+          </ion-col>
+          <ion-col class="grid-readonly-col">
+            <p class="ion-text-wrap">
+              <span>{{shipmentCode}}
+              </span>
+            </p>
+          </ion-col>
+        </ion-row>
+      }
+    </ion-grid>
 
-            <ion-col size="6" size-xs class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form " appearance="outline">
-                <mat-label class="matLabel">Test Receipt Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [matDatepicker]="testReceiptPicker" class="datepicker-input"
-                  [(ngModel)]="testReceiptDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"  #vlTestReceiptDate="ngModel" name="vlTestReceiptDate"
-                  placeholder="Choose Test Receipt Date" [readonly]="isView!='true'" [disabled]="isView=='true'" required>
-                  <ion-icon name="close" *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearTestReceiptDate()"></ion-icon>
-                <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
-                <mat-datepicker #testReceiptPicker disabled={{isView}}></mat-datepicker>
-                <mat-error *ngIf="!testReceiptDate">Test Receipt Date is required </mat-error>
-              </mat-form-field>
-            </ion-col>
+    <ion-grid>
+      <ion-row>
+
+        <ion-col size="6" size-xs class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form " appearance="outline">
+            <mat-label class="matLabel">Test Receipt Date @if (isView=='true') {
+              <span class="danger-text">*</span>
+            }</mat-label>
+            <input matInput [matDatepicker]="testReceiptPicker" class="datepicker-input"
+              [(ngModel)]="testReceiptDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"  #vlTestReceiptDate="ngModel" name="vlTestReceiptDate"
+              placeholder="Choose Test Receipt Date" [readonly]="isView!='true'" [disabled]="isView=='true'" required>
+            @if (isView=='false') {
+              <ion-icon name="close" class="clearDateIcon" (click)="clearTestReceiptDate()"></ion-icon>
+            }
+            <mat-datepicker-toggle matSuffix [for]="testReceiptPicker"></mat-datepicker-toggle>
+            <mat-datepicker #testReceiptPicker disabled={{isView}}></mat-datepicker>
+            @if (!testReceiptDate) {
+              <mat-error>Test Receipt Date is required </mat-error>
+            }
+          </mat-form-field>
+        </ion-col>
 
 
-            <ion-col size="6" size-xs class="grid-input-col" *ngIf="!ptPanelTest">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label class="matLabel">Sample Rehydration Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [matDatepicker]="sampleRhdPicker" [(ngModel)]="sampleRhdDate"[min]="testReceiptDate"
-                  placeholder="Choose Sample Rehydration Date" class="datepicker-input" #vlSampleRhdDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" required
-                  name="vlSampleRhdDate"  [readonly]="isView!='true'" [disabled]="isView=='true'"  >
-                <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
-                <ion-icon name="close" *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearSampleRehydDate()"></ion-icon>
-                <mat-datepicker #sampleRhdPicker disabled={{isView}}></mat-datepicker>
-                <mat-error *ngIf="!sampleRhdDate">Sample Rehydration Date is required </mat-error> 
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
+        @if (!ptPanelTest) {
+          <ion-col size="6" size-xs class="grid-input-col">
+            <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+              <mat-label class="matLabel">Sample Rehydration Date @if (isView=='true') {
+                <span class="danger-text">*</span>
+              }</mat-label>
+              <input matInput [matDatepicker]="sampleRhdPicker" [(ngModel)]="sampleRhdDate"[min]="testReceiptDate"
+                placeholder="Choose Sample Rehydration Date" class="datepicker-input" #vlSampleRhdDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" required
+                name="vlSampleRhdDate"  [readonly]="isView!='true'" [disabled]="isView=='true'"  >
+              <mat-datepicker-toggle matSuffix [for]="sampleRhdPicker"></mat-datepicker-toggle>
+              @if (isView=='false') {
+                <ion-icon name="close" class="clearDateIcon" (click)="clearSampleRehydDate()"></ion-icon>
+              }
+              <mat-datepicker #sampleRhdPicker disabled={{isView}}></mat-datepicker>
+              @if (!sampleRhdDate) {
+                <mat-error>Sample Rehydration Date is required </mat-error>
+              }
+            </mat-form-field>
+          </ion-col>
+        }
+      </ion-row>
 
-          <ion-row>
-            <ion-col size="12" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form"
-                [ngClass]="{ 'mat-form-field-invalid': !testDate && isView==false }" appearance="outline">
-                <mat-label class="matLabel">Testing Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="testDate" name="vlTestDate"[min]="testReceiptDate"
-                  #vlTestDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"  placeholder="Choose Testing Date" class="datepicker-input" required  [readonly]="isView!='true'" [disabled]="isView=='true'"  >
-                <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
-                <ion-icon name="close" *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearTestingDate()"></ion-icon>
-                <mat-datepicker #testDatePicker disabled={{isView}}></mat-datepicker>
-                <mat-error *ngIf="!testDate">
-                  Testing Date is required </mat-error>
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="12" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label class="matLabel">Specimen Volume used for testing</mat-label>
-                <input matInput [(ngModel)]="specVolTest" name="vlSpecVolTest" #vlSpecVolTest="ngModel"
-                  placeholder="Enter Specimen Volume" [disabled]="isView=='true'">
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
+      <ion-row>
+        <ion-col size="12" class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form"
+            [ngClass]="{ 'mat-form-field-invalid': !testDate && isView==false }" appearance="outline">
+            <mat-label class="matLabel">Testing Date @if (isView=='true') {
+              <span class="danger-text">*</span>
+            }</mat-label>
+            <input matInput [matDatepicker]="testDatePicker" [(ngModel)]="testDate" name="vlTestDate"[min]="testReceiptDate"
+              #vlTestDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"  placeholder="Choose Testing Date" class="datepicker-input" required  [readonly]="isView!='true'" [disabled]="isView=='true'"  >
+            <mat-datepicker-toggle matSuffix [for]="testDatePicker"></mat-datepicker-toggle>
+            @if (isView=='false') {
+              <ion-icon name="close" class="clearDateIcon" (click)="clearTestingDate()"></ion-icon>
+            }
+            <mat-datepicker #testDatePicker disabled={{isView}}></mat-datepicker>
+            @if (!testDate) {
+              <mat-error>
+              Testing Date is required </mat-error>
+            }
+          </mat-form-field>
+        </ion-col>
+        <ion-col size="12" class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+            <mat-label class="matLabel">Specimen Volume used for testing</mat-label>
+            <input matInput [(ngModel)]="specVolTest" name="vlSpecVolTest" #vlSpecVolTest="ngModel"
+              placeholder="Enter Specimen Volume" [disabled]="isView=='true'">
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
 
-          <ion-row>
-            <ion-col size="6" size-xs class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form inputBox"
-                [ngClass]="{ 'mat-form-field-invalid': !vlassay && isView==false}" appearance="outline">
-                <mat-label class="matLabel">Viral Load Assay <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <mat-select [(ngModel)]="vlassay" name="vlFormassay" #vlFormassay="ngModel"
-                  (ngModelChange)="changeViralLoadAssay(vlassay)" required [disabled]="isView=='true'">
-                  <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let vl of shipmentsDetailsArray['vlAssaySelect']" [value]="vl.value">
-                    {{vl.show}}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="!vlassay">
-                  Please choose Viral Load Assay </mat-error>
-              </mat-form-field>
-            </ion-col>
+      <ion-row>
+        <ion-col size="6" size-xs class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form inputBox"
+            [ngClass]="{ 'mat-form-field-invalid': !vlassay && isView==false}" appearance="outline">
+            <mat-label class="matLabel">Viral Load Assay @if (isView=='true') {
+              <span class="danger-text">*</span>
+            }</mat-label>
+            <mat-select [(ngModel)]="vlassay" name="vlFormassay" #vlFormassay="ngModel"
+              (ngModelChange)="changeViralLoadAssay(vlassay)" required [disabled]="isView=='true'">
+              <mat-option>--Select--</mat-option>
+              @for (vl of shipmentsDetailsArray['vlAssaySelect']; track vl) {
+                <mat-option [value]="vl.value">
+                  {{vl.show}}
+                </mat-option>
+              }
+            </mat-select>
+            @if (!vlassay) {
+              <mat-error>
+              Please choose Viral Load Assay </mat-error>
+            }
+          </mat-form-field>
+        </ion-col>
 
-            <ion-col size="6" size-xs *ngIf="isSelectedOther" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form inputBox" appearance="outline">
-                <mat-label class="matLabel">Please specify Other Assay Name <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [(ngModel)]="othervlassay" name="vlOthervlassay" #vlOthervlassay="ngModel"
-                  placeholder="Enter Other Assay Name" required [disabled]="isView=='true'">
-                <mat-error *ngIf="!othervlassay && isSelectedOther">
-                  Please specify Other Assay Name </mat-error>
-              </mat-form-field>
-            </ion-col>
-          </ion-row> 
-           <ion-row *ngIf="!ptPanelTest">
-            <ion-col size="6" size-xs class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form"
-                [ngClass]="{ 'mat-form-field-invalid': !assayExpDate && isView==false }" appearance="outline">
-                <mat-label class="matLabel">Assay Expiration Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [matDatepicker]="assayExpiryDate"  [(ngModel)]="assayExpDate" name="vlAssayExpDate"
-                  #vlAssayExpDate="ngModel" placeholder="Choose Assay Expiration Date" class="datepicker-input" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"  [readonly]="isView!='true'" [disabled]="isView=='true'"   required>
-                <mat-datepicker-toggle matSuffix [for]="assayExpiryDate"></mat-datepicker-toggle>
-                <ion-icon name="close"  *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearAssayExpDate()"></ion-icon>
-                <mat-datepicker #assayExpiryDate disabled={{isView}}></mat-datepicker>
-                <mat-error *ngIf="!assayExpDate">
-              Assay Expiration Date is required </mat-error>
-              </mat-form-field>
-            </ion-col>
+        @if (isSelectedOther) {
+          <ion-col size="6" size-xs class="grid-input-col">
+            <mat-form-field class="login-full-width grid-col-form inputBox" appearance="outline">
+              <mat-label class="matLabel">Please specify Other Assay Name @if (isView=='true') {
+                <span class="danger-text">*</span>
+              }</mat-label>
+              <input matInput [(ngModel)]="othervlassay" name="vlOthervlassay" #vlOthervlassay="ngModel"
+                placeholder="Enter Other Assay Name" required [disabled]="isView=='true'">
+              @if (!othervlassay && isSelectedOther) {
+                <mat-error>
+                Please specify Other Assay Name </mat-error>
+              }
+            </mat-form-field>
+          </ion-col>
+        }
+      </ion-row>
+      @if (!ptPanelTest) {
+        <ion-row>
+          <ion-col size="6" size-xs class="grid-input-col">
+            <mat-form-field class="login-full-width grid-col-form"
+              [ngClass]="{ 'mat-form-field-invalid': !assayExpDate && isView==false }" appearance="outline">
+              <mat-label class="matLabel">Assay Expiration Date @if (isView=='true') {
+                <span class="danger-text">*</span>
+              }</mat-label>
+              <input matInput [matDatepicker]="assayExpiryDate"  [(ngModel)]="assayExpDate" name="vlAssayExpDate"
+                #vlAssayExpDate="ngModel" placeholder="Choose Assay Expiration Date" class="datepicker-input" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"  [readonly]="isView!='true'" [disabled]="isView=='true'"   required>
+              <mat-datepicker-toggle matSuffix [for]="assayExpiryDate"></mat-datepicker-toggle>
+              @if (isView=='false') {
+                <ion-icon name="close"  class="clearDateIcon" (click)="clearAssayExpDate()"></ion-icon>
+              }
+              <mat-datepicker #assayExpiryDate disabled={{isView}}></mat-datepicker>
+              @if (!assayExpDate) {
+                <mat-error>
+                Assay Expiration Date is required </mat-error>
+              }
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="6" size-xs class="grid-input-col">
+            <mat-form-field class="login-full-width grid-col-form inputBox"
+              [ngClass]="{ 'mat-form-field-invalid':!assayLotNo && isView==false}" appearance="outline">
+              <mat-label class="matLabel">Assay Lot Number @if (isView=='true') {
+                <span class="danger-text">*</span>
+              }</mat-label>
+              <input matInput [(ngModel)]="assayLotNo" name="vlAssayLotNo" #vlAssayLotNo="ngModel"
+                placeholder="Enter Assay Lot Number" [disabled]="isView=='true'" required>
+              @if (!assayLotNo) {
+                <mat-error>Please
+                enter Assay Lot Number</mat-error>
+              }
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+      }
 
-            <ion-col size="6" size-xs class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form inputBox"
-                [ngClass]="{ 'mat-form-field-invalid':!assayLotNo && isView==false}" appearance="outline">
-                <mat-label class="matLabel">Assay Lot Number <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [(ngModel)]="assayLotNo" name="vlAssayLotNo" #vlAssayLotNo="ngModel"
-                  placeholder="Enter Assay Lot Number" [disabled]="isView=='true'" required>
-                <mat-error *ngIf="!assayLotNo">Please
-                  enter Assay Lot Number</mat-error>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
+      <ion-row>
+        @if (isPartiEditRespDate) {
+          <ion-col size="6" size-xs class="grid-input-col">
+            <mat-form-field class="login-full-width grid-col-form"
+              [ngClass]="{ 'mat-form-field-invalid':!responseDate && isView==false }" appearance="outline">
+              <mat-label class="matLabel">Response Date @if (isView=='true') {
+                <span class="danger-text">*</span>
+              }</mat-label>
+              <input matInput [matDatepicker]="respDate" placeholder="Choose Response Date"
+                [(ngModel)]="responseDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" name="vlResponseDate" #vlResponseDate="ngModel" class="datepicker-input"
+                [readonly]="isView!='true'" [disabled]="isView=='true'"   [required]="isPartiEditRespDate">
+              <mat-datepicker-toggle matSuffix [for]="respDate"></mat-datepicker-toggle>
+              @if (isView=='false') {
+                <ion-icon name="close" class="clearDateIcon" (click)="clearResponseDate()"></ion-icon>
+              }
+              <mat-datepicker #respDate disabled={{isView}}></mat-datepicker>
+              @if (!responseDate) {
+                <mat-error>
+                Response Date is required </mat-error>
+              }
+            </mat-form-field>
+          </ion-col>
+        }
 
-          <ion-row>
-            <ion-col size="6" size-xs class="grid-input-col" *ngIf="isPartiEditRespDate">
-              <mat-form-field class="login-full-width grid-col-form"
-                [ngClass]="{ 'mat-form-field-invalid':!responseDate && isView==false }" appearance="outline">
-                <mat-label class="matLabel">Response Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [matDatepicker]="respDate" placeholder="Choose Response Date"
-                  [(ngModel)]="responseDate" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}" name="vlResponseDate" #vlResponseDate="ngModel" class="datepicker-input"
-                  [readonly]="isView!='true'" [disabled]="isView=='true'"   [required]="isPartiEditRespDate">
-                <mat-datepicker-toggle matSuffix [for]="respDate"></mat-datepicker-toggle>
-                <ion-icon name="close" *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearResponseDate()"></ion-icon>
-                <mat-datepicker #respDate disabled={{isView}}></mat-datepicker>
-                <mat-error *ngIf="!responseDate">
-                  Response Date is required </mat-error>
-              </mat-form-field>
-            </ion-col>
-
-            <ion-col size="6" size-xs class="grid-input-col" *ngIf="isPartiEditModeRec">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label class="matLabel">Mode of Receipt <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <mat-select [(ngModel)]="receiptmode" name="vlreceiptmode" #vlreceiptmode="ngModel"
-                  [disabled]="isView=='true'" [required]="isPartiEditModeRec">
-                  <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let item of modeOfReceiptArray" [value]="item.value">
+        @if (isPartiEditModeRec) {
+          <ion-col size="6" size-xs class="grid-input-col">
+            <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+              <mat-label class="matLabel">Mode of Receipt @if (isView=='true') {
+                <span class="danger-text">*</span>
+              }</mat-label>
+              <mat-select [(ngModel)]="receiptmode" name="vlreceiptmode" #vlreceiptmode="ngModel"
+                [disabled]="isView=='true'" [required]="isPartiEditModeRec">
+                <mat-option>--Select--</mat-option>
+                @for (item of modeOfReceiptArray; track item) {
+                  <mat-option [value]="item.value">
                     {{item.show}}
                   </mat-option>
-                </mat-select>
-                <mat-error *ngIf="!receiptmode">
-                  Mode of Receipt is required</mat-error>
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
+                }
+              </mat-select>
+              @if (!receiptmode) {
+                <mat-error>
+                Mode of Receipt is required</mat-error>
+              }
+            </mat-form-field>
+          </ion-col>
+        }
+      </ion-row>
 
-          <ion-row *ngIf="isQCDoneShow && isPartiQCAccess">
-            <ion-col size="12">
-              <mat-label class="matLabel" style="margin-left: 10px;font-size: 13px;">QC Done <span class="danger-text">*</span></mat-label>
-              <mat-radio-group aria-labelledby="example-radio-group-label" class="login-full-width grid-col-form"
-                [(ngModel)]="qcDone" name="vlQcDone" #vlQcDone="ngModel" [required]="isQCDoneShow" [disabled]="isView=='true'">
-                <mat-radio-button class="example-radio-button" *ngFor="let qcData of qcRadioArray"
+      @if (isQCDoneShow && isPartiQCAccess) {
+        <ion-row>
+          <ion-col size="12">
+            <mat-label class="matLabel" style="margin-left: 10px;font-size: 13px;">QC Done <span class="danger-text">*</span></mat-label>
+            <mat-radio-group aria-labelledby="example-radio-group-label" class="login-full-width grid-col-form"
+              [(ngModel)]="qcDone" name="vlQcDone" #vlQcDone="ngModel" [required]="isQCDoneShow" [disabled]="isView=='true'">
+              @for (qcData of qcRadioArray; track qcData) {
+                <mat-radio-button class="example-radio-button"
                   [value]="qcData.value">
                   {{qcData.show}}
                 </mat-radio-button>
-              </mat-radio-group>
-            </ion-col>
-          </ion-row>
+              }
+            </mat-radio-group>
+          </ion-col>
+        </ion-row>
+      }
 
 
-          <ion-row *ngIf="isQCDoneShow && qcDone=='yes' && isPartiQCAccess">
-            <ion-col size="12">
-              <mat-form-field class="login-full-width grid-col-form"
-                [ngClass]="{ 'mat-form-field-invalid':!qcDate && isView==false }" appearance="outline">
-                <mat-label class="matLabel">QC Date <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" name="vlQcDate" #vlQcDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
-                  placeholder="Choose QC Date" class="datepicker-input" 
-                  [required]="isQCDoneShow && qcDone=='yes'"  [readonly]="isView!='true'" [disabled]="isView=='true'"  >
-                <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
-                <ion-icon name="close" *ngIf="isView=='false'" class="clearDateIcon" ios="ios-close" (click)="clearQCDate()"></ion-icon>
-                <mat-datepicker #qcDatePicker disabled={{isView}}></mat-datepicker>
-                <mat-error *ngIf="!qcDate || qcDate==''">
-                  QC Date is required </mat-error>
-              </mat-form-field>
-            </ion-col>
+      @if (isQCDoneShow && qcDone=='yes' && isPartiQCAccess) {
+        <ion-row>
+          <ion-col size="12">
+            <mat-form-field class="login-full-width grid-col-form"
+              [ngClass]="{ 'mat-form-field-invalid':!qcDate && isView==false }" appearance="outline">
+              <mat-label class="matLabel">QC Date @if (isView=='true') {
+                <span class="danger-text">*</span>
+              }</mat-label>
+              <input matInput [matDatepicker]="qcDatePicker" [(ngModel)]="qcDate" name="vlQcDate" #vlQcDate="ngModel" [ngStyle]="{'color':isView === 'true'? 'rgba(0,0,0,.38)' : 'rgba(0,0,0,.87)'}"
+                placeholder="Choose QC Date" class="datepicker-input"
+                [required]="isQCDoneShow && qcDone=='yes'"  [readonly]="isView!='true'" [disabled]="isView=='true'"  >
+              <mat-datepicker-toggle matSuffix [for]="qcDatePicker"></mat-datepicker-toggle>
+              @if (isView=='false') {
+                <ion-icon name="close" class="clearDateIcon" (click)="clearQCDate()"></ion-icon>
+              }
+              <mat-datepicker #qcDatePicker disabled={{isView}}></mat-datepicker>
+              @if (!qcDate || qcDate=='') {
+                <mat-error>
+                QC Date is required </mat-error>
+              }
+            </mat-form-field>
+          </ion-col>
+          <ion-col size="12">
+            <mat-form-field class="login-full-width grid-col-form inputBox"
+              [ngClass]="{ 'mat-form-field-invalid':!qcDoneBy && isView==false }" appearance="outline">
+              <mat-label class="matLabel">QC Done By @if (isView=='true') {
+                <span class="danger-text">*</span>
+              }</mat-label>
+              <input matInput [(ngModel)]="qcDoneBy" placeholder="" name="vlQcDoneBy" #vlQcDoneBy="ngModel"
+                [disabled]="isView=='true'" [required]="isQCDoneShow && qcDone=='yes'">
+              @if (!qcDoneBy) {
+                <mat-error>
+                QC Done By is required</mat-error>
+              }
+            </mat-form-field>
+          </ion-col>
+        </ion-row>
+      }
+    </ion-grid>
 
-            <ion-col size="12">
-              <mat-form-field class="login-full-width grid-col-form inputBox"
-                [ngClass]="{ 'mat-form-field-invalid':!qcDoneBy && isView==false }" appearance="outline">
-                <mat-label class="matLabel">QC Done By <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [(ngModel)]="qcDoneBy" placeholder="" name="vlQcDoneBy" #vlQcDoneBy="ngModel"
-                  [disabled]="isView=='true'" [required]="isQCDoneShow && qcDone=='yes'">
-                <mat-error *ngIf="!qcDoneBy">
-                  QC Done By is required</mat-error>
-              </mat-form-field>
+    <mat-action-row>
+      <button mat-button color="primary" (click)="prevStep()">Previous</button>
+      <button mat-button color="warn" type="submit"
+      (click)="nextStepShipmentPanel(shipmentPanelForm.valid,'next')">Next</button>
+    </mat-action-row>
+  </mat-expansion-panel>
+</form>
+
+
+
+<form #PTPanelTestForm="ngForm" novalidate>
+  <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <ion-grid class="panelHeading">
+          <ion-row>
+            <ion-col size="10" class="grid-readonly-col">
+              <span class="text-title-color"> PT Panel Test</span>
             </ion-col>
+            @if (isValidPTPanel) {
+              <ion-col size="2" class="grid-readonly-col">
+                <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+              </ion-col>
+            }
           </ion-row>
         </ion-grid>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
+    <ion-row>
+      <ion-col class="grid-input-col">
+        <section class="div-section">
+          <mat-checkbox class="matLabel" [(ngModel)]="ptPanelTest" name="vlPtPanelTest" #vlPtPanelTest="ngModel"
+            [disabled]="isView=='true'" required>PT panel not tested
+          </mat-checkbox>
+        </section>
+      </ion-col>
+    </ion-row>
 
-        <mat-action-row>
-          <button mat-button color="primary" (click)="prevStep()">Previous</button>
-          <button mat-button color="warn" type="submit"
-            (click)="nextStepShipmentPanel(shipmentPanelForm.valid,'next')">Next</button>
-        </mat-action-row>
-      </mat-expansion-panel>
-    </form>
-
-
-
-    <form #PTPanelTestForm="ngForm" novalidate>
-      <mat-expansion-panel [expanded]="step === 2" (opened)="setStep(2)">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <ion-grid class="panelHeading">
-              <ion-row>
-                <ion-col size="10" class="grid-readonly-col">
-                  <span class="text-title-color"> PT Panel Test</span>
-                </ion-col>
-                <ion-col size="2" class="grid-readonly-col" *ngIf="isValidPTPanel">
-                  <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
+    @if (ptPanelTest==false || !ptPanelTest) {
+      <section>
         <ion-row>
           <ion-col class="grid-input-col">
             <section class="div-section">
-              <mat-checkbox class="matLabel" [(ngModel)]="ptPanelTest" name="vlPtPanelTest" #vlPtPanelTest="ngModel"
-                [disabled]="isView=='true'" required>PT panel not tested
-              </mat-checkbox>
+              <p>Please Note :</p>
+              <ul>
+                @for (item of ptPanelTestData.notes; track item) {
+                  <li>
+                    <div innerHtml="{{item}}"></div>
+                  </li>
+                }
+              </ul>
             </section>
           </ion-col>
         </ion-row>
-
-        <section *ngIf="ptPanelTest==false || !ptPanelTest">
+        @if (isView!='true') {
           <ion-row>
-            <ion-col class="grid-input-col">
-              <section class="div-section">
-                <p>Please Note :</p>
-                <ul>
-                  <li *ngFor="let item of ptPanelTestData.notes">
-                    <div innerHtml="{{item}}"></div>
-                  </li>
-                </ul>
-              </section>
-            </ion-col>
-          </ion-row>
-
-          <ion-row *ngIf="isView!='true'">
             <ion-col class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form vlCalc" appearance="outline">
                 <mat-label>
@@ -629,279 +770,328 @@
               <p class="log-para">{{vlLog}}</p>
             </ion-col>
           </ion-row>
-
-          <div *ngIf="ptPanelTestData.controlArray">
-            <mat-card class="dynamic-card" *ngFor="let controls of ptPanelTestData.controlArray.label ;let i = index">
-              <mat-card-title>
-                {{controls}}<span class="danger-text" *ngIf="ptPanelTestData.controlArray.mandatory[i]==true">*</span>
+        }
+        @if (ptPanelTestData.controlArray) {
+          <div>
+            @for (controls of ptPanelTestData.controlArray.label ; track controls; let i = $index) {
+              <mat-card class="dynamic-card">
+                <mat-card-title>
+                  {{controls}}@if (ptPanelTestData.controlArray.mandatory[i]==true) {
+                  <span class="danger-text">*</span>
+                }
               </mat-card-title>
               <mat-card-content>
-
-                <div *ngIf="ptPanelTestArray.vlResult">
-
-                  <div *ngFor="let vlresult of ptPanelTestArray.vlResult;let k = index">
-                    <ion-row>
-                      <ion-col size="12" class="grid-input-col" *ngIf="k==i">
-                        <p class="no-padding" style="padding-bottom: 5px !important;">
-                          {{ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-3]}}
-                        </p>
-
-                        <mat-form-field class="login-full-width grid-col-form inputBox vlResultInput"
-                          appearance="outline">
-                          <mat-label class="matLabel">
-                            <div [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]">
-                            </div>
-                          </mat-label>
-                          <input matInput [(ngModel)]="ptPanelTestData.vlResult[k]" name="vl[{{k}}]" #vl="ngModel" type="tel" placeholder="Viral Load (log10 copies/ml)"
-                            [ngClass]="{ 'mat-form-field-invalid': isNextStepPanelTest==true && ptPanelTestData.controlArray.mandatory[i]==true && (!vlResultArray[k] || vlResultArray[k]=='') && (ptPanelTest==false || !ptPanelTest) }"
-                            [disabled]="ptPanelTestData.tndArray[i]=='yes'||isView=='true'"
-                            [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest)" class="vlResultInput">
-
-                          <!-- [disabled]="ptPanelTestData.tndArray[i]=='yes'||isView=='true'"
-                          
-                            [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest) || ptPanelTestData.tndArray[i].disabled"-->
-
-                            <!-- && !ptPanelTestData.vlResult[k]  -->
-
-                        <mat-error
-                        *ngIf="ptPanelTestData.controlArray.mandatory[i]==true && !ptPanelTestData.vlResult[k] && (ptPanelTest==false || !ptPanelTest)">
-                        Please Enter <span
+                @if (ptPanelTestArray.vlResult) {
+                  <div>
+                    @for (vlresult of ptPanelTestArray.vlResult; track vlresult; let k = $index) {
+                      <div>
+                        <ion-row>
+                          @if (k==i) {
+                            <ion-col size="12" class="grid-input-col">
+                              <p class="no-padding" style="padding-bottom: 5px !important;">
+                                {{ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-3]}}
+                              </p>
+                              <mat-form-field class="login-full-width grid-col-form inputBox vlResultInput"
+                                appearance="outline">
+                                <mat-label class="matLabel">
+                                  <div [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]">
+                                  </div>
+                                </mat-label>
+                                <input matInput [(ngModel)]="ptPanelTestData.vlResult[k]" name="vl[{{k}}]" #vl="ngModel" type="tel" placeholder="Viral Load (log10 copies/ml)"
+                                  [ngClass]="{ 'mat-form-field-invalid': isNextStepPanelTest==true && ptPanelTestData.controlArray.mandatory[i]==true && (!vlResultArray[k] || vlResultArray[k]=='') && (ptPanelTest==false || !ptPanelTest) }"
+                                  [disabled]="ptPanelTestData.tndArray[i]=='yes'||isView=='true'"
+                                  [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest)" class="vlResultInput">
+                                <!-- [disabled]="ptPanelTestData.tndArray[i]=='yes'||isView=='true'"
+                                [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest) || ptPanelTestData.tndArray[i].disabled"-->
+                                <!-- && !ptPanelTestData.vlResult[k]  -->
+                                @if (ptPanelTestData.controlArray.mandatory[i]==true && !ptPanelTestData.vlResult[k] && (ptPanelTest==false || !ptPanelTest)) {
+                                  <mat-error
+                                    >
+                                    Please Enter <span
+                                  [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]"></span>
+                                </mat-error>
+                              }
+                            </mat-form-field>
+                            <!-- <div class="errorMsg"
+                            *ngIf="isNextStepPanelTest==true && ptPanelTestData.controlArray.mandatory[i]==true && (!vlResultArray[k] || vlResultArray[k]=='') && (ptPanelTest==false || !ptPanelTest)">
+                            Please Enter <span
                           [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]"></span>
-                      </mat-error> 
-                        </mat-form-field>
-                        <!-- <div class="errorMsg"
-                          *ngIf="isNextStepPanelTest==true && ptPanelTestData.controlArray.mandatory[i]==true && (!vlResultArray[k] || vlResultArray[k]=='') && (ptPanelTest==false || !ptPanelTest)">
-                          Please Enter <span
-                            [innerHTML]="ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-2]"></span>
                         </div> -->
-          
                       </ion-col>
-                    </ion-row>
-                  </div>
-                </div>
-
-                <div *ngFor="let item of ptPanelTestData.tndRadioArray;let j= index">
-                  <ion-row>
-                    <ion-col class="grid-input-col" *ngIf="j==i">
-                      <p class="no-padding" style="margin-top: 0px;">
-                        {{ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-1]}}
-                      </p>
-                      <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
-                        [(ngModel)]="ptPanelTestData.tndArray[j]" [ngModelOptions]="{standalone: true}"
-                        (ngModelChange)="changeTND(j,ptPanelTestData.tndArray[j])" name="tnd[{{j}}]" #tnd="ngModel"
-                        [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest)"
-                        [disabled]="isView=='true'">
-
-                        <mat-radio-button class="example-radio-button" *ngFor="let tnd of item" [value]="tnd.value">
-                          {{tnd.show}}
-                        </mat-radio-button>
-                        <mat-error
-                          *ngIf="ptPanelTestData.controlArray.mandatory[i]==true && !ptPanelTestData.tndArray[j] && (ptPanelTest==false || !ptPanelTest)">
-                          Please Enter {{ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-1]}}
-                        </mat-error>
-                      </mat-radio-group>
-                    </ion-col>
-
-
+                    }
                   </ion-row>
                 </div>
-
-              </mat-card-content>
-            </mat-card>
-
-          </div>
-        </section>
-
-        <section *ngIf="ptPanelTest">
-          <ion-row>
-            <ion-col size="12" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label class="matLabel">
-                  {{ptPanelNotTestData.ptNotTestedReasonLabel}} <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <mat-select [(ngModel)]="ptPanelNotTestData.vlNotTestedReason" name="vlNotTested" #vlNotTested="ngModel"
-                  [required]="ptPanelTest" [disabled]="isView=='true'">
-                  <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let item of ptPanelNotTestData.ptNotTestedReasonArray" [value]="item.value">
-                    {{item.show}}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="!ptPanelNotTestData.vlNotTestedReason && ptPanelTest">Please choose the Reason for not
-                  testing</mat-error>
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="12" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form mat-text-area-field" appearance="outline">
-                <mat-label class="matLabel">{{ptPanelNotTestData.ptNotTestedCommentsLabel}} <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <textarea matInput placeholder="Enter Your Comments here"
-                  [(ngModel)]="ptPanelNotTestData.ptNotTestedComments" name="ptNotTestedComments"
-                  #ptNotTestedComments="ngModel" [required]="ptPanelTest" [disabled]="isView=='true'"></textarea>
-                <mat-error *ngIf="!ptPanelNotTestData.ptNotTestedComments && ptPanelTest">Please Enter Your Comments
-                </mat-error>
-              </mat-form-field>
-            </ion-col>
-            <ion-col size="12" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form mat-text-area-field" appearance="outline">
-                <mat-label class="matLabel">{{ptPanelNotTestData.ptSupportCommentsLabel}}</mat-label>
-                <textarea matInput placeholder="Enter Your Comments here"
-                  [(ngModel)]="ptPanelNotTestData.ptSupportComments" name="ptSupportComments"
-                  #ptSupportComments="ngModel" [disabled]="isView=='true'"></textarea>
-                <!-- <mat-error *ngIf="!ptPanelNotTestData.ptSupportComments && ptPanelTest">Please Enter Your Comments
-                </mat-error> -->
-              </mat-form-field>
-            </ion-col>
-          </ion-row>
-        </section>
-        <mat-action-row>
-          <button mat-button color="warn" (click)="prevStep()">Previous</button>
-          <button mat-button color="primary" type="submit"
-            (click)="nextStepPTPanelTest('next',ptPanelTest)">Next</button>
-        </mat-action-row>
-      </mat-expansion-panel>
-    </form>
-
-
-     <!-- Custom Field panel starts-->
-
-     <form #customFieldsForm="ngForm" novalidate>
-
-      <mat-expansion-panel *ngIf="showCustomFieldData" [expanded]="step === 3"
-       (opened)="setStep(3)">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <ion-grid class="panelHeading">
+              }
+            </div>
+          }
+          @for (item of ptPanelTestData.tndRadioArray; track item; let j = $index) {
+            <div>
               <ion-row>
-                <ion-col size="10" class="grid-readonly-col">
-                  <span class="text-title-color">Custom Fields</span>
-                </ion-col>
-                <ion-col size="2" class="grid-readonly-col" *ngIf="isValidCustField==true">
+                @if (j==i) {
+                  <ion-col class="grid-input-col">
+                    <p class="no-padding" style="margin-top: 0px;">
+                      {{ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-1]}}
+                    </p>
+                    <mat-radio-group aria-labelledby="example-radio-group-label" class="example-radio-group"
+                      [(ngModel)]="ptPanelTestData.tndArray[j]" [ngModelOptions]="{standalone: true}"
+                      (ngModelChange)="changeTND(j,ptPanelTestData.tndArray[j])" name="tnd[{{j}}]" #tnd="ngModel"
+                      [required]="ptPanelTestData.controlArray.mandatory[i]==true && (ptPanelTest==false || !ptPanelTest)"
+                      [disabled]="isView=='true'">
+                      @for (tnd of item; track tnd) {
+                        <mat-radio-button class="example-radio-button" [value]="tnd.value">
+                          {{tnd.show}}
+                        </mat-radio-button>
+                      }
+                      @if (ptPanelTestData.controlArray.mandatory[i]==true && !ptPanelTestData.tndArray[j] && (ptPanelTest==false || !ptPanelTest)) {
+                        <mat-error
+                          >
+                          Please Enter {{ptPanelTestData.controlHeads[ptPanelTestData.controlHeads.length-1]}}
+                        </mat-error>
+                      }
+                    </mat-radio-group>
+                  </ion-col>
+                }
+              </ion-row>
+            </div>
+          }
+        </mat-card-content>
+      </mat-card>
+    }
+  </div>
+}
+</section>
+}
+
+@if (ptPanelTest) {
+  <section>
+    <ion-row>
+      <ion-col size="12" class="grid-input-col">
+        <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+          <mat-label class="matLabel">
+            {{ptPanelNotTestData.ptNotTestedReasonLabel}} @if (isView=='true') {
+            <span class="danger-text">*</span>
+          }</mat-label>
+          <mat-select [(ngModel)]="ptPanelNotTestData.vlNotTestedReason" name="vlNotTested" #vlNotTested="ngModel"
+            [required]="ptPanelTest" [disabled]="isView=='true'">
+            <mat-option>--Select--</mat-option>
+            @for (item of ptPanelNotTestData.ptNotTestedReasonArray; track item) {
+              <mat-option [value]="item.value">
+                {{item.show}}
+              </mat-option>
+            }
+          </mat-select>
+          @if (!ptPanelNotTestData.vlNotTestedReason && ptPanelTest) {
+            <mat-error>Please choose the Reason for not
+            testing</mat-error>
+          }
+        </mat-form-field>
+      </ion-col>
+      <ion-col size="12" class="grid-input-col">
+        <mat-form-field class="login-full-width grid-col-form mat-text-area-field" appearance="outline">
+          <mat-label class="matLabel">{{ptPanelNotTestData.ptNotTestedCommentsLabel}} @if (isView=='true') {
+            <span class="danger-text">*</span>
+          }</mat-label>
+          <textarea matInput placeholder="Enter Your Comments here"
+            [(ngModel)]="ptPanelNotTestData.ptNotTestedComments" name="ptNotTestedComments"
+          #ptNotTestedComments="ngModel" [required]="ptPanelTest" [disabled]="isView=='true'"></textarea>
+          @if (!ptPanelNotTestData.ptNotTestedComments && ptPanelTest) {
+            <mat-error>Please Enter Your Comments
+            </mat-error>
+          }
+        </mat-form-field>
+      </ion-col>
+      <ion-col size="12" class="grid-input-col">
+        <mat-form-field class="login-full-width grid-col-form mat-text-area-field" appearance="outline">
+          <mat-label class="matLabel">{{ptPanelNotTestData.ptSupportCommentsLabel}}</mat-label>
+          <textarea matInput placeholder="Enter Your Comments here"
+            [(ngModel)]="ptPanelNotTestData.ptSupportComments" name="ptSupportComments"
+          #ptSupportComments="ngModel" [disabled]="isView=='true'"></textarea>
+          <!-- <mat-error *ngIf="!ptPanelNotTestData.ptSupportComments && ptPanelTest">Please Enter Your Comments
+        </mat-error> -->
+      </mat-form-field>
+    </ion-col>
+  </ion-row>
+</section>
+}
+<mat-action-row>
+  <button mat-button color="warn" (click)="prevStep()">Previous</button>
+  <button mat-button color="primary" type="submit"
+  (click)="nextStepPTPanelTest('next',ptPanelTest)">Next</button>
+</mat-action-row>
+</mat-expansion-panel>
+</form>
+
+
+<!-- Custom Field panel starts-->
+
+<form #customFieldsForm="ngForm" novalidate>
+
+  @if (showCustomFieldData) {
+    <mat-expansion-panel [expanded]="step === 3"
+      (opened)="setStep(3)">
+      <mat-expansion-panel-header>
+        <mat-panel-title>
+          <ion-grid class="panelHeading">
+            <ion-row>
+              <ion-col size="10" class="grid-readonly-col">
+                <span class="text-title-color">Custom Fields</span>
+              </ion-col>
+              @if (isValidCustField==true) {
+                <ion-col size="2" class="grid-readonly-col">
                   <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
                 </ion-col>
-              </ion-row>
-            </ion-grid>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
-        <ion-grid>
-          <ion-row *ngIf="customFieldData.customField1Text">
+              }
+            </ion-row>
+          </ion-grid>
+        </mat-panel-title>
+      </mat-expansion-panel-header>
+      <ion-grid>
+        @if (customFieldData.customField1Text) {
+          <ion-row>
             <ion-col size="12"class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>{{customFieldData.customField1Text}}</mat-label>
-                <input matInput [(ngModel)]="customFieldData.customField1Val" 
-                placeholder="Enter {{customFieldData.customField1Text}}" #custField1="ngModel"
-                 name="custField1" [disabled]="isView=='true'">
-                <mat-error *ngIf="!customFieldData.customField1Val">
-                  {{customFieldData.customField1Text}} is required
-                </mat-error>
+                <input matInput [(ngModel)]="customFieldData.customField1Val"
+                  placeholder="Enter {{customFieldData.customField1Text}}" #custField1="ngModel"
+                  name="custField1" [disabled]="isView=='true'">
+                @if (!customFieldData.customField1Val) {
+                  <mat-error>
+                    {{customFieldData.customField1Text}} is required
+                  </mat-error>
+                }
               </mat-form-field>
             </ion-col>
           </ion-row>
-          <ion-row *ngIf="customFieldData.customField2Text">
+        }
+        @if (customFieldData.customField2Text) {
+          <ion-row>
             <ion-col size="12"class="grid-input-col">
               <mat-form-field class="login-full-width grid-col-form" appearance="outline">
                 <mat-label>{{customFieldData.customField2Text}}</mat-label>
-                <input matInput [(ngModel)]="customFieldData.customField2Val" 
-                placeholder="Enter {{customFieldData.customField2Text}}" #custField2="ngModel"
-                 name="custField2" [disabled]="isView=='true'">
-                <mat-error *ngIf="!customFieldData.customField2Val">
-                  {{customFieldData.customField2Text}} is required
-                </mat-error>
+                <input matInput [(ngModel)]="customFieldData.customField2Val"
+                  placeholder="Enter {{customFieldData.customField2Text}}" #custField2="ngModel"
+                  name="custField2" [disabled]="isView=='true'">
+                @if (!customFieldData.customField2Val) {
+                  <mat-error>
+                    {{customFieldData.customField2Text}} is required
+                  </mat-error>
+                }
               </mat-form-field>
             </ion-col>
           </ion-row>
-     
-        </ion-grid>
-        <mat-action-row>
-          <button mat-button color="primary" (click)="prevStep()">Previous</button>
-          <button mat-button color="warn"
-          type='submit' (click)="checkCustFieldPanel('next')">Next</button>
-        </mat-action-row>
-      </mat-expansion-panel>
-      </form>
+        }
+      </ion-grid>
+      <mat-action-row>
+        <button mat-button color="primary" (click)="prevStep()">Previous</button>
+        <button mat-button color="warn"
+        type='submit' (click)="checkCustFieldPanel('next')">Next</button>
+      </mat-action-row>
+    </mat-expansion-panel>
+  }
+</form>
 
-      <!-- Custom Panel Ends-->
- 
+<!-- Custom Panel Ends-->
 
-    <form #otherInfoPanelForm="ngForm" novalidate>
-      <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)">
-        <mat-expansion-panel-header>
-          <mat-panel-title>
-            <ion-grid class="panelHeading">
-              <ion-row>
-                <ion-col size="10" class="grid-readonly-col">
-                  <span class="text-title-color">Other Information</span>
-                </ion-col>
-                <ion-col size="2" class="grid-readonly-col" *ngIf="validOtherInfo==true">
-                  <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
-                </ion-col>
-              </ion-row>
-            </ion-grid>
-          </mat-panel-title>
-        </mat-expansion-panel-header>
 
-        <ion-grid>
+<form #otherInfoPanelForm="ngForm" novalidate>
+  <mat-expansion-panel [expanded]="step === 4" (opened)="setStep(4)">
+    <mat-expansion-panel-header>
+      <mat-panel-title>
+        <ion-grid class="panelHeading">
           <ion-row>
-            <ion-col class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form inputBox"
-                [ngClass]="{ 'mat-form-field-invalid':!supReview && isView==false}" appearance="outline">
-                <mat-label class="matLabel">Supervisor Review <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <mat-select [(ngModel)]="supReview" name="vlFormSupReview" #vlFormSupReview="ngModel"
-                  (ngModelChange)="changeSupervisorReview(supReview)" [disabled]="isView=='true'" required>
-                  <mat-option>--Select--</mat-option>
-                  <mat-option *ngFor="let sr of supervisorReviewArray" [value]="sr.value">
-                    {{sr.show}}
-                  </mat-option>
-                </mat-select>
-                <mat-error *ngIf="!supReview">Supervisor Review is
-                  required</mat-error>
-              </mat-form-field>
-
+            <ion-col size="10" class="grid-readonly-col">
+              <span class="text-title-color">Other Information</span>
             </ion-col>
-
-            <ion-col *ngIf="supReview=='yes'" class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form inputBox"
-                [ngClass]="{ 'mat-form-field-invalid':!supName && supReview=='yes' && isView==false }"
-                appearance="outline">
-                <mat-label class="matLabel">{{approvalLabel }} <span class="danger-text" *ngIf="isView=='true'">*</span></mat-label>
-                <input matInput [(ngModel)]="supName" placeholder="Enter Supervisor Name" [disabled]="isView=='true'"
-                  name="vlSupName" #vlSupName="ngModel" [required]="supReview=='yes'">
-                <mat-error *ngIf="!supName && supReview=='yes'">{{approvalLabel}} is required</mat-error>
-              </mat-form-field>
-
-            </ion-col>
-          </ion-row>
-          <ion-row>
-            <ion-col class="grid-input-col">
-              <mat-form-field class="login-full-width grid-col-form" appearance="outline">
-                <mat-label class="matLabel">Comments</mat-label>
-                <textarea matInput placeholder="Enter Comments here" [(ngModel)]="comments" name="vlComments"
-                  #vlComments="ngModel" [disabled]="isView=='true'"></textarea>
-              </mat-form-field>
-            </ion-col>
+            @if (validOtherInfo==true) {
+              <ion-col size="2" class="grid-readonly-col">
+                <ion-icon name="checkmark-circle" class="checkMarkIcon"></ion-icon>
+              </ion-col>
+            }
           </ion-row>
         </ion-grid>
+      </mat-panel-title>
+    </mat-expansion-panel-header>
 
-        <mat-action-row>
-          <button mat-button color="primary" (click)="prevStep()">Previous</button>   
+    <ion-grid>
+      <ion-row>
+        <ion-col class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form inputBox"
+            [ngClass]="{ 'mat-form-field-invalid':!supReview && isView==false}" appearance="outline">
+            <mat-label class="matLabel">Supervisor Review @if (isView=='true') {
+              <span class="danger-text">*</span>
+            }</mat-label>
+            <mat-select [(ngModel)]="supReview" name="vlFormSupReview" #vlFormSupReview="ngModel"
+              (ngModelChange)="changeSupervisorReview(supReview)" [disabled]="isView=='true'" required>
+              <mat-option>--Select--</mat-option>
+              @for (sr of supervisorReviewArray; track sr) {
+                <mat-option [value]="sr.value">
+                  {{sr.show}}
+                </mat-option>
+              }
+            </mat-select>
+            @if (!supReview) {
+              <mat-error>Supervisor Review is
+              required</mat-error>
+            }
+          </mat-form-field>
 
-          <button mat-button color="primary" *ngIf="summarizeForm==false && isView!='true'" (click)="submitViralLoad(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>  
-        </mat-action-row>
+        </ion-col>
 
-      </mat-expansion-panel>
-    </form>
-  </mat-accordion>
+        @if (supReview=='yes') {
+          <ion-col class="grid-input-col">
+            <mat-form-field class="login-full-width grid-col-form inputBox"
+              [ngClass]="{ 'mat-form-field-invalid':!supName && supReview=='yes' && isView==false }"
+              appearance="outline">
+              <mat-label class="matLabel">{{approvalLabel }} @if (isView=='true') {
+                <span class="danger-text">*</span>
+              }</mat-label>
+              <input matInput [(ngModel)]="supName" placeholder="Enter Supervisor Name" [disabled]="isView=='true'"
+                name="vlSupName" #vlSupName="ngModel" [required]="supReview=='yes'">
+              @if (!supName && supReview=='yes') {
+                <mat-error>{{approvalLabel}} is required</mat-error>
+              }
+            </mat-form-field>
+          </ion-col>
+        }
+      </ion-row>
+      <ion-row>
+        <ion-col class="grid-input-col">
+          <mat-form-field class="login-full-width grid-col-form" appearance="outline">
+            <mat-label class="matLabel">Comments</mat-label>
+            <textarea matInput placeholder="Enter Comments here" [(ngModel)]="comments" name="vlComments"
+            #vlComments="ngModel" [disabled]="isView=='true'"></textarea>
+          </mat-form-field>
+        </ion-col>
+      </ion-row>
+    </ion-grid>
 
-<ion-grid *ngIf="summarizeForm==true">
-  <ion-row>
-    <ion-col size="6">
-      <ion-button class="text-center native-btn summarizeButtons"
-      (click)="editForm()">Edit 
-    </ion-button>
-    </ion-col>
-    <ion-col size="6">
-      <ion-button class="text-center native-btn summarizeButtons confirm"
-      (click)="confirmViralLoad(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Confirm 
-    </ion-button>
-    </ion-col>
-  </ion-row>
-</ion-grid>
+    <mat-action-row>
+      <button mat-button color="primary" (click)="prevStep()">Previous</button>
+
+      @if (summarizeForm==false && isView!='true') {
+        <button mat-button color="primary" (click)="submitViralLoad(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Submit</button>
+      }
+    </mat-action-row>
+
+  </mat-expansion-panel>
+</form>
+</mat-accordion>
+
+@if (summarizeForm==true) {
+  <ion-grid>
+    <ion-row>
+      <ion-col size="6">
+        <ion-button class="text-center native-btn summarizeButtons"
+          (click)="editForm()">Edit
+        </ion-button>
+      </ion-col>
+      <ion-col size="6">
+        <ion-button class="text-center native-btn summarizeButtons confirm"
+          (click)="confirmViralLoad(shipmentPanelForm,PTPanelTestForm,otherInfoPanelForm)">Confirm
+        </ion-button>
+      </ion-col>
+    </ion-row>
+  </ion-grid>
+}
 
 </ion-content>

@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   syncDataLimit
@@ -8,14 +9,14 @@ import {
 import * as _ from 'lodash';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   Router
 } from '@angular/router';
 import {
-  Events,
   ModalController
 } from '@ionic/angular';
+import { Events } from '../service/events/events.service';
 import {
   LoaderService,
   AlertService
@@ -26,11 +27,13 @@ import {
 import {
   LoadingController
 } from '@ionic/angular';
-import { Network } from '@ionic-native/network/ngx';
+import { Network } from '@awesome-cordova-plugins/network/ngx';
 
 @Component({
+  standalone: false,
   selector: 'app-sync-all-shipments',
   templateUrl: './sync-all-shipments.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./sync-all-shipments.page.scss'],
 })
 export class SyncAllShipmentsPage implements OnInit {

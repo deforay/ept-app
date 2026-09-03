@@ -1,13 +1,14 @@
 import {
   Component,
   OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   CrudServiceService
 } from '../../app/service/crud/crud-service.service';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   PopoverController
 } from '@ionic/angular';
@@ -16,16 +17,16 @@ import {
 } from '../../app/service/providers';
 import {
   Network
-} from '@ionic-native/network/ngx';
-import {
-  Events
-} from '@ionic/angular';
+} from '@awesome-cordova-plugins/network/ngx';
+import { Events } from '../service/events/events.service';
 import {
   Router
 } from '@angular/router';
 @Component({
+  standalone: false,
   selector: 'app-shipment-filter',
   templateUrl: './shipment-filter.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./shipment-filter.component.scss'],
 })
 export class ShipmentFilterComponent implements OnInit {

@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   Router
@@ -24,10 +25,10 @@ import {
 } from '@angular/material/core';
 import {
   Network
-} from '@ionic-native/network/ngx';
+} from '@awesome-cordova-plugins/network/ngx';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   MenuController
 } from '@ionic/angular';
@@ -39,8 +40,10 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-forgot-password',
   templateUrl: './forgot-password.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./forgot-password.page.scss'],
 })
 

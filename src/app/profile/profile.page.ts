@@ -1,6 +1,7 @@
 import {
   Component,
-  OnInit
+  OnInit,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   FormControl,
@@ -17,19 +18,17 @@ import {
 } from '../../app/service/crud/crud-service.service';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   ErrorStateMatcher
 } from '@angular/material/core';
 import {
   Router
 } from '@angular/router';
-import {
-  Events
-} from '@ionic/angular';
+import { Events } from '../service/events/events.service';
 import {
   Network
-} from '@ionic-native/network/ngx';
+} from '@awesome-cordova-plugins/network/ngx';
 import {
   AlertController
 } from '@ionic/angular';
@@ -42,8 +41,10 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
 }
 
 @Component({
+  standalone: false,
   selector: 'app-profile',
   templateUrl: './profile.page.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./profile.page.scss'],
 })
 

@@ -2,8 +2,8 @@ import {
   Injectable
 } from '@angular/core';
 import {
-  Firebase
-} from '@ionic-native/firebase/ngx';
+  FirebaseX
+} from '@awesome-cordova-plugins/firebase-x/ngx';
 import {
   Platform
 } from '@ionic/angular';
@@ -12,7 +12,7 @@ import {
 } from '../app/service/crud/crud-service.service';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 import {
   Observable
 } from 'rxjs';
@@ -27,7 +27,7 @@ export class FcmService {
 
   appVersionNumber: any;
   authToken: any;
-  constructor(private firebase: Firebase,
+  constructor(private firebase: FirebaseX,
     private platform: Platform,
     public CrudServiceService: CrudServiceService,
     private storage: Storage,
@@ -50,8 +50,10 @@ export class FcmService {
   async getToken() {
     let token;
     if (this.platform.is('android')) {
+      // Android 13+ (targetSdk 33 and above) gates notifications behind a
+      // runtime POST_NOTIFICATIONS grant; resolves immediately on older versions.
+      await this.firebase.grantPermission();
       token = await this.firebase.getToken();
-      console.log('token', token);
     }
     if (this.platform.is('ios')) {
       token = await this.firebase.getToken();

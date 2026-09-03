@@ -3,17 +3,20 @@ import {
   Component,
   OnInit,
   Input,
+  ChangeDetectionStrategy
 } from '@angular/core';
 import {
   Router
 } from '@angular/router';
 import {
   Storage
-} from '@ionic/storage';
+} from '@ionic/storage-angular';
 
 @Component({
+  standalone: false,
   selector: 'app-header',
   templateUrl: './header.component.html',
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ['./header.component.scss'],
 })
 export class HeaderComponent implements OnInit {

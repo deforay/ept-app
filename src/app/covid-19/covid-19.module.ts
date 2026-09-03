@@ -2,7 +2,7 @@ import { NgModule} from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import { IonButton, IonCol, IonContent, IonGrid, IonIcon, IonRow } from '@ionic/angular';
 import { MaterialModule } from '../material.module';
 import { MomentModule } from '../moment.module';
 
@@ -15,7 +15,7 @@ import { ComponentsModule } from '../component/components.module';
     CommonModule,
     FormsModule,
     ReactiveFormsModule,
-    IonicModule,
+    IonButton, IonCol, IonContent, IonGrid, IonIcon, IonRow,
     MaterialModule,
     MomentModule,
     ComponentsModule,

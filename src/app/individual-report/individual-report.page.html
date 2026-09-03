@@ -2,108 +2,114 @@
 
 <ion-content>
 
-  <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)" *ngIf="networkType!='none'">
-    <ion-refresher-content></ion-refresher-content>
-  </ion-refresher>
+  @if (networkType!='none') {
+    <ion-refresher slot="fixed" (ionRefresh)="doRefresh($event)">
+      <ion-refresher-content></ion-refresher-content>
+    </ion-refresher>
+  }
 
-  <ion-searchbar *ngIf="networkType!='none' && showNoData==false" class="searchBar" [(ngModel)]="search" mode="ios" showCancelButton="never"
-  #searchShipment="ngModel" name="searchShipment"></ion-searchbar>
-
-
-<div *ngIf="networkType!='none'" class="topDiv">
-  <ion-card *ngFor="let item of individualReports | filter:search" class="eptCard">
-    <ion-card-header class="CardHeader">
-      <p class="ion-text-wrap" class="schemeName"> {{item.schemeName}}</p>
-    </ion-card-header>
-    <ion-card-content class="cardContent">
-      <ion-grid>
-        <ion-row *ngIf="item.shipmentDate">
-          <ion-col size="5">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">Shipment Date </span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-              <p class="ion-text-wrap">
-                  <span class="text-title-color">:</span>
-              </p>
-          </ion-col>
-          <ion-col>
-            <p class="ion-text-wrap" class="shipmentValues">
-              <span>{{item.shipmentDate | date :'d MMM y'}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
+  @if (networkType!='none' && showNoData==false) {
+    <ion-searchbar class="searchBar" [(ngModel)]="search" mode="ios" showCancelButton="never"
+    #searchShipment="ngModel" name="searchShipment"></ion-searchbar>
+  }
 
 
-       <ion-row *ngIf="item.shipmentCode">
-          <ion-col size="5">
-            <p class="ion-text-wrap">
-              <span class="text-title-color">Shipment Code </span>
-            </p>
-          </ion-col>
-          <ion-col size="1">
-              <p class="ion-text-wrap">
-                  <span class="text-title-color">:</span>
-              </p>
-          </ion-col>
-          <ion-col>
-            <p class="ion-text-wrap" class="shipmentValues">
-              <span>{{item.shipmentCode}}</span>
-            </p>
-          </ion-col>
-        </ion-row>
-
-
-        <ion-row *ngIf="item.uniqueIdentifier">
-            <ion-col size="5">
-              <p class="ion-text-wrap">
-                <span class="text-title-color">Participant ID </span>
-              </p>
-            </ion-col>
-            <ion-col size="1">
-                <p class="ion-text-wrap">
-                    <span class="text-title-color">:</span>
-                </p>
-            </ion-col>
-            <ion-col>
-              <p class="ion-text-wrap" class="shipmentValues">
-                <span>{{item.uniqueIdentifier}}</span>
-              </p>
-            </ion-col>
-          </ion-row>
-
-
-
-          <ion-row *ngIf="item.name">
-              <ion-col size="5">
-                <p class="ion-text-wrap">
-                  <span class="text-title-color">Participant Name </span>
-                </p>
-              </ion-col>
-              <ion-col size="1">
-                  <p class="ion-text-wrap">
+  @if (networkType!='none') {
+    <div class="topDiv">
+      @for (item of individualReports | filter:search; track item) {
+        <ion-card class="eptCard">
+          <ion-card-header class="CardHeader">
+            <p class="ion-text-wrap" class="schemeName"> {{item.schemeName}}</p>
+          </ion-card-header>
+          <ion-card-content class="cardContent">
+            <ion-grid>
+              @if (item.shipmentDate) {
+                <ion-row>
+                  <ion-col size="5">
+                    <p class="ion-text-wrap">
+                      <span class="text-title-color">Shipment Date </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size="1">
+                    <p class="ion-text-wrap">
                       <span class="text-title-color">:</span>
-                  </p>
-              </ion-col>
-              <ion-col>
-                <p class="ion-text-wrap" class="shipmentValues">
-                  <span>{{item.name}}</span>
-                </p>
-              </ion-col>
-            </ion-row>
-
-
-              <ion-row *ngIf="item.responseDate">
+                    </p>
+                  </ion-col>
+                  <ion-col>
+                    <p class="ion-text-wrap" class="shipmentValues">
+                      <span>{{item.shipmentDate | date :'d MMM y'}}</span>
+                    </p>
+                  </ion-col>
+                </ion-row>
+              }
+              @if (item.shipmentCode) {
+                <ion-row>
+                  <ion-col size="5">
+                    <p class="ion-text-wrap">
+                      <span class="text-title-color">Shipment Code </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size="1">
+                    <p class="ion-text-wrap">
+                      <span class="text-title-color">:</span>
+                    </p>
+                  </ion-col>
+                  <ion-col>
+                    <p class="ion-text-wrap" class="shipmentValues">
+                      <span>{{item.shipmentCode}}</span>
+                    </p>
+                  </ion-col>
+                </ion-row>
+              }
+              @if (item.uniqueIdentifier) {
+                <ion-row>
+                  <ion-col size="5">
+                    <p class="ion-text-wrap">
+                      <span class="text-title-color">Participant ID </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size="1">
+                    <p class="ion-text-wrap">
+                      <span class="text-title-color">:</span>
+                    </p>
+                  </ion-col>
+                  <ion-col>
+                    <p class="ion-text-wrap" class="shipmentValues">
+                      <span>{{item.uniqueIdentifier}}</span>
+                    </p>
+                  </ion-col>
+                </ion-row>
+              }
+              @if (item.name) {
+                <ion-row>
+                  <ion-col size="5">
+                    <p class="ion-text-wrap">
+                      <span class="text-title-color">Participant Name </span>
+                    </p>
+                  </ion-col>
+                  <ion-col size="1">
+                    <p class="ion-text-wrap">
+                      <span class="text-title-color">:</span>
+                    </p>
+                  </ion-col>
+                  <ion-col>
+                    <p class="ion-text-wrap" class="shipmentValues">
+                      <span>{{item.name}}</span>
+                    </p>
+                  </ion-col>
+                </ion-row>
+              }
+              @if (item.responseDate) {
+                <ion-row>
                   <ion-col size="5">
                     <p class="ion-text-wrap">
                       <span class="text-title-color">Response Date </span>
                     </p>
                   </ion-col>
                   <ion-col size="1">
-                      <p class="ion-text-wrap">
-                          <span class="text-title-color">:</span>
-                      </p>
+                    <p class="ion-text-wrap">
+                      <span class="text-title-color">:</span>
+                    </p>
                   </ion-col>
                   <ion-col>
                     <p class="ion-text-wrap" class="shipmentValues">
@@ -111,76 +117,81 @@
                     </p>
                   </ion-col>
                 </ion-row>
-      </ion-grid>
-      <!-- <ion-button class="text-center native-btn" href="{{apiUrl}}{{item.downloadLink}}"  (click)="downloadReport()"*ngIf="item.downloadLink">Download Report</ion-button> -->
-      <ion-button class="text-center native-btn" (click)="downloadReport(item.downloadLink,item.fileName)" *ngIf="item.downloadLink">Download Report</ion-button>
+              }
+            </ion-grid>
+            <!-- <ion-button class="text-center native-btn" href="{{apiUrl}}{{item.downloadLink}}"  (click)="downloadReport()"*ngIf="item.downloadLink">Download Report</ion-button> -->
+            @if (item.downloadLink) {
+              <ion-button class="text-center native-btn" (click)="downloadReport(item.downloadLink,item.fileName)">Download Report</ion-button>
+            }
+          </ion-card-content>
+        </ion-card>
+      }
+      <!-- ion-skeleton-text code start -->
+      @for (item of skeltonArray; track item) {
+        <ion-card class="eptCard">
+          <ion-card-header class="CardHeader">
+            <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+          </ion-card-header>
+          <ion-card-content class="cardContent">
+            <ion-grid class="shipmentGrid">
+              <ion-row class="skeltonRow">
+                <ion-col size="12">
+                  <p class="ion-text-wrap">
+                    <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
+                  </p>
+                </ion-col>
+              </ion-row>
+              <ion-row class="skeltonRow">
+                <ion-col size="12">
+                  <p class="ion-text-wrap">
+                    <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
+                  </p>
+                </ion-col>
+              </ion-row>
+              <ion-row class="skeltonRow">
+                <ion-col size="12">
+                  <p class="ion-text-wrap">
+                    <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
+                  </p>
+                </ion-col>
+              </ion-row>
+              <ion-row class="skeltonRow">
+                <ion-col size="12">
+                  <p class="ion-text-wrap">
+                    <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
+                  </p>
+                </ion-col>
+              </ion-row>
+              <ion-row class="skeltonRow">
+                <ion-col size="12">
+                  <p class="ion-text-wrap">
+                    <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
+                  </p>
+                </ion-col>
+              </ion-row>
+              <ion-row class="skeltonRow">
+                <ion-col size="12">
+                  <p class="ion-text-wrap">
+                    <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
+                  </p>
+                </ion-col>
+              </ion-row>
+            </ion-grid>
+          </ion-card-content>
+        </ion-card>
+      }
+      <!-- ion-skeleton-text code end -->
+    </div>
+  }
 
-    </ion-card-content>
-  </ion-card>
-
-  
-    <!-- ion-skeleton-text code start -->
-    <ion-card *ngFor="let item of skeltonArray" class="eptCard">
-      <ion-card-header class="CardHeader">
-        <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-      </ion-card-header>
-  
+  @if (networkType=='none'|| showNoData) {
+    <ion-card class="eptCard noReports">
       <ion-card-content class="cardContent">
-        <ion-grid class="shipmentGrid">
-          <ion-row class="skeltonRow">
-            <ion-col size="12">
-              <p class="ion-text-wrap">
-                <ion-skeleton-text animated style="width: 20%"></ion-skeleton-text>
-              </p>
-            </ion-col>
-          </ion-row>
-          <ion-row class="skeltonRow">
-            <ion-col size="12">
-              <p class="ion-text-wrap">
-                <ion-skeleton-text animated style="width: 30%"></ion-skeleton-text>
-              </p>
-            </ion-col>
-          </ion-row>
-          <ion-row class="skeltonRow">
-            <ion-col size="12">
-              <p class="ion-text-wrap">
-                <ion-skeleton-text animated style="width: 40%"></ion-skeleton-text>
-              </p>
-            </ion-col>
-          </ion-row>
-          <ion-row class="skeltonRow">
-            <ion-col size="12">
-              <p class="ion-text-wrap">
-                <ion-skeleton-text animated style="width: 60%"></ion-skeleton-text>
-              </p>
-            </ion-col>
-          </ion-row>
-          <ion-row class="skeltonRow">
-            <ion-col size="12">
-              <p class="ion-text-wrap">
-                <ion-skeleton-text animated style="width: 80%"></ion-skeleton-text>
-              </p>
-            </ion-col>
-          </ion-row>
-          <ion-row class="skeltonRow">
-            <ion-col size="12">
-              <p class="ion-text-wrap">
-                <ion-skeleton-text animated style="width: 90%"></ion-skeleton-text>
-              </p>
-            </ion-col>
-          </ion-row>
-        </ion-grid>
+        <p class="noReports">
+          No individual reports available
+        </p>
       </ion-card-content>
     </ion-card>
-    <!-- ion-skeleton-text code end -->
-  </div>
-
-    <ion-card class="eptCard noReports" *ngIf="networkType=='none'|| showNoData">
-      <ion-card-content class="cardContent">
-      <p class="noReports">
-        No individual reports available 
-      </p>
-        </ion-card-content>
-    </ion-card>
+  }
 
 </ion-content>

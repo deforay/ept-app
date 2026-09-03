@@ -2,7 +2,7 @@ import { NgModule } from '@angular/core';
 import { CommonModule } from '@angular/common';
 import { FormsModule ,ReactiveFormsModule} from '@angular/forms';
 
-import { IonicModule } from '@ionic/angular';
+import { IonCol, IonContent, IonGrid, IonRow } from '@ionic/angular';
 
 import { ChangePasswordPageRoutingModule } from './change-password-routing.module';
 
@@ -13,7 +13,7 @@ import { ComponentsModule } from '../component/components.module';
   imports: [
     CommonModule,
     FormsModule,
-    IonicModule,
+    IonCol, IonContent, IonGrid, IonRow,
     MaterialModule,
     ReactiveFormsModule,
     ComponentsModule,

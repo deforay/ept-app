@@ -1,4 +1,4 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import {
   FormBuilder,
   FormControl,
@@ -6,13 +6,13 @@ import {
   NgForm,
   Validators,
 } from "@angular/forms";
-import { Storage } from "@ionic/storage";
+import { Storage } from "@ionic/storage-angular";
 import { Router, ActivatedRoute } from "@angular/router";
 import { LoaderService, AlertService } from "../../app/service/providers";
 import { CrudServiceService } from "../../app/service/crud/crud-service.service";
 import { ErrorStateMatcher } from "@angular/material/core";
 import { BrowserModule, DomSanitizer } from "@angular/platform-browser";
-import { Network } from "@ionic-native/network/ngx";
+import { Network } from "@awesome-cordova-plugins/network/ngx";
 import { LocalShipmentFormService } from "../../app/service/localShipmentForm/local-shipment-form.service";
 import { AlertController, LoadingController } from "@ionic/angular";
 
@@ -24,8 +24,10 @@ export class MyErrorStateMatcher implements ErrorStateMatcher {
   }
 }
 @Component({
+  standalone: false,
   selector: "app-dbs-eid",
   templateUrl: "./dbs-eid.page.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./dbs-eid.page.scss"],
 })
 export class DbsEidPage implements OnInit {

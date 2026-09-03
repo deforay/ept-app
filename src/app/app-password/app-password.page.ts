@@ -1,6 +1,6 @@
-import { Component, OnInit, ViewChild } from "@angular/core";
+import { Component, OnInit, ViewChild, ChangeDetectionStrategy } from "@angular/core";
 import { Router } from "@angular/router";
-import { Storage } from "@ionic/storage";
+import { Storage } from "@ionic/storage-angular";
 import {
   LoaderService,
   AlertService,
@@ -8,12 +8,14 @@ import {
 } from "../../app/service/providers";
 import { CrudServiceService } from "../../app/service/crud/crud-service.service";
 import { MenuController, LoadingController } from "@ionic/angular";
-import { Events } from "@ionic/angular";
-import { FingerprintAIO } from "@ionic-native/fingerprint-aio/ngx";
+import { Events } from '../service/events/events.service';
+import { FingerprintAIO } from "@awesome-cordova-plugins/fingerprint-aio/ngx";
 
 @Component({
+  standalone: false,
   selector: "app-app-password",
   templateUrl: "./app-password.page.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./app-password.page.scss"],
 })
 export class AppPasswordPage implements OnInit {
@@ -252,7 +254,7 @@ export class AppPasswordPage implements OnInit {
   }
   checkFingerprintAvaiablity() {
     this.faio
-      .isAvailable()
+      .isAvailable({ requireStrongBiometrics: false })
       .then((result: any) => {
         console.log(result);
         if (result) {

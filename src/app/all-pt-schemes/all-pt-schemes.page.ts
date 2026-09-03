@@ -1,10 +1,10 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import { Router } from "@angular/router";
 import { LoaderService, AlertService } from "../../app/service/providers";
 import { CrudServiceService } from "../../app/service/crud/crud-service.service";
-import { Storage } from "@ionic/storage";
-import { Network } from "@ionic-native/network/ngx";
-import { Events } from "@ionic/angular";
+import { Storage } from "@ionic/storage-angular";
+import { Network } from "@awesome-cordova-plugins/network/ngx";
+import { Events } from '../service/events/events.service';
 import * as _ from "lodash";
 import { LoadingController } from "@ionic/angular";
 import { PopoverController } from "@ionic/angular";
@@ -13,9 +13,9 @@ import {
   FileTransfer,
   FileUploadOptions,
   FileTransferObject,
-} from "@ionic-native/file-transfer/ngx";
-import { FileOpener } from "@ionic-native/file-opener/ngx";
-import { File } from "@ionic-native/file/ngx";
+} from "@awesome-cordova-plugins/file-transfer/ngx";
+import { FileOpener } from "@awesome-cordova-plugins/file-opener/ngx";
+import { File } from "@awesome-cordova-plugins/file/ngx";
 import {
   ROOT_DIRECTORY,
   SHIPMENTS_REPORTS_DIRECTORY,
@@ -23,8 +23,10 @@ import {
 import { ModalController } from "@ionic/angular";
 import { FcmService } from "../../app/fcm.service";
 @Component({
+  standalone: false,
   selector: "app-all-pt-schemes",
   templateUrl: "./all-pt-schemes.page.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./all-pt-schemes.page.scss"],
 })
 export class AllPTSchemesPage implements OnInit {
@@ -894,11 +896,12 @@ search:any;
     let downloadUrl = this.apiUrl + downloadLink;
 
     let path =
-      this.file.externalRootDirectory +
+      this.file.externalDataDirectory +
       ROOT_DIRECTORY +
       "/" +
-      SHIPMENTS_REPORTS_DIRECTORY;
-    fileTransfer.download(downloadUrl, path + fileName).then(
+      SHIPMENTS_REPORTS_DIRECTORY +
+      "/";
+    fileTransfer.download(downloadUrl, path + String(fileName).replace(/^\/+/, "")).then(
       (entry) => {
         console.log("download complete: " + entry.toURL());
         let url = entry.toURL();

@@ -1,11 +1,11 @@
-import { Component, OnInit } from "@angular/core";
+import { Component, OnInit, ChangeDetectionStrategy } from "@angular/core";
 import {
   FormControl,
   FormGroupDirective,
   NgForm,
   Validators,
 } from "@angular/forms";
-import { Storage } from "@ionic/storage";
+import { Storage } from "@ionic/storage-angular";
 import { Router, ActivatedRoute } from "@angular/router";
 ``;
 import { LoaderService, AlertService } from "../../app/service/providers";
@@ -16,7 +16,7 @@ import {
   DomSanitizer,
   disableDebugTools,
 } from "@angular/platform-browser";
-import { Network } from "@ionic-native/network/ngx";
+import { Network } from "@awesome-cordova-plugins/network/ngx";
 import { LocalShipmentFormService } from "../../app/service/localShipmentForm/local-shipment-form.service";
 import { AlertController, LoadingController } from "@ionic/angular";
 
@@ -41,8 +41,10 @@ interface selectArray {
 }
 
 @Component({
+  standalone: false,
   selector: "app-dts-hiv-viralload",
   templateUrl: "./dts-hiv-viralload.page.html",
+  changeDetection: ChangeDetectionStrategy.Eager,
   styleUrls: ["./dts-hiv-viralload.page.scss"],
 })
 export class DtsHivViralloadPage implements OnInit {
