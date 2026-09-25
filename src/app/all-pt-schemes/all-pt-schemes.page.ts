@@ -74,12 +74,12 @@ search:any;
     this.storage.get("filterValuesJSON").then((filterValuesJSON) => {
       this.filterJSON = [];
       this.filterJSON = filterValuesJSON;
-      if (this.filterJSON.length != 0 && param != "pulled") {
+      if (this.filterJSON && this.filterJSON.length != 0 && param != "pulled") {
         this.applyFilter(this.filterJSON);
       } else if (param == "pulled") {
         this.filterJSON = {
-          shipmentFilterID: "activeNotResp",
-          shipmentFilterName: "Active and Not Responded",
+          shipmentFilterID: "active",
+          shipmentFilterName: "Active",
           participantFliterId: "",
           participantFliterName: "",
           schemeTypeFliterID: "",
@@ -89,8 +89,8 @@ search:any;
         this.onloadShipment();
       } else {
         this.filterJSON = {
-          shipmentFilterID: "activeNotResp",
-          shipmentFilterName: "Active and Not Responded",
+          shipmentFilterID: "active",
+          shipmentFilterName: "Active",
           participantFliterId: "",
           participantFliterName: "",
           schemeTypeFliterID: "",
@@ -109,12 +109,12 @@ search:any;
     // Offline event
     this.events.subscribe("network:offline", (data) => {
       this.networkType = this.network.type;
-      if (this.filterJSON.length != 0 && param != "pulled") {
+      if (this.filterJSON && this.filterJSON.length != 0 && param != "pulled") {
         this.applyFilter(this.filterJSON);
       } else if (param == "pulled") {
         this.filterJSON = {
-          shipmentFilterID: "activeNotResp",
-          shipmentFilterName: "Active and Not Responded",
+          shipmentFilterID: "active",
+          shipmentFilterName: "Active",
           participantFliterId: "",
           participantFliterName: "",
           schemeTypeFliterID: "",
@@ -123,8 +123,8 @@ search:any;
         this.callOfflineFunctions();
       } else {
         this.filterJSON = {
-          shipmentFilterID: "activeNotResp",
-          shipmentFilterName: "Active and Not Responded",
+          shipmentFilterID: "active",
+          shipmentFilterName: "Active",
           participantFliterId: "",
           participantFliterName: "",
           schemeTypeFliterID: "",
@@ -137,12 +137,12 @@ search:any;
     // Online event
     this.events.subscribe("network:online", () => {
       this.networkType = this.network.type;
-      if (this.filterJSON.length != 0 && param != "pulled") {
+      if (this.filterJSON && this.filterJSON.length != 0 && param != "pulled") {
         this.applyFilter(this.filterJSON);
       } else if (param == "pulled") {
         this.filterJSON = {
-          shipmentFilterID: "activeNotResp",
-          shipmentFilterName: "Active and Not Responded",
+          shipmentFilterID: "active",
+          shipmentFilterName: "Active",
           participantFliterId: "",
           participantFliterName: "",
           schemeTypeFliterID: "",
@@ -151,8 +151,8 @@ search:any;
         this.getAllShippings();
       } else {
         this.filterJSON = {
-          shipmentFilterID: "activeNotResp",
-          shipmentFilterName: "Active and Not Responded",
+          shipmentFilterID: "active",
+          shipmentFilterName: "Active",
           participantFliterId: "",
           participantFliterName: "",
           schemeTypeFliterID: "",
@@ -174,8 +174,8 @@ search:any;
       if (data["data"]) {
         if (data["data"] == "reset") {
           this.filterJSON = {
-            shipmentFilterID: "activeNotResp",
-            shipmentFilterName: "Active and Not Responded",
+            shipmentFilterID: "active",
+            shipmentFilterName: "Active",
             participantFliterId: "",
             participantFliterName: "",
             schemeTypeFliterID: "",
@@ -446,7 +446,19 @@ search:any;
     if (value == "finished_checkIsSynced") {
       this.shippingsArray = [];
       let filterJSON = this.filterJSON;
-      if (
+      if (filterJSON.shipmentFilterID == "active") {
+        // Same rule as the web app's current-schemes page: not finalized and
+        // accepting responses. Unsynced local responses stay visible.
+        this.shippingsArray = this.shippingsOriginalArray.filter(
+          (item) =>
+            item.status != "finalized" &&
+            (item.responseSwitch == "on" || item.isSynced == "false") &&
+            (!filterJSON.participantFliterId ||
+              item.participantId == filterJSON.participantFliterId) &&
+            (!filterJSON.schemeTypeFliterID ||
+              item.schemeType == filterJSON.schemeTypeFliterID)
+        );
+      } else if (
         filterJSON.shipmentFilterID &&
         filterJSON.participantFliterId &&
         filterJSON.schemeTypeFliterID

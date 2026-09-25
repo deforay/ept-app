@@ -6,6 +6,7 @@
           <mat-label>Shipment Status</mat-label>
           <mat-select [(ngModel)]="shipmentStatusFliter" name="shipmentStatus" #shipmentStatus="ngModel" >
             <mat-option>--Select--</mat-option>
+            <mat-option value="active">Active</mat-option>
             <mat-option value="activeNotResp">Active and Not Responded</mat-option>
             <mat-option value="activeResp">Active and Responded</mat-option>
             <mat-option value="closed">Closed</mat-option>

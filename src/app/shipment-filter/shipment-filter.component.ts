@@ -62,7 +62,7 @@ export class ShipmentFilterComponent implements OnInit {
 
   ionViewWillEnter() {
 
-    this.shipmentStatusFliter = "activeNotResp";
+    this.shipmentStatusFliter = "active";
 
     this.networkType = this.network.type;
     this.events.subscribe('network:offline', (data) => {
@@ -84,7 +84,7 @@ export class ShipmentFilterComponent implements OnInit {
 
     this.storage.get('bindLocalFilterJSON').then((bindLocalFilterJSON) => {
       if (bindLocalFilterJSON.length!=0) {
-        this.shipmentStatusFliter = bindLocalFilterJSON.shipmentStatusFliter ? bindLocalFilterJSON.shipmentStatusFliter:"activeNotResp";
+        this.shipmentStatusFliter = bindLocalFilterJSON.shipmentStatusFliter ? bindLocalFilterJSON.shipmentStatusFliter:"active";
         this.participantFliter = bindLocalFilterJSON.participantFliter.participant_id ? bindLocalFilterJSON.participantFliter.participant_id:'';
         this.participantFliterObj = bindLocalFilterJSON.participantFliter ? bindLocalFilterJSON.participantFliter:'';
         this.schemeTypeFliter = bindLocalFilterJSON.schemeTypeFliter.scheme_id ? bindLocalFilterJSON.schemeTypeFliter.scheme_id:'';
@@ -142,7 +142,9 @@ export class ShipmentFilterComponent implements OnInit {
 
   applyFilter() {
 
-    if (this.shipmentStatusFliter == 'activeNotResp') {
+    if (this.shipmentStatusFliter == 'active') {
+      this.shipmentStatusFliterName = "Active";
+    } else if (this.shipmentStatusFliter == 'activeNotResp') {
       this.shipmentStatusFliterName = "Active and Not Responded";
     } else if (this.shipmentStatusFliter == 'activeResp') {
       this.shipmentStatusFliterName = "Active and Responded";

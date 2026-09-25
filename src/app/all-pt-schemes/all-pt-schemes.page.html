@@ -271,7 +271,7 @@
   }
 
 
-  @if (showNoData && shippingsArray.length==0 && filterJSON.shipmentFilterID=='activeNotResp') {
+  @if (showNoData && shippingsArray.length==0 && (filterJSON.shipmentFilterID=='active' || filterJSON.shipmentFilterID=='activeNotResp')) {
     <ion-card class="eptCard noShipments">
       <ion-card-content class="cardContent">
         <p class="noShipments">
